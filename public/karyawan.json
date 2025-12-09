@@ -1,0 +1,74 @@
+{
+  "karyawan": [
+    {
+      "id": 1,
+      "nama": "Andi Pratama",
+      "jabatan": "Software Engineer",
+      "performa": "95%",
+      "departemen": "IT",
+      "gaji": 8500000,
+      "beban": 35,
+      "proyek": 3,
+      "tugas": 50,
+      "keahlian": "Frontend",
+      "bergabung": "2024-05-21",
+      "img": "/img/karyawan.jpg"
+    },
+    {
+      "id": 2,
+      "nama": "Siti Rahmawati",
+      "jabatan": "UI/UX Designer",
+      "departemen": "IT",
+      "performa": "80%",
+      "gaji": 7800000,
+      "beban": 55,
+      "proyek": 4,
+      "tugas": 39,
+      "keahlian": "UI/UX Designer",
+      "bergabung": "2024-08-17",
+      "img": "/img/karyawan.jpg"
+    },
+    {
+      "id": 3,
+      "nama": "Budi Santoso",
+      "jabatan": "HRD Staff",
+      "departemen": "IT",
+      "performa": "90%",
+      "gaji": 6200000,
+      "beban": 45,
+      "proyek": 5,
+      "tugas": 43,
+      "keahlian": "Interview",
+      "bergabung": "2025-01-13",
+      "img": "/img/karyawan.jpg"
+    },
+    {
+      "id": 4,
+      "nama": "Rina Apriliyani",
+      "jabatan": "Marketing Specialist",
+      "departemen": "IT",
+      "performa": "83%",
+      "gaji": 7100000,
+      "beban": 65,
+      "proyek": 2,
+      "tugas": 37,
+      "keahlian": "Marketing",
+      "bergabung": "2024-09-23",
+      "img": "/img/karyawan.jpg"
+    },
+    {
+      "id": 5,
+      "nama": "Doni Kurniawan",
+      "jabatan": "Admin Officer",
+      "departemen": "IT",
+      "performa": "92%",
+      "gaji": 5000000,
+      "beban": 30,
+      "proyek": 5,
+      "tugas": 51,
+      "keahlian": "Admin",
+      "bergabung": "2024-01-07",
+      "img": "/img/karyawan.jpg"
+    }
+  ]
+}

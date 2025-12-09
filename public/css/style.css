@@ -1,0 +1,1057 @@
+:root {
+  --borderCard: 1px solid rgb(219, 214, 246);
+  --bebanSedang: rgb(255, 240, 178);
+}
+
+.kuning {
+  background-color: var(--bebanSedang);
+}
+
+.merah {
+  background-color: rgb(255, 81, 81);
+}
+
+.hijau {
+  background-color: rgb(153, 253, 153);
+}
+
+.putih {
+  border: 1px solid #010101;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  text-decoration: none;
+}
+
+body {
+  background-color: #f8fcff;
+  /* background: #ffffff;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(186, 186, 255, 1) 100%,
+    rgba(255, 255, 255, 1) 100%
+  ); */
+  width: 100%;
+  height: 100vh;
+  color: #010101;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  font-family: "Poppins", sans-serif;
+}
+
+.konten {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+.konten .navbar {
+  display: none;
+}
+
+/* .konten .navbar {
+  display: flex;
+  background-color: rgb(16, 50, 130);
+  color: white;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  height: 12vh;
+  align-items: center;
+  z-index: 99;
+  padding-left: 20px;
+  gap: 10px;
+} */
+
+.navbar .menu {
+  background-color: rgb(16, 62, 170);
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+.navbar p {
+  font-size: 16px;
+}
+
+.konten .background .sidebar_responsive {
+  width: 50%;
+  background-color: rgb(16, 50, 130);
+  height: 100vh;
+  text-align: center;
+  color: #fff;
+  position: fixed;
+  left: 0;
+  z-index: 999;
+  -webkit-animation: slide-in-blurred-left 0.6s cubic-bezier(0.23, 1, 0.32, 1)
+    both;
+  animation: slide-in-blurred-left 0.6s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+@-webkit-keyframes slide-in-blurred-left {
+  0% {
+    -webkit-transform: translateX(-1000px) scaleX(2.5) scaleY(0.2);
+    transform: translateX(-1000px) scaleX(2.5) scaleY(0.2);
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    -webkit-filter: blur(10px);
+    filter: blur(10px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateX(0) scaleY(1) scaleX(1);
+    transform: translateX(0) scaleY(1) scaleX(1);
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    -webkit-filter: blur(0);
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+@keyframes slide-in-blurred-left {
+  0% {
+    -webkit-transform: translateX(-1000px) scaleX(2.5) scaleY(1);
+    transform: translateX(-1000px) scaleX(2.5) scaleY(1);
+    -webkit-transform-origin: 100% 50%;
+    transform-origin: 100% 50%;
+    -webkit-filter: blur(40px);
+    filter: blur(40px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateX(0) scaleY(1) scaleX(1);
+    transform: translateX(0) scaleY(1) scaleX(1);
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    -webkit-filter: blur(0);
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+.konten .sidebar {
+  width: 18%;
+  background-color: rgb(16, 50, 130);
+  height: 100vh;
+  text-align: center;
+  color: #fff;
+  position: fixed;
+  left: 0;
+}
+
+.sidebar .logo,
+.sidebar_responsive .logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid rgb(85, 57, 223);
+  height: 13vh;
+}
+
+.logo img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  background-color: white;
+  border-radius: 50%;
+}
+
+.logo .keterangan {
+  text-align: justify;
+}
+
+.keterangan p {
+  font-size: small;
+  color: rgb(98, 205, 238);
+}
+
+.sidebar .sidebar-text,
+.sidebar_responsive .sidebar-text {
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
+  text-align: justify;
+  padding: 5px 15px;
+  width: 100%;
+  gap: 12px;
+  height: 54%;
+}
+
+.listKaryawan,
+.performance,
+.report {
+  padding: 10px 10px 10px 15px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.listKaryawan:hover,
+.performance:hover,
+.report:hover {
+  background-color: rgb(16, 67, 185);
+}
+
+.sidebar-text i {
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.sidebar-text a {
+  color: #fff;
+  font-size: 15px;
+  height: 6vh;
+  text-align: justify;
+}
+
+.sidebar .footer_sidebar,
+.sidebar_responsive .footer_sidebar {
+  /* position: absolute;
+  bottom: 0; */
+  /* border: 1px solid #010101; */
+  border-top: 1px solid rgb(85, 57, 223);
+  padding: 18px;
+  width: 100%;
+  height: 25%;
+}
+
+.footer_sidebar .user {
+  background-color: rgb(16, 67, 185);
+  padding: 10px 14px;
+  /* margin: 0 15px; */
+  border-radius: 10px;
+  text-align: justify;
+}
+
+.footer_sidebar .sync button {
+  margin: 10px 0;
+  background-color: rgb(13, 85, 254);
+  font-size: 14px;
+  padding: 8px 0;
+  width: 100%;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+}
+
+/* .sync:active {
+  scale: 0.9;
+} */
+
+.sync button:hover {
+  background-color: rgb(0, 69, 230);
+}
+
+/* .sync .btn::before {
+  font-family: "Font Awesome 6 Free", "Font Awesome 7 Free";
+  font-weight: 600; 
+  content: "\f2f1"; 
+} */
+
+.footer_sidebar .logout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid rgb(16, 72, 203);
+  font-size: 14px;
+  gap: 10px;
+  border-radius: 10px;
+  padding: 6px 0;
+}
+
+.logout:hover {
+  background-color: rgb(16, 67, 185);
+}
+
+.logout::before {
+  font-family: "Font Awesome 7 Free";
+  font-weight: 600; /* solid */
+  content: "\f2f5"; /* arrow-right-from-bracket */
+}
+
+.user p {
+  font-weight: 400;
+  color: rgb(98, 205, 238);
+  margin: 5px 0;
+  font-size: 12px;
+}
+
+.user h4 {
+  font-size: 15px;
+  font-weight: 400;
+}
+
+/* Konten */
+.konten .isi {
+  width: 80%;
+  position: absolute;
+  height: 100vh;
+  right: 0;
+}
+
+.isi h2 {
+  margin-top: 40px;
+  color: rgb(16, 50, 130);
+  margin-bottom: 10px;
+}
+
+.isi .filter {
+  background-color: #fff;
+  width: 96%;
+  height: 20vh;
+  margin-top: 35px;
+  padding: 16px;
+  border: var(--borderCard);
+}
+
+.filter .title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 10px;
+}
+
+.title i {
+  font-size: 18px;
+}
+
+.filter form {
+  width: 100%;
+  height: 30%;
+  margin-top: 25px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+form .dates {
+  width: 35%;
+}
+
+form .dates .tanggal {
+  /* width: 60%; */
+  display: flex;
+  justify-content: center;
+  border: var(--borderCard);
+  /* background-color: #4caf50; */
+  /* padding: 0 5px; */
+  /* width: 100%; */
+  border-radius: 10px;
+  padding: 10px 15px;
+  gap: 15px;
+  /* margin-right: 10px; */
+  /* border: var(--borderCard); */
+}
+
+.tanggal span {
+  font-size: 18px;
+}
+
+.dates .tanggal input {
+  width: 50%;
+}
+
+form .tanggal_mulai,
+.tanggal_akhir,
+.posisi,
+.cari {
+  width: 30%;
+}
+
+.tanggal_mulai label,
+.tanggal_akhir label,
+.dates label,
+.posisi label,
+.cari label {
+  margin-left: 5px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.tanggal_mulai input,
+.tanggal_akhir input,
+.posisi select,
+.cari input {
+  background-color: #ddd;
+  width: 100%;
+  border-radius: 10px;
+  padding: 10px 15px;
+  /* margin-right: 10px; */
+  border: var(--borderCard);
+}
+
+/* .filter form i {
+  position: absolute;
+  top: 208px;
+  left: 435px;
+
+} */
+
+/* form input,
+form select {
+  background-color: #ddd;
+  width: 31%;
+  border-radius: 10px;
+  padding: 0 15px;
+  margin: 0 10px;
+  border: var(--borderCard);
+} */
+
+.daftarKaryawan {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  width: 99%;
+}
+
+.karyawan {
+  margin-top: 20px;
+  border: var(--borderCard);
+  width: 22.8%;
+  /* height: 35vh; */
+  text-align: center;
+  border-radius: 15px;
+  transition: transform 0.3s ease;
+  padding: 20px 0;
+  /* box-shadow:  2px 2px 25px #cfd6ff,
+             -2px -2px 25px #fbfbff; */
+}
+
+.karyawan:hover {
+  border: 1px solid rgb(68, 41, 203);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  transform: scale(1.05);
+}
+
+.karyawan .identitas img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 5px solid rgb(193, 222, 232);
+  /* margin-top: 20px; */
+}
+
+.karyawan h4 {
+  color: rgb(16, 50, 130);
+  margin-top: 10px;
+}
+
+.karyawan .peran {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+}
+
+.karyawan .identitas .bebanKerja {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  margin: 10px 75px;
+  padding: 5px 0;
+  font-size: 12px;
+  border-radius: 15px;
+}
+
+.karyawan .kinerja {
+  margin: 0 30px;
+  margin-top: 15px;
+  border-top: 1px solid rgb(222, 221, 226);
+}
+
+.kinerja .proyekAktif {
+  margin-top: 10px;
+}
+
+.kinerja .proyekAktif,
+.performa {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Detail Karyawan */
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+}
+
+.detailKaryawan {
+  position: fixed;
+  width: 35%;
+  height: 85vh;
+  text-align: center;
+  background-color: #fff;
+  top: 80px;
+  border-radius: 15px;
+  border: var(--borderCard);
+  overflow-y: scroll;
+  padding: 0 25px 15px 25px;
+  -webkit-animation: scale-up-center 0.2s cubic-bezier(0.39, 0.575, 0.565, 1)
+    both;
+  animation: scale-up-center 0.3s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+}
+
+@-webkit-keyframes scale-up-center {
+  0% {
+    -webkit-transform: scale(0.5);
+    transform: scale(0.5);
+  }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+@keyframes scale-up-center {
+  0% {
+    -webkit-transform: scale(0.9);
+    transform: scale(0.9);
+  }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+.detailKaryawan .header {
+  color: rgb(40, 40, 40);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 0;
+  position: sticky;
+  top: 0;
+  background-color: #ffffffd8;
+  /* height: fit-content; */
+}
+
+.header i {
+  padding: 8px 16px;
+  display: flex;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.header i:hover {
+  background-color: #f1f0f0;
+}
+
+/* .detailKaryawan .profilImage {
+  border-bottom: 1px solid rgb(222, 221, 226);
+} */
+
+.detailKaryawan .profilImage img {
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border: 5px solid rgb(193, 222, 232);
+}
+
+.profilImage .peran {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.profilImage .bebanKerja {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin: 10px 160px 0 160px;
+  height: 3vh;
+  font-size: 10px;
+  border-radius: 15px;
+}
+
+.infoKontak {
+  border-top: 1.5px solid rgb(193, 222, 232);
+  border-bottom: 1.5px solid rgb(193, 222, 232);
+  margin-top: 10px;
+}
+
+.infoKontak .judul {
+  text-align: justify;
+  margin: 10px 0;
+}
+
+.infoKontak .emailTelepon {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* .emailTelepon .telepon, */
+.emailTelepon .email {
+  background-color: #e0edfc;
+  width: 100%;
+  padding: 7px 0 7px 10px;
+  border-radius: 10px;
+  text-align: justify;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.infoKontak i,
+.infoKerja i {
+  font-size: 18px;
+  color: blue;
+}
+
+/* .infoKontak .alamat {
+  background-color: #e0edfc;
+  margin-top: 10px;
+  border-radius: 10px;
+  text-align: justify;
+  display: flex;
+  align-items: center;
+  padding: 7px 0 7px 10px;
+  gap: 10px;
+  font-size: 14px;
+  margin-bottom: 20px;
+} */
+
+.infoKerja {
+  border-bottom: 1.5px solid rgb(193, 222, 232);
+}
+
+.infoKerja .judul {
+  text-align: justify;
+  margin: 10px 0;
+}
+
+.infoKerja .kerja {
+  display: flex;
+  gap: 6px;
+}
+
+.infoKontak .keterangan,
+.infoKerja .kerja .keterangan {
+  font-size: 12.5px;
+  font-weight: 250;
+}
+
+.kerja .join,
+.infoKerja .status {
+  background-color: #f2f0f0;
+  width: 50%;
+  padding: 7px 0 7px 12px;
+  border-radius: 10px;
+  text-align: justify;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.kerja .detail {
+  text-align: justify;
+}
+
+.statistikKinerja {
+  border-bottom: 1.5px solid rgb(193, 222, 232);
+  margin: 10px 0 10px 0;
+}
+
+.statistikKinerja .judul {
+  text-align: justify;
+  margin-bottom: 10px;
+}
+
+.statistikKinerja .statistik {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.statistik .proyek {
+  background-color: rgb(218, 234, 255);
+  border: 1px solid rgb(118, 177, 254);
+}
+
+.statistik .completed {
+  background-color: rgb(219, 251, 227);
+  border: 1px solid rgb(64, 254, 111);
+}
+
+.statistik .on_progress {
+  background-color: #e8d8ff;
+  border: 1px solid #b37dff;
+}
+
+.proyek i {
+  font-size: 15px;
+  color: blue;
+  padding: 6px 13px;
+  display: flex;
+  justify-content: center;
+  border: 3px solid blue;
+  border-radius: 50%;
+}
+
+.completed i {
+  font-size: 15px;
+  color: rgb(10, 230, 65);
+  padding: 6px 13px;
+  display: flex;
+  justify-content: center;
+  border: 3px solid rgb(10, 230, 65);
+  border-radius: 50%;
+}
+
+.on_progress i {
+  font-size: 26px;
+  color: rgb(132, 0, 255);
+}
+
+.proyek,
+.completed,
+.on_progress {
+  width: 40%;
+  height: 16.5vh;
+  background-color: #ddd;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* gap: 10px; */
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.proyek {
+  gap: 16px;
+}
+
+.completed {
+  gap: 5px;
+}
+
+.proyek p,
+.completed p,
+.on_progress p {
+  font-size: 14px;
+  /* margin-bottom: 5px; */
+}
+
+.keahlian .judul {
+  text-align: justify;
+  margin-bottom: 10px;
+}
+
+.keahlian .daftarSkil {
+  display: flex;
+  gap: 10px;
+}
+
+.daftarSkil .skil {
+  background-color: rgb(225, 239, 255);
+  border: 1px solid rgb(118, 177, 254);
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 10px;
+  color: blue;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+
+/* Tampilan perangkat */
+/* Laptop */
+@media (max-width: 1366px) {
+  html {
+    font-size: 75%;
+  }
+}
+
+/* Tablet LandScape */
+@media (max-width: 1024px) {
+  .konten {
+    overflow-x: hidden;
+  }
+
+  .konten .sidebar {
+    /* width: 22%; */
+    display: none;
+  }
+
+  .konten .background .sidebar_responsive {
+    width: 40%;
+  }
+
+  .sidebar_responsive .logo {
+    display: flex;
+    /* justify-content: space-between; */
+    justify-content: left;
+    padding-left: 30px;
+    text-align: justify;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgb(85, 57, 223);
+    height: 13vh;
+  }
+
+  .konten .navbar {
+    display: flex;
+    background-color: rgb(16, 50, 130);
+    color: white;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    height: 12vh;
+    align-items: center;
+    z-index: 99;
+    padding-left: 35px;
+    gap: 10px;
+  }
+
+  .konten .isi {
+    width: 95%;
+    /* overflow-x: hidden; */
+    position: relative;
+    top: 10vh;
+    right: 0;
+    z-index: 9;
+    /* left: 20px; */
+  }
+
+  .karyawan {
+    width: 48%;
+    /* height: 38vh; */
+    font-size: 20px;
+  }
+
+  .karyawan .identitas .bebanKerja {
+    margin: 10px 170px;
+  }
+
+  .karyawan .peran {
+    /* display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px; */
+    font-size: 20px;
+  }
+
+  .detailKaryawan {
+    width: 50%;
+    height: 90vh;
+  }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  template {
+    font-size: 62.5%;
+  }
+
+  .konten .sidebar {
+    display: none;
+  }
+
+  .konten .navbar {
+    display: flex;
+    background-color: rgb(16, 50, 130);
+    color: white;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    height: 12vh;
+    align-items: center;
+    z-index: 99;
+    padding-left: 20px;
+    gap: 10px;
+  }
+
+  .konten .isi {
+    width: 96%;
+    overflow-x: hidden;
+    position: relative;
+    top: 10vh;
+  }
+}
+
+/* Handphone */
+@media (max-width: 576px) {
+  html {
+    font-size: 85%;
+  }
+
+  /* Sidebar di-hide */
+  .konten .sidebar {
+    display: none;
+  }
+
+  /* Konten melebar full */
+  .konten .isi {
+    width: 100%;
+    position: relative;
+    top: 12vh;
+    padding: 0 15px;
+  }
+
+  .isi h2 {
+    margin-top: 20px;
+    /* text-align: center; */
+  }
+
+  /* Filter */
+  .isi .filter {
+    width: 100%;
+    height: auto;
+  }
+
+  .isi .filter form {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .tanggal_mulai,
+  .tanggal_akhir,
+  .posisi,
+  .cari {
+    width: 100%;
+  }
+
+  /* Card Karyawan */
+  .isi .daftarKaryawan {
+    justify-content: center;
+  }
+
+  .isi .karyawan {
+    width: 50%;
+    /* height: auto; */
+    padding-bottom: 15px;
+  }
+
+  .karyawan .identitas img {
+    width: 75px;
+    height: 75px;
+  }
+
+  /* Detail Modal */
+  .detailKaryawan {
+    width: 90%;
+    height: 80vh;
+    top: 50px;
+  }
+
+  .detailKaryawan .profilImage img {
+    width: 120px;
+    height: 120px;
+  }
+
+  .profilImage .bebanKerja {
+    margin: 10px 80px 0 80px;
+  }
+
+  .statistik .proyek,
+  .statistik .perform,
+  .statistik .completed {
+    width: 100%;
+    height: auto;
+    padding: 15px 10px;
+  }
+
+  .filter .filter_detail {
+    display: inline-block;
+    width: 100%;
+    /* flex-wrap: wrap; */
+  }
+
+  .filter_detail form {
+    width: 100%;
+  }
+
+  .filter_detail .total_karyawan {
+    width: 100%;
+  }
+
+  .filter_detail form input {
+    /* width: 100rem; */
+  }
+}
+
+/* SPINNER */
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 3px solid #ffffff70;
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-right: 6px;
+  transition: opacity 0.3s;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ANIMASI SUKSES */
+.sukses_animation {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: 5%;
+}
+
+.sukses_animation .sukses {
+  animation: fadeOut 2s ease-out forwards;
+  background: #4caf50;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  margin-top: 8px;
+  font-size: 14px;
+  text-align: center;
+  width: 50%;
+  padding: 10px 0;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  70% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
