@@ -1017,25 +1017,14 @@ form select {
 }
 
 /* ANIMASI SUKSES */
-.sukses_animation {
+.success-animation {
   width: 100%;
   display: flex;
   justify-content: center;
   position: absolute;
   top: 5%;
-}
-
-.sukses_animation .sukses {
   animation: fadeOut 2s ease-out forwards;
-  background: #4caf50;
-  color: white;
-  padding: 8px 14px;
-  border-radius: 6px;
-  margin-top: 8px;
-  font-size: 14px;
-  text-align: center;
-  width: 50%;
-  padding: 10px 0;
+  z-index: 1000;
 }
 
 @keyframes fadeOut {
@@ -1043,15 +1032,64 @@ form select {
     opacity: 0;
   }
   50% {
-    opacity: 0.9;
+    opacity: 0.7;
   }
   70% {
-    opacity: 1;
-  }
-  80% {
-    opacity: 1;
+    opacity: 0.9;
   }
   100% {
     opacity: 1;
   }
 }
+
+.success-animation .sukses {
+  background: #4caf50;
+  color: white;
+  padding: 15px 14px;
+  border-radius: 6px;
+  margin-top: 8px;
+  font-size: 14px;
+  width: 70%;
+  /* text-align: center; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* padding: 10px 0; */
+   position: fixed;
+   
+}
+
+.sukses .berhasil {
+  display: flex;
+  justify-content: right;
+  width: 62%;
+  gap: 10px;
+}
+
+.sukses .berhasil p {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.sukses .ceklis {
+  border-radius: 50%;
+  padding: 3px 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 3px solid white;
+}
+
+.sukses .silang {
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 2px;
+  text-align: center;
+  border-radius: 50%;
+}
+
+/* .silang:hover {
+  background-color: #449b47; 
+  
+ 
+} */

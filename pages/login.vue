@@ -540,6 +540,7 @@ export default {
         username: "",
         password: "",
       },
+      showPassword: false,
       isError: false,
     };
   },
@@ -560,8 +561,16 @@ export default {
         // Simpan token (opsional, sesuaikan API)
         localStorage.setItem("token", res.data.token);
 
-        // 👉 Redirect otomatis
-        router.push("/listKaryawan");
+        const username = this.form.username;
+
+        if (username === "admin") {
+          // 👉 Redirect otomatis
+          router.push("/listKaryawan");
+          console.log("Anda masuk ke dashboard ", username);
+        } else if (username === "karyawan") {
+          router.push("/detailTask");
+          console.log("Anda masuk ke dashboard karyawan");
+        }
       } catch (error) {
         console.error("API Error:", error);
         this.isError = true;

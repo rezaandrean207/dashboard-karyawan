@@ -61,13 +61,8 @@
               <i v-else class="fa-solid fa-rotate-right"></i>
               {{ loading ? "Menyinkronkan..." : "Sync ClickUp" }}
             </button>
-
-            <!-- Animasi sukses -->
-            <div v-if="sukses" class="success-animation">
-              ✔ Sinkronisasi Berhasil!
-            </div>
           </div>
-          <NuxtLink to="/" class="logout" >Logout</NuxtLink>
+          <NuxtLink to="/" class="logout">Logout</NuxtLink>
         </div>
       </div>
     </div>
@@ -105,7 +100,7 @@
       <div class="footer_sidebar">
         <div class="user">
           <p>Logged in sebagai</p>
-          <h4>Budi Santoso</h4>
+          <h4>Reza Andrean</h4>
           <p>Karyawan</p>
         </div>
         <div class="sync">
@@ -137,8 +132,18 @@
       <!-- <div class="success-animation">
       </div> -->
 
-      <div v-if="sukses" class="sukses_animation">
-        <div class="sukses">✔ Sinkronisasi Berhasil!</div>
+      <div v-if="sukses" class="success-animation">
+        <div class="sukses">
+          <div class="berhasil">
+            <div class="ceklis">
+              <i class="fa-solid fa-check"></i>
+            </div>
+            <p>Sinkronisasi Berhasil!</p>
+          </div>
+          <div class="silang" @click="closeSukses">
+            <i class="fa-solid fa-xmark"></i>
+          </div>
+        </div>
       </div>
 
       <h2>Daftar Karyawan</h2>
@@ -160,8 +165,13 @@
             />
             <select v-model="posisi">
               <option value="" selected>Semua Posisi</option>
-              <option value="member">Member</option>
-              <option value="admin">Admin</option>
+              <option value="pm">Project Manager</option>
+              <option value="analis">Data Analys</option>
+              <option value="backend">Backend</option>
+              <option value="backend-web">Backend-Web Developer</option>
+              <option value="web">Web Developer</option>
+              <option value="mobile apps">Mobile Apps</option>
+              <option value="UI-UX">UI-UX</option>
               <!-- <option value="UI/UX Designer">UI/UX Designer</option>
               <option value="Project Manager">Project Manager</option> -->
             </select>
@@ -170,7 +180,9 @@
             <i class="fa-solid fa-users"></i>
             <div class="jumlah_karyawan">
               <p>Total Karyawan</p>
-              <p class="jumlah">- orang</p>
+              <p class="jumlah">
+                <strong>{{ daftarKaryawan.length }} Karyawan</strong>
+              </p>
             </div>
           </div>
         </div>
@@ -192,7 +204,7 @@
               <i class="fa-solid fa-briefcase"></i>
               <p>{{ k.role }}</p>
             </div>
-            <div
+            <!-- <div
               class="bebanKerja"
               :class="{
                 kuning: kategoriBeban(k.beban) === 'Sedang',
@@ -205,12 +217,12 @@
               <p>
                 {{ kategoriBeban(k.beban) }}
               </p>
-            </div>
+            </div> -->
           </div>
           <div class="kinerja">
             <div class="proyekAktif">
               <p>Status:</p>
-              <p>{{ k.proyek }}Off</p>
+              <p>{{ k.status }}</p>
             </div>
             <!-- <div class="performa">
               <p>Performa:</p>
@@ -409,7 +421,7 @@
               <i class="fa-solid fa-envelope"></i>
               <div class="isiEmail">
                 <p class="keterangan">Email</p>
-                <p>{{ selected.display_name }}</p>
+                <p>{{ selected.email }}</p>
               </div>
             </div>
             <!-- <div class="telepon">
@@ -431,25 +443,25 @@
             -->
         </div>
 
-        <div class="infoKerja">
+        <!-- <div class="infoKerja">
           <p class="judul">Informasi Pekerjaan</p>
           <div class="kerja">
             <div class="join">
               <i class="fa-solid fa-calendar"></i>
               <div class="detail">
                 <p class="keterangan">Tanggal Bergabung</p>
-                <!-- <p>{{ selected.created_at }}</p> -->
+                <p>{{ selected.created_at }}</p>
               </div>
             </div>
             <div class="status">
               <i class="fa-solid fa-briefcase"></i>
               <div class="detail">
                 <p class="keterangan">Update at</p>
-                <!-- <p>{{ selected.updated_at }}</p> -->
+                <p>{{ selected.updated_at }}</p>
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <div class="statistikKinerja">
           <p class="judul">Kinerja & Statistik</p>
@@ -852,7 +864,7 @@ form input {
 
 <script setup>
 definePageMeta({
-  middleware: 'auth',
+  middleware: "auth",
 });
 </script>
 
@@ -905,6 +917,9 @@ export default {
         peran: this.posisi,
         beban: this.kerja,
       });
+    },
+    closeSukses() {
+      this.sukses = false;
     },
 
     async ambilData() {
@@ -1005,6 +1020,9 @@ export default {
       }
 
       return hasil;
+    },
+    totalKaryawan() {
+      return this.filteredKaryawan.length || 0;
     },
   },
 };

@@ -40,7 +40,7 @@
         <div class="footer_sidebar">
           <div class="user">
             <p>Logged in sebagai</p>
-            <h4>Budi Santoso</h4>
+            <h4>Reza Andrean</h4>
             <p>Karyawan</p>
           </div>
           <div class="sync">
@@ -98,7 +98,7 @@
       <div class="footer_sidebar">
         <div class="user">
           <p>Logged in sebagai</p>
-          <h4>Budi Santoso</h4>
+          <h4>Reza Andrean</h4>
           <p>Karyawan</p>
         </div>
         <div class="sync">
@@ -128,7 +128,17 @@
 
       <!-- Animasi sukses -->
       <div v-if="sukses" class="success-animation">
-        ✔ Sinkronisasi Berhasil!
+        <div class="sukses">
+          <div class="berhasil">
+            <div class="ceklis">
+              <i class="fa-solid fa-check"></i>
+            </div>
+            <p>Sinkronisasi Berhasil!</p>
+          </div>
+          <div class="silang" @click="closeSukses">
+            <i class="fa-solid fa-xmark"></i>
+          </div>
+        </div>
       </div>
 
       <h2>Manajemen Beban Kerja</h2>
@@ -162,12 +172,14 @@
               <option value="project manager">Project Manager</option>
             </select> -->
             <select v-model="posisi">
-              <option value="">Semua Posisi</option>
-              <option value="Software Engineer">Frontend Developer</option>
-              <option value="UI/UX Designer">UI/UX Designer</option>
-              <option value="HRD Staff">HRD</option>
-              <option value="Marketing Specialist">Marketing</option>
-              <option value="Admin Officer">Admin</option>
+              <option value="" selected>Semua Posisi</option>
+              <option value="pm">Project Manager</option>
+              <option value="analis">Data Analys</option>
+              <option value="backend">Backend</option>
+              <option value="backend-web">Backend Web Developer</option>
+              <option value="web">Web Developer</option>
+              <option value="mobile apps">Mobile Apps</option>
+              <option value="UI-UX">UI-UX</option>
             </select>
           </div>
           <!-- <div class="tanggal_mulai">
@@ -177,12 +189,12 @@
           <div class="dates">
             <label for="tanggal">Tanggal</label>
             <div class="tanggal">
-              <input type="date" name="start" v-model="start"/>
+              <input type="date" name="start" v-model="start" />
 
               <!-- <NuxtTime :datetime="sekarang" day="2-digit" month="2-digit" year="numeric" /> -->
 
               <span class="separator">➡️</span>
-              <input type="date" name="end" v-model="end"/>
+              <input type="date" name="end" v-model="end" />
             </div>
           </div>
           <!-- <div class="tanggal_akhir">
@@ -233,47 +245,66 @@
             <div class="about">
               <!-- <h4>{{ k.name }}</h4> -->
               <h4>{{ k.username }}</h4>
-              <p>{{ k.position }}</p>
-              <p v-if="start === '' && end === ''">
-                {{ k.filteredTasks?.length ?? k.tasks.length }}
-              </p>
-              <p v-else>{{ totalFilteredTask(k) }}</p>
+              <!-- <p>{{ k.position }}</p> -->
+              <!-- <p v-if="ambilTask">{{ k.tasks.length }}</p>
+              <p v-else>{{ totalFilteredTask(k) }}</p> -->
+              <p>{{ k.role }}</p>
+              <!-- <p v-if="k.role === 'pm'">Project Manager</p>
+              <p v-if="k.role === 'analis'">Data Analys</p>
+              <p v-if="k.role === 'backend'">Backend</p>
+              <p v-if="k.role === 'web'">Web Developer</p>
+              <p v-if="k.role === 'backend-web'">Backend-Web Developer</p>
+              <p v-if="k.role === 'mobile apps'">Mobile Apps</p>
+              <p v-if="k.role === 'UI-UX'">UI-UX Designer</p> -->
             </div>
           </div>
           <div class="status_karyawan">
             <div class="status">
               <p>- Normal</p>
             </div>
-            <div class="keterangan_status">
-              <p>Lorem ipsum dolor sit.</p>
-            </div>
+            <!-- <div class="keterangan_status">
+              <p>10 jam lebih cepat</p>
+            </div> -->
           </div>
         </div>
 
         <details class="details">
-          <summary class="beban_karyawan">Beban Karyawan</summary>
+          <summary class="beban_karyawan">Beban Kerja Karyawan</summary>
           <div class="keterangan_karyawan">
             <div class="container_flex">
               <div class="total_beban">
                 <div class="teks">
                   <p>Total Beban Kerja (Aktif)</p>
-                  <p>-</p>
+                  <h4>
+                    {{ k.total_spent_hours }} Jam dari {{ k.total_tasks }} task
+                  </h4>
                 </div>
                 <div class="ikon">
                   <i class="fa-regular fa-clock"></i>
                 </div>
               </div>
-              <div class="performs">
+              <div class="total_seharusnya">
                 <div class="teks">
-                  <p>Performa</p>
-                  <p>-</p>
+                  <p>Total Beban Kerja (Seharusnya)</p>
+                  <h4>
+                    {{ k.expected_hours }} Jam dari {{ k.total_tasks }} task
+                  </h4>
+                </div>
+                <div class="ikon">
+                  <i class="fa-regular fa-clock"></i>
+                </div>
+              </div>
+              <div class="ketepatan_pengerjaan">
+                <div class="teks">
+                  <p>Ketepatan Pengerjaan Semua Tugas</p>
+                  <h4>{{ k.on_time_completion_percentage }}%</h4>
                 </div>
                 <div class="ikon">
                   <i class="fa-solid fa-list-check"></i>
                 </div>
               </div>
             </div>
-            <div class="container_block">
+            <!-- <div class="container_block">
               <p>Breakdown Detail</p>
               <div class="container1">
                 <p>Selesai</p>
@@ -295,13 +326,16 @@
                 <p>Standar (Seharusnya)</p>
                 <p>-</p>
               </div>
-            </div>
+            </div> -->
           </div>
         </details>
 
         <div class="detail_task" @click="detail(k)">
           <i class="fa-solid fa-list-check"></i>
-          <p>Lihat Ringkasan Task Detail (4 task)</p>
+          <p v-if="ambilTask">
+            Lihat Ringkasan Task Detail ({{ k.tasks.length }} Task)
+          </p>
+          <p v-else>{{ totalFilteredTask(k) }}</p>
           <i class="fa-solid fa-arrow-up-from-bracket"></i>
         </div>
 
@@ -426,22 +460,22 @@
     </div>
 
     <!-- Details Task -->
-    <div class="isi" v-else v-for="t in detailTasks">
+    <div class="isi" v-else>
       <div class="header_task">
         <div class="back_button" @click="kembali">
           <i class="fa-solid fa-arrow-left"></i>
           <p>Kembali</p>
         </div>
-        <div class="detailTask_karyawan">
+        <!-- <div class="detailTask_karyawan">
           <p class="name_karyawan">
             Detail Task - {{ detailKaryawan.username }}
           </p>
           <div class="periode">
-            <!-- <p>Periode: {{ start }} - {{ end }}</p> -->
-            <p v-if="start === '' && end === ''">Seluruh Periode</p>
+             <p>Periode: {{ start }} - {{ end }}</p> -->
+        <!-- <p v-if="start === '' && end === ''">Seluruh Periode</p>
             <p v-else>Periode: {{ start }} - {{ end }}</p>
           </div>
-        </div>
+        </div>  -->
       </div>
 
       <div class="card_karyawan">
@@ -449,17 +483,22 @@
           <img src="/img/profil.png" alt="" />
           <div class="card_name">
             <h3>{{ detailKaryawan.username }}</h3>
-            <p>Frontend Developer</p>
-            <p>Pelajar</p>
+            <p>{{ detailKaryawan.role }}</p>
+            <div class="periode">
+              <!-- <p>Periode: {{ start }} - {{ end }}</p> -->
+              <p v-if="start === '' && end === ''">Seluruh Periode</p>
+              <p v-else>Periode: {{ start }} - {{ end }}</p>
+            </div>
           </div>
         </div>
         <div class="card_task">
           <p>Total Task</p>
           <!-- <p>{{ totalFilteredTask }} Task</p> -->
-          <p v-if="start === '' && end === ''">
+          <!-- <p v-if="start === '' && end === ''">
             {{ detailKaryawan.tasks.length }}
           </p>
-          <p v-else>{{ totalFilteredTask(detailKaryawan) }}</p>
+          <p v-else>{{ totalFilteredTask(detailKaryawan) }}</p> -->
+          <p>{{ detailKaryawan.total_tasks }}</p>
         </div>
       </div>
 
@@ -468,6 +507,129 @@
       </div> -->
 
       <div class="task">
+        <select name="" id="" class="select_task" v-model="progres">
+          <option value="">Semua Progress</option>
+          <option value="completed">Complete</option>
+          <option value="done dev">Done Dev</option>
+          <option value="in progress">In Progress</option>
+          <option value="in review">In Review</option>
+          <option value="to do">To Do</option>
+        </select>
+
+        <!-- <div class="select_task" @click="openTask">Semua Progres</div>
+
+        <div class="opsi" v-if="openTaskList">
+          <label for="">
+            <input type="checkbox" name="" id="" v-model="complete" /> Complete
+          </label>
+          <label for="">
+            <input type="checkbox" name="" id="" v-model="inProgres" /> In
+            Progress
+          </label>
+          <label for="">
+            <input type="checkbox" name="" id="" v-model="todo" /> To Do
+          </label>
+          <label for="">
+            <input type="checkbox" name="" id="" v-model="inReview" /> In Review
+          </label>
+        </div> -->
+
+        <div
+          class="container_task"
+          v-for="k in detailKaryawan.tasks.filter(
+            (t) =>
+              t.status_name !== 'backlog' &&
+              (!progres ||
+                t.status_name.toLowerCase() === progres.toLowerCase())
+          )"
+        >
+          <div class="header_container">
+            <div class="name_task">
+              <p>{{ k.name }}</p>
+            </div>
+            <div class="status_task">
+              <div
+                class="progres_task"
+                :class="{
+                  task_todo: k.status_name === 'to do',
+                  task_selesai:
+                    k.status_name === 'done dev' ||
+                    k.status_name === 'completed',
+                  task_inProgress: k.status_name === 'in progress',
+                  task_inReview: k.status_name === 'in review',
+                  task_cancelled: k.status_name === 'cancelled',
+                }"
+              >
+                <p v-if="k.status_name === 'done dev'">Done Dev</p>
+                <p v-if="k.status_name === 'completed'">Complete</p>
+                <p v-if="k.status_name === 'in progress'">In Progress</p>
+                <p v-if="k.status_name === 'to do'">To Do</p>
+                <p v-if="k.status_name === 'in review'">In Review</p>
+                <p v-if="k.status_name === 'cancelled'">Cancel</p>
+              </div>
+              <div class="task_priority">
+                <p>High</p>
+              </div>
+              <div class="task_penghargaan">
+                <!-- <i class="fa-solid fa-award"></i> -->
+                <p>{{ k.project_name }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="description">
+            <p>{{ k.description }}</p>
+          </div>
+          <div
+            class="achievement"
+            v-if="k.status_name === 'done dev' || k.status_name === 'completed'"
+          >
+            <!-- <div class="achievement_logo">
+              <i class="fa-solid fa-award"></i>
+            </div> -->
+            <div class="penghargaan">
+              <p>
+                <!-- 🎉 <strong>Penghargaan!</strong>  -->
+                <!-- Selesai lebih cepat dari deadline -->
+                Ketepatan Pengerjaan Tugas
+              </p>
+              <h4>{{ k.time_efficiency_percentage }}%</h4>
+            </div>
+          </div>
+          <div class="keterangan_waktu">
+            <div class="jam">
+              <i class="fa-regular fa-clock"></i>
+              <p>Waktu Pengerjaan: {{ k.time_estimate_hours }} Jam</p>
+            </div>
+            <div class="start_date">
+              <i class="fa-regular fa-calendar"></i>
+              <p>Tanggal: {{ k.start_date }}</p>
+            </div>
+            <div class="deadline">
+              <i class="fa-regular fa-calendar"></i>
+              <p>Deadline: {{ k.due_date }}</p>
+            </div>
+            <div
+              class="done_date"
+              v-if="
+                k.status_name === 'done dev' || k.status_name === 'completed'
+              "
+            >
+              <i class="fa-regular fa-calendar"></i>
+              <p>Selesai: {{ k.date_done }}</p>
+            </div>
+          </div>
+
+          <!-- <div class="jenis_data">
+            <div class="form">
+              <p>ClickUp</p>
+            </div>
+            <div class="jenis">
+              <p>Frontend</p>
+            </div>
+          </div> -->
+        </div>
+      </div>
+      <!-- <div class="task">
         <h4>Task Complete ({{ jumlahSelesai }})</h4>
         <div
           class="container_task"
@@ -758,11 +920,59 @@
             </div>
           </div>
         </div>
-      </div>
-
+      </div> -->
     </div>
   </div>
 </template>
+
+<style scoped>
+@media (max-width: 576px) {
+  .dates {
+    width: 100%;
+    /* position: relative; */
+  }
+
+  .dates .tanggal {
+  }
+
+  .tanggal input {
+    position: relative;
+    width: 45%;
+  }
+
+  .card_karyawan {
+    font-size: 14px;
+    flex-wrap: wrap;
+  }
+
+  .card_karyawan .card_profile {
+    width: 75%;
+  }
+
+  .header_container {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .keterangan_waktu {
+    /* display: flex;
+    flex-wrap: wrap; */
+    display: flex;
+    flex-direction: column; /* ⬅️ lebih tepat daripada wrap */
+    gap: 6px; /* ⬅️ jarak antar baris */
+    align-items: flex-start;
+  }
+
+  .keterangan_waktu .jam,
+  .keterangan_waktu .start_date,
+  .keterangan_waktu .deadline,
+  .keterangan_waktu .done_date {
+    margin: 0;
+    width: 100%;
+    line-height: 1.2;
+  }
+}
+</style>
 
 <style scoped>
 .performance {
@@ -790,10 +1000,19 @@
   padding: 5px 10px;
   border-radius: 8px;
   background-color: #fff;
+  position: fixed;
+  /* top: 10px; */
+  box-shadow: 2px 2px 8px rgb(170, 170, 170);
+  z-index: 5;
+  /* margin: 10px 0; */
+  cursor: pointer;
+  /* background-color: rgb(16, 50, 130); */
+  background-color: #0041c2;
+  color: #fff;
 }
 
 .back_button:hover {
-  background-color: rgb(235, 241, 255);
+  background-color: #0037a6;
 }
 
 .header_task .detailTask_karyawan {
@@ -869,6 +1088,7 @@
   padding: 15px;
   border-radius: 10px;
   margin: 10px 0 20px 0;
+  background-color: #fff;
 }
 
 .header_container {
@@ -878,7 +1098,7 @@
   align-items: center;
 }
 
-.header_container .name_task {
+.header_container .name_task p {
   color: var(--font-color);
   font-weight: 500;
 }
@@ -894,21 +1114,23 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  background-color: rgb(222, 255, 222);
-  border: 1px solid rgb(115, 255, 115);
+  /* background-color: rgb(222, 255, 222);
+  border: 1px solid rgb(115, 255, 115); */
+  background-color: #fff;
+  border: 1px solid var(--border_color);
   border-radius: 7px;
   padding: 2px 5px;
   padding-top: 4px;
-  color: green;
+  color: var(--font-color);
   /* color: #fff; */
 }
 
 .status_task .progres_task {
-  background-color: rgb(216, 216, 255);
-  border: 1px solid rgb(176, 176, 255);
+  /* background-color: rgb(216, 216, 255);
+  border: 1px solid rgb(176, 176, 255); */
   border-radius: 7px;
   padding: 2px 5px;
-  color: rgb(0, 0, 255);
+  /* color: rgb(0, 0, 255); */
   display: flex;
   align-items: center;
 }
@@ -925,7 +1147,7 @@
 
 .description {
   margin: 10px 0;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .achievement {
@@ -940,6 +1162,20 @@
 .achievement .achievement_logo i {
   color: green;
   font-weight: 600;
+}
+
+.achievement .penghargaan p {
+  font-weight: 400;
+  color: green;
+  font-size: 14px;
+}
+
+.achievement .penghargaan h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #010101;
+  margin: 0;
+  padding: 0;
 }
 
 .keterangan_waktu {
@@ -984,6 +1220,82 @@
 
 .task_review .task h4 {
   color: rgb(0, 255, 221);
+}
+
+.select_task {
+  /* background: #fff
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")
+    no-repeat right 10px center;
+  background-size: 16px; */
+  border: 1px solid #010101;
+  padding: 4px 8px;
+  font-size: 14px;
+  border-radius: 6px;
+  width: 200px;
+}
+
+.opsi {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 200px;
+  /* align-items: center; */
+  justify-content: center;
+  border: 1px solid var(--border_color);
+  /* padding: 10px; */
+  background-color: #fff;
+  position: absolute;
+  margin-top: 10px;
+  border-radius: 6px;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.opsi label {
+  border: 1px solid #f5f3f3;
+  padding: 10px;
+}
+
+.achiv_overload {
+  background-color: red;
+  border: 1px solid rgb(253, 199, 199);
+}
+
+.achiv_normal {
+  background-color: green;
+  border: 1px solid rgb(124, 255, 124);
+}
+.achiv_underload {
+  background-color: orange;
+  border: 1px solid rgb(251, 251, 45);
+}
+
+.task_selesai {
+  background-color: rgb(216, 255, 216);
+  border: 1px solid rgb(115, 255, 115);
+  color: green;
+}
+
+.task_inProgress {
+  /* background-color: rgb(216, 216, 255);
+  border: 1px solid rgb(176, 176, 255); */
+  background-color: #fdff8b;
+  border: 1px solid #ffff47;
+}
+
+.task_todo {
+  background-color: #b3b7bd;
+  border: 1px solid rgb(176, 176, 255);
+}
+
+.task_inReview {
+  background-color: #14b8a6;
+  border: 1px solid rgb(176, 176, 255);
+}
+
+.task_cancelled {
+  background-color: #ffb3b3;
+  border: 1px solid #ff4d4d;
+  color: #800000;
 }
 </style>
 
@@ -1086,6 +1398,7 @@
   width: 96%;
   border-radius: 10px;
   padding: 25px;
+  background-color: #fff;
 }
 
 .kinerja_karyawan .profil {
@@ -1124,7 +1437,7 @@
   font-size: 12px;
   padding: 2px 10px;
   border-radius: 6px;
-  margin: 0 28%;
+  /* margin: 0 15 %; */
   text-align: center;
 }
 
@@ -1143,12 +1456,13 @@
 }
 
 .container_flex .total_beban,
-.container_flex .performs {
+.container_flex .total_seharusnya,
+.container_flex .ketepatan_pengerjaan {
   width: 50%;
   padding: 20px 15px;
   border-radius: 10px;
-  font-weight: 300;
-  font-size: 16px;
+  font-weight: 400;
+  font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1212,17 +1526,31 @@
 }
 
 .total_beban .ikon {
-  color: blue;
+  /* color: blue; */
 }
 
 .total_beban {
   background-color: rgb(236, 244, 255);
   border: 1px solid rgb(186, 215, 255);
+  color: rgb(16, 50, 130);
 }
 
-.performs {
-  background-color: #f5f5f5;
-  border: 1px solid rgb(186, 215, 255);
+.total_beban h4,
+.total_seharusnya h4,
+.ketepatan_pengerjaan h4 {
+  font-size: large;
+}
+
+.total_seharusnya {
+  background-color: rgb(226, 255, 225);
+  border: 1px solid rgb(166, 255, 163);
+  color: rgb(16, 130, 50);
+}
+
+.ketepatan_pengerjaan {
+  background-color: rgb(245, 239, 255);
+  border: 1px solid rgb(245, 239, 255);
+  /* color: ; */
 }
 
 /* .detail_task { */
@@ -1233,6 +1561,7 @@
 .detail_task {
   position: relative;
   z-index: 999;
+  cursor: pointer;
 }
 
 .detail_task .task .task1-2 {
@@ -1711,23 +2040,75 @@ export default {
       start: "",
       end: "",
       achiv: true,
+      openTaskList: false,
+      karyawanLuar: [],
+      complete: [],
+      progres: "",
     };
   },
   mounted() {
+    this.setDefaultTanggal();
     this.ambilTask();
   },
   methods: {
+    convertTime(value) {
+      // Kalau nilainya mendekati ms (3,600,000 ms = 1 jam)
+      if (value >= 360000) {
+        return value / 1000 / 60;
+      }
+
+      // Kalau nilainya lebih kecil, pakai faktor 10000
+      return value / 10000;
+    },
+    formatTanggal(tgl) {
+      const [year, month, day] = tgl.split("-");
+      return `${day}-${month}-${year}`;
+    },
+
+    setDefaultTanggal() {
+      if (this.start && this.end) return;
+      const today = new Date();
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(today.getDate() - 14);
+
+      // Format ke YYYY-MM-DD (format input type="date")
+      const format = (date) => date.toISOString().split("T")[0];
+      this.start = format(sevenDaysAgo);
+      this.end = format(today);
+    },
+    closeSukses() {
+      this.sukses = false;
+    },
     async ambilTask() {
+      console.log("Ambil task dipanggil");
       const { $api } = useNuxtApp();
 
       // const task = await $api_task.get("/api/v1/workload/tasks-by-range?start=2025-08-01&end=2025-12-30");
       // const task = await $api.get("/api/v1/clickup/tasks");
-      const task = await $api.get(
-        "/api/v1/workload/tasks-by-range?start_date=01-07-2025&end_date=31-12-2025"
-      );
-      this.daftarKaryawan = task.data.assignees;
+      try {
+        const task = await $api.get(
+          `/api/v1/workload/tasks-by-range?start_date=${this.formatTanggal(
+            this.start
+          )}&end_date=${this.formatTanggal(this.end)}`
+          // "/api/v1/workload/tasks-by-range?start_date=01-07-2025&end_date=31-12-2025"
+        );
+        this.daftarKaryawan = task.data.assignees;
 
-      console.log(task);
+        console.log("Berhasil ambil task:", task);
+      } catch (error) {
+        console.error("Gagal ambil task:", error);
+      }
+      // const task = await $api.get(
+      //   "/api/v1/workload/tasks-by-range?start_date=01-07-2025&end_date=31-12-2025"
+      // );
+      // this.daftarKaryawan = task.data.assignees;
+
+      // const tampilanLuar = await $api.get(
+      //   `/api/v1/workload/summary?start_date=09-12-2025&end_date=10-12-2025`
+      // );
+      // this.karyawanLuar = tampilanLuar.data.assignees;
+
+      // console.log(task);
     },
 
     async syncData() {
@@ -1743,7 +2124,7 @@ export default {
       this.sukses = false;
 
       try {
-        const sync = await $api.post("/api/v1/clickup/sync-all");
+        const sync = await $api.post("/api/v1/sync/all");
         // this.daftarKaryawan = sync.data;
         console.log("Berhasil: ", sync);
         // alert("Berhasil");
@@ -1766,10 +2147,11 @@ export default {
         console.log("STATUS:", error.response?.status);
         console.log("DATA:", error.response?.data);
         console.log("MESSAGE:", error.message);
-      } finally {
-        this.sukses = true;
-        this.loading = false;
-      }
+      } 
+      // finally {
+      //   this.sukses = true;
+      //   this.loading = false;
+      // }
     },
     menu() {
       this.sidebar = true;
@@ -1798,6 +2180,10 @@ export default {
     kembali() {
       this.detail_task = false;
       this.detailKaryawan = null;
+      this.progres = "";
+    },
+    openTask() {
+      this.openTaskList = !this.openTaskList;
     },
   },
   computed: {
@@ -1821,6 +2207,15 @@ export default {
       if (this.posisi) {
         hasil = hasil.filter(
           (k) => k.role.toLowerCase() === this.posisi.toLowerCase()
+        );
+      }
+
+      // filter berdasarkan progress task (jika dipilih)
+      if (this.progres) {
+        hasil = hasil.filter((k) =>
+          (k.tasks || []).some(
+            (t) => t.status_name.toLowerCase() === this.progres.toLowerCase()
+          )
         );
       }
 
@@ -1854,33 +2249,36 @@ export default {
       //     .filter((k) => k.tasks.length > 0); // Hanya tampilkan karyawan yg punya task dalam range
       // }
 
-       if (this.start && this.end) {
-        const startFilter = new Date(this.start);
-        const endFilter = new Date(this.end);
-
-        hasil = hasil
-          .map((karyawan) => {
-            // Filter task per karyawan
-            const filteredTasks = (karyawan.tasks || []).filter((t) => {
-              const startDate = new Date(t.start_date);
-              const dueDate = new Date(t.due_date);
-
-              // Task masuk range jika:
-              // - Mulai atau selesai di antara range
-              // - Atau range berada di dalam rentang task
-              return (
-                (startDate >= startFilter && startDate <= endFilter) ||
-                (dueDate >= startFilter && dueDate <= endFilter) ||
-                (startFilter >= startDate && endFilter <= dueDate)
-              );
-            });
-
-            return { ...karyawan, tasks: filteredTasks };
-          })
-          .filter((k) => k.tasks.length > 0); // Hanya tampilkan karyawan yg punya task dalam range
-      }
-
       return hasil;
+    },
+
+    filteredTask() {
+      return this.detailKaryawan.tasks.filter((t) => {
+        // Jika tidak ada filter
+        if (
+          !this.complete &&
+          !this.inProgress &&
+          !this.todo &&
+          !this.inReview
+        ) {
+          return true; // Tampilkan semua
+        }
+
+        if (this.complete && t.status_name === "completed") {
+          return true;
+        }
+        if (this.inProgress && t.status_name === "in progress") {
+          return true;
+        }
+        if (this.todo && t.status_name === "to do") {
+          return true;
+        }
+        if (this.inReview && t.status_name === "in review") {
+          return true;
+        }
+
+        return false;
+      });
     },
 
     totalFilteredTask() {
@@ -1896,24 +2294,40 @@ export default {
         }).length;
       };
     },
-    jumlahSelesai() {
-      const selesai = ["completed", "done dev"];
-      return this.detailKaryawan.tasks.filter((t) =>
-        selesai.includes(t.status_name)
-      ).length;
+    // jumlahSelesai() {
+    //   const selesai = ["completed", "done dev"];
+    //   return this.detailKaryawan.tasks.filter((t) =>
+    //     selesai.includes(t.status_name)
+    //   ).length;
+    // },
+    // jumlahInProgress() {
+    //   return this.detailKaryawan.tasks.filter(
+    //     (t) => t.status_name === "in progress"
+    //   ).length;
+    // },
+    // jumlahTodo() {
+    //   return this.detailKaryawan.tasks.filter((t) => t.status_name === "to do")
+    //     .length;
+    // },
+    // inReview() {
+    //   return this.detailKaryawan.tasks.filter(
+    //     (t) => t.status_name === "in review"
+    //   ).length;
+    // },
+  },
+  watch: {
+    // start(newVal, oldVal) {
+    //   this.ambilTask();
+    // },
+    // end(newVal, oldVal) {
+    //console.log("END berubah:", newVal);
+    //this.ambilTask();
+    //},
+    start() {
+      if (this.start && this.end) this.ambilTask();
     },
-    jumlahInProgress() {
-      return this.detailKaryawan.tasks.filter(
-        (t) => t.status_name === "in progress"
-      ).length;
-    },
-    jumlahTodo() {
-      return this.detailKaryawan.tasks.filter((t) => t.status_name === "to do")
-        .length;
-    },
-    inReview() {
-      return this.detailKaryawan.tasks.filter((t) => t.status_name === "in review")
-        .length;
+    end() {
+      if (this.start && this.end) this.ambilTask();
     },
   },
 };
