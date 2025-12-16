@@ -957,7 +957,7 @@ export default {
     },
 
     async syncData() {
-      const { $api2 } = useNuxtApp();
+      const { $api } = useNuxtApp();
       // console.log("SYNC DATA DIPANGGIL !");
 
       // Prevent Spam Klik
@@ -969,7 +969,7 @@ export default {
       this.sukses = false;
 
       try {
-        const sync = await $api2.post("/api/v1/clickup/sync-all");
+        const sync = await $api.post("/api/v1/sync/all");
         // this.daftarKaryawan = sync.data;
         console.log("Berhasil: ", sync);
         // alert("Berhasil");

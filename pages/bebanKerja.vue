@@ -102,7 +102,7 @@
           <p>Karyawan</p>
         </div>
         <div class="sync">
-          <button
+          <!-- <button
             class="btn"
             @click="syncData"
             :disabled="loading"
@@ -114,7 +114,11 @@
             <span v-if="loading" class="spinner"></span>
             <i v-else class="fa-solid fa-rotate-right"></i>
             {{ loading ? "Menyinkronkan..." : "Sync ClickUp" }}
-          </button>
+          </button> -->
+          <NuxtLink to="/historySync" class="btn">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <p>History Sync</p>
+          </NuxtLink>
         </div>
         <NuxtLink to="/" class="logout">Logout</NuxtLink>
       </div>
