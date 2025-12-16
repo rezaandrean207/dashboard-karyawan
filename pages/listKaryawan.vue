@@ -394,7 +394,7 @@
         </div>
 
         <div class="profilImage">
-          <img :src="selected.img" alt="" />
+          <img src="/img/profil.png" alt="" />
           <p>{{ selected.name }}</p>
           <div class="peran">
             <i class="fa-solid fa-briefcase"></i>

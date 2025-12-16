@@ -102,7 +102,7 @@
           <p>Karyawan</p>
         </div>
         <div class="sync">
-          <!-- <button
+          <button
             class="btn"
             @click="syncData"
             :disabled="loading"
@@ -114,11 +114,11 @@
             <span v-if="loading" class="spinner"></span>
             <i v-else class="fa-solid fa-rotate-right"></i>
             {{ loading ? "Menyinkronkan..." : "Sync ClickUp" }}
-          </button> -->
-          <NuxtLink to="/historySync" class="btn">
+          </button>
+          <!-- <NuxtLink to="/historySync" class="btn">
             <i class="fa-solid fa-clock-rotate-left"></i>
             <p>History Sync</p>
-          </NuxtLink>
+          </NuxtLink> -->
         </div>
         <NuxtLink to="/" class="logout">Logout</NuxtLink>
       </div>
@@ -328,7 +328,7 @@
               </div>
               <div class="container5">
                 <p>Standar (Seharusnya)</p>
-                <p>-</p>
+                <p>{{ k.expected_hours }} Jam</p>
               </div>
             </div> -->
           </div>
@@ -586,6 +586,11 @@
           <div
             class="achievement"
             v-if="k.status_name === 'done dev' || k.status_name === 'completed'"
+            :class="{
+              late: k.schedule_status === 'Late',
+              ontime: k.schedule_status === 'On time',
+              early: k.schedule_status === 'Early',
+            }"
           >
             <!-- <div class="achievement_logo">
               <i class="fa-solid fa-award"></i>
@@ -597,6 +602,9 @@
                 Ketepatan Pengerjaan Tugas
               </p>
               <h4>{{ k.time_efficiency_percentage }}%</h4>
+
+              <p class="label">Waktu Penyelesaian</p>
+              <h4>{{ k.remaining_time }}</h4>
             </div>
           </div>
           <div class="keterangan_waktu">
@@ -976,6 +984,39 @@
     line-height: 1.2;
   }
 }
+
+.late {
+  background-color: rgb(255, 200, 200);
+  border: 1px solid rgb(255, 100, 100);
+  border-radius: 7px;
+  padding: 5px;
+}
+
+.late .penghargaan p {
+  color: rgb(200, 0, 0);
+}
+
+.ontime {
+  background-color: rgb(222, 255, 222);
+  border: 1px solid rgb(115, 255, 115);
+  border-radius: 7px;
+  padding: 5px;
+}
+
+.ontime .penghargaan p {
+  color: rgb(0, 150, 0);
+}
+
+.early {
+  background-color: rgb(200, 255, 200);
+  border: 1px solid rgb(100, 255, 100);
+  border-radius: 7px;
+  padding: 5px;
+}
+
+.early .penghargaan p {
+  color: rgb(0, 100, 0);
+}
 </style>
 
 <style scoped>
@@ -1157,20 +1198,20 @@
 .achievement {
   display: flex;
   gap: 10px;
-  background-color: rgb(222, 255, 222);
-  border: 1px solid rgb(115, 255, 115);
+  /* background-color: rgb(222, 255, 222);
+  border: 1px solid rgb(115, 255, 115); */
   border-radius: 10px;
   padding: 12px;
 }
 
 .achievement .achievement_logo i {
-  color: green;
+  /* color: green; */
   font-weight: 600;
 }
 
 .achievement .penghargaan p {
   font-weight: 400;
-  color: green;
+  /* color: green; */
   font-size: 14px;
 }
 
@@ -1180,6 +1221,10 @@
   color: #010101;
   margin: 0;
   padding: 0;
+}
+
+.penghargaan .label {
+  margin-top: 10px;
 }
 
 .keterangan_waktu {
@@ -2079,6 +2124,8 @@ export default {
       const format = (date) => date.toISOString().split("T")[0];
       this.start = format(sevenDaysAgo);
       this.end = format(today);
+
+      return;
     },
     closeSukses() {
       this.sukses = false;
@@ -2151,7 +2198,7 @@ export default {
         console.log("STATUS:", error.response?.status);
         console.log("DATA:", error.response?.data);
         console.log("MESSAGE:", error.message);
-      } 
+      }
       // finally {
       //   this.sukses = true;
       //   this.loading = false;
