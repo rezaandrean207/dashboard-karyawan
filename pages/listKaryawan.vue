@@ -607,9 +607,6 @@ form input {
     gap: 20px;
   } */
 
-  .isi .filter {
-    height: 25vh;
-  }
 
   .filter_detail form {
     width: 100%;
@@ -628,6 +625,7 @@ form input {
     width: 100%;
     height: auto;
     padding: 12px 0;
+    font-size: 14px;
   }
 
   /* .karyawan {
@@ -685,10 +683,6 @@ form input {
     left: 0;
   }
 
-  .isi .filter {
-    height: 42vh;
-  }
-
   .filter .filter_detail {
     flex-direction: column;
     width: 100%;
@@ -723,7 +717,6 @@ form input {
 
   .filter_detail .total_karyawan {
     width: 100%;
-    height: 12vh;
     padding: 15px;
     justify-content: flex-start;
   }

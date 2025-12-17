@@ -262,53 +262,84 @@
               <p v-if="k.role === 'UI-UX'">UI-UX Designer</p> -->
             </div>
           </div>
+
           <div class="status_karyawan">
+            <div class="available">
+              <i class="fa-solid fa-circle"></i>
+              <p>Available</p>
+            </div>
             <div class="status">
               <p>- Normal</p>
             </div>
-            <!-- <div class="keterangan_status">
-              <p>10 jam lebih cepat</p>
-            </div> -->
+          </div>
+          <div class="performa_karyawan">
+            <i class="fa-solid fa-chart-line"></i>
+            <div class="text">
+              <p>Performa</p>
+              <span>100%</span>
+            </div>
           </div>
         </div>
 
-        <details class="details">
-          <summary class="beban_karyawan">Beban Kerja Karyawan</summary>
-          <div class="keterangan_karyawan">
-            <div class="container_flex">
-              <div class="total_beban">
-                <div class="teks">
-                  <p>Total Beban Kerja (Aktif)</p>
-                  <h4>
-                    {{ k.total_spent_hours }} Jam dari {{ k.total_tasks }} task
-                  </h4>
-                </div>
-                <div class="ikon">
-                  <i class="fa-regular fa-clock"></i>
-                </div>
+        <!-- <details class="details">
+          <summary class="beban_karyawan">Beban Kerja Karyawan</summary> -->
+        <div class="keterangan_karyawan">
+          <div class="container_flex">
+            <div class="total_seharusnya">
+              <div class="teks">
+                <p>Total Beban Kerja (Seharusnya)</p>
+                <h4>
+                  {{ k.expected_hours }} Jam dari {{ k.total_tasks }} task
+                </h4>
               </div>
-              <div class="total_seharusnya">
-                <div class="teks">
-                  <p>Total Beban Kerja (Seharusnya)</p>
-                  <h4>
-                    {{ k.expected_hours }} Jam dari {{ k.total_tasks }} task
-                  </h4>
-                </div>
-                <div class="ikon">
-                  <i class="fa-regular fa-clock"></i>
-                </div>
-              </div>
-              <div class="ketepatan_pengerjaan">
-                <div class="teks">
-                  <p>Ketepatan Pengerjaan Semua Tugas</p>
-                  <h4>{{ k.on_time_completion_percentage }}%</h4>
-                </div>
-                <div class="ikon">
-                  <i class="fa-solid fa-list-check"></i>
-                </div>
+              <div class="ikon">
+                <i class="fa-regular fa-clock"></i>
               </div>
             </div>
-            <!-- <div class="container_block">
+            <div class="total_beban">
+              <div class="teks">
+                <p>Total Beban Kerja (Aktif)</p>
+                <h4>
+                  {{ k.total_spent_hours }} Jam dari {{ k.total_tasks }} task
+                </h4>
+              </div>
+              <div class="ikon">
+                <i class="fa-regular fa-clock"></i>
+              </div>
+            </div>
+            <div
+              class="ketepatan_pengerjaan"
+              v-if="k.on_time_completion_percentage == null"
+            >
+              <div class="teks">
+                <p>Ketepatan Pengerjaan Semua Tugas</p>
+                <h4>-</h4>
+              </div>
+              <div class="ikon">
+                <i class="fa-solid fa-list-check"></i>
+              </div>
+            </div>
+            <div
+              class="ketepatan_pengerjaan"
+              v-else
+              :class="{
+                special: k.on_time_completion_percentage > 100,
+                ontime:
+                  k.on_time_completion_percentage > 80 &&
+                  k.on_time_completion_percentage <= 100,
+                late: k.on_time_completion_percentage <= 80,
+              }"
+            >
+              <div class="teks">
+                <p>Ketepatan Pengerjaan Semua Tugas</p>
+                <h4>{{ k.on_time_completion_percentage }}%</h4>
+              </div>
+              <div class="ikon">
+                <i class="fa-solid fa-list-check"></i>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="container_block">
               <p>Breakdown Detail</p>
               <div class="container1">
                 <p>Selesai</p>
@@ -331,8 +362,8 @@
                 <p>{{ k.expected_hours }} Jam</p>
               </div>
             </div> -->
-          </div>
-        </details>
+        </div>
+        <!-- </details> -->
 
         <div class="detail_task" @click="detail(k)">
           <i class="fa-solid fa-list-check"></i>
@@ -489,26 +520,83 @@
             <h3>{{ detailKaryawan.username }}</h3>
             <p>{{ detailKaryawan.role }}</p>
             <div class="periode">
-              <!-- <p>Periode: {{ start }} - {{ end }}</p> -->
               <p v-if="start === '' && end === ''">Seluruh Periode</p>
               <p v-else>Periode: {{ start }} - {{ end }}</p>
             </div>
           </div>
         </div>
-        <div class="card_task">
+        <!-- <div class="card_task">
           <p>Total Task</p>
-          <!-- <p>{{ totalFilteredTask }} Task</p> -->
-          <!-- <p v-if="start === '' && end === ''">
-            {{ detailKaryawan.tasks.length }}
-          </p>
-          <p v-else>{{ totalFilteredTask(detailKaryawan) }}</p> -->
           <p>{{ detailKaryawan.total_tasks }}</p>
+        </div> -->
+        <div class="keterangan_karyawan">
+          <div class="container_flex">
+            <div class="total_seharusnya">
+              <div class="teks">
+                <p>Total Beban Kerja (Seharusnya)</p>
+                <h4>
+                  {{ detailKaryawan.expected_hours }} Jam dari
+                  {{ detailKaryawan.total_tasks }} task
+                </h4>
+              </div>
+              <div class="ikon">
+                <i class="fa-regular fa-clock"></i>
+              </div>
+            </div>
+            <div class="total_beban">
+              <div class="teks">
+                <p>Total Beban Kerja (Aktif)</p>
+                <h4>
+                  {{ detailKaryawan.total_spent_hours }} Jam dari
+                  {{ detailKaryawan.total_tasks }} task
+                </h4>
+              </div>
+              <div class="ikon">
+                <i class="fa-regular fa-clock"></i>
+              </div>
+            </div>
+            <div
+              class="ketepatan_pengerjaan"
+              :class="{
+                special: detailKaryawan.on_time_completion_percentage > 100,
+                ontime:
+                  detailKaryawan.on_time_completion_percentage > 80 &&
+                  detailKaryawan.on_time_completion_percentage <= 100,
+                late: detailKaryawan.on_time_completion_percentage <= 80,
+              }"
+            >
+              <div class="teks">
+                <p>Ketepatan Pengerjaan Semua Tugas</p>
+                <h4>{{ detailKaryawan.on_time_completion_percentage }}%</h4>
+              </div>
+              <div class="ikon">
+                <i class="fa-solid fa-list-check"></i>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- <div class="container">
-        <h1>Dummy</h1>
-      </div> -->
+      <div class="container_progres">
+        <div class="container_selesai">
+          <p>Task Selesai</p>
+          <p>
+            <strong>{{ completedTask }} Task</strong>
+          </p>
+        </div>
+        <div class="container_onProgres">
+          <p>Sedang Dikerjakan</p>
+          <p>
+            <strong>{{ inProgressTask }} Task</strong>
+          </p>
+        </div>
+        <div class="container_todo">
+          <p>Akan Datang</p>
+          <p>
+            <strong>{{ todoTask }} Task</strong>
+          </p>
+        </div>
+      </div>
 
       <div class="task">
         <select name="" id="" class="select_task" v-model="progres">
@@ -587,9 +675,11 @@
             class="achievement"
             v-if="k.status_name === 'done dev' || k.status_name === 'completed'"
             :class="{
-              late: k.schedule_status === 'Late',
-              ontime: k.schedule_status === 'On time',
-              early: k.schedule_status === 'Early',
+              special: k.time_efficiency_percentage > 100,
+              ontime:
+                k.time_efficiency_percentage > 80 &&
+                k.time_efficiency_percentage <= 100,
+              late: k.time_efficiency_percentage <= 80,
             }"
           >
             <!-- <div class="achievement_logo">
@@ -937,6 +1027,69 @@
   </div>
 </template>
 
+<!-- Style Container Progress -->
+<style scoped>
+.posisi select,
+.posisi select option {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.container_progres {
+  display: flex;
+  justify-content: space-between;
+  /* margin: 20px; */
+  padding: 10px 0 20px 0;
+  /* background-color: #f5f5f5; */
+  border-radius: 10px;
+  gap: 20px;
+  width: 96%;
+}
+
+.container_selesai,
+.container_onProgres,
+.container_todo {
+  flex: 1;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  flex-direction: column;
+  display: flex;
+  gap: 6px;
+}
+
+.container_selesai {
+  background-color: rgb(233, 243, 255);
+  border: 1px solid rgb(136, 190, 255);
+}
+.container_selesai p {
+  color: rgb(16, 50, 130);
+  font-size: 15px;
+}
+
+.container_onProgres {
+  background-color: rgb(255, 244, 230);
+  border: 1px solid rgb(255, 200, 150);
+}
+.container_onProgres p {
+  color: rgb(218, 58, 0);
+  font-size: 15px;
+}
+
+.container_todo {
+  background-color: #f3e8ff;
+  border: 1px solid #d8b4fe;
+}
+.container_todo p {
+  color: purple;
+  font-size: 15px;
+}
+</style>
+
+<!-- Style Responsive -->
 <style scoped>
 @media (max-width: 576px) {
   .dates {
@@ -983,6 +1136,8 @@
     width: 100%;
     line-height: 1.2;
   }
+
+ 
 }
 
 .late {
@@ -1034,6 +1189,7 @@
   align-items: center;
   gap: 20px;
   margin-top: 20px;
+  width: 96%;
 }
 
 .header_task .back_button {
@@ -1046,7 +1202,6 @@
   border-radius: 8px;
   background-color: #fff;
   position: fixed;
-  /* top: 10px; */
   box-shadow: 2px 2px 8px rgb(170, 170, 170);
   z-index: 5;
   /* margin: 10px 0; */
@@ -1076,9 +1231,9 @@
 }
 
 .card_karyawan {
-  display: flex;
+  /* display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; */
   border: 1px solid rgb(198, 215, 253);
   border-radius: 10px;
   padding: 25px;
@@ -1086,16 +1241,18 @@
   top: 20px; */
   margin: 20px 0;
   background-color: #fff;
+  width: 96%;
 }
 
 .card_karyawan .card_profile {
   display: flex;
   align-items: center;
   gap: 15px;
+  margin-bottom: 10px;
 }
 
 .card_karyawan .card_profile img {
-  width: 20%;
+  width: 100px;
   /* border: 1px solid #010101; */
   border-radius: 50%;
   border: 5px solid rgb(193, 222, 232);
@@ -1134,6 +1291,7 @@
   border-radius: 10px;
   margin: 10px 0 20px 0;
   background-color: #fff;
+  width: 96%;
 }
 
 .header_container {
@@ -1455,11 +1613,12 @@
   align-items: center;
   gap: 20px;
   padding-right: 20px;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   /* border-bottom: 1px solid #b5b5b5c9; */
-  padding-bottom: 20px;
+  padding-bottom: 10px;
   font-weight: 300;
   font-size: 15px;
+  flex-wrap: wrap;
 }
 
 .profil .profil_karyawan {
@@ -1467,6 +1626,7 @@
   /* border: 1px solid #010101; */
   align-items: center;
   gap: 15px;
+  flex: 10;
 }
 
 .profil_karyawan img {
@@ -1477,12 +1637,43 @@
   border: 5px solid rgb(193, 222, 232);
 }
 
-.profil .status_karyawan {
+.profil .container_status {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.status_karyawan {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex: 1;
+}
+
+.status_karyawan .available {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  background-color: #f5f5f5;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 6px;
+  border: 1px solid #dbdbdb;
+}
+
+.status_karyawan .available i {
+  color: red;
+  font-size: 8px;
 }
 
 .profil .status_karyawan .status {
-  background-color: #010101;
-  color: #fff;
+  background-color: #f5f5f5;
+  /* background-color: #010101; */
+  border: 1px solid #dbdbdb;
+  /* color: #fff; */
+  font-weight: 600;
   font-size: 12px;
   padding: 2px 10px;
   border-radius: 6px;
@@ -1497,17 +1688,45 @@
   font-size: 15px;
 }
 
-.kinerja_karyawan .keterangan_karyawan .container_flex {
+.performa_karyawan {
+  border: 1px solid #dbdbdb;
+  background-color: #f5f5f5;
+  border-radius: 6px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.performa_karyawan i {
+  font-size: 25px;
+}
+
+.performa_karyawan .text {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 5px;
+  font-size: 16px;
+}
+
+.text span {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.keterangan_karyawan .container_flex {
   display: flex;
   justify-content: space-evenly;
   gap: 15px;
   margin-top: 10px;
 }
 
-.container_flex .total_beban,
 .container_flex .total_seharusnya,
+.container_flex .total_beban,
 .container_flex .ketepatan_pengerjaan {
-  width: 50%;
+  width: 100%;
   padding: 20px 15px;
   border-radius: 10px;
   font-weight: 400;
@@ -1579,9 +1798,9 @@
 }
 
 .total_beban {
-  background-color: rgb(236, 244, 255);
-  border: 1px solid rgb(186, 215, 255);
-  color: rgb(16, 50, 130);
+  background-color: rgb(226, 255, 225);
+  border: 1px solid rgb(166, 255, 163);
+  color: rgb(16, 130, 50);
 }
 
 .total_beban h4,
@@ -1591,15 +1810,51 @@
 }
 
 .total_seharusnya {
-  background-color: rgb(226, 255, 225);
-  border: 1px solid rgb(166, 255, 163);
-  color: rgb(16, 130, 50);
+  background-color: #f5f5f5;
+  border: 1px solid #d1d1d1;
+  color: #333333;
 }
 
-.ketepatan_pengerjaan {
+/* .ketepatan_pengerjaan {
   background-color: rgb(245, 239, 255);
   border: 1px solid rgb(245, 239, 255);
-  /* color: ; */
+} */
+
+.special {
+  position: relative;
+  padding: 20px;
+  border-radius: 12px;
+  background: #fff;
+  z-index: 0;
+  border: 5px solid #c0b838;
+}
+
+.special::before {
+  content: "";
+  position: absolute;
+  inset: -2px; /* ketebalan border */
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    #ffd700,
+    #ffb700,
+    #fff2a8,
+    #ffb700,
+    #ffd700
+  );
+  background-size: 300% 300%;
+  animation: gold-run 8s linear infinite;
+  z-index: -1;
+}
+
+/* Animasi berjalan */
+@keyframes gold-run {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 300% 50%;
+  }
 }
 
 /* .detail_task { */
@@ -1737,6 +1992,10 @@
   gap: 4px;
 }
 
+.tanggal input {
+  background-color: #fff;
+}
+
 .time .project {
   border: 1px solid rgb(163, 224, 255);
   font-size: 12px;
@@ -1794,7 +2053,7 @@ summary:hover {
   transform: rotate(90deg);
 }
 
-.details .keterangan_karyawan {
+.keterangan_karyawan {
   max-height: 0;
   overflow: hidden;
   opacity: 0;
@@ -1803,7 +2062,7 @@ summary:hover {
   margin-bottom: 15px;
 }
 
-details[open] .keterangan_karyawan {
+.keterangan_karyawan {
   max-height: 800px; /* cukup besar agar muat semua */
   opacity: 1;
   transform: translateY(0);
@@ -1934,6 +2193,14 @@ form select {
     gap: 20px;
     font-size: 13px;
   }
+
+  .back_button {
+    margin-top: 30px;
+  }
+
+  .container_progres {
+    flex-wrap: wrap;
+  }
 }
 
 /* ----------- 768px (Tablet / Small Laptop) ----------- */
@@ -1992,6 +2259,10 @@ form select {
     flex-direction: column;
     gap: 8px;
   } */
+
+  .detail_task {
+    font-size: 13px;
+  }
 }
 
 /* ----------- 576px (Mobile) ----------- */
@@ -2069,6 +2340,10 @@ form select {
   .konten .background .sidebar_responsive {
     width: 60%;
   }
+
+   .detail_task {
+    font-size: 10px;
+  }
 }
 </style>
 
@@ -2124,8 +2399,6 @@ export default {
       const format = (date) => date.toISOString().split("T")[0];
       this.start = format(sevenDaysAgo);
       this.end = format(today);
-
-      return;
     },
     closeSukses() {
       this.sukses = false;
@@ -2344,6 +2617,20 @@ export default {
           return tgl >= startDate && tgl <= endDate;
         }).length;
       };
+    },
+    completedTask() {
+      return this.detailKaryawan.tasks.filter(
+        (t) => t.status_name === "completed" || t.status_name === "done dev"
+      ).length;
+    },
+    inProgressTask() {
+      return this.detailKaryawan.tasks.filter(
+        (t) => t.status_name === "in progress"
+      ).length;
+    },
+    todoTask() {
+      return this.detailKaryawan.tasks.filter((t) => t.status_name === "to do")
+        .length;
     },
     // jumlahSelesai() {
     //   const selesai = ["completed", "done dev"];
