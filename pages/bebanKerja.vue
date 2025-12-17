@@ -26,11 +26,6 @@
             <i class="fa-regular fa-clock"></i>
             <p>Beban Kerja</p>
           </NuxtLink>
-
-          <NuxtLink to="/laporanKinerja" class="report">
-            <i class="fa-solid fa-chart-simple"></i>
-            <p>Laporan Kinerja</p>
-          </NuxtLink>
           <!-- <div class="setting">
           <i class="fa-solid fa-gear"></i>
           <a href="">Pengaturan</a>
@@ -57,7 +52,7 @@
               <!-- <i v-else class="fa-solid fa-rotate-right"></i> -->
               <i v-else class="fa-solid fa-rotate-right"></i>
 
-              {{ loading ? "Menyinkronkan..." : "Sync ClickUp" }}
+              {{ loading ? "Menyinkronkan..." : "Sync" }}
               <!-- <i v-else class="fa-solid fa-circle-check"></i>     -->
             </button>
           </div>
@@ -113,7 +108,7 @@
           >
             <span v-if="loading" class="spinner"></span>
             <i v-else class="fa-solid fa-rotate-right"></i>
-            {{ loading ? "Menyinkronkan..." : "Sync ClickUp" }}
+            {{ loading ? "Menyinkronkan..." : "Sync" }}
           </button>
           <!-- <NuxtLink to="/historySync" class="btn">
             <i class="fa-solid fa-clock-rotate-left"></i>
@@ -125,10 +120,7 @@
     </div>
 
     <div class="isi" v-if="detailKaryawan === null">
-      <!-- Animasi sukses -->
-      <!-- <div v-if="sukses" class="success-animation">
-        ✔ Sinkronisasi Berhasil!
-      </div> -->
+     
 
       <!-- Animasi sukses -->
       <div v-if="sukses" class="success-animation">
@@ -144,6 +136,14 @@
           </div>
         </div>
       </div>
+
+      <div v-if="isLoading" class="loading">
+        <div class="loading_tanggal">
+          <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </div>
+      </div>
+
+      
 
       <h2>Manajemen Beban Kerja</h2>
       <p>
@@ -1136,8 +1136,6 @@
     width: 100%;
     line-height: 1.2;
   }
-
- 
 }
 
 .late {
@@ -2341,7 +2339,7 @@ form select {
     width: 60%;
   }
 
-   .detail_task {
+  .detail_task {
     font-size: 10px;
   }
 }
@@ -2368,6 +2366,7 @@ export default {
       karyawanLuar: [],
       complete: [],
       progres: "",
+      isLoading: false,
     };
   },
   mounted() {
@@ -2393,7 +2392,7 @@ export default {
       if (this.start && this.end) return;
       const today = new Date();
       const sevenDaysAgo = new Date();
-      sevenDaysAgo.setDate(today.getDate() - 14);
+      sevenDaysAgo.setDate(today.getDate() - 30);
 
       // Format ke YYYY-MM-DD (format input type="date")
       const format = (date) => date.toISOString().split("T")[0];
@@ -2404,6 +2403,7 @@ export default {
       this.sukses = false;
     },
     async ambilTask() {
+      this.isLoading = true
       console.log("Ambil task dipanggil");
       const { $api } = useNuxtApp();
 
@@ -2421,6 +2421,8 @@ export default {
         console.log("Berhasil ambil task:", task);
       } catch (error) {
         console.error("Gagal ambil task:", error);
+      } finally {
+        this.isLoading = false
       }
       // const task = await $api.get(
       //   "/api/v1/workload/tasks-by-range?start_date=01-07-2025&end_date=31-12-2025"

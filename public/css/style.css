@@ -152,7 +152,7 @@ body {
   align-items: center;
   gap: 10px;
   border-bottom: 1px solid rgb(85, 57, 223);
-  height: 13vh;
+  height: 12%;
 }
 
 .logo img {
@@ -213,13 +213,13 @@ body {
 
 .sidebar .footer_sidebar,
 .sidebar_responsive .footer_sidebar {
-  /* position: absolute;
-  bottom: 0; */
+  position: absolute;
+  bottom: 0;
   /* border: 1px solid #010101; */
   border-top: 1px solid rgb(85, 57, 223);
   padding: 18px;
   width: 100%;
-  height: 25%;
+  /* height: 25%; */
 }
 
 .footer_sidebar .user {
@@ -368,7 +368,6 @@ form .tanggal_mulai,
 .cari {
   width: 30%;
 }
-
 
 .tanggal_mulai label,
 .tanggal_akhir label,
@@ -807,22 +806,6 @@ form select {
     display: none;
   }
 
-  .konten .background .sidebar_responsive {
-    width: 40%;
-  }
-
-  .sidebar_responsive .logo {
-    display: flex;
-    /* justify-content: space-between; */
-    justify-content: left;
-    padding-left: 30px;
-    text-align: justify;
-    align-items: center;
-    gap: 10px;
-    border-bottom: 1px solid rgb(85, 57, 223);
-    height: 13vh;
-  }
-
   .konten .navbar {
     display: flex;
     background-color: rgb(16, 50, 130);
@@ -830,7 +813,7 @@ form select {
     width: 100%;
     position: fixed;
     top: 0;
-    height: 12vh;
+    height: 10vh;
     align-items: center;
     z-index: 99;
     padding-left: 35px;
@@ -869,8 +852,6 @@ form select {
     width: 50%;
     height: 90vh;
   }
-
-  
 }
 
 /* Tablet */
@@ -883,8 +864,6 @@ form select {
     display: none;
   }
 
-  
-
   .konten .isi {
     width: 96%;
     overflow-x: hidden;
@@ -895,8 +874,6 @@ form select {
 
 /* Handphone */
 @media (max-width: 576px) {
-
-
   /* Sidebar di-hide */
   .konten .sidebar {
     display: none;
@@ -1010,11 +987,55 @@ form select {
   }
 }
 
+/* LOADING TANGGAL - overlay for date loading */
+.loading {
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.6);
+  z-index: 950;
+  pointer-events: all;
+  animation: fadeIn 0.18s ease-out both;
+  width: 100vw  ;
+  height: 100vh;
+}
+
+.loading_tanggal {
+  background: rgba(255, 255, 255, 1);
+  padding: 18px 20px;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.loading_tanggal i {
+  font-size: 28px;
+  color: rgb(16, 50, 130);
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* FILTER OVERLAY */
 .filter-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.35);
+  background: rgba(0, 0, 0, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1029,7 +1050,7 @@ form select {
   display: flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
 }
 
 .filter-overlay .spinner {
@@ -1079,8 +1100,7 @@ form select {
   justify-content: space-between;
   align-items: center;
   /* padding: 10px 0; */
-   position: fixed;
-   
+  position: fixed;
 }
 
 .sukses .berhasil {
@@ -1117,4 +1137,3 @@ form select {
   
  
 } */
-

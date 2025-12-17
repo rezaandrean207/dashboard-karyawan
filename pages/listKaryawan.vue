@@ -30,11 +30,6 @@
             <i class="fa-regular fa-clock"></i>
             <p>Beban Kerja</p>
           </NuxtLink>
-
-          <NuxtLink to="/laporanKinerja" class="report">
-            <i class="fa-solid fa-chart-simple"></i>
-            <p>Laporan Kinerja</p>
-          </NuxtLink>
           <!-- <div class="setting">
           <i class="fa-solid fa-gear"></i>
           <a href="">Pengaturan</a>
@@ -59,7 +54,7 @@
             >
               <span v-if="loading" class="spinner"></span>
               <i v-else class="fa-solid fa-rotate-right"></i>
-              {{ loading ? "Menyinkronkan..." : "Sync ClickUp" }}
+              {{ loading ? "Menyinkronkan..." : "Sync" }}
             </button>
           </div>
           <NuxtLink to="/" class="logout">Logout</NuxtLink>
@@ -117,7 +112,7 @@
             <!-- <i v-else class="fa-solid fa-rotate-right"></i> -->
             <i v-else class="fa-solid fa-rotate-right"></i>
 
-            {{ loading ? "Menyinkronkan..." : "Sync ClickUp" }}
+            {{ loading ? "Menyinkronkan..." : "Sync" }}
             <!-- <i v-else class="fa-solid fa-circle-check"></i>     -->
           </button>
         </div>
