@@ -5,9 +5,7 @@ export default defineNuxtConfig({
   css: ["@fortawesome/fontawesome-free/css/all.min.css"],
   runtimeConfig: {
     public: {
-      apiBaseUrl:
-        process.env.NUXT_PUBLIC_API_BASE_URL ||
-        "https://api.clickup.devlmu.com", // cukup didefinisikan, nilainya diambil dari .env
+      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || "https://api.clickup.devlmu.com", // cukup didefinisikan, nilainya diambil dari .env
     },
   },
   app: {
