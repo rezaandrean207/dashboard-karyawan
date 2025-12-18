@@ -8,12 +8,12 @@ export default defineNuxtPlugin(() => {
   });
 
   api.interceptors.request.use((req) => {
-    const token = useCookie("token").value;
-
-    if (token) {
-      req.headers.Authorization = `Bearer ${token}`;
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("token");
+      if (token) {
+        req.headers.Authorization = `Bearer ${token}`;
+      }
     }
-
     return req;
   });
 

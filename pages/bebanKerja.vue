@@ -261,19 +261,48 @@
           </div>
 
           <div class="status_karyawan">
-            <div class="available">
+            <div
+              :class="{
+                available: k.availability_status === 'Available',
+                not_available: k.availability_status === 'Not Available',
+              }"
+            >
               <i class="fa-solid fa-circle"></i>
-              <p>Available</p>
+              <p>{{ k.availability_status }}</p>
             </div>
-            <div class="status">
-              <p>- Normal</p>
+            <div
+              :class="{
+                overload_task: k.workload_status === 'Overload',
+                underload_task: k.workload_status === 'Underload',
+                normal_task: k.workload_status === 'Normal',
+              }"
+            >
+              <i
+                :class="{
+                  'fa-solid fa-chart-line': k.workload_status === 'Underload',
+                  'fa-solid fa-equals': k.workload_status === 'Normal',
+                  'fa-solid fa-arrow-trend-up':
+                    k.workload_status === 'Overload',
+                }"
+              ></i>
+              <!-- <i class="fa-solid fa-chart-line"></i>
+              <i class="fa-solid fa-arrow-trend-up"></i>
+              <i class="fa-solid fa-equals"></i> -->
+              <p>{{ k.workload_status }}</p>
             </div>
           </div>
-          <div class="performa_karyawan">
+          <div
+            class="performa_karyawan"
+            :class="{
+              special: k.performance.score > 100,
+              ontime: k.performance.score > 80 && k.performance.score <= 100,
+              late: k.performance.score <= 80,
+            }"
+          >
             <i class="fa-solid fa-chart-line"></i>
             <div class="text">
               <p>Performa</p>
-              <span>100%</span>
+              <span><strong>{{ k.performance.score }}%</strong></span>
             </div>
           </div>
         </div>
@@ -286,7 +315,7 @@
               <div class="teks">
                 <p>Total Beban Kerja (Seharusnya)</p>
                 <h4>
-                  {{ k.expected_hours }} Jam dari {{ k.total_tasks }} task
+                  {{ k.expected_hours }} Jam 
                 </h4>
               </div>
               <div class="ikon">
@@ -297,7 +326,8 @@
               <div class="teks">
                 <p>Total Beban Kerja (Aktif)</p>
                 <h4>
-                  {{ k.total_spent_hours }} Jam dari {{ k.total_tasks }} task
+                  {{ k.total_spent_hours.percentage }}%
+                  ({{ k.total_spent_hours.hours }} Jam)
                 </h4>
               </div>
               <div class="ikon">
@@ -306,7 +336,7 @@
             </div>
             <!-- <div
               class="ketepatan_pengerjaan"
-              v-if="k.on_time_completion_percentage == null"
+              v-if="k.avg_time_efficiency.avg_percentage == null"
             >
               <div class="teks">
                 <p>Ketepatan Pengerjaan Semua Tugas</p>
@@ -318,18 +348,18 @@
             </div> -->
             <div
               class="ketepatan_pengerjaan"
-              v-if="k.on_time_completion_percentage"
+              v-if="k.avg_time_efficiency.avg_percentage"
               :class="{
-                special: k.on_time_completion_percentage > 100,
+                special: k.avg_time_efficiency.avg_percentage > 100,
                 ontime:
-                  k.on_time_completion_percentage > 80 &&
-                  k.on_time_completion_percentage <= 100,
-                late: k.on_time_completion_percentage <= 80,
+                  k.avg_time_efficiency.avg_percentage > 80 &&
+                  k.avg_time_efficiency.avg_percentage <= 100,
+                late: k.avg_time_efficiency.avg_percentage <= 80,
               }"
             >
               <div class="teks">
                 <p>Ketepatan Pengerjaan Semua Tugas</p>
-                <h4>{{ k.on_time_completion_percentage }}%</h4>
+                <h4>{{ k.avg_time_efficiency.avg_percentage }}%</h4>
               </div>
               <div class="ikon">
                 <i class="fa-solid fa-list-check"></i>
@@ -364,9 +394,7 @@
 
         <div class="detail_task" @click="detail(k)">
           <i class="fa-solid fa-list-check"></i>
-          <p v-if="ambilTask">
-            Lihat Ringkasan Task Detail ({{ k.tasks.length }} Task)
-          </p>
+          <p v-if="ambilTask">Task Detail ({{ k.tasks.length }} Task)</p>
           <p v-else>{{ totalFilteredTask(k) }}</p>
           <i class="fa-solid fa-arrow-up-from-bracket"></i>
         </div>
@@ -532,8 +560,7 @@
               <div class="teks">
                 <p>Total Beban Kerja (Seharusnya)</p>
                 <h4>
-                  {{ detailKaryawan.expected_hours }} Jam dari
-                  {{ detailKaryawan.total_tasks }} task
+                  {{ detailKaryawan.expected_hours }} Jam 
                 </h4>
               </div>
               <div class="ikon">
@@ -544,8 +571,8 @@
               <div class="teks">
                 <p>Total Beban Kerja (Aktif)</p>
                 <h4>
-                  {{ detailKaryawan.total_spent_hours }} Jam dari
-                  {{ detailKaryawan.total_tasks }} task
+                  {{ detailKaryawan.total_spent_hours.hours }} Jam
+                  {{ detailKaryawan.total_spent_hours.percentage }}%
                 </h4>
               </div>
               <div class="ikon">
@@ -1622,7 +1649,7 @@
   /* border: 1px solid #010101; */
   align-items: center;
   gap: 15px;
-  flex: 10;
+  flex: 12;
 }
 
 .profil_karyawan img {
@@ -1644,10 +1671,11 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
-  flex: 1;
+  flex: 2;
 }
 
-.status_karyawan .available {
+.status_karyawan .available,
+.not_available {
   display: flex;
   gap: 5px;
   align-items: center;
@@ -1657,17 +1685,26 @@
   padding: 2px 10px;
   border-radius: 6px;
   border: 1px solid #dbdbdb;
+  text-wrap: nowrap;
 }
 
 .status_karyawan .available i {
+  color: rgb(0, 255, 0);
+  font-size: 8px;
+}
+
+.status_karyawan .not_available i {
   color: red;
   font-size: 8px;
 }
 
-.profil .status_karyawan .status {
-  background-color: #f5f5f5;
+.profil .status_karyawan .overload_task,
+.underload_task,
+.normal_task {
+  display: flex;
+  /* background-color: #f5f5f5; */
   /* background-color: #010101; */
-  border: 1px solid #dbdbdb;
+  /* border: 1px solid #dbdbdb; */
   /* color: #fff; */
   font-weight: 600;
   font-size: 12px;
@@ -1675,6 +1712,27 @@
   border-radius: 6px;
   /* margin: 0 15 %; */
   text-align: center;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.overload_task {
+  background-color: rgb(255, 237, 237);
+  color: rgb(203, 0, 0);
+  border: 1px solid rgb(255, 204, 204);
+}
+
+.underload_task {
+  background-color: rgb(212, 255, 212);
+  border: 1px solid rgb(154, 255, 154);
+  color: green;
+}
+
+.normal_task {
+  background-color: #f5f5f5;
+   border: 1px solid #dbdbdb;
+   color: #010101;
 }
 
 .status_karyawan .keterangan_status {
@@ -1685,14 +1743,15 @@
 }
 
 .performa_karyawan {
-  border: 1px solid #dbdbdb;
-  background-color: #f5f5f5;
+  /* border: 1px solid #dbdbdb;
+  background-color: #f5f5f5; */
   border-radius: 6px;
   padding: 10px 20px;
   display: flex;
   align-items: center;
   gap: 10px;
-  flex: 1;
+  flex: 2;
+  margin-left: auto;
 }
 
 .performa_karyawan i {
@@ -2343,6 +2402,12 @@ form select {
 }
 </style>
 
+<script setup>
+definePageMeta({
+  middleware: "auth",
+});
+</script>
+
 <script>
 import DetailTask from "./detailTask.vue";
 
@@ -2471,8 +2536,7 @@ export default {
         console.log("STATUS:", error.response?.status);
         console.log("DATA:", error.response?.data);
         console.log("MESSAGE:", error.message);
-      }
-      finally {
+      } finally {
         this.sukses = true;
         this.loading = false;
       }
