@@ -631,7 +631,16 @@
                 <i class="fa-regular fa-clock"></i>
               </div>
             </div>
-            <div class="total_beban">
+            <div
+              class="total_beban"
+              :class="{
+                special: k.total_spent_hours.percentage > 100,
+                ontime:
+                  k.total_spent_hours.percentage > 80 &&
+                  k.total_spent_hours.percentage <= 100,
+                late: k.total_spent_hours.percentage <= 80,
+              }"
+            >
               <div class="teks">
                 <p>Total Beban Kerja (Aktif)</p>
                 <h4>
@@ -781,7 +790,7 @@
             v-if="k.status_name === 'done dev' || k.status_name === 'completed'"
             :class="{
               special: k.time_efficiency_percentage > 100,
-              ontime: k.time_efficiency_percentage === 100,
+              ontime: k.time_efficiency_percentage == 100,
               late: k.time_efficiency_percentage < 100,
             }"
           >
