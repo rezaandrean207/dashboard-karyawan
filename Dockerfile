@@ -7,10 +7,10 @@ RUN npm install -g npm@11.6.2
 WORKDIR /usr/src/app
 
 # Argument untuk environment variables
-ARG NUXT_PUBLIC_BASE_URL
+ARG NUXT_PUBLIC_API_BASE_URL
 
 # Set sebagai ENV agar terbaca saat 'npm run build'
-ENV NUXT_PUBLIC_BASE_URL=$NUXT_PUBLIC_BASE_URL
+ENV NUXT_PUBLIC_API_BASE_URL=$NUXT_PUBLIC_API_BASE_URL
 
 # Copy package files
 COPY package*.json ./
