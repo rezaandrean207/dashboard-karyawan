@@ -190,22 +190,12 @@
           <div class="dates">
             <label for="tanggal">Tanggal</label>
             <div class="tanggal">
-              <input
-                type="date"
-                name="start"
-                v-model="start"
-            
-              />
+              <input type="date" name="start" v-model="start" />
 
               <!-- <NuxtTime :datetime="sekarang" day="2-digit" month="2-digit" year="numeric" /> -->
 
               <span class="separator">➡️</span>
-              <input
-                type="date"
-                name="end"
-                v-model="end"
-                
-              />
+              <input type="date" name="end" v-model="end" />
             </div>
           </div>
           <!-- <div class="tanggal_akhir">
@@ -332,7 +322,16 @@
                 <i class="fa-regular fa-clock"></i>
               </div>
             </div>
-            <div class="total_beban">
+            <div
+              class="total_beban"
+              :class="{
+                special: k.total_spent_hours.percentage > 100,
+                ontime:
+                  k.total_spent_hours.percentage > 80 &&
+                  k.total_spent_hours.percentage <= 100,
+                late: k.total_spent_hours.percentage <= 80,
+              }"
+            >
               <div class="teks">
                 <p>Total Beban Kerja (Aktif)</p>
                 <h4>
@@ -786,11 +785,8 @@
               late: k.time_efficiency_percentage < 100,
             }"
           >
-          <div class="penghargaan">
-              <p>
-               
-                Ketepatan Pengerjaan Tugas
-              </p>
+            <div class="penghargaan">
+              <p>Ketepatan Pengerjaan Tugas</p>
               <h4>{{ k.time_efficiency_percentage }}%</h4>
 
               <!-- <p class="label">Lebih Cepat</p> -->
@@ -1981,11 +1977,11 @@
   /* color: blue; */
 }
 
-.total_beban {
+/* .total_beban {
   background-color: rgb(226, 255, 225);
   border: 1px solid rgb(166, 255, 163);
   color: rgb(16, 130, 50);
-}
+} */
 
 .total_beban h4,
 .total_seharusnya h4,
@@ -2594,7 +2590,6 @@ export default {
     closeSukses() {
       this.sukses = false;
     },
-    
 
     async ambilTask() {
       this.isLoading = true;
@@ -2870,11 +2865,9 @@ export default {
       if (this.end < this.start) {
         this.start = this.end;
         console.log("akhir");
-        
       }
       if (this.start && this.end) this.ambilTask();
     },
   },
-
 };
 </script>
