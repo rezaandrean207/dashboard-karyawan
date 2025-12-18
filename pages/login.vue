@@ -14,6 +14,7 @@
         </div>
         <h2>DNA Monitoring</h2>
         <p>Silahkan login untuk melanjutkan</p>
+        <p v-if="apiError" class="api-error">{{ apiError }}</p>
 
         <form action="#" method="POST" class="form" @submit.prevent="login">
           <div class="input">
@@ -532,6 +533,19 @@ a {
 }
 </style>
 
+<style>
+.api-error {
+  color: #b32020;
+  background: rgba(179, 26, 26, 0.05);
+  border: 1px solid rgba(179, 26, 26, 0.12);
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-align: center;
+  margin: 8px 0 12px 0;
+  font-weight: 600;
+}
+</style>
+
 <script setup>
 definePageMeta({
   path: "/",
@@ -549,6 +563,7 @@ export default {
       showPassword: false,
       isError: false,
       isLoading: false,
+      apiError: "",
     };
   },
   mounted() {
@@ -556,11 +571,17 @@ export default {
   },
   methods: {
     async login() {
+      console.log('login start', this.form);
+      this.apiError = "";
+      if (typeof navigator !== 'undefined' && !navigator.onLine) {
+        this.apiError = 'Tidak ada koneksi internet';
+        return;
+      }
       this.isLoading = true;
-      const { $api } = useNuxtApp();
+      // const { $api } = useNuxtApp();
       const router = useRouter();
       try {
-        const res = await $api.post("/api/v1/auth/login", {
+        const res = await this.$api.post("/api/v1/auth/login", {
           username: this.form.username,
           password: this.form.password,
         });
@@ -581,6 +602,7 @@ export default {
         }
       } catch (error) {
         console.error("API Error:", error);
+        this.apiError = error?.response?.data?.message || error.message || 'Terjadi kesalahan saat login';
         this.isError = true;
         setTimeout(() => {
           this.isError = false;
