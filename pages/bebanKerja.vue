@@ -634,11 +634,11 @@
             <div
               class="total_beban"
               :class="{
-                special: k.total_spent_hours.percentage > 100,
+                special: detailKaryawan.total_spent_hours.percentage > 100,
                 ontime:
-                  k.total_spent_hours.percentage > 80 &&
-                  k.total_spent_hours.percentage <= 100,
-                late: k.total_spent_hours.percentage <= 80,
+                  detailKaryawan.total_spent_hours.percentage > 80 &&
+                  detailKaryawan.total_spent_hours.percentage <= 100,
+                late: detailKaryawan.total_spent_hours.percentage <= 80,
               }"
             >
               <div class="teks">
