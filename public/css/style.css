@@ -852,6 +852,10 @@ form select {
     width: 50%;
     height: 90vh;
   }
+
+  .sucess_animation .sukses {
+    width: 90%;
+  }
 }
 
 /* Tablet */
@@ -967,6 +971,11 @@ form select {
   .filter_detail form input {
     /* width: 100rem; */
   }
+  .success-animation .sukses {
+    font-size: 13px;
+    padding: 12px;
+    top: 0;
+  }
 }
 
 /* SPINNER */
@@ -999,7 +1008,7 @@ form select {
   z-index: 950;
   pointer-events: all;
   animation: fadeIn 0.18s ease-out both;
-  width: 100vw  ;
+  width: 100vw;
   height: 100vh;
 }
 
@@ -1063,44 +1072,45 @@ form select {
 
 /* ANIMASI SUKSES */
 .success-animation {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
   display: flex;
   justify-content: center;
-  position: absolute;
-  top: 5%;
-  animation: fadeOut 2s ease-out forwards;
   z-index: 1000;
+  margin-top: 16px;
 }
 
-@keyframes fadeOut {
+@keyframes fadeIn {
   0% {
     opacity: 0;
+    transform: translateY(-10px);
   }
-  50% {
-    opacity: 0.7;
+  15% {
+    opacity: 1;
+    transform: translateY(0);
   }
-  70% {
-    opacity: 0.9;
+  85% {
+    opacity: 1;
   }
   100% {
     opacity: 1;
+    transform: translateY(-5px);
   }
 }
 
 .success-animation .sukses {
+  max-width: 420px;
+  width: calc(100% - 10px);
   background: #4caf50;
   color: white;
-  padding: 15px 14px;
-  border-radius: 6px;
-  margin-top: 8px;
-  font-size: 14px;
-  width: 70%;
-  /* text-align: center; */
+  padding: 14px 16px;
+  border-radius: 8px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  /* padding: 10px 0; */
-  position: fixed;
+  justify-content: space-between;
+  animation: fadeIn 2.2s ease forwards;
 }
 
 .sukses .berhasil {

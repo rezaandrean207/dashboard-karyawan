@@ -120,8 +120,6 @@
     </div>
 
     <div class="isi" v-if="detailKaryawan === null">
-     
-
       <!-- Animasi sukses -->
       <div v-if="sukses" class="success-animation">
         <div class="sukses">
@@ -140,10 +138,9 @@
       <div v-if="isLoading" class="loading">
         <div class="loading_tanggal">
           <i class="fa-solid fa-circle-notch fa-spin"></i>
+          <p>Tunggu Sebentar</p>
         </div>
       </div>
-
-      
 
       <h2>Manajemen Beban Kerja</h2>
       <p>
@@ -2403,14 +2400,14 @@ export default {
       this.sukses = false;
     },
     async ambilTask() {
-      this.isLoading = true
+      this.isLoading = true;
       console.log("Ambil task dipanggil");
-      const { $api } = useNuxtApp();
+      // const { $api } = useNuxtApp();
 
       // const task = await $api_task.get("/api/v1/workload/tasks-by-range?start=2025-08-01&end=2025-12-30");
       // const task = await $api.get("/api/v1/clickup/tasks");
       try {
-        const task = await $api.get(
+        const task = await this.$api.get(
           `/api/v1/workload/tasks-by-range?start_date=${this.formatTanggal(
             this.start
           )}&end_date=${this.formatTanggal(this.end)}`
@@ -2422,7 +2419,7 @@ export default {
       } catch (error) {
         console.error("Gagal ambil task:", error);
       } finally {
-        this.isLoading = false
+        this.isLoading = false;
       }
       // const task = await $api.get(
       //   "/api/v1/workload/tasks-by-range?start_date=01-07-2025&end_date=31-12-2025"
@@ -2438,7 +2435,7 @@ export default {
     },
 
     async syncData() {
-      const { $api } = useNuxtApp();
+      // const { $api } = useNuxtApp();
       // console.log("SYNC DATA DIPANGGIL !");
 
       // Prevent Spam Klik
@@ -2450,7 +2447,7 @@ export default {
       this.sukses = false;
 
       try {
-        const sync = await $api.post("/api/v1/sync/all");
+        const sync = await this.$api.post("/api/v1/sync/all");
         // this.daftarKaryawan = sync.data;
         console.log("Berhasil: ", sync);
         // alert("Berhasil");

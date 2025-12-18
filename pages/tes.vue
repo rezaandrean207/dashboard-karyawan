@@ -96,3 +96,17 @@ export default {
   font-size: 15px;
 }
 </style>
+
+<script>
+export default {
+  mounted() {
+    this.tesEnv();
+  },
+  methods: {
+    async tesEnv() {
+      const { $api } = useNuxtApp();
+      console.log($api.defaults.baseURL);
+    },
+  },
+};
+</script>

@@ -1,5 +1,11 @@
 <template>
   <div class="login">
+    <div v-if="isLoading" class="loading">
+      <div class="loading_tanggal">
+        <i class="fa-solid fa-circle-notch fa-spin"></i>
+        <p>Tunggu Sebentar</p>
+      </div>
+    </div>
     <div class="wraper" id="app" :class="{ shake: isError }">
       <div class="hero">
         <div class="ikon_login">
@@ -542,6 +548,7 @@ export default {
       },
       showPassword: false,
       isError: false,
+      isLoading: false,
     };
   },
   mounted() {
@@ -549,6 +556,7 @@ export default {
   },
   methods: {
     async login() {
+      this.isLoading = true;
       const { $api } = useNuxtApp();
       const router = useRouter();
       try {
@@ -579,6 +587,8 @@ export default {
           // alert("Input tidak cocok");
         }, 500);
         // alert("Input tidak cocok");
+      } finally {
+        this.isLoading = false;
       }
     },
   },

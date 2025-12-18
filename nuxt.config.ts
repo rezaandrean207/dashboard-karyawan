@@ -3,6 +3,11 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
   css: ["@fortawesome/fontawesome-free/css/all.min.css"],
+  runtimeConfig: {
+    public: {
+      apiBaseUrl: "", // cukup didefinisikan, nilainya diambil dari .env
+    },
+  },
   app: {
     head: {
       link: [
@@ -20,7 +25,7 @@ export default defineNuxtConfig({
       ],
     },
   },
-  
+
   // nitro: {
   //   devProxy: {
   //     "/api": {
