@@ -2597,7 +2597,7 @@ export default {
     
 
     async ambilTask() {
-      // this.isLoading = true;
+      this.isLoading = true;
       console.log("Ambil task dipanggil");
       // const { $api } = useNuxtApp();
 
