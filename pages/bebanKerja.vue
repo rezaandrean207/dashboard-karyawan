@@ -194,7 +194,7 @@
                 type="date"
                 name="start"
                 v-model="start"
-                @change="cekTanggalMulai()"
+            
               />
 
               <!-- <NuxtTime :datetime="sekarang" day="2-digit" month="2-digit" year="numeric" /> -->
@@ -204,7 +204,7 @@
                 type="date"
                 name="end"
                 v-model="end"
-                @change="cekTanggalSelesai()"
+                
               />
             </div>
           </div>
@@ -786,13 +786,19 @@
               late: k.time_efficiency_percentage < 100,
             }"
           >
-            <!-- <div class="achievement_logo">
-              <i class="fa-solid fa-award"></i>
-            </div> -->
-            <div class="penghargaan" v-if="k.time_efficiency_percentage > 100">
+          <div class="penghargaan">
               <p>
-                <!-- 🎉 <strong>Penghargaan!</strong>  -->
-                <!-- Selesai lebih cepat dari deadline -->
+               
+                Ketepatan Pengerjaan Tugas
+              </p>
+              <h4>{{ k.time_efficiency_percentage }}%</h4>
+
+              <!-- <p class="label">Lebih Cepat</p> -->
+              <h4>{{ k.remaining_duration }}</h4>
+            </div>
+            <!-- <div class="penghargaan" v-if="k.time_efficiency_percentage > 100">
+              <p>
+               
                 Ketepatan Pengerjaan Tugas
               </p>
               <h4>{{ k.time_efficiency_percentage }}%</h4>
@@ -800,7 +806,6 @@
               <p class="label">Lebih Cepat</p>
               <h4>{{ k.remaining_duration }} Jam</h4>
             </div>
-
             <div
               class="penghargaan"
               v-else-if="k.time_efficiency_percentage === 100"
@@ -809,22 +814,20 @@
               <h4>{{ k.time_efficiency_percentage }}%</h4>
 
               <p class="label">Tepat Waktu</p>
-              <!-- <h4>{{ k.remaining_duration }} Jam</h4> -->
+              <h4>{{ k.remaining_duration }} Jam</h4>
             </div>
             <div
               class="penghargaan"
               v-else-if="k.time_efficiency_percentage < 100"
             >
               <p>
-                <!-- 🎉 <strong>Penghargaan!</strong>  -->
-                <!-- Selesai lebih cepat dari deadline -->
                 Ketepatan Pengerjaan Tugas
               </p>
               <h4>{{ k.time_efficiency_percentage }}%</h4>
 
               <p class="label">Lebih Lambat</p>
               <h4>{{ k.remaining_duration }} Jam</h4>
-            </div>
+            </div> -->
           </div>
           <div class="keterangan_waktu">
             <div class="jam">
@@ -2591,19 +2594,10 @@ export default {
     closeSukses() {
       this.sukses = false;
     },
-    cekTanggalMulai() {
-      if (this.start > this.end) {
-        this.end = this.start;
-      }
-    },
-    cekTanggalSelesai() {
-      if (this.start > this.end) {
-        this.start = this.end;
-      }
-    },
+    
 
     async ambilTask() {
-      this.isLoading = true;
+      // this.isLoading = true;
       console.log("Ambil task dipanggil");
       // const { $api } = useNuxtApp();
 
@@ -2619,11 +2613,14 @@ export default {
         this.daftarKaryawan = task.data.assignees;
 
         console.log("Berhasil ambil task:", task);
+        this.isLoading = false;
       } catch (error) {
         console.error("Gagal ambil task:", error);
+        this.isLoading = false;
       } finally {
         this.isLoading = false;
       }
+
       // const task = await $api.get(
       //   "/api/v1/workload/tasks-by-range?start_date=01-07-2025&end_date=31-12-2025"
       // );
@@ -2863,11 +2860,21 @@ export default {
     //this.ambilTask();
     //},
     start() {
+      if (this.start > this.end) {
+        this.end = this.start;
+        console.log("mulai");
+      }
       if (this.start && this.end) this.ambilTask();
     },
     end() {
+      if (this.end < this.start) {
+        this.start = this.end;
+        console.log("akhir");
+        
+      }
       if (this.start && this.end) this.ambilTask();
     },
   },
+
 };
 </script>
