@@ -1005,7 +1005,7 @@ form select {
   align-items: center;
   justify-content: center;
   background: rgba(255, 255, 255, 0.6);
-  z-index: 950;
+  z-index: 1005;
   pointer-events: all;
   animation: fadeIn 0.18s ease-out both;
   width: 100vw;

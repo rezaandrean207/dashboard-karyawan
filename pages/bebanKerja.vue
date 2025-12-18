@@ -190,12 +190,22 @@
           <div class="dates">
             <label for="tanggal">Tanggal</label>
             <div class="tanggal">
-              <input type="date" name="start" v-model="start" />
+              <input
+                type="date"
+                name="start"
+                v-model="start"
+                @change="cekTanggalMulai()"
+              />
 
               <!-- <NuxtTime :datetime="sekarang" day="2-digit" month="2-digit" year="numeric" /> -->
 
               <span class="separator">➡️</span>
-              <input type="date" name="end" v-model="end" />
+              <input
+                type="date"
+                name="end"
+                v-model="end"
+                @change="cekTanggalSelesai()"
+              />
             </div>
           </div>
           <!-- <div class="tanggal_akhir">
@@ -553,6 +563,41 @@
               </div>
             </div>
           </div>
+
+          <div class="status_karyawan">
+            <div
+              :class="{
+                available: detailKaryawan.availability_status === 'Available',
+                not_available:
+                  detailKaryawan.availability_status === 'Not Available',
+              }"
+            >
+              <i class="fa-solid fa-circle"></i>
+              <p>{{ detailKaryawan.availability_status }}</p>
+            </div>
+            <div
+              :class="{
+                overload_task: detailKaryawan.workload_status === 'Overload',
+                underload_task: detailKaryawan.workload_status === 'Underload',
+                normal_task: detailKaryawan.workload_status === 'Normal',
+              }"
+            >
+              <i
+                :class="{
+                  'fa-solid fa-chart-line':
+                    detailKaryawan.workload_status === 'Underload',
+                  'fa-solid fa-equals':
+                    detailKaryawan.workload_status === 'Normal',
+                  'fa-solid fa-arrow-trend-up':
+                    detailKaryawan.workload_status === 'Overload',
+                }"
+              ></i>
+              <!-- <i class="fa-solid fa-chart-line"></i>
+              <i class="fa-solid fa-arrow-trend-up"></i>
+              <i class="fa-solid fa-equals"></i> -->
+              <p>{{ detailKaryawan.workload_status }}</p>
+            </div>
+          </div>
           <div
             class="performa_karyawan"
             :class="{
@@ -737,23 +782,14 @@
             v-if="k.status_name === 'done dev' || k.status_name === 'completed'"
             :class="{
               special: k.time_efficiency_percentage > 100,
-              ontime:
-                k.time_efficiency_percentage > 80 &&
-                k.time_efficiency_percentage <= 100,
-              late: k.time_efficiency_percentage <= 80,
+              ontime: k.time_efficiency_percentage === 100,
+              late: k.time_efficiency_percentage < 100,
             }"
           >
             <!-- <div class="achievement_logo">
               <i class="fa-solid fa-award"></i>
             </div> -->
-            <div
-              class="penghargaan"
-              v-if="
-                k.time_efficiency_percentage > 100 ||
-                (k.time_efficiency_percentage > 80 &&
-                  k.time_efficiency_percentage <= 100)
-              "
-            >
+            <div class="penghargaan" v-if="k.time_efficiency_percentage > 100">
               <p>
                 <!-- 🎉 <strong>Penghargaan!</strong>  -->
                 <!-- Selesai lebih cepat dari deadline -->
@@ -765,24 +801,19 @@
               <h4>{{ k.remaining_duration }} Jam</h4>
             </div>
 
-            <!-- <div
-              class="penghargaan"
-              v-else-if="
-                k.time_efficiency_percentage > 80 &&
-                k.time_efficiency_percentage <= 100
-              "
-            >
-              <p>
-                Ketepatan Pengerjaan Tugas
-              </p>
-              <h4>{{ k.time_efficiency_percentage }}%</h4>
-
-              <p class="label">Lebih Cepat</p>
-              <h4>{{ k.remaining_duration }} Jam</h4>
-            </div> -->
             <div
               class="penghargaan"
-              v-else-if="k.time_efficiency_percentage <= 80"
+              v-else-if="k.time_efficiency_percentage === 100"
+            >
+              <p>Ketepatan Pengerjaan Tugas</p>
+              <h4>{{ k.time_efficiency_percentage }}%</h4>
+
+              <p class="label">Tepat Waktu</p>
+              <!-- <h4>{{ k.remaining_duration }} Jam</h4> -->
+            </div>
+            <div
+              class="penghargaan"
+              v-else-if="k.time_efficiency_percentage < 100"
             >
               <p>
                 <!-- 🎉 <strong>Penghargaan!</strong>  -->
@@ -802,11 +833,11 @@
             </div>
             <div class="start_date">
               <i class="fa-regular fa-calendar"></i>
-              <p>Tanggal: {{ k.start_date }}</p>
+              <p>Mulai: {{ k.start_date }}</p>
             </div>
             <div class="deadline">
               <i class="fa-regular fa-calendar"></i>
-              <p>Deadline: {{ k.due_date }}</p>
+              <p>Target: {{ k.due_date }}</p>
             </div>
             <div
               class="done_date"
@@ -1248,14 +1279,14 @@
 }
 
 .ontime {
-  background-color: rgb(222, 255, 222);
-  border: 1px solid rgb(115, 255, 115);
+  background-color: rgb(200, 255, 200);
+  border: 1px solid rgb(100, 255, 100);
   border-radius: 7px;
   padding: 5px;
 }
 
 .ontime .penghargaan p {
-  color: rgb(0, 150, 0);
+  color: rgb(0, 100, 0);
 }
 
 .early {
@@ -1346,6 +1377,8 @@
   gap: 15px;
   margin-bottom: 10px;
   justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 .card_profile .card_left {
@@ -1784,7 +1817,7 @@
   font-size: 8px;
 }
 
-.profil .status_karyawan .overload_task,
+.overload_task,
 .underload_task,
 .normal_task {
   display: flex;
@@ -1804,22 +1837,22 @@
 }
 
 .overload_task {
+  background-color: rgb(212, 255, 212);
+  border: 1px solid rgb(154, 255, 154);
+}
+
+.overload_task p {
+  color: green;
+}
+
+.underload_task {
   background-color: rgb(255, 237, 237);
   /* color: rgb(203, 0, 0); */
   border: 1px solid rgb(255, 204, 204);
 }
 
-.overload_task p {
-  color: rgb(203, 0, 0);
-}
-
-.underload_task {
-  background-color: rgb(212, 255, 212);
-  border: 1px solid rgb(154, 255, 154);
-}
-
 .underload_task p {
-  color: green;
+  color: rgb(203, 0, 0);
 }
 
 .normal_task {
@@ -2558,6 +2591,17 @@ export default {
     closeSukses() {
       this.sukses = false;
     },
+    cekTanggalMulai() {
+      if (this.start > this.end) {
+        this.end = this.start;
+      }
+    },
+    cekTanggalSelesai() {
+      if (this.start > this.end) {
+        this.start = this.end;
+      }
+    },
+
     async ambilTask() {
       this.isLoading = true;
       console.log("Ambil task dipanggil");

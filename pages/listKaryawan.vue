@@ -602,7 +602,6 @@ form input {
     gap: 20px;
   } */
 
-
   .filter_detail form {
     width: 100%;
     height: auto;
@@ -957,7 +956,7 @@ export default {
       this.sukses = false;
 
       try {
-        const sync = await $api.post("/api/v1/sync/all");
+        const sync = await this.$api.post("/api/v1/sync/all");
         // this.daftarKaryawan = sync.data;
         console.log("Berhasil: ", sync);
         // alert("Berhasil");
