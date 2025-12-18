@@ -302,7 +302,9 @@
             <i class="fa-solid fa-chart-line"></i>
             <div class="text">
               <p>Performa</p>
-              <span><strong>{{ k.performance.score }}%</strong></span>
+              <span
+                ><strong>{{ k.performance.score }}%</strong></span
+              >
             </div>
           </div>
         </div>
@@ -314,9 +316,7 @@
             <div class="total_seharusnya">
               <div class="teks">
                 <p>Total Beban Kerja (Seharusnya)</p>
-                <h4>
-                  {{ k.expected_hours }} Jam 
-                </h4>
+                <h4>{{ k.expected_hours }} Jam</h4>
               </div>
               <div class="ikon">
                 <i class="fa-regular fa-clock"></i>
@@ -326,8 +326,10 @@
               <div class="teks">
                 <p>Total Beban Kerja (Aktif)</p>
                 <h4>
-                  {{ k.total_spent_hours.percentage }}%
-                  ({{ k.total_spent_hours.hours }} Jam)
+                  {{ k.total_spent_hours.percentage }}% ({{
+                    k.total_spent_hours.hours
+                  }}
+                  Jam)
                 </h4>
               </div>
               <div class="ikon">
@@ -540,13 +542,33 @@
 
       <div class="card_karyawan">
         <div class="card_profile">
-          <img src="/img/profil.png" alt="" />
-          <div class="card_name">
-            <h3>{{ detailKaryawan.username }}</h3>
-            <p>{{ detailKaryawan.role }}</p>
-            <div class="periode">
-              <p v-if="start === '' && end === ''">Seluruh Periode</p>
-              <p v-else>Periode: {{ start }} - {{ end }}</p>
+          <div class="card_left">
+            <img src="/img/profil.png" alt="" />
+            <div class="card_name">
+              <h3>{{ detailKaryawan.username }}</h3>
+              <p>{{ detailKaryawan.role }}</p>
+              <div class="periode">
+                <p v-if="start === '' && end === ''">Seluruh Periode</p>
+                <p v-else>Periode: {{ start }} - {{ end }}</p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="performa_karyawan"
+            :class="{
+              special: detailKaryawan.performance.score > 100,
+              ontime:
+                detailKaryawan.performance.score > 80 &&
+                detailKaryawan.performance.score <= 100,
+              late: detailKaryawan.performance.score <= 80,
+            }"
+          >
+            <i class="fa-solid fa-chart-line"></i>
+            <div class="text">
+              <p>Performa</p>
+              <span
+                ><strong>{{ detailKaryawan.performance.score }}%</strong></span
+              >
             </div>
           </div>
         </div>
@@ -559,9 +581,7 @@
             <div class="total_seharusnya">
               <div class="teks">
                 <p>Total Beban Kerja (Seharusnya)</p>
-                <h4>
-                  {{ detailKaryawan.expected_hours }} Jam 
-                </h4>
+                <h4>{{ detailKaryawan.expected_hours }} Jam</h4>
               </div>
               <div class="ikon">
                 <i class="fa-regular fa-clock"></i>
@@ -571,8 +591,10 @@
               <div class="teks">
                 <p>Total Beban Kerja (Aktif)</p>
                 <h4>
-                  {{ detailKaryawan.total_spent_hours.hours }} Jam
-                  {{ detailKaryawan.total_spent_hours.percentage }}%
+                  {{ detailKaryawan.total_spent_hours.percentage }}% ({{
+                    detailKaryawan.total_spent_hours.hours
+                  }}
+                  Jam)
                 </h4>
               </div>
               <div class="ikon">
@@ -581,18 +603,21 @@
             </div>
             <div
               class="ketepatan_pengerjaan"
-              v-if="detailKaryawan.on_time_completion_percentage"
+              v-if="detailKaryawan.avg_time_efficiency.avg_percentage"
               :class="{
-                special: detailKaryawan.on_time_completion_percentage > 100,
+                special:
+                  detailKaryawan.avg_time_efficiency.avg_percentage > 100,
                 ontime:
-                  detailKaryawan.on_time_completion_percentage > 80 &&
-                  detailKaryawan.on_time_completion_percentage <= 100,
-                late: detailKaryawan.on_time_completion_percentage <= 80,
+                  detailKaryawan.avg_time_efficiency.avg_percentage > 80 &&
+                  detailKaryawan.avg_time_efficiency.avg_percentage <= 100,
+                late: detailKaryawan.avg_time_efficiency.avg_percentage <= 80,
               }"
             >
               <div class="teks">
                 <p>Ketepatan Pengerjaan Semua Tugas</p>
-                <h4>{{ detailKaryawan.on_time_completion_percentage }}%</h4>
+                <h4>
+                  {{ detailKaryawan.avg_time_efficiency.avg_percentage }}%
+                </h4>
               </div>
               <div class="ikon">
                 <i class="fa-solid fa-list-check"></i>
@@ -652,7 +677,14 @@
         </div> -->
 
         <div
+          class="no_task"
+          v-if="!detailKaryawan?.tasks || detailKaryawan.tasks.length === 0"
+        >
+          Tidak ada data
+        </div>
+        <div
           class="container_task"
+          v-else
           v-for="k in detailKaryawan.tasks.filter(
             (t) =>
               t.status_name !== 'backlog' &&
@@ -684,9 +716,13 @@
                 <p v-if="k.status_name === 'in review'">In Review</p>
                 <p v-if="k.status_name === 'cancelled'">Cancel</p>
               </div>
-              <div class="task_priority">
-                <p>High</p>
+              <div class="task_priority" v-if="k.priority_task">
+                <p>{{ k.priority_task }}</p>
               </div>
+              <div class="task_priority" v-else>
+                <p>No Priority</p>
+              </div>
+
               <div class="task_penghargaan">
                 <!-- <i class="fa-solid fa-award"></i> -->
                 <p>{{ k.project_name }}</p>
@@ -710,7 +746,14 @@
             <!-- <div class="achievement_logo">
               <i class="fa-solid fa-award"></i>
             </div> -->
-            <div class="penghargaan">
+            <div
+              class="penghargaan"
+              v-if="
+                k.time_efficiency_percentage > 100 ||
+                (k.time_efficiency_percentage > 80 &&
+                  k.time_efficiency_percentage <= 100)
+              "
+            >
               <p>
                 <!-- 🎉 <strong>Penghargaan!</strong>  -->
                 <!-- Selesai lebih cepat dari deadline -->
@@ -718,8 +761,38 @@
               </p>
               <h4>{{ k.time_efficiency_percentage }}%</h4>
 
-              <p class="label">Waktu Penyelesaian</p>
-              <h4>{{ k.remaining_time }}</h4>
+              <p class="label">Lebih Cepat</p>
+              <h4>{{ k.remaining_duration }} Jam</h4>
+            </div>
+
+            <!-- <div
+              class="penghargaan"
+              v-else-if="
+                k.time_efficiency_percentage > 80 &&
+                k.time_efficiency_percentage <= 100
+              "
+            >
+              <p>
+                Ketepatan Pengerjaan Tugas
+              </p>
+              <h4>{{ k.time_efficiency_percentage }}%</h4>
+
+              <p class="label">Lebih Cepat</p>
+              <h4>{{ k.remaining_duration }} Jam</h4>
+            </div> -->
+            <div
+              class="penghargaan"
+              v-else-if="k.time_efficiency_percentage <= 80"
+            >
+              <p>
+                <!-- 🎉 <strong>Penghargaan!</strong>  -->
+                <!-- Selesai lebih cepat dari deadline -->
+                Ketepatan Pengerjaan Tugas
+              </p>
+              <h4>{{ k.time_efficiency_percentage }}%</h4>
+
+              <p class="label">Lebih Lambat</p>
+              <h4>{{ k.remaining_duration }} Jam</h4>
             </div>
           </div>
           <div class="keterangan_waktu">
@@ -1272,9 +1345,17 @@
   align-items: center;
   gap: 15px;
   margin-bottom: 10px;
+  justify-content: space-between;
 }
 
-.card_karyawan .card_profile img {
+.card_profile .card_left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 10;
+}
+
+.card_karyawan .card_profile .card_left img {
   width: 100px;
   /* border: 1px solid #010101; */
   border-radius: 50%;
@@ -1287,6 +1368,10 @@
 
 .card_name p {
   font-weight: 400;
+}
+
+.card_profile .performa_karyawan {
+  flex: 2;
 }
 
 .card_karyawan .card_task {
@@ -1679,13 +1764,14 @@
   display: flex;
   gap: 5px;
   align-items: center;
+  justify-content: center;
   background-color: #f5f5f5;
   font-size: 12px;
   font-weight: 600;
   padding: 2px 10px;
   border-radius: 6px;
   border: 1px solid #dbdbdb;
-  text-wrap: nowrap;
+  /* text-wrap: nowrap; */
 }
 
 .status_karyawan .available i {
@@ -1719,20 +1805,27 @@
 
 .overload_task {
   background-color: rgb(255, 237, 237);
-  color: rgb(203, 0, 0);
+  /* color: rgb(203, 0, 0); */
   border: 1px solid rgb(255, 204, 204);
+}
+
+.overload_task p {
+  color: rgb(203, 0, 0);
 }
 
 .underload_task {
   background-color: rgb(212, 255, 212);
   border: 1px solid rgb(154, 255, 154);
+}
+
+.underload_task p {
   color: green;
 }
 
 .normal_task {
   background-color: #f5f5f5;
-   border: 1px solid #dbdbdb;
-   color: #010101;
+  border: 1px solid #dbdbdb;
+  color: #010101;
 }
 
 .status_karyawan .keterangan_status {
