@@ -24,7 +24,9 @@ jobs:
       # Step 3
       - name: Build Docker Image
         run: |
-          docker build --no-cache -t ${{ secrets.IMG_URL }}/clickup-monitor/fe:latest .
+          docker build --no-cache \
+            --build-arg NUXT_PUBLIC_API_BASE_URL="${{ secrets.NUXT_PUBLIC_API_BASE_URL }}" \
+            -t ${{ secrets.IMG_URL }}/clickup-monitor/fe:latest .
       # Step 4
       - name: Push Docker Image
         run: |
