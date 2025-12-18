@@ -911,7 +911,7 @@ export default {
     },
 
     async ambilData() {
-      const { $api } = useNuxtApp();
+      // const { $api } = useNuxtApp();
       // http://192.168.0.100:8001/api/v1/clickup/members
       // const isiData = await $api.get("api/v1/clickup/members");
       // console.log($api.defaults.baseURL);
@@ -928,7 +928,7 @@ export default {
         // this.daftarKaryawan = isiData.data.karyawan;
         // http://192.168.0.100:8001/api/v1/clickup/members
 
-        const member = await $api.get("/api/v1/clickup/members");
+        const member = await this.$api.get("/api/v1/clickup/members");
         this.daftarKaryawan = member.data.users;
         // const task = await $api.get("/api/v1/clickup/tasks");
         // this.daftarKaryawan = task.data;
@@ -945,7 +945,7 @@ export default {
     },
 
     async syncData() {
-      const { $api } = useNuxtApp();
+      // const { $api } = useNuxtApp();
       // console.log("SYNC DATA DIPANGGIL !");
 
       // Prevent Spam Klik

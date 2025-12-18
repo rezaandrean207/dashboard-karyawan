@@ -304,7 +304,7 @@
                 <i class="fa-regular fa-clock"></i>
               </div>
             </div>
-            <div
+            <!-- <div
               class="ketepatan_pengerjaan"
               v-if="k.on_time_completion_percentage == null"
             >
@@ -315,10 +315,10 @@
               <div class="ikon">
                 <i class="fa-solid fa-list-check"></i>
               </div>
-            </div>
+            </div> -->
             <div
               class="ketepatan_pengerjaan"
-              v-else
+              v-if="k.on_time_completion_percentage"
               :class="{
                 special: k.on_time_completion_percentage > 100,
                 ontime:
@@ -554,6 +554,7 @@
             </div>
             <div
               class="ketepatan_pengerjaan"
+              v-if="detailKaryawan.on_time_completion_percentage"
               :class="{
                 special: detailKaryawan.on_time_completion_percentage > 100,
                 ontime:
@@ -2471,10 +2472,10 @@ export default {
         console.log("DATA:", error.response?.data);
         console.log("MESSAGE:", error.message);
       }
-      // finally {
-      //   this.sukses = true;
-      //   this.loading = false;
-      // }
+      finally {
+        this.sukses = true;
+        this.loading = false;
+      }
     },
     menu() {
       this.sidebar = true;
