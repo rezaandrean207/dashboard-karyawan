@@ -8,8 +8,6 @@ WORKDIR /usr/src/app
 
 # Argument untuk environment variables
 ARG NUXT_PUBLIC_BASE_URL
-ARG API_URL
-ARG KLIK_API_TOKEN
 
 # Set sebagai ENV agar terbaca saat 'npm run build'
 ENV NUXT_PUBLIC_BASE_URL=$NUXT_PUBLIC_BASE_URL
