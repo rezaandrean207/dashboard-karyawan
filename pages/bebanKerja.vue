@@ -8,7 +8,11 @@
     </div>
 
     <div class="background" v-show="sidebar" @click="close">
-      <div class="sidebar_responsive" v-show="sidebar">
+      <div
+        class="sidebar_responsive"
+        @click.stop
+        :class="{ slideOut: isClose }"
+      >
         <div class="logo">
           <img src="/img/logo dna.png" alt="" />
           <div class="keterangan">
@@ -79,15 +83,6 @@
           <i class="fa-regular fa-clock"></i>
           <p>Beban Kerja</p>
         </NuxtLink>
-
-        <!-- <NuxtLink to="/laporanKinerja" class="report">
-          <i class="fa-solid fa-chart-simple"></i>
-          <p>Laporan Kinerja</p>
-        </NuxtLink> -->
-        <!-- <div class="setting">
-          <i class="fa-solid fa-gear"></i>
-          <a href="">Pengaturan</a>
-        </div> -->
       </div>
 
       <div class="footer_sidebar">
@@ -137,7 +132,7 @@
 
       <div v-if="isLoading" class="loading">
         <div class="loading_tanggal">
-          <i class="fa-solid fa-circle-notch fa-spin"></i>
+          <i class="fa-solid fa-spinner"></i>
           <p>Tunggu Sebentar</p>
         </div>
       </div>
@@ -165,13 +160,6 @@
           </div>
           <div class="posisi">
             <label for="posisi">Filter Posisi</label>
-            <!-- <select name="posisi" id="" v-model="posisi">
-              <option value="">Semua Posisi</option>
-              <option value="frontend">Frontend Developer</option>
-              <option value="backend">Backend Developer</option>
-              <option value="ui/ux">UI/UX Designer</option>
-              <option value="project manager">Project Manager</option>
-            </select> -->
             <select v-model="posisi">
               <option value="" selected>Semua Posisi</option>
               <option value="pm">Project Manager</option>
@@ -183,25 +171,14 @@
               <option value="UI-UX">UI-UX</option>
             </select>
           </div>
-          <!-- <div class="tanggal_mulai">
-            <label for="tanggal">Tanggal Mulai</label>
-            <input type="date" name="tanggal" id="" />
-          </div> -->
           <div class="dates">
             <label for="tanggal">Tanggal</label>
             <div class="tanggal">
               <input type="date" name="start" v-model="start" />
-
-              <!-- <NuxtTime :datetime="sekarang" day="2-digit" month="2-digit" year="numeric" /> -->
-
               <span class="separator">➡️</span>
               <input type="date" name="end" v-model="end" />
             </div>
           </div>
-          <!-- <div class="tanggal_akhir">
-            <label for="tanggal">Tanggal Akhir</label>
-            
-          </div> -->
         </form>
       </div>
       <!-- <div class="keterangan_kerja">
@@ -235,6 +212,42 @@
         <p>Not Found</p>
       </div>
 
+      <div class="filter">
+        <div class="filter_sortir">
+          <div class="style_sortir">
+            <label for="">Filter Performa</label>
+            <select name="" id="" class="sortir_performa" v-model="sortPerform">
+              <option value="">Semua</option>
+              <option value="highest">Tertinggi</option>
+              <option value="lowest">Terendah</option>
+            </select>
+          </div>
+
+          <div class="style_sortir">
+            <label for="">Filter Ketepatan Tugas</label>
+            <select
+              name=""
+              id=""
+              class="sortir_ketepatan"
+              v-model="sortKetepatanDetail"
+            >
+              <option value="">Semua</option>
+              <option value="highest">Tertinggi</option>
+              <option value="lowest">Terendah</option>
+            </select>
+          </div>
+
+          <div class="style_sortir">
+            <label for="">Filter Beban</label>
+            <select name="" id="" class="sortir_beban" v-model="sortBeban">
+              <option value="">Semua</option>
+              <option value="highest">Tertinggi</option>
+              <option value="lowest">Terendah</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       <div
         class="kinerja_karyawan"
         v-for="k in filteredKaryawan"
@@ -244,19 +257,8 @@
           <div class="profil_karyawan">
             <img src="/img/profil.png" alt="" />
             <div class="about">
-              <!-- <h4>{{ k.name }}</h4> -->
               <h4>{{ k.username }}</h4>
-              <!-- <p>{{ k.position }}</p> -->
-              <!-- <p v-if="ambilTask">{{ k.tasks.length }}</p>
-              <p v-else>{{ totalFilteredTask(k) }}</p> -->
               <p>{{ k.role }}</p>
-              <!-- <p v-if="k.role === 'pm'">Project Manager</p>
-              <p v-if="k.role === 'analis'">Data Analys</p>
-              <p v-if="k.role === 'backend'">Backend</p>
-              <p v-if="k.role === 'web'">Web Developer</p>
-              <p v-if="k.role === 'backend-web'">Backend-Web Developer</p>
-              <p v-if="k.role === 'mobile apps'">Mobile Apps</p>
-              <p v-if="k.role === 'UI-UX'">UI-UX Designer</p> -->
             </div>
           </div>
 
@@ -264,7 +266,7 @@
             <div
               :class="{
                 available: k.availability_status === 'Available',
-                not_available: k.availability_status === 'Not Available',
+                working: k.availability_status === 'Working',
               }"
             >
               <i class="fa-solid fa-circle"></i>
@@ -278,16 +280,24 @@
               }"
             >
               <i
-                :class="{
-                  'fa-solid fa-chart-line': k.workload_status === 'Underload',
-                  'fa-solid fa-equals': k.workload_status === 'Normal',
-                  'fa-solid fa-arrow-trend-up':
-                    k.workload_status === 'Overload',
-                }"
+                class="fa-solid fa-arrow-trend-up"
+                v-if="k.workload_status === 'Overload'"
               ></i>
-              <!-- <i class="fa-solid fa-chart-line"></i>
-              <i class="fa-solid fa-arrow-trend-up"></i>
-              <i class="fa-solid fa-equals"></i> -->
+              <i
+                class="fa-solid fa-equals"
+                v-if="k.workload_status === 'Normal'"
+              ></i>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="16px"
+                viewBox="0 -960 960 960"
+                width="16px"
+                v-if="k.workload_status === 'Underload'"
+              >
+                <path
+                  d="M640-240v-80h104L536-526 376-366 80-664l56-56 240 240 160-160 264 264v-104h80v240H640Z"
+                />
+              </svg>
               <p>{{ k.workload_status }}</p>
             </div>
           </div>
@@ -320,6 +330,25 @@
               </div>
               <div class="ikon">
                 <i class="fa-regular fa-clock"></i>
+              </div>
+            </div>
+            <div
+              class="ketepatan_pengerjaan"
+              v-if="k.avg_time_efficiency.avg_percentage"
+              :class="{
+                special: k.avg_time_efficiency.avg_percentage > 100,
+                ontime:
+                  k.avg_time_efficiency.avg_percentage > 80 &&
+                  k.avg_time_efficiency.avg_percentage <= 100,
+                late: k.avg_time_efficiency.avg_percentage <= 80,
+              }"
+            >
+              <div class="teks">
+                <p>Ketepatan Pengerjaan Semua Tugas</p>
+                <h4>{{ k.avg_time_efficiency.avg_percentage }}%</h4>
+              </div>
+              <div class="ikon">
+                <i class="fa-solid fa-list-check"></i>
               </div>
             </div>
             <div
@@ -357,56 +386,14 @@
                 <i class="fa-solid fa-list-check"></i>
               </div>
             </div> -->
-            <div
-              class="ketepatan_pengerjaan"
-              v-if="k.avg_time_efficiency.avg_percentage"
-              :class="{
-                special: k.avg_time_efficiency.avg_percentage > 100,
-                ontime:
-                  k.avg_time_efficiency.avg_percentage > 80 &&
-                  k.avg_time_efficiency.avg_percentage <= 100,
-                late: k.avg_time_efficiency.avg_percentage <= 80,
-              }"
-            >
-              <div class="teks">
-                <p>Ketepatan Pengerjaan Semua Tugas</p>
-                <h4>{{ k.avg_time_efficiency.avg_percentage }}%</h4>
-              </div>
-              <div class="ikon">
-                <i class="fa-solid fa-list-check"></i>
-              </div>
-            </div>
           </div>
-          <!-- <div class="container_block">
-              <p>Breakdown Detail</p>
-              <div class="container1">
-                <p>Selesai</p>
-                <p>-</p>
-              </div>
-              <div class="container2">
-                <p>Sedang Dikerjakan</p>
-                <p>-</p>
-              </div>
-              <div class="container3">
-                <p>Akan Datang</p>
-                <p>-</p>
-              </div>
-              <div class="container4">
-                <p>Total Aktif:</p>
-                <p>-</p>
-              </div>
-              <div class="container5">
-                <p>Standar (Seharusnya)</p>
-                <p>{{ k.expected_hours }} Jam</p>
-              </div>
-            </div> -->
         </div>
         <!-- </details> -->
 
         <div class="detail_task" @click="detail(k)">
           <i class="fa-solid fa-list-check"></i>
           <p v-if="ambilTask">Task Detail ({{ k.tasks.length }} Task)</p>
-          <p v-else>{{ totalFilteredTask(k) }}</p>
+          <!-- <p v-else>{{ totalFilteredTask(k) }}</p> -->
           <i class="fa-solid fa-arrow-up-from-bracket"></i>
         </div>
 
@@ -451,83 +438,7 @@
             </details>
           </div>
         </details> -->
-
-        <!-- <div class="detail_task">
-          <p>Detail Task</p>
-
-          <div class="task">
-            <div class="task1-2">
-              <div class="task_1">
-                <i class="fa-solid fa-circle"></i>
-                <div class="keterangan_task">
-                  <p>Develop Landing Page</p>
-                  <div class="kondisi_task">
-                    <p>32 jam - 15/09/2025</p>
-                    <div class="progres">
-                      <p>Selesai</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="task_2">
-                <i class="fa-solid fa-circle"></i>
-                <div class="keterangan_task">
-                  <p>Fix Bug In Dashboard</p>
-                  <div class="kondisi_task">
-                    <p>32 jam - 15/09/2025</p>
-                    <div class="progres">
-                      <p>Selesai</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="task_2">
-                <i class="fa-solid fa-circle"></i>
-                <div class="keterangan_task">
-                  <p>Fix Bug In Dashboard</p>
-                  <div class="kondisi_task">
-                    <p>32 jam - 15/09/2025</p>
-                    <div class="progres">
-                      <p>Selesai</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="task_2">
-                <i class="fa-solid fa-circle"></i>
-                <div class="keterangan_task">
-                  <p>Fix Bug In Dashboard</p>
-                  <div class="kondisi_task">
-                    <p>32 jam - 15/09/2025</p>
-                    <div class="progres">
-                      <p>Selesai</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> -->
       </div>
-      <!-- <div class="panduan">
-        <div class="panduan_overload">
-          <i class="fa-solid fa-circle"></i>
-          <p>Overload:</p>
-          <p>></p>
-          <p>160 jam/bulan</p>
-        </div>
-        <div class="panduan_normal">
-          <i class="fa-solid fa-circle"></i>
-          <p>Normal:</p>
-          <p>100-160 jam/bulan</p>
-        </div>
-        <div class="panduan_underload">
-          <i class="fa-solid fa-circle"></i>
-          <p>Underload:</p>
-          <p><</p>
-          <p>100 jam/bulan</p>
-        </div>
-      </div> -->
     </div>
 
     <!-- Details Task -->
@@ -554,8 +465,8 @@
           <div class="card_left">
             <img src="/img/profil.png" alt="" />
             <div class="card_name">
-              <h3>{{ detailKaryawan.username }}</h3>
-              <p>{{ detailKaryawan.role }}</p>
+              <h3>{{ sortirDetailKaryawan.username }}</h3>
+              <p>{{ sortirDetailKaryawan.role }}</p>
               <div class="periode">
                 <p v-if="start === '' && end === ''">Seluruh Periode</p>
                 <p v-else>Periode: {{ start }} - {{ end }}</p>
@@ -566,114 +477,125 @@
           <div class="status_karyawan">
             <div
               :class="{
-                available: detailKaryawan.availability_status === 'Available',
-                not_available:
-                  detailKaryawan.availability_status === 'Not Available',
+                available:
+                  sortirDetailKaryawan.availability_status === 'Available',
+                working: sortirDetailKaryawan.availability_status === 'Working',
               }"
             >
               <i class="fa-solid fa-circle"></i>
-              <p>{{ detailKaryawan.availability_status }}</p>
+              <p>{{ sortirDetailKaryawan.availability_status }}</p>
             </div>
             <div
               :class="{
-                overload_task: detailKaryawan.workload_status === 'Overload',
-                underload_task: detailKaryawan.workload_status === 'Underload',
-                normal_task: detailKaryawan.workload_status === 'Normal',
+                overload_task:
+                  sortirDetailKaryawan.workload_status === 'Overload',
+                underload_task:
+                  sortirDetailKaryawan.workload_status === 'Underload',
+                normal_task: sortirDetailKaryawan.workload_status === 'Normal',
               }"
             >
               <i
-                :class="{
-                  'fa-solid fa-chart-line':
-                    detailKaryawan.workload_status === 'Underload',
-                  'fa-solid fa-equals':
-                    detailKaryawan.workload_status === 'Normal',
-                  'fa-solid fa-arrow-trend-up':
-                    detailKaryawan.workload_status === 'Overload',
-                }"
+                class="fa-solid fa-arrow-trend-up"
+                v-if="sortirDetailKaryawan.workload_status === 'Overload'"
               ></i>
-              <!-- <i class="fa-solid fa-chart-line"></i>
-              <i class="fa-solid fa-arrow-trend-up"></i>
-              <i class="fa-solid fa-equals"></i> -->
-              <p>{{ detailKaryawan.workload_status }}</p>
+              <i
+                class="fa-solid fa-equals"
+                v-if="sortirDetailKaryawan.workload_status === 'Normal'"
+              ></i>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="16px"
+                viewBox="0 -960 960 960"
+                width="16px"
+                v-if="sortirDetailKaryawan.workload_status === 'Underload'"
+              >
+                <path
+                  d="M640-240v-80h104L536-526 376-366 80-664l56-56 240 240 160-160 264 264v-104h80v240H640Z"
+                />
+              </svg>
+              <p>{{ sortirDetailKaryawan.workload_status }}</p>
             </div>
           </div>
           <div
             class="performa_karyawan"
             :class="{
-              special: detailKaryawan.performance.score > 100,
+              special: sortirDetailKaryawan.performance.score > 100,
               ontime:
-                detailKaryawan.performance.score > 80 &&
-                detailKaryawan.performance.score <= 100,
-              late: detailKaryawan.performance.score <= 80,
+                sortirDetailKaryawan.performance.score > 80 &&
+                sortirDetailKaryawan.performance.score <= 100,
+              late: sortirDetailKaryawan.performance.score <= 80,
             }"
           >
             <i class="fa-solid fa-chart-line"></i>
             <div class="text">
               <p>Performa</p>
               <span
-                ><strong>{{ detailKaryawan.performance.score }}%</strong></span
+                ><strong
+                  >{{ sortirDetailKaryawan.performance.score }}%</strong
+                ></span
               >
             </div>
           </div>
         </div>
-        <!-- <div class="card_task">
-          <p>Total Task</p>
-          <p>{{ detailKaryawan.total_tasks }}</p>
-        </div> -->
         <div class="keterangan_karyawan">
           <div class="container_flex">
             <div class="total_seharusnya">
               <div class="teks">
                 <p>Total Beban Kerja (Seharusnya)</p>
-                <h4>{{ detailKaryawan.expected_hours }} Jam</h4>
+                <h4>{{ sortirDetailKaryawan.expected_hours }} Jam</h4>
               </div>
               <div class="ikon">
                 <i class="fa-regular fa-clock"></i>
               </div>
             </div>
+
+            <div
+              class="ketepatan_pengerjaan"
+              v-if="sortirDetailKaryawan.avg_time_efficiency.avg_percentage"
+              :class="{
+                special:
+                  sortirDetailKaryawan.avg_time_efficiency.avg_percentage > 100,
+                ontime:
+                  sortirDetailKaryawan.avg_time_efficiency.avg_percentage >
+                    80 &&
+                  sortirDetailKaryawan.avg_time_efficiency.avg_percentage <=
+                    100,
+                late:
+                  sortirDetailKaryawan.avg_time_efficiency.avg_percentage <= 80,
+              }"
+            >
+              <div class="teks">
+                <p>Ketepatan Pengerjaan Semua Tugas</p>
+                <h4>
+                  {{ sortirDetailKaryawan.avg_time_efficiency.avg_percentage }}%
+                </h4>
+              </div>
+              <div class="ikon">
+                <i class="fa-solid fa-list-check"></i>
+              </div>
+            </div>
             <div
               class="total_beban"
               :class="{
-                special: detailKaryawan.total_spent_hours.percentage > 100,
+                special:
+                  sortirDetailKaryawan.total_spent_hours.percentage > 100,
                 ontime:
-                  detailKaryawan.total_spent_hours.percentage > 80 &&
-                  detailKaryawan.total_spent_hours.percentage <= 100,
-                late: detailKaryawan.total_spent_hours.percentage <= 80,
+                  sortirDetailKaryawan.total_spent_hours.percentage > 80 &&
+                  sortirDetailKaryawan.total_spent_hours.percentage <= 100,
+                late: sortirDetailKaryawan.total_spent_hours.percentage <= 80,
               }"
             >
               <div class="teks">
                 <p>Total Beban Kerja (Aktif)</p>
                 <h4>
-                  {{ detailKaryawan.total_spent_hours.percentage }}% ({{
-                    detailKaryawan.total_spent_hours.hours
+                  {{ sortirDetailKaryawan.total_spent_hours.percentage }}% ({{
+                    sortirDetailKaryawan.total_spent_hours.hours
                   }}
                   Jam)
                 </h4>
               </div>
               <div class="ikon">
                 <i class="fa-regular fa-clock"></i>
-              </div>
-            </div>
-            <div
-              class="ketepatan_pengerjaan"
-              v-if="detailKaryawan.avg_time_efficiency.avg_percentage"
-              :class="{
-                special:
-                  detailKaryawan.avg_time_efficiency.avg_percentage > 100,
-                ontime:
-                  detailKaryawan.avg_time_efficiency.avg_percentage > 80 &&
-                  detailKaryawan.avg_time_efficiency.avg_percentage <= 100,
-                late: detailKaryawan.avg_time_efficiency.avg_percentage <= 80,
-              }"
-            >
-              <div class="teks">
-                <p>Ketepatan Pengerjaan Semua Tugas</p>
-                <h4>
-                  {{ detailKaryawan.avg_time_efficiency.avg_percentage }}%
-                </h4>
-              </div>
-              <div class="ikon">
-                <i class="fa-solid fa-list-check"></i>
               </div>
             </div>
           </div>
@@ -702,43 +624,47 @@
       </div>
 
       <div class="task">
-        <select name="" id="" class="select_task" v-model="progres">
-          <option value="">Semua Progress</option>
-          <option value="completed">Complete</option>
-          <option value="done dev">Done Dev</option>
-          <option value="in progress">In Progress</option>
-          <option value="in review">In Review</option>
-          <option value="to do">To Do</option>
-        </select>
+        <div class="filter_task">
+          <div class="style_progres">
+            <label for="">Filter Progres</label>
+            <select name="" id="" class="select_task" v-model="progres">
+              <option value="">Semua Progress</option>
+              <option value="completed">Complete</option>
+              <option value="done dev">Done Dev</option>
+              <option value="in progress">In Progress</option>
+              <option value="in review">In Review</option>
+              <option value="to do">To Do</option>
+            </select>
+          </div>
 
-        <!-- <div class="select_task" @click="openTask">Semua Progres</div>
-
-        <div class="opsi" v-if="openTaskList">
-          <label for="">
-            <input type="checkbox" name="" id="" v-model="complete" /> Complete
-          </label>
-          <label for="">
-            <input type="checkbox" name="" id="" v-model="inProgres" /> In
-            Progress
-          </label>
-          <label for="">
-            <input type="checkbox" name="" id="" v-model="todo" /> To Do
-          </label>
-          <label for="">
-            <input type="checkbox" name="" id="" v-model="inReview" /> In Review
-          </label>
-        </div> -->
+          <div class="style_sortir">
+            <label for="">Filter Ketepatan Tugas</label>
+            <select
+              name=""
+              id=""
+              class="sortir_ketepatan"
+              v-model="sortKetepatanDetail"
+            >
+              <option value="">Semua</option>
+              <option value="highest">Tertinggi</option>
+              <option value="lowest">Terendah</option>
+            </select>
+          </div>
+        </div>
 
         <div
           class="no_task"
-          v-if="!detailKaryawan?.tasks || detailKaryawan.tasks.length === 0"
+          v-if="
+            !sortirDetailKaryawan?.tasks ||
+            sortirDetailKaryawan.tasks.length === 0
+          "
         >
           Tidak ada data
         </div>
         <div
           class="container_task"
           v-else
-          v-for="k in detailKaryawan.tasks.filter(
+          v-for="k in sortirDetailKaryawan.tasks.filter(
             (t) =>
               t.status_name !== 'backlog' &&
               (!progres ||
@@ -787,7 +713,7 @@
           </div>
           <div
             class="achievement"
-            v-if="k.status_name === 'done dev' || k.status_name === 'completed'"
+            v-if="k.time_efficiency_percentage"
             :class="{
               special: k.time_efficiency_percentage > 100,
               ontime: k.time_efficiency_percentage == 100,
@@ -841,11 +767,13 @@
             </div>
             <div class="start_date">
               <i class="fa-regular fa-calendar"></i>
-              <p>Mulai: {{ k.start_date }}</p>
+              <p v-if="k.start_date">Mulai: {{ k.start_date }}</p>
+              <p v-if="!k.start_date">Mulai: <i>Tidak Valid</i></p>
             </div>
             <div class="deadline">
               <i class="fa-regular fa-calendar"></i>
-              <p>Target: {{ k.due_date }}</p>
+              <p v-if="k.due_date">Target: {{ k.due_date }}</p>
+              <p v-if="!k.due_date">Target: <i>Tidak Valid</i></p>
             </div>
             <div
               class="done_date"
@@ -857,312 +785,56 @@
               <p>Selesai: {{ k.date_done }}</p>
             </div>
           </div>
-
-          <!-- <div class="jenis_data">
-            <div class="form">
-              <p>ClickUp</p>
-            </div>
-            <div class="jenis">
-              <p>Frontend</p>
-            </div>
-          </div> -->
         </div>
       </div>
-      <!-- <div class="task">
-        <h4>Task Complete ({{ jumlahSelesai }})</h4>
-        <div
-          class="container_task"
-          v-for="k in detailKaryawan.tasks.filter(
-            (t) => t.status_name === 'done dev' || t.status_name === 'completed'
-          )"
-        >
-          <div class="header_container">
-            <div class="name_task">
-              <p>{{ k.name }}</p>
-            </div>
-            <div class="status_task">
-              <div class="progres_task">
-                <p>Selesai</p>
-              </div>
-              <div class="task_priority">
-                <p>High</p>
-              </div>
-              <div class="task_penghargaan">
-                <i class="fa-solid fa-award"></i>
-                <p>Achievement</p>
-              </div>
-            </div>
-          </div>
-          <div class="description">
-            <p>{{ k.description }}</p>
-          </div>
-          <div class="achievement" v-show="achiv">
-            <div class="achievement_logo">
-              <i class="fa-solid fa-award"></i>
-            </div>
-            <div class="penghargaan">
-              <p>
-                🎉 <strong>Penghargaan!</strong> Selesai 2 hari lebih cepat dari
-                deadline
-              </p>
-              <p>Lebih cepat: 48 jam</p>
-            </div>
-          </div>
-          <div class="keterangan_waktu">
-            <div class="jam">
-              <i class="fa-regular fa-clock"></i>
-              <p>16 jam</p>
-            </div>
-            <div class="start_date">
-              <i class="fa-regular fa-calendar"></i>
-              <p>Tanggal: 02/12/2024</p>
-            </div>
-            <div class="deadline">
-              <i class="fa-regular fa-calendar"></i>
-              <p>Deadline: 05/12/2024</p>
-            </div>
-            <div class="done_date">
-              <i class="fa-regular fa-calendar"></i>
-              <p>Selesai: 03/12/2024</p>
-            </div>
-          </div>
-
-          <div class="jenis_data">
-            <div class="form">
-              <p>ClickUp</p>
-            </div>
-            <div class="jenis">
-              <p>Frontend</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div
-        class="task_inProgres"
-        v-if="detailKaryawan.tasks.some((t) => t.status_name === 'in progress')"
-      >
-        <div class="task">
-          <h4>In Progress ({{ jumlahInProgress }})</h4>
-          <div
-            class="container_task"
-            v-for="k in detailKaryawan.tasks.filter(
-              (t) => t.status_name === 'in progress'
-            )"
-          >
-            <div class="header_container">
-              <div class="name_task">
-                <p>{{ k.name }}</p>
-              </div>
-              <div class="status_task">
-                <div class="progres_task">
-                  <p>Selesai</p>
-                </div>
-                <div class="task_priority">
-                  <p>High</p>
-                </div>
-                <div class="task_penghargaan">
-                  <i class="fa-solid fa-award"></i>
-                  <p>Achievement</p>
-                </div>
-              </div>
-            </div>
-            <div class="description">
-              <p>Create responsive landing page for new product</p>
-            </div>
-            <div class="achievement" v-show="achiv">
-              <div class="achievement_logo">
-                <i class="fa-solid fa-award"></i>
-              </div>
-              <div class="penghargaan">
-                <p>
-                  🎉 <strong>Penghargaan!</strong> Selesai 2 hari lebih cepat
-                  dari deadline
-                </p>
-                <p>Lebih cepat: 48 jam</p>
-              </div>
-            </div>
-            <div class="keterangan_waktu">
-              <div class="jam">
-                <i class="fa-regular fa-clock"></i>
-                <p>16 jam</p>
-              </div>
-              <div class="start_date">
-                <i class="fa-regular fa-calendar"></i>
-                <p>Tanggal: 02/12/2024</p>
-              </div>
-              <div class="deadline">
-                <i class="fa-regular fa-calendar"></i>
-                <p>Deadline: 05/12/2024</p>
-              </div>
-              <div class="done_date">
-                <i class="fa-regular fa-calendar"></i>
-                <p>Selesai: 03/12/2024</p>
-              </div>
-            </div>
-
-            <div class="jenis_data">
-              <div class="form">
-                <p>ClickUp</p>
-              </div>
-              <div class="jenis">
-                <p>Frontend</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        class="task_review"
-        v-if="detailKaryawan.tasks.some((t) => t.status_name === 'in review')"
-      >
-        <div class="task">
-          <h4>In Review ({{ inReview }})</h4>
-          <div
-            class="container_task"
-            v-for="k in detailKaryawan.tasks.filter(
-              (t) => t.status_name === 'in review'
-            )"
-          >
-            <div class="header_container">
-              <div class="name_task">
-                <p>{{ k.name }}</p>
-              </div>
-              <div class="status_task">
-                <div class="progres_task">
-                  <p>Selesai</p>
-                </div>
-                <div class="task_priority">
-                  <p>High</p>
-                </div>
-                <div class="task_penghargaan">
-                  <i class="fa-solid fa-award"></i>
-                  <p>Achievement</p>
-                </div>
-              </div>
-            </div>
-            <div class="description">
-              <p>Create responsive landing page for new product</p>
-            </div>
-            <div class="achievement" v-show="achiv">
-              <div class="achievement_logo">
-                <i class="fa-solid fa-award"></i>
-              </div>
-              <div class="penghargaan">
-                <p>
-                  🎉 <strong>Penghargaan!</strong> Selesai 2 hari lebih cepat
-                  dari deadline
-                </p>
-                <p>Lebih cepat: 48 jam</p>
-              </div>
-            </div>
-            <div class="keterangan_waktu">
-              <div class="jam">
-                <i class="fa-regular fa-clock"></i>
-                <p>16 jam</p>
-              </div>
-              <div class="start_date">
-                <i class="fa-regular fa-calendar"></i>
-                <p>Tanggal: 02/12/2024</p>
-              </div>
-              <div class="deadline">
-                <i class="fa-regular fa-calendar"></i>
-                <p>Deadline: 05/12/2024</p>
-              </div>
-              <div class="done_date">
-                <i class="fa-regular fa-calendar"></i>
-                <p>Selesai: 03/12/2024</p>
-              </div>
-            </div>
-
-            <div class="jenis_data">
-              <div class="form">
-                <p>ClickUp</p>
-              </div>
-              <div class="jenis">
-                <p>Frontend</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        class="task_todo"
-        v-if="detailKaryawan.tasks.some((t) => t.status_name === 'to do')"
-      >
-        <div class="task">
-          <h4>To Do ({{ jumlahTodo }})</h4>
-          <div
-            class="container_task"
-            v-for="k in detailKaryawan.tasks.filter(
-              (t) => t.status_name === 'to do'
-            )"
-          >
-            <div class="header_container">
-              <div class="name_task">
-                <p>{{ k.name }}</p>
-              </div>
-              <div class="status_task">
-                <div class="progres_task">
-                  <p>Selesai</p>
-                </div>
-                <div class="task_priority">
-                  <p>High</p>
-                </div>
-                <div class="task_penghargaan">
-                  <i class="fa-solid fa-award"></i>
-                  <p>Achievement</p>
-                </div>
-              </div>
-            </div>
-            <div class="description">
-              <p>Create responsive landing page for new product</p>
-            </div>
-            <div class="achievement" v-show="achiv">
-              <div class="achievement_logo">
-                <i class="fa-solid fa-award"></i>
-              </div>
-              <div class="penghargaan">
-                <p>
-                  🎉 <strong>Penghargaan!</strong> Selesai 2 hari lebih cepat
-                  dari deadline
-                </p>
-                <p>Lebih cepat: 48 jam</p>
-              </div>
-            </div>
-            <div class="keterangan_waktu">
-              <div class="jam">
-                <i class="fa-regular fa-clock"></i>
-                <p>16 jam</p>
-              </div>
-              <div class="start_date">
-                <i class="fa-regular fa-calendar"></i>
-                <p>Tanggal: 02/12/2024</p>
-              </div>
-              <div class="deadline">
-                <i class="fa-regular fa-calendar"></i>
-                <p>Deadline: 05/12/2024</p>
-              </div>
-              <div class="done_date">
-                <i class="fa-regular fa-calendar"></i>
-                <p>Selesai: 03/12/2024</p>
-              </div>
-            </div>
-
-            <div class="jenis_data">
-              <div class="form">
-                <p>ClickUp</p>
-              </div>
-              <div class="jenis">
-                <p>Frontend</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
     </div>
   </div>
 </template>
+
+<!-- Style Filter Sortir -->
+<style scoped>
+.filter_sortir {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* margin-top: 20px; */
+  width: 100%;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.style_sortir {
+  /* border: 1px solid #010101; */
+  width: 32%;
+}
+
+.style_sortir label,
+.style_progres label {
+  padding-left: 2px;
+  text-wrap: nowrap;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.sortir_performa,
+.sortir_beban,
+.sortir_ketepatan,
+.select_task {
+  border: var(--borderCard);
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 6px;
+  /* margin-top: 20px; */
+  display: block;
+  width: 100%;
+}
+
+.filter_task {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+</style>
 
 <!-- Style Container Progress -->
 <style scoped>
@@ -1761,9 +1433,6 @@
   display: flex;
   align-items: center;
   gap: 20px;
-  padding-right: 20px;
-  /* justify-content: space-between; */
-  /* border-bottom: 1px solid #b5b5b5c9; */
   padding-bottom: 10px;
   font-weight: 300;
   font-size: 15px;
@@ -1801,7 +1470,7 @@
 }
 
 .status_karyawan .available,
-.not_available {
+.working {
   display: flex;
   gap: 5px;
   align-items: center;
@@ -1812,7 +1481,7 @@
   padding: 2px 10px;
   border-radius: 6px;
   border: 1px solid #dbdbdb;
-  /* text-wrap: nowrap; */
+  text-wrap: nowrap;
 }
 
 .status_karyawan .available i {
@@ -1820,7 +1489,7 @@
   font-size: 8px;
 }
 
-.status_karyawan .not_available i {
+.status_karyawan .working i {
   color: red;
   font-size: 8px;
 }
@@ -1849,18 +1518,18 @@
   border: 1px solid rgb(154, 255, 154);
 }
 
-.overload_task p {
+.overload_task {
   color: green;
 }
 
 .underload_task {
   background-color: rgb(255, 237, 237);
-  /* color: rgb(203, 0, 0); */
   border: 1px solid rgb(255, 204, 204);
+  color: rgb(203, 0, 0);
 }
 
-.underload_task p {
-  color: rgb(203, 0, 0);
+.underload_task svg {
+  fill: rgb(203, 0, 0);
 }
 
 .normal_task {
@@ -2556,6 +2225,11 @@ export default {
       complete: [],
       progres: "",
       isLoading: false,
+      isClose: false,
+      sortPerform: "",
+      sortBeban: "",
+      sortKetepatan: "",
+      sortKetepatanDetail: "",
     };
   },
   mounted() {
@@ -2563,19 +2237,23 @@ export default {
     this.ambilTask();
   },
   methods: {
+    onDateChange() {
+      if (!this.start || !this.end) return;
+
+      // Normalisasi range
+      if (this.start > this.end) {
+        this.end = this.start;
+        return;
+      }
+
+      if (this.isLoading) return;
+
+      this.ambilTask();
+    },
     logout() {
       const token = useCookie("token");
       token.value = null;
       this.$router.push("/login");
-    },
-    convertTime(value) {
-      // Kalau nilainya mendekati ms (3,600,000 ms = 1 jam)
-      if (value >= 360000) {
-        return value / 1000 / 60;
-      }
-
-      // Kalau nilainya lebih kecil, pakai faktor 10000
-      return value / 10000;
     },
     formatTanggal(tgl) {
       const [year, month, day] = tgl.split("-");
@@ -2611,13 +2289,12 @@ export default {
           )}&end_date=${this.formatTanggal(this.end)}`
           // "/api/v1/workload/tasks-by-range?start_date=01-07-2025&end_date=31-12-2025"
         );
-        this.daftarKaryawan = task.data.assignees;
+        this.daftarKaryawan = task.data.assignees || [];
 
         console.log("Berhasil ambil task:", task);
-        this.isLoading = false;
       } catch (error) {
         console.error("Gagal ambil task:", error);
-        this.isLoading = false;
+        this.daftarKaryawan = [];
       } finally {
         this.isLoading = false;
       }
@@ -2680,7 +2357,12 @@ export default {
       this.sidebar = true;
     },
     close() {
-      this.sidebar = false;
+      this.isClose = true;
+
+      setTimeout(() => {
+        this.sidebar = false;
+        this.isClose = false;
+      }, 200);
     },
     detail(karyawan) {
       // this.daftarKaryawan = karyawan;
@@ -2742,66 +2424,92 @@ export default {
         );
       }
 
-      // Filter by tanggal
-      // if (this.start && this.end) {
-      //   const startFilter = new Date(this.start);
-      //   const endFilter = new Date(this.end);
-      //   // Convert DD-MM-YYYY → Date
-      //   const fixDate = (tanggal) => {
-      //     if (!tanggal) return null;
+      // Sortir Tertinggi
 
-      //     const [dd, mm, yyyy] = tanggal.split("-");
-      //     return new Date(`${yyyy}-${mm}-${dd}`);
-      //   };
+      // Performa
+      if (this.sortPerform === "highest" || this.sortPerform === "lowest") {
+        hasil = hasil
+          .filter(
+            (k) => k.performance && typeof k.performance.score === "number"
+          )
 
-      //   hasil = hasil
-      //     .map((karyawan) => {
-      //       // Filter task per karyawan
-      //       const filteredTasks = (karyawan.tasks || []).filter((t) => {
-      //         const startDate = fixDate(t.start_date);
-      //         const dueDate = fixDate(t.due_date);
-
-      //         // Task masuk range jika:
-      //         // - Mulai atau selesai di antara range
-      //         // - Atau range berada di dalam rentang task
-      //         return startDate <= endFilter && dueDate >= startFilter;
-      //       });
-
-      //       return { ...karyawan, filteredTasks: filteredTasks };
-      //     })
-      //     .filter((k) => k.tasks.length > 0); // Hanya tampilkan karyawan yg punya task dalam range
-      // }
+          .sort((a, b) => {
+            if (this.sortPerform === "highest") {
+              return b.performance.score - a.performance.score;
+            }
+            return a.performance.score - b.performance.score;
+          });
+      } else if (
+        this.sortKetepatan === "highest" ||
+        this.sortKetepatan === "lowest"
+      ) {
+        hasil = hasil
+          .filter(
+            (k) =>
+              k.avg_time_efficiency &&
+              typeof k.avg_time_efficiency.avg_percentage === "number"
+          )
+          .sort((a, b) => {
+            if (this.sortKetepatan === "highest") {
+              return (
+                b.avg_time_efficiency.avg_percentage -
+                a.avg_time_efficiency.avg_percentage
+              );
+            }
+            return (
+              a.avg_time_efficiency.avg_percentage -
+              b.avg_time_efficiency.avg_percentage
+            );
+          });
+      }
+      // Beban Kerja
+      else if (this.sortBeban === "highest" || this.sortBeban === "lowest") {
+        hasil = hasil
+          .filter(
+            (k) =>
+              k.total_spent_hours &&
+              typeof k.total_spent_hours.percentage === "number"
+          )
+          .sort((a, b) => {
+            if (this.sortBeban === "highest") {
+              return (
+                b.total_spent_hours.percentage - a.total_spent_hours.percentage
+              );
+            }
+            return (
+              a.total_spent_hours.percentage - b.total_spent_hours.percentage
+            );
+          });
+      }
 
       return hasil;
     },
+    sortirDetailKaryawan() {
+      let hasil = this.detailKaryawan;
+      let task = [...hasil.tasks];
+      console.log("tes");
+      if (
+        this.sortKetepatanDetail === "highest" ||
+        this.sortKetepatanDetail === "lowest"
+      ) {
+        task = task
+          .filter(
+            (k) =>
+              k.time_efficiency_percentage &&
+              typeof k.time_efficiency_percentage
+          )
+          .sort((a, b) => {
+            if (this.sortKetepatanDetail === "highest") {
+              return (
+                b.time_efficiency_percentage - a.time_efficiency_percentage
+              );
+            }
+            return a.time_efficiency_percentage - b.time_efficiency_percentage;
+          });
+      }
+      console.log(task);
 
-    filteredTask() {
-      return this.detailKaryawan.tasks.filter((t) => {
-        // Jika tidak ada filter
-        if (
-          !this.complete &&
-          !this.inProgress &&
-          !this.todo &&
-          !this.inReview
-        ) {
-          return true; // Tampilkan semua
-        }
-
-        if (this.complete && t.status_name === "completed") {
-          return true;
-        }
-        if (this.inProgress && t.status_name === "in progress") {
-          return true;
-        }
-        if (this.todo && t.status_name === "to do") {
-          return true;
-        }
-        if (this.inReview && t.status_name === "in review") {
-          return true;
-        }
-
-        return false;
-      });
+      return hasil;
     },
 
     totalFilteredTask() {
@@ -2853,27 +2561,8 @@ export default {
     // },
   },
   watch: {
-    // start(newVal, oldVal) {
-    //   this.ambilTask();
-    // },
-    // end(newVal, oldVal) {
-    //console.log("END berubah:", newVal);
-    //this.ambilTask();
-    //},
-    start() {
-      if (this.start > this.end) {
-        this.end = this.start;
-        console.log("mulai");
-      }
-      if (this.start && this.end) this.ambilTask();
-    },
-    end() {
-      if (this.end < this.start) {
-        this.start = this.end;
-        console.log("akhir");
-      }
-      if (this.start && this.end) this.ambilTask();
-    },
+    start: "onDateChange",
+    end: "onDateChange",
   },
 };
 </script>

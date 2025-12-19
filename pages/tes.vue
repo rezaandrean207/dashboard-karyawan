@@ -1,5 +1,5 @@
 <template>
-  <div class="container_progres">
+  <!-- <div class="container_progres">
     <div class="container_selesai">
       <span>Task Selesai</span>
       <span>2 Task</span>
@@ -14,8 +14,23 @@
       <span>Akan Datang</span>
       <span>5 Task</span>
       <p>48 Jam</p>
+    </div> -->
+
+  <!-- <div class="loading">
+    <div class="loading_tanggal">
+      <i class="fa-solid fa-spinner"></i>
+      <i class="fa-solid fa-circle-notch"></i>
+      <i class="fa-solid fa-arrows-spin"></i>
+      <i class="fa-solid fa-circle-notch fa-spin"></i>
+      <p>Tunggu Sebentar</p>
     </div>
-  </div>
+  </div> -->
+
+  <select name="" id="" class="filter_sortir">
+    <option value="">Semua</option>
+    <option value="highest">Tertinggi</option>
+    <option value="lowest">Terendah</option>
+  </select>
 </template>
 
 <!-- <script>
@@ -36,6 +51,47 @@ export default {
   }
 };
 </script> -->
+
+<style scoped>
+.filter_sortir {
+  border: 1px solid #010101;
+  padding: 4px;
+  font-size: 14px;
+  border-radius: 6px;
+  width: 180px;
+}
+</style>
+
+<style scoped>
+.loading .loading_tanggal i {
+  /* border: 1px solid #010101; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading_tanggal .spin {
+  font-size: 28px;
+  color: rgb(16, 50, 130);
+  animation: spin 0.8s linear infinite;
+}
+
+.loading_tanggal i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px; /* GENAP */
+  color: rgb(16, 50, 130);
+  animation: spin 1s linear infinite;
+  transform-origin: 50% 50%;
+}
+</style>
 
 <style scoped>
 .container_progres {
