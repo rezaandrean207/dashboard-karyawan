@@ -55,7 +55,7 @@
           </button>
         </div>
 
-        <NuxtLink to="/" class="logout">Logout</NuxtLink>
+        <button  @click="logout" class="logout">Logout</button>
       </div>
     </div>
 
@@ -170,6 +170,11 @@ export default {
     this.historySync();
   },
   methods: {
+    logout(){
+      const token = useCookie("token");
+      token.value = null;
+      this.$router.push('/login');
+    },
     async syncData() {
       const { $api } = useNuxtApp();
       this.loading = true;

@@ -56,7 +56,7 @@
               <!-- <i v-else class="fa-solid fa-circle-check"></i>     -->
             </button>
           </div>
-          <NuxtLink to="/" class="logout">Logout</NuxtLink>
+          <button @click="logout" class="logout">Logout</button>
         </div>
       </div>
     </div>
@@ -115,7 +115,7 @@
             <p>History Sync</p>
           </NuxtLink> -->
         </div>
-        <NuxtLink to="/" class="logout">Logout</NuxtLink>
+        <button @click="logout" class="logout">Logout</button>
       </div>
     </div>
 
@@ -2537,7 +2537,6 @@ form select {
 </style>
 
 <script>
-
 export default {
   data() {
     return {
@@ -2564,6 +2563,11 @@ export default {
     this.ambilTask();
   },
   methods: {
+    logout() {
+      const token = useCookie("token");
+      token.value = null;
+      this.$router.push("/login");
+    },
     convertTime(value) {
       // Kalau nilainya mendekati ms (3,600,000 ms = 1 jam)
       if (value >= 360000) {

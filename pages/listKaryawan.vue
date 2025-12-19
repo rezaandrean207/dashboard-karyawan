@@ -57,7 +57,7 @@
               {{ loading ? "Menyinkronkan..." : "Sync" }}
             </button>
           </div>
-          <NuxtLink to="/" class="logout">Logout</NuxtLink>
+          <button @click="logout" class="logout">Logout</button>
         </div>
       </div>
     </div>
@@ -117,7 +117,7 @@
           </button>
         </div>
 
-        <NuxtLink to="/" class="logout">Logout</NuxtLink>
+        <button @click="logout" class="logout">Logout</button>
       </div>
     </div>
 
@@ -870,6 +870,11 @@ export default {
     this.ambilData();
   },
   methods: {
+    logout() {
+      const token = useCookie("token");
+      token.value = null;
+      this.$router.push("/login");
+    },
     menu() {
       this.sidebar = true;
     },
