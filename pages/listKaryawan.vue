@@ -849,12 +849,6 @@ form input {
 }
 </style>
 
-<script setup>
-definePageMeta({
-  middleware: "auth",
-});
-</script>
-
 <script>
 export default {
   data() {

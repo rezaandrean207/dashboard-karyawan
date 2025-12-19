@@ -2536,14 +2536,7 @@ form select {
 }
 </style>
 
-<script setup>
-definePageMeta({
-  middleware: "auth",
-});
-</script>
-
 <script>
-import DetailTask from "./detailTask.vue";
 
 export default {
   data() {

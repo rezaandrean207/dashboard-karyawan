@@ -533,9 +533,6 @@ a {
 </style>
 
 <script setup>
-definePageMeta({
-  path: "/",
-});
 </script>
 
 <script>
@@ -564,10 +561,15 @@ export default {
           username: this.form.username,
           password: this.form.password,
         });
-        console.log("Login sukses:", res.data);
+        console.log("Login sukses:", res.data.token);
 
-        // Simpan token (opsional, sesuaikan API)
-        localStorage.setItem("token", res.data.token);
+        const token = useCookie("token", {
+          maxAge: 60 * 60 * 24, // 1 hari
+          sameSite: "lax",
+          path: "/",
+        });
+
+        token.value = res.data.data.token;
 
         const username = this.form.username;
 
