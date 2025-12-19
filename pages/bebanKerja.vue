@@ -229,7 +229,7 @@
               name=""
               id=""
               class="sortir_ketepatan"
-              v-model="sortKetepatanDetail"
+              v-model="sortKetepatan"
             >
               <option value="">Semua</option>
               <option value="highest">Tertinggi</option>
@@ -393,7 +393,7 @@
         <div class="detail_task" @click="detail(k)">
           <i class="fa-solid fa-list-check"></i>
           <p v-if="ambilTask">Task Detail ({{ k.tasks.length }} Task)</p>
-          <!-- <p v-else>{{ totalFilteredTask(k) }}</p> -->
+          <p v-else>{{ totalFilteredTask(k) }}</p>
           <i class="fa-solid fa-arrow-up-from-bracket"></i>
         </div>
 
@@ -465,8 +465,8 @@
           <div class="card_left">
             <img src="/img/profil.png" alt="" />
             <div class="card_name">
-              <h3>{{ sortirDetailKaryawan.username }}</h3>
-              <p>{{ sortirDetailKaryawan.role }}</p>
+              <h3>{{ detailKaryawan.username }}</h3>
+              <p>{{ detailKaryawan.role }}</p>
               <div class="periode">
                 <p v-if="start === '' && end === ''">Seluruh Periode</p>
                 <p v-else>Periode: {{ start }} - {{ end }}</p>
@@ -477,62 +477,57 @@
           <div class="status_karyawan">
             <div
               :class="{
-                available:
-                  sortirDetailKaryawan.availability_status === 'Available',
-                working: sortirDetailKaryawan.availability_status === 'Working',
+                available: detailKaryawan.availability_status === 'Available',
+                working: detailKaryawan.availability_status === 'Working',
               }"
             >
               <i class="fa-solid fa-circle"></i>
-              <p>{{ sortirDetailKaryawan.availability_status }}</p>
+              <p>{{ detailKaryawan.availability_status }}</p>
             </div>
             <div
               :class="{
-                overload_task:
-                  sortirDetailKaryawan.workload_status === 'Overload',
-                underload_task:
-                  sortirDetailKaryawan.workload_status === 'Underload',
-                normal_task: sortirDetailKaryawan.workload_status === 'Normal',
+                overload_task: detailKaryawan.workload_status === 'Overload',
+                underload_task: detailKaryawan.workload_status === 'Underload',
+                normal_task: detailKaryawan.workload_status === 'Normal',
               }"
             >
               <i
                 class="fa-solid fa-arrow-trend-up"
-                v-if="sortirDetailKaryawan.workload_status === 'Overload'"
+                v-if="detailKaryawan.workload_status === 'Overload'"
               ></i>
               <i
                 class="fa-solid fa-equals"
-                v-if="sortirDetailKaryawan.workload_status === 'Normal'"
+                v-if="detailKaryawan.workload_status === 'Normal'"
               ></i>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 height="16px"
                 viewBox="0 -960 960 960"
                 width="16px"
-                v-if="sortirDetailKaryawan.workload_status === 'Underload'"
+                v-if="detailKaryawan.workload_status === 'Underload'"
               >
                 <path
                   d="M640-240v-80h104L536-526 376-366 80-664l56-56 240 240 160-160 264 264v-104h80v240H640Z"
                 />
               </svg>
-              <p>{{ sortirDetailKaryawan.workload_status }}</p>
+              <p>{{ detailKaryawan.workload_status }}</p>
             </div>
           </div>
           <div
             class="performa_karyawan"
             :class="{
-              special: sortirDetailKaryawan.performance.score > 100,
+              special: detailKaryawan.performance.score > 100,
               ontime:
-                sortirDetailKaryawan.performance.score > 80 &&
-                sortirDetailKaryawan.performance.score <= 100,
-              late: sortirDetailKaryawan.performance.score <= 80,
+                detailKaryawan.performance.score > 80 &&
+                detailKaryawan.performance.score <= 100,
+              late: detailKaryawan.performance.score <= 80,
             }"
           >
             <i class="fa-solid fa-chart-line"></i>
             <div class="text">
               <p>Performa</p>
               <span
-                ><strong
-                  >{{ sortirDetailKaryawan.performance.score }}%</strong
-                ></span
+                ><strong>{{ detailKaryawan.performance.score }}%</strong></span
               >
             </div>
           </div>
@@ -542,7 +537,7 @@
             <div class="total_seharusnya">
               <div class="teks">
                 <p>Total Beban Kerja (Seharusnya)</p>
-                <h4>{{ sortirDetailKaryawan.expected_hours }} Jam</h4>
+                <h4>{{ detailKaryawan.expected_hours }} Jam</h4>
               </div>
               <div class="ikon">
                 <i class="fa-regular fa-clock"></i>
@@ -551,23 +546,20 @@
 
             <div
               class="ketepatan_pengerjaan"
-              v-if="sortirDetailKaryawan.avg_time_efficiency.avg_percentage"
+              v-if="detailKaryawan.avg_time_efficiency.avg_percentage"
               :class="{
                 special:
-                  sortirDetailKaryawan.avg_time_efficiency.avg_percentage > 100,
+                  detailKaryawan.avg_time_efficiency.avg_percentage > 100,
                 ontime:
-                  sortirDetailKaryawan.avg_time_efficiency.avg_percentage >
-                    80 &&
-                  sortirDetailKaryawan.avg_time_efficiency.avg_percentage <=
-                    100,
-                late:
-                  sortirDetailKaryawan.avg_time_efficiency.avg_percentage <= 80,
+                  detailKaryawan.avg_time_efficiency.avg_percentage > 80 &&
+                  detailKaryawan.avg_time_efficiency.avg_percentage <= 100,
+                late: detailKaryawan.avg_time_efficiency.avg_percentage <= 80,
               }"
             >
               <div class="teks">
                 <p>Ketepatan Pengerjaan Semua Tugas</p>
                 <h4>
-                  {{ sortirDetailKaryawan.avg_time_efficiency.avg_percentage }}%
+                  {{ detailKaryawan.avg_time_efficiency.avg_percentage }}%
                 </h4>
               </div>
               <div class="ikon">
@@ -577,19 +569,18 @@
             <div
               class="total_beban"
               :class="{
-                special:
-                  sortirDetailKaryawan.total_spent_hours.percentage > 100,
+                special: detailKaryawan.total_spent_hours.percentage > 100,
                 ontime:
-                  sortirDetailKaryawan.total_spent_hours.percentage > 80 &&
-                  sortirDetailKaryawan.total_spent_hours.percentage <= 100,
-                late: sortirDetailKaryawan.total_spent_hours.percentage <= 80,
+                  detailKaryawan.total_spent_hours.percentage > 80 &&
+                  detailKaryawan.total_spent_hours.percentage <= 100,
+                late: detailKaryawan.total_spent_hours.percentage <= 80,
               }"
             >
               <div class="teks">
                 <p>Total Beban Kerja (Aktif)</p>
                 <h4>
-                  {{ sortirDetailKaryawan.total_spent_hours.percentage }}% ({{
-                    sortirDetailKaryawan.total_spent_hours.hours
+                  {{ detailKaryawan.total_spent_hours.percentage }}% ({{
+                    detailKaryawan.total_spent_hours.hours
                   }}
                   Jam)
                 </h4>
@@ -643,7 +634,7 @@
               name=""
               id=""
               class="sortir_ketepatan"
-              v-model="sortKetepatanDetail"
+              v-model="sortKetepatan"
             >
               <option value="">Semua</option>
               <option value="highest">Tertinggi</option>
@@ -654,17 +645,14 @@
 
         <div
           class="no_task"
-          v-if="
-            !sortirDetailKaryawan?.tasks ||
-            sortirDetailKaryawan.tasks.length === 0
-          "
+          v-if="!detailKaryawan?.tasks || detailKaryawan.tasks.length === 0"
         >
           Tidak ada data
         </div>
         <div
           class="container_task"
           v-else
-          v-for="k in sortirDetailKaryawan.tasks.filter(
+          v-for="k in detailKaryawan.tasks.filter(
             (t) =>
               t.status_name !== 'backlog' &&
               (!progres ||
@@ -2229,7 +2217,6 @@ export default {
       sortPerform: "",
       sortBeban: "",
       sortKetepatan: "",
-      sortKetepatanDetail: "",
     };
   },
   mounted() {
@@ -2471,7 +2458,7 @@ export default {
               typeof k.total_spent_hours.percentage === "number"
           )
           .sort((a, b) => {
-            if (this.sortBeban === "highest") {
+            if (this.sortBeban=== "highest") {
               return (
                 b.total_spent_hours.percentage - a.total_spent_hours.percentage
               );
@@ -2482,34 +2469,39 @@ export default {
           });
       }
 
-      return hasil;
-    },
-    sortirDetailKaryawan() {
-      let hasil = this.detailKaryawan;
-      let task = [...hasil.tasks];
-      console.log("tes");
-      if (
-        this.sortKetepatanDetail === "highest" ||
-        this.sortKetepatanDetail === "lowest"
-      ) {
-        task = task
-          .filter(
-            (k) =>
-              k.time_efficiency_percentage &&
-              typeof k.time_efficiency_percentage
-          )
-          .sort((a, b) => {
-            if (this.sortKetepatanDetail === "highest") {
-              return (
-                b.time_efficiency_percentage - a.time_efficiency_percentage
-              );
-            }
-            return a.time_efficiency_percentage - b.time_efficiency_percentage;
-          });
-      }
-      console.log(task);
+      
+   
 
       return hasil;
+    },
+
+    filteredTask() {
+      return this.detailKaryawan.tasks.filter((t) => {
+        // Jika tidak ada filter
+        if (
+          !this.complete &&
+          !this.inProgress &&
+          !this.todo &&
+          !this.inReview
+        ) {
+          return true; // Tampilkan semua
+        }
+
+        if (this.complete && t.status_name === "completed") {
+          return true;
+        }
+        if (this.inProgress && t.status_name === "in progress") {
+          return true;
+        }
+        if (this.todo && t.status_name === "to do") {
+          return true;
+        }
+        if (this.inReview && t.status_name === "in review") {
+          return true;
+        }
+
+        return false;
+      });
     },
 
     totalFilteredTask() {
