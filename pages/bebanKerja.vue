@@ -162,10 +162,8 @@
             <label for="posisi">Filter Posisi</label>
             <select v-model="posisi">
               <option value="" selected>Semua Posisi</option>
-              <option value="pm">Project Manager</option>
               <option value="analis">Data Analys</option>
               <option value="backend">Backend</option>
-              <option value="backend-web">Backend Web Developer</option>
               <option value="web">Web Developer</option>
               <option value="mobile apps">Mobile Apps</option>
               <option value="UI-UX">UI-UX</option>
@@ -208,16 +206,16 @@
         </div>
       </div> -->
 
-      <div class="not_found" v-show="notFound">
-        <p>Not Found</p>
-      </div>
-
       <div class="filter">
+        <div class="title">
+          <i class="fa-solid fa-filter"></i>
+          <p>Sortir Kinerja Karyawan</p>
+        </div>
         <div class="filter_sortir">
           <div class="style_sortir">
             <label for="">Filter Performa</label>
             <select name="" id="" class="sortir_performa" v-model="sortPerform">
-              <option value="">Semua</option>
+              <option value="">Semua Kinerja</option>
               <option value="highest">Tertinggi</option>
               <option value="lowest">Terendah</option>
             </select>
@@ -231,7 +229,7 @@
               class="sortir_ketepatan"
               v-model="sortKetepatan"
             >
-              <option value="">Semua</option>
+              <option value="">Semua Kinerja</option>
               <option value="highest">Tertinggi</option>
               <option value="lowest">Terendah</option>
             </select>
@@ -240,12 +238,16 @@
           <div class="style_sortir">
             <label for="">Filter Beban</label>
             <select name="" id="" class="sortir_beban" v-model="sortBeban">
-              <option value="">Semua</option>
+              <option value="">Semua Kinerja</option>
               <option value="highest">Tertinggi</option>
               <option value="lowest">Terendah</option>
             </select>
           </div>
         </div>
+      </div>
+
+      <div class="not_found" v-show="notFound">
+        <p>Not Found</p>
       </div>
 
       <div
@@ -392,52 +394,9 @@
 
         <div class="detail_task" @click="detail(k)">
           <i class="fa-solid fa-list-check"></i>
-          <p v-if="ambilTask">Task Detail ({{ k.tasks.length }} Task)</p>
-          <p v-else>{{ totalFilteredTask(k) }}</p>
+          <p>Task Detail ({{ k.total_tasks }} Task)</p>
           <i class="fa-solid fa-arrow-up-from-bracket"></i>
         </div>
-
-        <!-- <details class="details">
-          <summary class="ringkasan">Ringkasan</summary>
-          <div class="ringkasan_task">
-            <p class="jud">Jenis Task:</p>
-            <details class="task_detail" v-for="task in k.tasks">
-              <summary class="jenis_task">
-                <div class="jenis_1">
-                  <p class="kategori">{{ task.name }}</p>
-                  <p>2 task - 56 jam</p>
-                </div>
-              </summary>
-              <div class="content">
-                <div class="name_task">
-                  <p>{{ task.description }}</p>
-                  <div class="progres-level">
-                    <div class="kemajuan">
-                      <p>Selesai</p>
-                    </div>
-                    <div class="kesulitan">
-                      <p>High</p>
-                    </div>
-                  </div>
-                </div>
-                <p class="ket">{{ k.text_content }}</p>
-                <div class="time">
-                  <div class="jam">
-                    <i class="fa-regular fa-clock"></i>
-                    <p>32 jam</p>
-                  </div>
-                  <div class="tanggal">
-                    <i class="fa-regular fa-calendar"></i>
-                    <p>15/9/2025</p>
-                  </div>
-                  <div class="project">
-                    <p>Clickup</p>
-                  </div>
-                </div>
-              </div>
-            </details>
-          </div>
-        </details> -->
       </div>
     </div>
 
@@ -595,21 +554,35 @@
 
       <div class="container_progres">
         <div class="container_selesai">
-          <p>Task Selesai</p>
+          <p>Selesai</p>
           <p>
-            <strong>{{ completedTask }} Task</strong>
+            <strong
+              >{{ detailKaryawan.task_status_summary.completed }} Task</strong
+            >
           </p>
         </div>
         <div class="container_onProgres">
           <p>Sedang Dikerjakan</p>
           <p>
-            <strong>{{ inProgressTask }} Task</strong>
+            <strong
+              >{{ detailKaryawan.task_status_summary.in_progress }} Task</strong
+            >
           </p>
         </div>
         <div class="container_todo">
           <p>Akan Datang</p>
           <p>
-            <strong>{{ todoTask }} Task</strong>
+            <strong
+              >{{ detailKaryawan.task_status_summary.upcoming }} Task</strong
+            >
+          </p>
+        </div>
+        <div class="container_cancel">
+          <p>Dibatalkan</p>
+          <p>
+            <strong
+              >{{ detailKaryawan.task_status_summary.upcoming }} Task</strong
+            >
           </p>
         </div>
       </div>
@@ -633,144 +606,124 @@
             <select
               name=""
               id=""
-              class="sortir_ketepatan"
-              v-model="sortKetepatan"
+              class="sortir_ketepatan sortir"
+              v-model="sortKetepatanDetail"
             >
-              <option value="">Semua</option>
+              <option value="">Semua Kinerja</option>
               <option value="highest">Tertinggi</option>
               <option value="lowest">Terendah</option>
             </select>
           </div>
         </div>
 
-        <div
+        <!-- <div
           class="no_task"
-          v-if="!detailKaryawan?.tasks || detailKaryawan.tasks.length === 0"
+          v-if="
+            !filteredKaryawanDetail?.tasks ||
+            filteredKaryawanDetail.tasks.length === 0
+          "
         >
           Tidak ada data
-        </div>
-        <div
-          class="container_task"
-          v-else
-          v-for="k in detailKaryawan.tasks.filter(
-            (t) =>
-              t.status_name !== 'backlog' &&
-              (!progres ||
-                t.status_name.toLowerCase() === progres.toLowerCase())
-          )"
-        >
-          <div class="header_container">
-            <div class="name_task">
-              <p>{{ k.name }}</p>
-            </div>
-            <div class="status_task">
-              <div
-                class="progres_task"
-                :class="{
-                  task_todo: k.status_name === 'to do',
-                  task_selesai:
-                    k.status_name === 'done dev' ||
-                    k.status_name === 'completed',
-                  task_inProgress: k.status_name === 'in progress',
-                  task_inReview: k.status_name === 'in review',
-                  task_cancelled: k.status_name === 'cancelled',
-                }"
-              >
-                <p v-if="k.status_name === 'done dev'">Done Dev</p>
-                <p v-if="k.status_name === 'completed'">Complete</p>
-                <p v-if="k.status_name === 'in progress'">In Progress</p>
-                <p v-if="k.status_name === 'to do'">To Do</p>
-                <p v-if="k.status_name === 'in review'">In Review</p>
-                <p v-if="k.status_name === 'cancelled'">Cancel</p>
+        </div> -->
+        <div>
+          <div class="container_task" v-for="k in filteredKaryawanDetail">
+            <div class="header_container">
+              <div class="name_task">
+                <p>{{ k.name }}</p>
               </div>
-              <div class="task_priority" v-if="k.priority_task">
-                <p>{{ k.priority_task }}</p>
-              </div>
-              <div class="task_priority" v-else>
-                <p>No Priority</p>
-              </div>
+              <div class="status_task">
+                <div
+                  class="progres_task"
+                  :class="{
+                    task_todo: k.status_name === 'to do',
+                    task_selesai:
+                      k.status_name === 'done dev' ||
+                      k.status_name === 'completed',
+                    task_inProgress: k.status_name === 'in progress',
+                    task_inReview: k.status_name === 'in review',
+                    task_cancelled: k.status_name === 'cancelled',
+                  }"
+                >
+                  <p v-if="k.status_name === 'done dev'">Done Dev</p>
+                  <p v-if="k.status_name === 'completed'">Complete</p>
+                  <p v-if="k.status_name === 'in progress'">In Progress</p>
+                  <p v-if="k.status_name === 'to do'">To Do</p>
+                  <p v-if="k.status_name === 'in review'">In Review</p>
+                  <p v-if="k.status_name === 'cancelled'">Cancel</p>
+                </div>
+                <div class="task_priority" v-if="k.priority_task">
+                  <p>{{ k.priority_task }}</p>
+                </div>
+                <div class="task_priority" v-else>
+                  <p>No Priority</p>
+                </div>
 
-              <div class="task_penghargaan">
-                <!-- <i class="fa-solid fa-award"></i> -->
-                <p>{{ k.project_name }}</p>
+                <div class="task_penghargaan">
+                  <!-- <i class="fa-solid fa-award"></i> -->
+                  <p>{{ k.project_name }}</p>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="description">
-            <p>{{ k.description }}</p>
-          </div>
-          <div
-            class="achievement"
-            v-if="k.time_efficiency_percentage"
-            :class="{
-              special: k.time_efficiency_percentage > 100,
-              ontime: k.time_efficiency_percentage == 100,
-              late: k.time_efficiency_percentage < 100,
-            }"
-          >
-            <div class="penghargaan">
-              <p>Ketepatan Pengerjaan Tugas</p>
-              <h4>{{ k.time_efficiency_percentage }}%</h4>
-
-              <!-- <p class="label">Lebih Cepat</p> -->
-              <h4>{{ k.remaining_duration }}</h4>
-            </div>
-            <!-- <div class="penghargaan" v-if="k.time_efficiency_percentage > 100">
-              <p>
-               
-                Ketepatan Pengerjaan Tugas
-              </p>
-              <h4>{{ k.time_efficiency_percentage }}%</h4>
-
-              <p class="label">Lebih Cepat</p>
-              <h4>{{ k.remaining_duration }} Jam</h4>
+            <div class="description">
+              <p>{{ k.description }}</p>
             </div>
             <div
-              class="penghargaan"
-              v-else-if="k.time_efficiency_percentage === 100"
-            >
-              <p>Ketepatan Pengerjaan Tugas</p>
-              <h4>{{ k.time_efficiency_percentage }}%</h4>
-
-              <p class="label">Tepat Waktu</p>
-              <h4>{{ k.remaining_duration }} Jam</h4>
-            </div>
-            <div
-              class="penghargaan"
-              v-else-if="k.time_efficiency_percentage < 100"
-            >
-              <p>
-                Ketepatan Pengerjaan Tugas
-              </p>
-              <h4>{{ k.time_efficiency_percentage }}%</h4>
-
-              <p class="label">Lebih Lambat</p>
-              <h4>{{ k.remaining_duration }} Jam</h4>
-            </div> -->
-          </div>
-          <div class="keterangan_waktu">
-            <div class="jam">
-              <i class="fa-regular fa-clock"></i>
-              <p>Waktu Pengerjaan: {{ k.time_estimate_hours }} Jam</p>
-            </div>
-            <div class="start_date">
-              <i class="fa-regular fa-calendar"></i>
-              <p v-if="k.start_date">Mulai: {{ k.start_date }}</p>
-              <p v-if="!k.start_date">Mulai: <i>Tidak Valid</i></p>
-            </div>
-            <div class="deadline">
-              <i class="fa-regular fa-calendar"></i>
-              <p v-if="k.due_date">Target: {{ k.due_date }}</p>
-              <p v-if="!k.due_date">Target: <i>Tidak Valid</i></p>
-            </div>
-            <div
-              class="done_date"
+              class="achievement"
               v-if="
-                k.status_name === 'done dev' || k.status_name === 'completed'
+                (k.status_name === 'done dev' ||
+                  k.status_name === 'completed') &&
+                k.start_date
+              "
+              :class="{
+                special: k.time_efficiency_percentage > 100,
+                ontime: k.time_efficiency_percentage == 100,
+                late: k.time_efficiency_percentage < 100,
+              }"
+            >
+              <div class="penghargaan">
+                <p>Ketepatan Pengerjaan Tugas</p>
+                <h4>{{ k.time_efficiency_percentage }}%</h4>
+                <h4>{{ k.remaining_duration }}</h4>
+              </div>
+            </div>
+            <div
+              class="achievement not_special"
+              v-if="
+                (k.status_name === 'done dev' ||
+                  k.status_name === 'completed') &&
+                !k.start_date
               "
             >
-              <i class="fa-regular fa-calendar"></i>
-              <p>Selesai: {{ k.date_done }}</p>
+              <div class="penghargaan">
+                <p>Ketepatan Pengerjaan Tugas</p>
+                <h4>Tidak Tersedia</h4>
+                <!-- <h4>{{ k.remaining_duration }}</h4> -->
+              </div>
+            </div>
+            <div class="keterangan_waktu">
+              <div class="jam">
+                <i class="fa-regular fa-clock"></i>
+                <p>Waktu Pengerjaan: {{ k.time_estimate_hours }} Jam</p>
+              </div>
+              <div class="start_date">
+                <i class="fa-regular fa-calendar"></i>
+                <p v-if="k.start_date">Mulai: {{ k.start_date }}</p>
+                <p v-if="!k.start_date">Mulai: <i>Tidak Valid</i></p>
+              </div>
+              <div class="deadline">
+                <i class="fa-regular fa-calendar"></i>
+                <p v-if="k.due_date">Target: {{ k.due_date }}</p>
+                <p v-if="!k.due_date">Target: <i>Tidak Valid</i></p>
+              </div>
+              <div
+                class="done_date"
+                v-if="
+                  k.status_name === 'done dev' || k.status_name === 'completed'
+                "
+              >
+                <i class="fa-regular fa-calendar"></i>
+                <p>Selesai: {{ k.date_done }}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -789,11 +742,13 @@
   width: 100%;
   gap: 10px;
   flex-wrap: wrap;
+  margin-top: 15px;
 }
 
 .style_sortir {
   /* border: 1px solid #010101; */
-  width: 32%;
+  /* width: 32%; */
+  width: 350px;
 }
 
 .style_sortir label,
@@ -804,13 +759,31 @@
   font-weight: 500;
 }
 
+.sortir_performa {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='currentColor' stroke-width='32' viewBox='0 0 512 512'%3E%3Cpath d='M64 448V224M192 448V128M320 448V256M448 448V64'/%3E%3C/svg%3E")
+    no-repeat 10px center;
+  background-size: 14px;
+}
+
+.sortir_ketepatan {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='currentColor' stroke-width='32' viewBox='0 0 512 512'%3E%3Ccircle cx='256' cy='256' r='200'/%3E%3Cpath d='M160 270l56 56 136-136'/%3E%3C/svg%3E")
+    no-repeat 10px center;
+  background-size: 14px;
+}
+
+.sortir_beban {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='currentColor' stroke-width='32' viewBox='0 0 512 512'%3E%3Crect x='32' y='128' width='448' height='288' rx='32'/%3E%3Cpath d='M176 128V96a80 80 0 0 1 160 0v32'/%3E%3C/svg%3E")
+    no-repeat 10px center;
+  background-size: 14px;
+}
+
 .sortir_performa,
 .sortir_beban,
 .sortir_ketepatan,
 .select_task {
   border: var(--borderCard);
-  padding: 8px;
   font-size: 14px;
+  padding: 8px 8px 8px 35px;
   border-radius: 6px;
   /* margin-top: 20px; */
   display: block;
@@ -821,6 +794,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
 }
 </style>
 
@@ -846,9 +820,9 @@
 
 .container_selesai,
 .container_onProgres,
-.container_todo {
+.container_todo,
+.container_cancel {
   flex: 1;
-  background-color: #ffffff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -858,13 +832,19 @@
   gap: 6px;
 }
 
+.container_selesai p,
+.container_onProgres p,
+.container_todo p,
+.container_cancel p {
+  font-size: 15px;
+}
+
 .container_selesai {
   background-color: rgb(233, 243, 255);
   border: 1px solid rgb(136, 190, 255);
 }
 .container_selesai p {
   color: rgb(16, 50, 130);
-  font-size: 15px;
 }
 
 .container_onProgres {
@@ -873,7 +853,6 @@
 }
 .container_onProgres p {
   color: rgb(218, 58, 0);
-  font-size: 15px;
 }
 
 .container_todo {
@@ -882,7 +861,15 @@
 }
 .container_todo p {
   color: purple;
-  font-size: 15px;
+}
+
+.container_cancel {
+  background-color: rgb(255, 224, 224);
+  border: 1px solid rgb(255, 130, 130);
+}
+
+.container_cancel p {
+  color: red;
 }
 </style>
 
@@ -1165,10 +1152,12 @@
 .achievement {
   display: flex;
   gap: 10px;
-  /* background-color: rgb(222, 255, 222);
-  border: 1px solid rgb(115, 255, 115); */
   border-radius: 10px;
   padding: 12px;
+}
+
+.not_special {
+  background-color: #f5f5f5;
 }
 
 .achievement .achievement_logo i {
@@ -1238,37 +1227,21 @@
   color: rgb(0, 255, 221);
 }
 
-.select_task {
-  /* background: #fff
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")
-    no-repeat right 10px center;
-  background-size: 16px; */
-  border: 1px solid #010101;
-  padding: 4px 8px;
+.select_task,
+.sortir {
+  border: 1px solid var(--border_color);
+  padding: 4px 8px 4px 30px;
   font-size: 14px;
   border-radius: 6px;
-  width: 200px;
-}
-
-.opsi {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 200px;
-  /* align-items: center; */
-  justify-content: center;
-  border: 1px solid var(--border_color);
-  /* padding: 10px; */
   background-color: #fff;
-  position: absolute;
-  margin-top: 10px;
-  border-radius: 6px;
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+  width: 330px;
 }
 
-.opsi label {
-  border: 1px solid #f5f3f3;
-  padding: 10px;
+.select_task {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' stroke='%2364748b' stroke-width='32' viewBox='0 0 512 512'%3E%3Ccircle cx='256' cy='256' r='160'/%3E%3Cpath d='M256 96v160l96 64'/%3E%3Cpath d='M64 96h384M128 160h256'/%3E%3C/svg%3E")
+    no-repeat 10px center;
+  background-size: 14px;
+  background-color: #fff;
 }
 
 .achiv_overload {
@@ -1703,11 +1676,6 @@
   }
 }
 
-/* .detail_task { */
-/* border: 1px solid #010101; */
-/* margin-top: 10px;
-} */
-
 .detail_task {
   position: relative;
   z-index: 999;
@@ -1716,7 +1684,6 @@
 
 .detail_task .task .task1-2 {
   display: flex;
-  /* justify-content: center; */
   gap: 20px;
   flex-wrap: wrap;
 }
@@ -1955,9 +1922,6 @@ form select {
 }
 
 .cari input {
-  /* font-family: "Font Awesome 7 Free";
-  font-weight: 900;
-  content: "\f002"; */
   background: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20512%20512'%3E%3Cpath%20d='M416%20208c0%2045.9-14.9%2088.3-40%20122.7L502.6%20457.4c12.5%2012.5%2012.5%2032.8%200%2045.3s-32.8%2012.5-45.3%200L330.7%20376C296.3%20401.1%20253.9%20416%20208%20416%2093.1%20416%200%20322.9%200%20208S93.1%200%20208%200%20416%2093.1%20416%20208zM208%20352a144%20144%200%201%200%200-288%20144%20144%200%201%200%200%20288z'/%3E%3C/svg%3E")
     no-repeat 10px center;
   background-size: 14px;
@@ -2217,6 +2181,7 @@ export default {
       sortPerform: "",
       sortBeban: "",
       sortKetepatan: "",
+      sortKetepatanDetail: "",
     };
   },
   mounted() {
@@ -2402,15 +2367,6 @@ export default {
         );
       }
 
-      // filter berdasarkan progress task (jika dipilih)
-      if (this.progres) {
-        hasil = hasil.filter((k) =>
-          (k.tasks || []).some(
-            (t) => t.status_name.toLowerCase() === this.progres.toLowerCase()
-          )
-        );
-      }
-
       // Sortir Tertinggi
 
       // Performa
@@ -2458,7 +2414,7 @@ export default {
               typeof k.total_spent_hours.percentage === "number"
           )
           .sort((a, b) => {
-            if (this.sortBeban=== "highest") {
+            if (this.sortBeban === "highest") {
               return (
                 b.total_spent_hours.percentage - a.total_spent_hours.percentage
               );
@@ -2468,54 +2424,34 @@ export default {
             );
           });
       }
-
-      
-   
-
       return hasil;
     },
 
-    filteredTask() {
-      return this.detailKaryawan.tasks.filter((t) => {
-        // Jika tidak ada filter
-        if (
-          !this.complete &&
-          !this.inProgress &&
-          !this.todo &&
-          !this.inReview
-        ) {
-          return true; // Tampilkan semua
-        }
-
-        if (this.complete && t.status_name === "completed") {
-          return true;
-        }
-        if (this.inProgress && t.status_name === "in progress") {
-          return true;
-        }
-        if (this.todo && t.status_name === "to do") {
-          return true;
-        }
-        if (this.inReview && t.status_name === "in review") {
-          return true;
-        }
-
-        return false;
-      });
-    },
-
-    totalFilteredTask() {
-      return (karyawan) => {
-        if (!this.start || !this.end) return karyawan.tasks.length;
-
-        const startDate = new Date(this.start);
-        const endDate = new Date(this.end);
-
-        return karyawan.tasks.filter((t) => {
-          const tgl = new Date(t.start_date);
-          return tgl >= startDate && tgl <= endDate;
-        }).length;
-      };
+    filteredKaryawanDetail() {
+      let hasil = this.detailKaryawan.tasks;
+      // filter berdasarkan progress task (jika dipilih)
+      if (this.progres) {
+        hasil = hasil.filter(
+          (k) => k.status_name.toLowerCase() === this.progres.toLowerCase()
+        );
+      }
+      // Filter Sortir
+      if (
+        this.sortKetepatanDetail === "highest" ||
+        this.sortKetepatanDetail === "lowest"
+      ) {
+        hasil = hasil
+          .filter((k) => typeof k.time_efficiency_percentage === "number")
+          .sort((a, b) => {
+            if (this.sortKetepatanDetail === "highest") {
+              return (
+                b.time_efficiency_percentage - a.time_efficiency_percentage
+              );
+            }
+            return a.time_efficiency_percentage - b.time_efficiency_percentage;
+          });
+      }
+      return hasil;
     },
     completedTask() {
       return this.detailKaryawan.tasks.filter(
