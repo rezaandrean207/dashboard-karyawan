@@ -768,16 +768,11 @@ form select {
 /* Tampilan perangkat */
 /* Laptop */
 @media (max-width: 1366px) {
-  html {
-    font-size: 75%;
-  }
 }
 
 /* Tablet LandScape */
 @media (max-width: 1024px) {
-  html {
-    font-size: 68%;
-  }
+
 
   .konten {
     overflow-x: hidden;

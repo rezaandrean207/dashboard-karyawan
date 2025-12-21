@@ -213,32 +213,32 @@
         </div>
         <div class="filter_sortir">
           <div class="style_sortir">
-            <label for="">Filter Performa</label>
+            <label for="">Performa</label>
             <select name="" id="" class="sortir_performa" v-model="sortPerform">
-              <option value="">Semua Kinerja</option>
+              <option value="">Semua Performa</option>
               <option value="highest">Tertinggi</option>
               <option value="lowest">Terendah</option>
             </select>
           </div>
 
           <div class="style_sortir">
-            <label for="">Filter Ketepatan Tugas</label>
+            <label for="">Ketepatan Tugas</label>
             <select
               name=""
               id=""
               class="sortir_ketepatan"
               v-model="sortKetepatan"
             >
-              <option value="">Semua Kinerja</option>
+              <option value="">Semua Ketepatan</option>
               <option value="highest">Tertinggi</option>
               <option value="lowest">Terendah</option>
             </select>
           </div>
 
           <div class="style_sortir">
-            <label for="">Filter Beban</label>
+            <label for="">Beban Kerja</label>
             <select name="" id="" class="sortir_beban" v-model="sortBeban">
-              <option value="">Semua Kinerja</option>
+              <option value="">Semua Beban Kerja</option>
               <option value="highest">Tertinggi</option>
               <option value="lowest">Terendah</option>
             </select>
@@ -286,7 +286,7 @@
                 v-if="k.workload_status === 'Overload'"
               ></i>
               <i
-                class="fa-solid fa-equals"
+                class="fa-solid fa-minus"
                 v-if="k.workload_status === 'Normal'"
               ></i>
               <svg
@@ -358,9 +358,9 @@
               :class="{
                 special: k.total_spent_hours.percentage > 100,
                 ontime:
-                  k.total_spent_hours.percentage > 80 &&
+                  k.total_spent_hours.percentage >= 85 &&
                   k.total_spent_hours.percentage <= 100,
-                late: k.total_spent_hours.percentage <= 80,
+                late: k.total_spent_hours.percentage < 85,
               }"
             >
               <div class="teks">
@@ -530,9 +530,9 @@
               :class="{
                 special: detailKaryawan.total_spent_hours.percentage > 100,
                 ontime:
-                  detailKaryawan.total_spent_hours.percentage > 80 &&
+                  detailKaryawan.total_spent_hours.percentage >= 85 &&
                   detailKaryawan.total_spent_hours.percentage <= 100,
-                late: detailKaryawan.total_spent_hours.percentage <= 80,
+                late: detailKaryawan.total_spent_hours.percentage < 85,
               }"
             >
               <div class="teks">
@@ -590,7 +590,7 @@
       <div class="task">
         <div class="filter_task">
           <div class="style_progres">
-            <label for="">Filter Progres</label>
+            <label for="">Progres</label>
             <select name="" id="" class="select_task" v-model="progres">
               <option value="">Semua Progress</option>
               <option value="completed">Complete</option>
@@ -601,15 +601,15 @@
             </select>
           </div>
 
-          <div class="style_sortir">
-            <label for="">Filter Ketepatan Tugas</label>
+          <div class="sortir_style">
+            <label for="">Ketepatan Tugas</label>
             <select
               name=""
               id=""
               class="sortir_ketepatan sortir"
               v-model="sortKetepatanDetail"
             >
-              <option value="">Semua Kinerja</option>
+              <option value="">Semua Ketepatan</option>
               <option value="highest">Tertinggi</option>
               <option value="lowest">Terendah</option>
             </select>
@@ -669,11 +669,7 @@
             </div>
             <div
               class="achievement"
-              v-if="
-                (k.status_name === 'done dev' ||
-                  k.status_name === 'completed') &&
-                k.start_date
-              "
+              v-if="k.time_efficiency_percentage"
               :class="{
                 special: k.time_efficiency_percentage > 100,
                 ontime: k.time_efficiency_percentage == 100,
@@ -746,13 +742,12 @@
 }
 
 .style_sortir {
-  /* border: 1px solid #010101; */
-  /* width: 32%; */
   width: 350px;
 }
 
 .style_sortir label,
-.style_progres label {
+.style_progres label,
+.sortir_style label {
   padding-left: 2px;
   text-wrap: nowrap;
   font-size: 14px;
@@ -788,6 +783,7 @@
   /* margin-top: 20px; */
   display: block;
   width: 100%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .filter_task {
@@ -795,6 +791,11 @@
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+}
+
+.sortir_style,
+.style_progres {
+  width: 300px;
 }
 </style>
 
@@ -878,10 +879,6 @@
 @media (max-width: 576px) {
   .dates {
     width: 100%;
-    /* position: relative; */
-  }
-
-  .dates .tanggal {
   }
 
   .tanggal input {
@@ -1040,7 +1037,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  flex: 10;
+  width: 70%;
 }
 
 .card_karyawan .card_profile .card_left img {
@@ -1113,35 +1110,30 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  /* background-color: rgb(222, 255, 222);
-  border: 1px solid rgb(115, 255, 115); */
   background-color: #fff;
   border: 1px solid var(--border_color);
   border-radius: 7px;
   padding: 2px 5px;
   padding-top: 4px;
   color: var(--font-color);
-  /* color: #fff; */
 }
 
 .status_task .progres_task {
-  /* background-color: rgb(216, 216, 255);
-  border: 1px solid rgb(176, 176, 255); */
   border-radius: 7px;
   padding: 2px 5px;
-  /* color: rgb(0, 0, 255); */
   display: flex;
   align-items: center;
+  text-wrap: nowrap;
 }
 
 .task_priority {
   background-color: rgb(255, 47, 47);
   padding: 2px 5px;
   border-radius: 7px;
-  /* border: 1px solid rgb(255, 0, 0); */
   color: #fff;
   display: flex;
   align-items: center;
+  text-wrap: nowrap;
 }
 
 .description {
@@ -1230,11 +1222,10 @@
 .select_task,
 .sortir {
   border: 1px solid var(--border_color);
-  padding: 4px 8px 4px 30px;
+  padding: 8px 8px 8px 30px;
   font-size: 14px;
   border-radius: 6px;
   background-color: #fff;
-  width: 330px;
 }
 
 .select_task {
@@ -1474,13 +1465,37 @@
   gap: 5px;
 }
 
-.overload_task {
+/* .overload_task {
   background-color: rgb(212, 255, 212);
   border: 1px solid rgb(154, 255, 154);
 }
 
 .overload_task {
   color: green;
+} */
+.overload_task {
+  position: relative;
+  background: #fff;
+  z-index: 0;
+  border: 5px solid #c0b838;
+}
+
+.overload_task::before {
+  content: "";
+  position: absolute;
+  inset: -2px; /* ketebalan border */
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    #ffd700,
+    #ffb700,
+    #fff2a8,
+    #ffb700,
+    #ffd700
+  );
+  background-size: 300% 300%;
+  animation: gold-run 8s linear infinite;
+  z-index: -1;
 }
 
 .underload_task {
@@ -1494,9 +1509,12 @@
 }
 
 .normal_task {
-  background-color: #f5f5f5;
+  /* background-color: #f5f5f5;
   border: 1px solid #dbdbdb;
-  color: #010101;
+  color: #010101; */
+  background-color: rgb(212, 255, 212);
+  border: 1px solid rgb(154, 255, 154);
+  color: green;
 }
 
 .status_karyawan .keterangan_status {
@@ -1555,59 +1573,6 @@
   justify-content: space-between;
 }
 
-.kinerja_karyawan .keterangan_karyawan .container_block {
-  padding: 20px;
-  border: 1px solid #010101;
-  margin-top: 20px;
-  border: var(--borderCard);
-  border-radius: 10px;
-}
-
-.container_block p {
-  font-weight: 300;
-}
-
-.container_block .container2,
-.container_block .container1,
-.container_block .container3,
-.container_block .container4,
-.container_block .container5 {
-  width: 100%;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 15px;
-  border-radius: 5px;
-  font-weight: 300;
-  font-size: 14px;
-  margin-top: 10px;
-}
-
-.container1 {
-  background-color: rgb(236, 244, 255);
-  /* border: 1px solid rgb(186, 215, 255); */
-}
-
-.container2 {
-  background-color: rgb(255, 247, 232);
-  /* border: 1px solid rgb(255, 224, 166); */
-}
-
-.container3 {
-  background-color: rgb(249, 239, 255);
-  /* border: 1px solid rgb(220, 160, 255); */
-}
-
-.container4 {
-  background-color: #eeeeee;
-  border-top: 3px solid #ddd;
-}
-
-.container5 {
-  background-color: #f7f7f7;
-  /* border: 1px solid #e0e0e0; */
-}
 .ikon i {
   font-size: 30px;
 }
@@ -1633,11 +1598,6 @@
   border: 1px solid #d1d1d1;
   color: #333333;
 }
-
-/* .ketepatan_pengerjaan {
-  background-color: rgb(245, 239, 255);
-  border: 1px solid rgb(245, 239, 255);
-} */
 
 .special {
   position: relative;
@@ -1682,82 +1642,6 @@
   cursor: pointer;
 }
 
-.detail_task .task .task1-2 {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.task1-2 .task_1,
-.task1-2 .task_2 {
-  background-color: #f9f9f9;
-  width: 49%;
-  text-align: justify;
-  padding: 8px 10px;
-  font-size: 16px;
-  border-radius: 10px;
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  border: 1px solid rgb(230, 230, 255);
-  margin-top: 10px;
-}
-
-.task_1 i,
-.task_2 i {
-  font-size: 8px;
-  color: red;
-}
-
-.task_1 .keterangan_task .kondisi_task,
-.task_2 .keterangan_task .kondisi_task {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.kondisi_task .progres {
-  border: 1px solid #a7a7a7;
-  font-size: 10px;
-  padding: 2px 6px;
-  border-radius: 5px;
-  font-weight: 600;
-}
-
-.panduan {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 35px;
-  background-color: rgb(231, 244, 255);
-  font-size: 14px;
-  height: 80px;
-  width: 96%;
-  margin: 20px 0;
-  border: var(--borderCard);
-  border-radius: 10px;
-}
-
-.panduan_overload,
-.panduan_normal,
-.panduan_underload {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.panduan_overload i {
-  color: red;
-}
-
-.panduan_normal i {
-  color: rgb(4, 229, 4);
-}
-
-.panduan_underload i {
-  color: orange;
-}
-
 .content {
   /* border: var(--borderCard); */
   /* border-radius: 10px; */
@@ -1781,15 +1665,6 @@
   /* border: 1px solid #010101; */
   justify-content: flex-end;
   gap: 10px;
-}
-
-.progres-level .kemajuan,
-.kesulitan {
-  /* padding: 5px; */
-  padding: 0px 8px;
-  border: var(--borderCard);
-  border-radius: 8px;
-  font-size: 12px;
 }
 
 .content .time {
@@ -1891,21 +1766,6 @@ summary:hover {
   border-radius: 10px;
 }
 
-.jenis_task {
-  padding: 30px 20px;
-  font-weight: 300;
-  background-color: #f5f5f5;
-}
-
-.jenis_task:hover {
-  background-color: #e3e3e3;
-}
-
-.kategori {
-  font-size: 16px;
-  font-weight: 400;
-}
-
 .tanggal_mulai input,
 .tanggal_akhir input {
   background: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20448%20512'%3E%3Cpath%20d='M120%200c13.3%200%2024%2010.7%2024%2024l0%2040%20160%200%200-40c0-13.3%2010.7-24%2024-24s24%2010.7%2024%2024l0%2040%2032%200c35.3%200%2064%2028.7%2064%2064l0%20288c0%2035.3-28.7%2064-64%2064L64%20480c-35.3%200-64-28.7-64-64L0%20128C0%2092.7%2028.7%2064%2064%2064l32%200%200-40c0-13.3%2010.7-24%2024-24zm0%20112l-56%200c-8.8%200-16%207.2-16%2016l0%2048%20352%200%200-48c0-8.8-7.2-16-16-16l-264%200zM48%20224l0%20192c0%208.8%207.2%2016%2016%2016l320%200c8.8%200%2016-7.2%2016-16l0-192-352%200z'/%3E%3C/svg%3E")
@@ -1951,9 +1811,6 @@ form select {
 
 /* ----------- 1024px (Tablet Landscape) ----------- */
 @media (max-width: 1024px) {
-  html {
-    font-size: 65%;
-  }
 
   .konten .sidebar .sidebar_text {
     gap: 9px;
@@ -1992,16 +1849,6 @@ form select {
 
   .container_flex {
     gap: 10px;
-  }
-
-  .task1-2 .task_1,
-  .task1-2 .task_2 {
-    width: 48%;
-  }
-
-  .panduan {
-    gap: 20px;
-    font-size: 13px;
   }
 
   .back_button {
@@ -2045,33 +1892,12 @@ form select {
     width: 100%;
   }
 
-  .task1-2 {
-    flex-direction: column;
-  }
-
-  .task1-2 .task_1,
-  .task1-2 .task_2 {
-    width: 100%;
-  }
-
-  .panduan {
-    flex-direction: column;
-    height: auto;
-    padding: 15px 0;
-    gap: 10px;
-  }
-
   .content {
     font-size: 14px;
   }
 
-  /* .content .time {
-    flex-direction: column;
-    gap: 8px;
-  } */
-
-  .detail_task {
-    font-size: 13px;
+    .style_sortir {
+    width: 100%;
   }
 }
 
@@ -2110,27 +1936,6 @@ form select {
     font-size: 14px;
   }
 
-  .container_block .container1,
-  .container_block .container2,
-  .container_block .container3,
-  .container_block .container4,
-  .container_block .container5 {
-    height: auto;
-    padding: 10px;
-    font-size: 13px;
-  }
-
-  .task1-2 .task_1,
-  .task1-2 .task_2 {
-    font-size: 14px;
-    padding: 10px;
-  }
-
-  /* .name_task {
-    flex-direction: column;
-    gap: 8px;
-  } */
-
   input,
   select {
     background-position: 10px center !important;
@@ -2139,6 +1944,21 @@ form select {
 
   form .tanggal_mulai {
     width: 100%;
+  }
+  .card_profile .card_left {
+    width: 100%;
+  }
+
+  .sortir_style,
+  .style_progres {
+    width: 47%;
+  }
+
+  .select_task,
+  .sortir,
+  .sortir_style label,
+  .style_progres label {
+    font-size: 12px;
   }
 }
 
@@ -2149,10 +1969,6 @@ form select {
   } */
   .konten .background .sidebar_responsive {
     width: 60%;
-  }
-
-  .detail_task {
-    font-size: 10px;
   }
 }
 </style>
@@ -2171,7 +1987,6 @@ export default {
       detailKaryawan: null,
       start: "",
       end: "",
-      achiv: true,
       openTaskList: false,
       karyawanLuar: [],
       complete: [],
