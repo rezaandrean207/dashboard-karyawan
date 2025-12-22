@@ -651,12 +651,21 @@
                   <p v-if="k.status_name === 'in review'">In Review</p>
                   <p v-if="k.status_name === 'cancelled'">Cancel</p>
                 </div>
-                <div class="task_priority" v-if="k.priority_task">
-                  <p>{{ k.priority_task }}</p>
+                <div
+                  class="task_priority"
+                  :class="{
+                    urgent: k.priority_name === 'urgent',
+                    high: k.priority_name === 'high',
+                    minimum: k.priority_name === 'normal',
+                    low: k.priority_name === 'low',
+                  }"
+                  v-if="k.priority_name"
+                >
+                  <p>{{ k.priority_name }}</p>
                 </div>
-                <div class="task_priority" v-else>
+                <!-- <div class="task_priority" v-else>
                   <p>No Priority</p>
-                </div>
+                </div> -->
 
                 <div class="task_penghargaan">
                   <!-- <i class="fa-solid fa-award"></i> -->
@@ -720,6 +729,10 @@
                 <i class="fa-regular fa-calendar"></i>
                 <p>Selesai: {{ k.date_done }}</p>
               </div>
+              <div class="created_by">
+                <i class="fa-regular fa-user"></i>
+                <p>Dibuat oleh: {{ k.creator_name }}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -742,7 +755,7 @@
 }
 
 .style_sortir {
-  width: 350px;
+  width: 32%;
 }
 
 .style_sortir label,
@@ -912,10 +925,11 @@
   .keterangan_waktu .jam,
   .keterangan_waktu .start_date,
   .keterangan_waktu .deadline,
-  .keterangan_waktu .done_date {
+  .keterangan_waktu .done_date,
+  .keterangan_waktu .created_by {
     margin: 0;
     width: 100%;
-    line-height: 1.2;
+    line-height: 0;
   }
 }
 
@@ -1127,13 +1141,34 @@
 }
 
 .task_priority {
-  background-color: rgb(255, 47, 47);
   padding: 2px 5px;
   border-radius: 7px;
-  color: #fff;
   display: flex;
   align-items: center;
   text-wrap: nowrap;
+}
+
+.urgent {
+  background-color: rgb(255, 219, 219);
+  border: 1px solid rgb(255, 137, 137);
+  color: red;
+}
+
+.high {
+  background-color: rgb(255, 255, 219);
+  border: 1px solid rgb(255, 255, 95);
+  color: rgb(220, 114, 0);
+}
+
+.minimum {
+  background-color: rgb(221, 221, 255);
+  border: rgb(163, 163, 255);
+  color: blue;
+}
+
+.low {
+  background-color: #f5f5f5;
+  border: 1px solid #dbdbdb;
 }
 
 .description {
@@ -1187,10 +1222,14 @@
 .keterangan_waktu .jam,
 .start_date,
 .deadline,
-.done_date {
+.done_date,
+.created_by {
   display: flex;
   align-items: center;
   gap: 4px;
+  text-wrap: nowrap;
+  font-size: 13.5px;
+  font-weight: 400;
 }
 
 .jenis_data {
@@ -1958,6 +1997,10 @@ form select {
   .sortir_style label,
   .style_progres label {
     font-size: 12px;
+  }
+
+  .kinerja_karyawan {
+    width: 100%;
   }
 }
 
