@@ -307,8 +307,8 @@
             class="performa_karyawan"
             :class="{
               special: k.performance.score > 100,
-              ontime: k.performance.score > 80 && k.performance.score <= 100,
-              late: k.performance.score <= 80,
+              ontime: k.performance.score >= 85 && k.performance.score <= 100,
+              late: k.performance.score < 85,
             }"
           >
             <i class="fa-solid fa-chart-line"></i>
@@ -340,9 +340,9 @@
               :class="{
                 special: k.avg_time_efficiency.avg_percentage > 100,
                 ontime:
-                  k.avg_time_efficiency.avg_percentage > 80 &&
+                  k.avg_time_efficiency.avg_percentage >= 85 &&
                   k.avg_time_efficiency.avg_percentage <= 100,
-                late: k.avg_time_efficiency.avg_percentage <= 80,
+                late: k.avg_time_efficiency.avg_percentage < 85,
               }"
             >
               <div class="teks">
@@ -477,9 +477,9 @@
             :class="{
               special: detailKaryawan.performance.score > 100,
               ontime:
-                detailKaryawan.performance.score > 80 &&
+                detailKaryawan.performance.score >= 85 &&
                 detailKaryawan.performance.score <= 100,
-              late: detailKaryawan.performance.score <= 80,
+              late: detailKaryawan.performance.score < 85,
             }"
           >
             <i class="fa-solid fa-chart-line"></i>
@@ -510,9 +510,9 @@
                 special:
                   detailKaryawan.avg_time_efficiency.avg_percentage > 100,
                 ontime:
-                  detailKaryawan.avg_time_efficiency.avg_percentage > 80 &&
+                  detailKaryawan.avg_time_efficiency.avg_percentage >= 85 &&
                   detailKaryawan.avg_time_efficiency.avg_percentage <= 100,
-                late: detailKaryawan.avg_time_efficiency.avg_percentage <= 80,
+                late: detailKaryawan.avg_time_efficiency.avg_percentage < 85,
               }"
             >
               <div class="teks">
@@ -1811,7 +1811,6 @@ form select {
 
 /* ----------- 1024px (Tablet Landscape) ----------- */
 @media (max-width: 1024px) {
-
   .konten .sidebar .sidebar_text {
     gap: 9px;
   }
@@ -1896,7 +1895,7 @@ form select {
     font-size: 14px;
   }
 
-    .style_sortir {
+  .style_sortir {
     width: 100%;
   }
 }
@@ -2065,18 +2064,6 @@ export default {
       } finally {
         this.isLoading = false;
       }
-
-      // const task = await $api.get(
-      //   "/api/v1/workload/tasks-by-range?start_date=01-07-2025&end_date=31-12-2025"
-      // );
-      // this.daftarKaryawan = task.data.assignees;
-
-      // const tampilanLuar = await $api.get(
-      //   `/api/v1/workload/summary?start_date=09-12-2025&end_date=10-12-2025`
-      // );
-      // this.karyawanLuar = tampilanLuar.data.assignees;
-
-      // console.log(task);
     },
 
     async syncData() {
@@ -2135,6 +2122,9 @@ export default {
       // this.daftarKaryawan = karyawan;
       this.detail_task = true;
       this.detailKaryawan = karyawan;
+      this.sortPerform = "";
+      this.sortBeban = "";
+      this.sortKetepatn = "";
 
       // jika filter tanggal aktif → tasks detail juga harus disaring ulang
       if (this.start && this.end) {
@@ -2153,6 +2143,7 @@ export default {
       this.detail_task = false;
       this.detailKaryawan = null;
       this.progres = "";
+      this.sortKetepatanDetail = "";
     },
     openTask() {
       this.openTaskList = !this.openTaskList;
@@ -2169,10 +2160,9 @@ export default {
           (this.notFound = false)
         );
 
-        if (hasil.length === 0) {
-          // alert("Tidak ditemukan");
-          this.notFound = true;
-        }
+        // if (hasil.length === 0) {
+        //   this.notFound = true;
+        // }
       }
 
       // filter posisi (role)
