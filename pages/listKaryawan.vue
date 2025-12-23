@@ -395,15 +395,7 @@
             <i class="fa-solid fa-briefcase"></i>
             <p>{{ selected.role }}</p>
           </div>
-          <div
-            class="bebanKerja"
-            :class="{
-              kuning: kategoriBeban(selected.beban) === 'Sedang',
-              merah: kategoriBeban(selected.beban) === 'Berat',
-              hijau: kategoriBeban(selected.beban) === 'Mudah',
-              putih: kategoriBeban(selected.beban) === '',
-            }"
-          >
+          <div class="bebanKerja" :class="bebanClass(selected.beban)">
             <i class="fa-solid fa-clock"></i>
             <p>Beban Kerja: {{ kategoriBeban(selected.beban) }}</p>
           </div>
@@ -909,33 +901,9 @@ export default {
     },
 
     async ambilData() {
-      // const { $api } = useNuxtApp();
-      // http://192.168.0.100:8001/api/v1/clickup/members
-      // const isiData = await $api.get("api/v1/clickup/members");
-      // console.log($api.defaults.baseURL);
-      // console.log("api adalah: ", isiData.data);
-
-      // console.log($api);
-      // console.log("BaseURL:", $api.defaults.baseURL);
-
       try {
-        // http://192.168.0.100:8001/api/v1/clickup/sync/team
-        // const isiData = await $api.get("/v1/clickup/sync/team");
-        // this.daftarKaryawan = isiData.data.teams.teams.flatMap(t => t.members);
-        // const isiData = await axios.get("/karyawan.json");
-        // this.daftarKaryawan = isiData.data.karyawan;
-        // http://192.168.0.100:8001/api/v1/clickup/members
-
         const member = await this.$api.get("/api/v1/clickup/members");
         this.daftarKaryawan = member.data.users;
-        // const task = await $api.get("/api/v1/clickup/tasks");
-        // this.daftarKaryawan = task.data;
-
-        // const team = await $api.get("/api/v1/clickup/teams");
-        // this.daftarKaryawan = team.data;
-
-        // const member = await.$api.
-
         console.log("Struktur API:", member.data);
       } catch (error) {
         console.error("API Error:", error);
@@ -943,9 +911,6 @@ export default {
     },
 
     async syncData() {
-      // const { $api } = useNuxtApp();
-      // console.log("SYNC DATA DIPANGGIL !");
-
       // Prevent Spam Klik
       if (this.loading) return;
 
@@ -956,9 +921,9 @@ export default {
 
       try {
         const sync = await this.$api.post("/api/v1/sync/all");
-        // this.daftarKaryawan = sync.data;
+
         console.log("Berhasil: ", sync);
-        // alert("Berhasil");
+
         this.loading = false;
 
         // Sukses
@@ -983,11 +948,16 @@ export default {
         this.loading = false;
       }
     },
+    bebanClass(beban) {
+      return {
+        kuning: beban === "Sedang",
+        merah: beban === "Berat",
+        hijau: beban === "Mudah",
+        putih: beban === "",
+      };
+    },
   },
   computed: {
-    // search() {
-    //   // this.daftarKaryawan.name = this.searchInput
-    // },
     filteredKaryawan() {
       let hasil = this.daftarKaryawan;
 
@@ -1012,37 +982,4 @@ export default {
     },
   },
 };
-
-// const detailKaryawan = ref(false);
-
-// function karyawan() {
-//   detailKaryawan.value = true;
-// }
-
-// function close() {
-//   detailKaryawan.value = false;
-// }
 </script>
-
-<!-- <script type="module" src="">
-import {
-  createApp,
-  ref,
-} from "https://unpkg.com/vue@3/dist/vue.esm-browser.js";
-
-createApp({
-  data() {
-    return {
-      detailKaryawan: false,
-    };
-  },
-  methods: {
-    karyawan() {
-      this.detailKaryawan = true;
-    },
-    close() {
-      this.detailKaryawan = false;
-    },
-  },
-}).mount("#app");
-</script> -->

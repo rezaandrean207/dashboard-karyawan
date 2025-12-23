@@ -126,11 +126,11 @@ body {
 .sidebar .logo,
 .sidebar_responsive .logo {
   display: flex;
-  justify-content: center;
   align-items: center;
   gap: 10px;
   border-bottom: 1px solid rgb(85, 57, 223);
-  height: 10%;
+  padding: 0 25px;
+  height: 12%;
 }
 
 .logo img {
@@ -143,10 +143,11 @@ body {
 
 .logo .keterangan {
   text-align: justify;
+  font-size: 13px;
+  text-wrap: nowrap;
 }
 
 .keterangan p {
-  font-size: small;
   color: rgb(98, 205, 238);
 }
 
@@ -790,7 +791,7 @@ form select {
     width: 100%;
     position: fixed;
     top: 0;
-    height: 10vh;
+    height: 12%;
     align-items: center;
     z-index: 99;
     padding-left: 35px;

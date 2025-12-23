@@ -265,22 +265,11 @@
           </div>
 
           <div class="status_karyawan">
-            <div
-              :class="{
-                available: k.availability_status === 'Available',
-                working: k.availability_status === 'Working',
-              }"
-            >
+            <div :class="availableClass(k.availability_status)">
               <i class="fa-solid fa-circle"></i>
               <p>{{ k.availability_status }}</p>
             </div>
-            <div
-              :class="{
-                overload_task: k.workload_status === 'Overload',
-                underload_task: k.workload_status === 'Underload',
-                normal_task: k.workload_status === 'Normal',
-              }"
-            >
+            <div :class="workloadClass(k.workload_status)">
               <i
                 class="fa-solid fa-arrow-trend-up"
                 v-if="k.workload_status === 'Overload'"
@@ -305,11 +294,7 @@
           </div>
           <div
             class="performa_karyawan"
-            :class="{
-              special: k.performance.score > 100,
-              ontime: k.performance.score >= 85 && k.performance.score <= 100,
-              late: k.performance.score < 85,
-            }"
+            :class="performaClass(k.performance.score)"
           >
             <i class="fa-solid fa-chart-line"></i>
             <div class="text">
@@ -337,13 +322,7 @@
             <div
               class="ketepatan_pengerjaan"
               v-if="k.avg_time_efficiency.avg_percentage"
-              :class="{
-                special: k.avg_time_efficiency.avg_percentage > 100,
-                ontime:
-                  k.avg_time_efficiency.avg_percentage >= 85 &&
-                  k.avg_time_efficiency.avg_percentage <= 100,
-                late: k.avg_time_efficiency.avg_percentage < 85,
-              }"
+              :class="ketepatanClass(k.avg_time_efficiency.avg_percentage)"
             >
               <div class="teks">
                 <p>Ketepatan Pengerjaan Semua Tugas</p>
@@ -355,13 +334,7 @@
             </div>
             <div
               class="total_beban"
-              :class="{
-                special: k.total_spent_hours.percentage > 100,
-                ontime:
-                  k.total_spent_hours.percentage >= 85 &&
-                  k.total_spent_hours.percentage <= 100,
-                late: k.total_spent_hours.percentage < 85,
-              }"
+              :class="totalBebanClass(k.total_spent_hours.percentage)"
             >
               <div class="teks">
                 <p>Total Beban Kerja (Aktif)</p>
@@ -376,18 +349,6 @@
                 <i class="fa-regular fa-clock"></i>
               </div>
             </div>
-            <!-- <div
-              class="ketepatan_pengerjaan"
-              v-if="k.avg_time_efficiency.avg_percentage == null"
-            >
-              <div class="teks">
-                <p>Ketepatan Pengerjaan Semua Tugas</p>
-                <h4>-</h4>
-              </div>
-              <div class="ikon">
-                <i class="fa-solid fa-list-check"></i>
-              </div>
-            </div> -->
           </div>
         </div>
         <!-- </details> -->
@@ -434,22 +395,11 @@
           </div>
 
           <div class="status_karyawan">
-            <div
-              :class="{
-                available: detailKaryawan.availability_status === 'Available',
-                working: detailKaryawan.availability_status === 'Working',
-              }"
-            >
+            <div :class="availableClass(detailKaryawan.availability_status)">
               <i class="fa-solid fa-circle"></i>
               <p>{{ detailKaryawan.availability_status }}</p>
             </div>
-            <div
-              :class="{
-                overload_task: detailKaryawan.workload_status === 'Overload',
-                underload_task: detailKaryawan.workload_status === 'Underload',
-                normal_task: detailKaryawan.workload_status === 'Normal',
-              }"
-            >
+            <div :class="workloadClass(detailKaryawan.workload_status)">
               <i
                 class="fa-solid fa-arrow-trend-up"
                 v-if="detailKaryawan.workload_status === 'Overload'"
@@ -474,13 +424,7 @@
           </div>
           <div
             class="performa_karyawan"
-            :class="{
-              special: detailKaryawan.performance.score > 100,
-              ontime:
-                detailKaryawan.performance.score >= 85 &&
-                detailKaryawan.performance.score <= 100,
-              late: detailKaryawan.performance.score < 85,
-            }"
+            :class="performaClass(detailKaryawan.performance.score)"
           >
             <i class="fa-solid fa-chart-line"></i>
             <div class="text">
@@ -506,14 +450,11 @@
             <div
               class="ketepatan_pengerjaan"
               v-if="detailKaryawan.avg_time_efficiency.avg_percentage"
-              :class="{
-                special:
-                  detailKaryawan.avg_time_efficiency.avg_percentage > 100,
-                ontime:
-                  detailKaryawan.avg_time_efficiency.avg_percentage >= 85 &&
-                  detailKaryawan.avg_time_efficiency.avg_percentage <= 100,
-                late: detailKaryawan.avg_time_efficiency.avg_percentage < 85,
-              }"
+              :class="
+                ketepatanClass(
+                  detailKaryawan.avg_time_efficiency.avg_percentage
+                )
+              "
             >
               <div class="teks">
                 <p>Ketepatan Pengerjaan Semua Tugas</p>
@@ -527,13 +468,9 @@
             </div>
             <div
               class="total_beban"
-              :class="{
-                special: detailKaryawan.total_spent_hours.percentage > 100,
-                ontime:
-                  detailKaryawan.total_spent_hours.percentage >= 85 &&
-                  detailKaryawan.total_spent_hours.percentage <= 100,
-                late: detailKaryawan.total_spent_hours.percentage < 85,
-              }"
+              :class="
+                totalBebanClass(detailKaryawan.total_spent_hours.percentage)
+              "
             >
               <div class="teks">
                 <p>Total Beban Kerja (Aktif)</p>
@@ -634,41 +571,20 @@
               <div class="status_task">
                 <div
                   class="progres_task"
-                  :class="{
-                    task_todo: k.status_name === 'to do',
-                    task_selesai:
-                      k.status_name === 'done dev' ||
-                      k.status_name === 'completed',
-                    task_inProgress: k.status_name === 'in progress',
-                    task_inReview: k.status_name === 'in review',
-                    task_cancelled: k.status_name === 'cancelled',
-                  }"
+                  :class="statusTaskClass(k.status_name)"
                 >
-                  <p v-if="k.status_name === 'done dev'">Done Dev</p>
-                  <p v-if="k.status_name === 'completed'">Complete</p>
-                  <p v-if="k.status_name === 'in progress'">In Progress</p>
-                  <p v-if="k.status_name === 'to do'">To Do</p>
-                  <p v-if="k.status_name === 'in review'">In Review</p>
-                  <p v-if="k.status_name === 'cancelled'">Cancel</p>
+                  <p>{{ statusLabel(k.status_name) }}</p>
                 </div>
                 <div
                   class="task_priority"
-                  :class="{
-                    urgent: k.priority_name === 'urgent',
-                    high: k.priority_name === 'high',
-                    minimum: k.priority_name === 'normal',
-                    low: k.priority_name === 'low',
-                  }"
+                  :class="priorityClass(k.priority_name)"
                   v-if="k.priority_name"
                 >
                   <p>{{ k.priority_name }}</p>
                 </div>
-                <!-- <div class="task_priority" v-else>
-                  <p>No Priority</p>
-                </div> -->
 
-                <div class="task_penghargaan">
-                  <!-- <i class="fa-solid fa-award"></i> -->
+                <!-- Dari Project mana task tersebut -->
+                <div class="task_project">
                   <p>{{ k.project_name }}</p>
                 </div>
               </div>
@@ -676,14 +592,12 @@
             <div class="description">
               <p>{{ k.description }}</p>
             </div>
+
+            <!-- Ketika start date tersedia -->
             <div
               class="achievement"
               v-if="k.time_efficiency_percentage"
-              :class="{
-                special: k.time_efficiency_percentage > 100,
-                ontime: k.time_efficiency_percentage == 100,
-                late: k.time_efficiency_percentage < 100,
-              }"
+              :class="achivClass(k.time_efficiency_percentage)"
             >
               <div class="penghargaan">
                 <p>Ketepatan Pengerjaan Tugas</p>
@@ -691,6 +605,8 @@
                 <h4>{{ k.remaining_duration }}</h4>
               </div>
             </div>
+
+            <!-- Ketika start date tidak tersedia-->
             <div
               class="achievement not_special"
               v-if="
@@ -702,7 +618,6 @@
               <div class="penghargaan">
                 <p>Ketepatan Pengerjaan Tugas</p>
                 <h4>Tidak Tersedia</h4>
-                <!-- <h4>{{ k.remaining_duration }}</h4> -->
               </div>
             </div>
             <div class="keterangan_waktu">
@@ -1120,7 +1035,7 @@
   font-weight: 500;
 }
 
-.status_task .task_penghargaan {
+.status_task .task_project {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -2087,16 +2002,11 @@ export default {
     async ambilTask() {
       this.isLoading = true;
       console.log("Ambil task dipanggil");
-      // const { $api } = useNuxtApp();
-
-      // const task = await $api_task.get("/api/v1/workload/tasks-by-range?start=2025-08-01&end=2025-12-30");
-      // const task = await $api.get("/api/v1/clickup/tasks");
       try {
         const task = await this.$api.get(
           `/api/v1/workload/tasks-by-range?start_date=${this.formatTanggal(
             this.start
           )}&end_date=${this.formatTanggal(this.end)}`
-          // "/api/v1/workload/tasks-by-range?start_date=01-07-2025&end_date=31-12-2025"
         );
         this.daftarKaryawan = task.data.assignees || [];
 
@@ -2110,9 +2020,6 @@ export default {
     },
 
     async syncData() {
-      // const { $api } = useNuxtApp();
-      // console.log("SYNC DATA DIPANGGIL !");
-
       // Prevent Spam Klik
       if (this.loading) return;
 
@@ -2190,6 +2097,76 @@ export default {
     },
     openTask() {
       this.openTaskList = !this.openTaskList;
+    },
+    statusLabel(status) {
+      const map = {
+        "done dev": "Done Dev",
+        completed: "Completed",
+        "in progress": "In Progress",
+        "to do": "To Do",
+        "in review": "In Review",
+        cancelled: "Cancel",
+      };
+      return map[status] ?? "-";
+    },
+    priorityClass(priority) {
+      return {
+        urgent: priority === "urgent",
+        high: priority === "high",
+        minimum: priority === "normal",
+        low: priority === "low",
+      };
+    },
+    achivClass(achiv) {
+      return {
+        special: achiv > 100,
+        ontime: achiv == 100,
+        late: achiv < 100,
+      };
+    },
+    totalBebanClass(beban) {
+      return {
+        special: beban > 100,
+        ontime: beban >= 85 && beban <= 100,
+        late: beban < 85,
+      };
+    },
+    ketepatanClass(ketepatan) {
+      return {
+        special: ketepatan > 100,
+        ontime: ketepatan >= 85 && ketepatan <= 100,
+        late: ketepatan < 85,
+      };
+    },
+    performaClass(performa) {
+      return {
+        special: performa > 100,
+        ontime: performa >= 85 && performa <= 100,
+        late: performa < 85,
+      };
+    },
+    availableClass(available) {
+      return {
+        available: available === "Available",
+        working: available === "Working",
+      };
+    },
+    workloadClass(workload) {
+      return {
+        overload_task: workload === "Overload",
+        underload_task: workload === "Underload",
+        normal_task: workload === "Normal",
+      };
+    },
+    statusTaskClass(status) {
+      return {
+        task_todo: status === "to do",
+        task_selesai:
+          status === "done dev" || status === "completed",
+        task_inProgress: status === "in progress",
+        task_inReview: status === "in review",
+        task_cancelled: status === "cancelled",
+      };
     },
   },
   computed: {
@@ -2301,40 +2278,6 @@ export default {
       }
       return hasil;
     },
-    completedTask() {
-      return this.detailKaryawan.tasks.filter(
-        (t) => t.status_name === "completed" || t.status_name === "done dev"
-      ).length;
-    },
-    inProgressTask() {
-      return this.detailKaryawan.tasks.filter(
-        (t) => t.status_name === "in progress"
-      ).length;
-    },
-    todoTask() {
-      return this.detailKaryawan.tasks.filter((t) => t.status_name === "to do")
-        .length;
-    },
-    // jumlahSelesai() {
-    //   const selesai = ["completed", "done dev"];
-    //   return this.detailKaryawan.tasks.filter((t) =>
-    //     selesai.includes(t.status_name)
-    //   ).length;
-    // },
-    // jumlahInProgress() {
-    //   return this.detailKaryawan.tasks.filter(
-    //     (t) => t.status_name === "in progress"
-    //   ).length;
-    // },
-    // jumlahTodo() {
-    //   return this.detailKaryawan.tasks.filter((t) => t.status_name === "to do")
-    //     .length;
-    // },
-    // inReview() {
-    //   return this.detailKaryawan.tasks.filter(
-    //     (t) => t.status_name === "in review"
-    //   ).length;
-    // },
   },
   watch: {
     start: "onDateChange",
