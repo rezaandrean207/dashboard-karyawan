@@ -108,7 +108,8 @@ body {
 @keyframes slide-right {
   from {
     transform: translateX(-30%);
-  } to {
+  }
+  to {
     transform: translateX(0%);
   }
 }
@@ -142,9 +143,9 @@ body {
 }
 
 .logo .keterangan {
-  text-align: justify;
   font-size: 13px;
   text-wrap: nowrap;
+  text-align: justify;
 }
 
 .keterangan p {
@@ -773,8 +774,6 @@ form select {
 
 /* Tablet LandScape */
 @media (max-width: 1024px) {
-
-
   .konten {
     overflow-x: hidden;
   }
