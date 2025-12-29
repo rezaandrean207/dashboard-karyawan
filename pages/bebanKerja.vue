@@ -368,16 +368,6 @@
           <i class="fa-solid fa-arrow-left"></i>
           <p>Kembali</p>
         </div>
-        <!-- <div class="detailTask_karyawan">
-          <p class="name_karyawan">
-            Detail Task - {{ detailKaryawan.username }}
-          </p>
-          <div class="periode">
-             <p>Periode: {{ start }} - {{ end }}</p> -->
-        <!-- <p v-if="start === '' && end === ''">Seluruh Periode</p>
-            <p v-else>Periode: {{ start }} - {{ end }}</p>
-          </div>
-        </div>  -->
       </div>
 
       <div class="card_karyawan">
