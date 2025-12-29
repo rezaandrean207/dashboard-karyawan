@@ -30,13 +30,6 @@
 
 body {
   background-color: #f8fcff;
-  /* background: #ffffff;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(186, 186, 255, 1) 100%,
-    rgba(255, 255, 255, 1) 100%
-  ); */
   width: 100%;
   height: 100vh;
   color: #010101;
@@ -54,20 +47,6 @@ body {
 .konten .navbar {
   display: none;
 }
-
-/* .konten .navbar {
-  display: flex;
-  background-color: rgb(16, 50, 130);
-  color: white;
-  width: 100%;
-  position: fixed;
-  top: 0;
-  height: 12vh;
-  align-items: center;
-  z-index: 99;
-  padding-left: 20px;
-  gap: 10px;
-} */
 
 .navbar .menu {
   background-color: rgb(16, 62, 170);
@@ -323,27 +302,17 @@ form .dates {
 }
 
 form .dates .tanggal {
-  /* width: 60%; */
   display: flex;
   justify-content: center;
   border: var(--borderCard);
-  /* background-color: #4caf50; */
-  /* padding: 0 5px; */
-  /* width: 100%; */
   border-radius: 10px;
   padding: 10px 15px;
   gap: 15px;
   background-color: #fff;
-  /* margin-right: 10px; */
-  /* border: var(--borderCard); */
 }
 
 .tanggal span {
   font-size: 18px;
-}
-
-.dates .tanggal input {
-  width: 50%;
 }
 
 form .tanggal_mulai,
@@ -943,10 +912,6 @@ form select {
 
   .filter_detail .total_karyawan {
     width: 100%;
-  }
-
-  .filter_detail form input {
-    /* width: 100rem; */
   }
   .success-animation .sukses {
     font-size: 13px;
