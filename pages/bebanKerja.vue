@@ -325,7 +325,7 @@
               :class="ketepatanClass(k.avg_time_efficiency.avg_percentage)"
             >
               <div class="teks">
-                <p>Ketepatan Pengerjaan Semua Tugas</p>
+                <p>Tepat Waktu Kerja</p>
                 <h4>{{ k.avg_time_efficiency.avg_percentage }}%</h4>
               </div>
               <div class="ikon">
@@ -457,7 +457,7 @@
               "
             >
               <div class="teks">
-                <p>Ketepatan Pengerjaan Semua Tugas</p>
+                <p>Tepat Waktu Kerja</p>
                 <h4>
                   {{ detailKaryawan.avg_time_efficiency.avg_percentage }}%
                 </h4>
