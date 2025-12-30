@@ -381,7 +381,7 @@
 
         <div class="detail_task" @click="detail(k)">
           <i class="fa-solid fa-list-check"></i>
-          <p>Task Detail ({{ k.total_tasks }} Task)</p>
+          <p>Informasi Detail</p>
           <i class="fa-solid fa-arrow-up-from-bracket"></i>
         </div>
         <!-- <div class="detail_bug" @click="detailBug(k)">
@@ -598,7 +598,7 @@
           </div>
 
           <div class="filter_bug">
-            <label for="">Sortir Task</label>
+            <label for="">Tugas</label>
             <select name="" id="" class="task_style" v-model="taskBug">
               <option value="">Semua</option>
               <option value="bug">Bug</option>
@@ -1092,7 +1092,7 @@
   font-weight: 500;
 }
 
-.status_task .bug {
+/* .status_task .bug {
   border: 1px solid rgb(178, 178, 255);
   display: flex;
   align-items: center;
@@ -1102,7 +1102,7 @@
   padding: 2px 5px;
   padding-top: 4px;
   color: var(--font-color);
-}
+} */
 
 .status_task .task_project,
 .bug {
@@ -1202,6 +1202,7 @@
   font-size: 14px;
   font-weight: 400;
   margin: 10px 0;
+  flex-wrap: wrap;
 }
 
 .keterangan_waktu .jam,
