@@ -261,9 +261,6 @@
   background-color: rgb(235, 241, 255);
 }
 
-.header_task .detailTask_karyawan {
-}
-
 .detailTask_karyawan .name_karyawan {
   font-size: 23px;
   font-weight: 500;

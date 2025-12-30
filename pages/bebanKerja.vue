@@ -221,6 +221,20 @@
             </select>
           </div>
 
+          <!-- <div class="style_sortir">
+            <label for="">Performa Bug</label>
+            <select
+              name=""
+              id=""
+              class="sortir_performa"
+              v-model="sortPerformBug"
+            >
+              <option value="">Semua Performa</option>
+              <option value="highest">Tertinggi</option>
+              <option value="lowest">Terendah</option>
+            </select>
+          </div> -->
+
           <div class="style_sortir">
             <label for="">Ketepatan Tugas</label>
             <select
@@ -294,13 +308,13 @@
           </div>
           <div
             class="performa_karyawan"
-            :class="performaClass(k.performance.score)"
+            :class="performaClass(k.performance_bugs.score)"
           >
             <i class="fa-solid fa-chart-line"></i>
             <div class="text">
               <p>Performa</p>
               <span
-                ><strong>{{ k.performance.score }}%</strong></span
+                ><strong>{{ k.performance_bugs.score }}%</strong></span
               >
             </div>
           </div>
@@ -349,20 +363,37 @@
                 <i class="fa-regular fa-clock"></i>
               </div>
             </div>
+            <div
+              class="performa_bug"
+              :class="performaClass(k.performance_bugs.bugs)"
+            >
+              <div class="teks">
+                <p>Performa Bug</p>
+                <h4>{{ k.performance_bugs.bugs }}%</h4>
+              </div>
+              <div class="ikon">
+                <i class="fa-solid fa-chart-line"></i>
+              </div>
+            </div>
           </div>
         </div>
         <!-- </details> -->
 
         <div class="detail_task" @click="detail(k)">
           <i class="fa-solid fa-list-check"></i>
-          <p>Task Detail ({{ k.total_tasks }} Task)</p>
+          <p>Informasi Detail</p>
           <i class="fa-solid fa-arrow-up-from-bracket"></i>
         </div>
+        <!-- <div class="detail_bug" @click="detailBug(k)">
+          <i class="fa-solid fa-list-check"></i>
+          <p>Bug Detail (Bug)</p>
+          <i class="fa-solid fa-arrow-up-from-bracket"></i>
+        </div> -->
       </div>
     </div>
 
     <!-- Details Task -->
-    <div class="isi" v-else>
+    <div class="isi" v-else-if="detailKaryawan">
       <div class="header_task">
         <div class="back_button" @click="kembali">
           <i class="fa-solid fa-arrow-left"></i>
@@ -414,13 +445,15 @@
           </div>
           <div
             class="performa_karyawan"
-            :class="performaClass(detailKaryawan.performance.score)"
+            :class="performaClass(detailKaryawan.performance_bugs.score)"
           >
             <i class="fa-solid fa-chart-line"></i>
             <div class="text">
               <p>Performa</p>
               <span
-                ><strong>{{ detailKaryawan.performance.score }}%</strong></span
+                ><strong
+                  >{{ detailKaryawan.performance_bugs.score }}%</strong
+                ></span
               >
             </div>
           </div>
@@ -473,6 +506,18 @@
               </div>
               <div class="ikon">
                 <i class="fa-regular fa-clock"></i>
+              </div>
+            </div>
+            <div
+              class="performa_bug"
+              :class="performaClass(detailKaryawan.performance_bugs.bugs)"
+            >
+              <div class="teks">
+                <p>Performa Bug</p>
+                <h4>{{ detailKaryawan.performance_bugs.bugs }}%</h4>
+              </div>
+              <div class="ikon">
+                <i class="fa-solid fa-chart-line"></i>
               </div>
             </div>
           </div>
@@ -541,6 +586,15 @@
               <option value="lowest">Terendah</option>
             </select>
           </div>
+
+          <div class="filter_bug">
+            <label for="">Tugas</label>
+            <select name="" id="" class="task_style" v-model="taskBug">
+              <option value="">Semua</option>
+              <option value="bug">Bug</option>
+              <option value="task">Task</option>
+            </select>
+          </div>
         </div>
 
         <!-- <div
@@ -559,6 +613,9 @@
                 <p>{{ k.name }}</p>
               </div>
               <div class="status_task">
+                <div class="bug" v-if="k.tags">
+                  <p>{{ k.tags[0] }}</p>
+                </div>
                 <div
                   class="progres_task"
                   :class="statusTaskClass(k.status_name)"
@@ -665,7 +722,8 @@
 
 .style_sortir label,
 .style_progres label,
-.sortir_style label {
+.sortir_style label,
+.filter_task label {
   padding-left: 2px;
   text-wrap: nowrap;
   font-size: 14px;
@@ -693,7 +751,8 @@
 .sortir_performa,
 .sortir_beban,
 .sortir_ketepatan,
-.select_task {
+.select_task,
+.task_style {
   border: var(--borderCard);
   font-size: 14px;
   padding: 8px 8px 8px 35px;
@@ -712,7 +771,8 @@
 }
 
 .sortir_style,
-.style_progres {
+.style_progres,
+.filter_bug {
   width: 300px;
 }
 </style>
@@ -913,9 +973,6 @@
   background-color: #0037a6;
 }
 
-.header_task .detailTask_karyawan {
-}
-
 .detailTask_karyawan .name_karyawan {
   font-size: 23px;
   font-weight: 500;
@@ -1025,7 +1082,20 @@
   font-weight: 500;
 }
 
-.status_task .task_project {
+/* .status_task .bug {
+  border: 1px solid rgb(178, 178, 255);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: rgb(178, 178, 255);
+  border-radius: 7px;
+  padding: 2px 5px;
+  padding-top: 4px;
+  color: var(--font-color);
+} */
+
+.status_task .task_project,
+.bug {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -1078,7 +1148,7 @@
 
 .description {
   margin: 10px 0;
-  font-weight: 400;
+  font-weight: 300;
 }
 
 .achievement {
@@ -1122,6 +1192,7 @@
   font-size: 14px;
   font-weight: 400;
   margin: 10px 0;
+  flex-wrap: wrap;
 }
 
 .keterangan_waktu .jam,
@@ -1164,7 +1235,8 @@
 }
 
 .select_task,
-.sortir {
+.sortir,
+.task_style {
   border: 1px solid var(--border_color);
   padding: 8px 8px 8px 30px;
   font-size: 14px;
@@ -1175,6 +1247,13 @@
 .select_task {
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' stroke='%2364748b' stroke-width='32' viewBox='0 0 512 512'%3E%3Ccircle cx='256' cy='256' r='160'/%3E%3Cpath d='M256 96v160l96 64'/%3E%3Cpath d='M64 96h384M128 160h256'/%3E%3C/svg%3E")
     no-repeat 10px center;
+  background-size: 14px;
+  background-color: #fff;
+}
+
+.task_style {
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path d='M32%2064C19.1%2064%207.4%2071.8%202.4%2083.8S.2%20109.5%209.4%20118.6L192%20301.3V416c0%208.5%203.4%2016.6%209.4%2022.6l64%2064c9.2%209.2%2022.9%2011.9%2034.9%206.9S320%20492.9%20320%20480V301.3L502.6%20118.6c9.2%209.2%2011.9%2022.9%206.9%2034.9S492.9%2064%20480%2064H32z'/></svg>")
+    no-repeat 12px center;
   background-size: 14px;
   background-color: #fff;
 }
@@ -1506,12 +1585,13 @@
 
 .container_flex .total_seharusnya,
 .container_flex .total_beban,
-.container_flex .ketepatan_pengerjaan {
+.container_flex .ketepatan_pengerjaan,
+.container_flex .performa_bug {
   width: 100%;
-  padding: 20px 15px;
+  padding: 15px;
   border-radius: 10px;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1521,19 +1601,10 @@
   font-size: 30px;
 }
 
-.total_beban .ikon {
-  /* color: blue; */
-}
-
-/* .total_beban {
-  background-color: rgb(226, 255, 225);
-  border: 1px solid rgb(166, 255, 163);
-  color: rgb(16, 130, 50);
-} */
-
 .total_beban h4,
 .total_seharusnya h4,
-.ketepatan_pengerjaan h4 {
+.ketepatan_pengerjaan h4,
+.performa_bug h4 {
   font-size: large;
 }
 
@@ -1580,9 +1651,9 @@
   }
 }
 
-.detail_task {
+.detail_task,
+.detail_bug {
   position: relative;
-  z-index: 999;
   cursor: pointer;
 }
 
@@ -1626,6 +1697,7 @@
 
 .tanggal input {
   background-color: #fff;
+  /* width: 90%; */
 }
 
 .time .project {
@@ -1732,17 +1804,30 @@ form select {
   padding-left: 35px;
 }
 
-.detail_task {
+.detail_task,
+.detail_bug {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: blue;
   border-radius: 10px;
   padding: 8px;
-  color: #fff;
   gap: 10px;
   font-size: 14px;
   font-weight: 500;
+  margin: 10px 0;
+}
+
+.detail_task {
+  background-color: blue;
+  color: #fff;
+}
+
+.detail_bug {
+  border: 1px solid #bdbdbd;
+}
+
+.detail_bug:hover {
+  background-color: #e6e6e6;
 }
 
 .detail_task:hover {
@@ -1800,6 +1885,11 @@ form select {
 
   .container_progres {
     flex-wrap: wrap;
+  }
+
+  .tanggal input {
+    position: relative;
+    /* width:; */
   }
 }
 
@@ -1893,14 +1983,16 @@ form select {
   }
 
   .sortir_style,
-  .style_progres {
+  .style_progres,
+  .filter_bug {
     width: 47%;
   }
 
   .select_task,
   .sortir,
   .sortir_style label,
-  .style_progres label {
+  .style_progres label,
+  .filter_bug label {
     font-size: 12px;
   }
 
@@ -1932,6 +2024,7 @@ export default {
       loading: false,
       sukses: false,
       detailKaryawan: null,
+      // detailKaryawanBug: null,
       start: "",
       end: "",
       openTaskList: false,
@@ -1941,9 +2034,11 @@ export default {
       isLoading: false,
       isClose: false,
       sortPerform: "",
+      sortPerformBug: "",
       sortBeban: "",
       sortKetepatan: "",
       sortKetepatanDetail: "",
+      taskBug: "",
     };
   },
   mounted() {
@@ -2060,27 +2155,21 @@ export default {
     },
     detail(karyawan) {
       // this.daftarKaryawan = karyawan;
-      this.detail_task = true;
       this.detailKaryawan = karyawan;
       this.sortPerform = "";
       this.sortBeban = "";
       this.sortKetepatn = "";
-
-      // jika filter tanggal aktif → tasks detail juga harus disaring ulang
-      if (this.start && this.end) {
-        const startFilter = new Date(this.start);
-        const endFilter = new Date(this.end);
-
-        this.detailTasks = karyawan.tasks.filter((t) => {
-          const tgl = new Date(t.start_date);
-          return tgl >= startFilter && tgl <= endFilter;
-        });
-      } else {
-        this.detailTasks = karyawan.tasks; // tampilkan full
-      }
+      this.taskBug = "";
     },
+    // detailBug(bug) {
+    //   this.detailKaryawanBug = bug;
+    //   console.log("hhhhh");
+    //   console.log(bug);
+    // },
+    // kembaliBug() {
+    //   this.detailKaryawanBug = null;
+    // },
     kembali() {
-      this.detail_task = false;
       this.detailKaryawan = null;
       this.progres = "";
       this.sortKetepatanDetail = "";
@@ -2151,8 +2240,7 @@ export default {
     statusTaskClass(status) {
       return {
         task_todo: status === "to do",
-        task_selesai:
-          status === "done dev" || status === "completed",
+        task_selesai: status === "done dev" || status === "completed",
         task_inProgress: status === "in progress",
         task_inReview: status === "in review",
         task_cancelled: status === "cancelled",
@@ -2162,6 +2250,7 @@ export default {
   computed: {
     filteredKaryawan() {
       let hasil = this.daftarKaryawan;
+      // let hasilBug = this.daftarKaryawan;
 
       // filter nama
       if (this.searchInput) {
@@ -2184,20 +2273,43 @@ export default {
 
       // Sortir Tertinggi
 
-      // Performa
+      // Performa Tasks
       if (this.sortPerform === "highest" || this.sortPerform === "lowest") {
         hasil = hasil
           .filter(
-            (k) => k.performance && typeof k.performance.score === "number"
+            (k) =>
+              k.performance_bugs && typeof k.performance_bugs.score === "number"
           )
 
           .sort((a, b) => {
             if (this.sortPerform === "highest") {
-              return b.performance.score - a.performance.score;
+              return b.performance_bugs.score - a.performance_bugs.score;
             }
-            return a.performance.score - b.performance.score;
+            return a.performance_bugs.score - b.performance_bugs.score;
           });
-      } else if (
+      }
+
+      // Performa Bug
+      else if (
+        this.sortPerformBug === "highest" ||
+        this.sortPerformBug === "lowest"
+      ) {
+        hasil = hasil
+          .filter(
+            (k) =>
+              k.performance_bugs && typeof k.performance_bugs.bugs === "number"
+          )
+
+          .sort((a, b) => {
+            if (this.sortPerformBug === "highest") {
+              return b.performance_bugs.bugs - a.performance_bugs.bugs;
+            }
+            return a.performance_bugs.bugs - b.performance_bugs.bugs;
+          });
+      }
+
+      // Ketepatan Tugas
+      else if (
         this.sortKetepatan === "highest" ||
         this.sortKetepatan === "lowest"
       ) {
@@ -2239,7 +2351,12 @@ export default {
             );
           });
       }
+
+      // Performa Bug
+      // Kode untuk Performa Bug
+
       return hasil;
+      // return hasilBug;
     },
 
     filteredKaryawanDetail() {
@@ -2266,8 +2383,36 @@ export default {
             return a.time_efficiency_percentage - b.time_efficiency_percentage;
           });
       }
+
+      // Filter Bug & Task
+      // if (this.taskBug) {
+      //   hasil = hasil.filter(
+      //     (k) =>
+      //       (this.taskBug === "bug") ===
+      //       k.tags?.some((t) => t.toLowerCase() === "bug")
+      //   );
+      // }
+
+      if (this.taskBug === "bug") {
+        hasil = hasil.filter((k) =>
+          k.tags?.some((t) => t.toLowerCase() === "bug")
+        );
+      } else if (this.taskBug === "task") {
+        hasil = hasil.filter(
+          (k) => !k.tags?.some((t) => t.toLowerCase() === "bug")
+        );
+      }
       return hasil;
     },
+
+    // filteredBugDetail() {
+    //   let hasilBug = this.detailKaryawanBug.tasks;
+
+    //   if (!hasilBug || !hasilBug) {
+    //     return [];
+    //   }
+    //   return hasilBug;
+    // },
   },
   watch: {
     start: "onDateChange",
