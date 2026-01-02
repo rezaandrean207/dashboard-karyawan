@@ -261,7 +261,7 @@
       </div>
 
       <div class="not_found" v-show="notFound">
-        <p>Not Found</p>
+        <p><i>Not Found</i></p>
       </div>
 
       <div
@@ -324,15 +324,6 @@
           <summary class="beban_karyawan">Beban Kerja Karyawan</summary> -->
         <div class="keterangan_karyawan">
           <div class="container_flex">
-            <div class="total_seharusnya">
-              <div class="teks">
-                <p>Total Beban Kerja (Seharusnya)</p>
-                <h4>{{ k.expected_hours }} Jam</h4>
-              </div>
-              <div class="ikon">
-                <i class="fa-regular fa-clock"></i>
-              </div>
-            </div>
             <div
               class="ketepatan_pengerjaan"
               v-if="k.avg_time_efficiency.avg_percentage"
@@ -344,6 +335,15 @@
               </div>
               <div class="ikon">
                 <i class="fa-solid fa-list-check"></i>
+              </div>
+            </div>
+            <div class="total_seharusnya">
+              <div class="teks">
+                <p>Total Beban Kerja (Seharusnya)</p>
+                <h4>{{ k.expected_hours }} Jam</h4>
+              </div>
+              <div class="ikon">
+                <i class="fa-regular fa-clock"></i>
               </div>
             </div>
             <div
@@ -460,16 +460,6 @@
         </div>
         <div class="keterangan_karyawan">
           <div class="container_flex">
-            <div class="total_seharusnya">
-              <div class="teks">
-                <p>Total Beban Kerja (Seharusnya)</p>
-                <h4>{{ detailKaryawan.expected_hours }} Jam</h4>
-              </div>
-              <div class="ikon">
-                <i class="fa-regular fa-clock"></i>
-              </div>
-            </div>
-
             <div
               class="ketepatan_pengerjaan"
               v-if="detailKaryawan.avg_time_efficiency.avg_percentage"
@@ -487,6 +477,15 @@
               </div>
               <div class="ikon">
                 <i class="fa-solid fa-list-check"></i>
+              </div>
+            </div>
+            <div class="total_seharusnya">
+              <div class="teks">
+                <p>Total Beban Kerja (Seharusnya)</p>
+                <h4>{{ detailKaryawan.expected_hours }} Jam</h4>
+              </div>
+              <div class="ikon">
+                <i class="fa-regular fa-clock"></i>
               </div>
             </div>
             <div
@@ -517,7 +516,7 @@
                 <h4>{{ detailKaryawan.performance_bugs.bugs }}%</h4>
               </div>
               <div class="ikon">
-                <i class="fa-solid fa-chart-line"></i>
+                <i class="fa-solid fa-bug"></i>
               </div>
             </div>
           </div>
@@ -597,15 +596,12 @@
           </div>
         </div>
 
-        <!-- <div
+        <div
           class="no_task"
-          v-if="
-            !filteredKaryawanDetail?.tasks ||
-            filteredKaryawanDetail.tasks.length === 0
-          "
+          v-if="!filteredKaryawanDetail || filteredKaryawanDetail.length === 0"
         >
-          Tidak ada data
-        </div> -->
+          <i>Data tidak tersedia</i>
+        </div>
         <div>
           <div class="container_task" v-for="k in filteredKaryawanDetail">
             <div class="header_container">
@@ -1314,6 +1310,15 @@
   font-weight: 500;
   text-align: center;
   font-size: 25px;
+}
+
+.no_task {
+  text-align: center;
+  position: relative;
+  top: 50px;
+  font-size: 20px;
+  font-weight: 500;
+  filter: drop-shadow(2px 2px 8px #d0d0d0);
 }
 
 /* Laporan Pages */
@@ -2254,14 +2259,12 @@ export default {
 
       // filter nama
       if (this.searchInput) {
-        hasil = hasil.filter(
-          (k) => k.name.toLowerCase().includes(this.searchInput.toLowerCase()),
-          (this.notFound = false)
+        hasil = hasil.filter((k) =>
+          k.name.toLowerCase().includes(this.searchInput.toLowerCase())
         );
-
-        // if (hasil.length === 0) {
-        //   this.notFound = true;
-        // }
+        this.notFound = hasil.length === 0;
+      } else {
+        this.notFound = false;
       }
 
       // filter posisi (role)
