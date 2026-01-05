@@ -456,7 +456,7 @@
             <div class="proyek">
               <div class="judul">
                 <p>Proyek</p>
-                <h2>{{ selected.proyek }} 3</h2>
+                <h3>{{ selected.project_count }}</h3>
               </div>
               <div class="logo">
                 <i class="fa-solid fa-check"></i>
@@ -467,7 +467,7 @@
               <div class="judul">
                 <p>Completed</p>
                 <!-- <p>Selesai</p> -->
-                <h2>{{ selected.performa }} 90%</h2>
+                <h3>{{ selected.completed_tasks }} Task</h3>
               </div>
               <div class="logo">
                 <i class="fa-solid fa-check"></i>
@@ -478,7 +478,7 @@
               <div class="judul">
                 <p>On Progress</p>
                 <!-- <p>Dikerjakan</p> -->
-                <h2>{{ selected.tugas }} 4</h2>
+                <h3>{{ selected.in_progress_tasks }} Task</h3>
               </div>
               <div class="logo">
                 <i class="fa-solid fa-chart-simple"></i>

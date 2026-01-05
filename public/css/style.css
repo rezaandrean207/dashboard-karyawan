@@ -641,8 +641,9 @@ form select {
 
 .statistikKinerja .statistik {
   display: flex;
-  justify-content: center;
-  gap: 15px;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .statistik .proyek {
@@ -688,7 +689,7 @@ form select {
 .proyek,
 .completed,
 .on_progress {
-  width: 40%;
+  width: 31%;
   height: 16.5vh;
   background-color: #ddd;
   text-align: center;
@@ -894,10 +895,12 @@ form select {
 
   .statistik .proyek,
   .statistik .perform,
-  .statistik .completed {
+  .statistik .completed,
+  .statistik .on_progress {
     width: 100%;
     height: auto;
-    padding: 15px 10px;
+    padding: 15px;
+    justify-content: space-between;
   }
 
   .filter .filter_detail {
