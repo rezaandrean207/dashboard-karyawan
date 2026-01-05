@@ -372,7 +372,7 @@
                 <h4>{{ k.performance_bugs.bugs }}%</h4>
               </div>
               <div class="ikon">
-                <i class="fa-solid fa-chart-line"></i>
+                <i class="fa-solid fa-bug"></i>
               </div>
             </div>
           </div>
