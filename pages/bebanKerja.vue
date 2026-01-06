@@ -326,7 +326,6 @@
           <div class="container_flex">
             <div
               class="ketepatan_pengerjaan"
-              v-if="k.avg_time_efficiency.avg_percentage"
               :class="ketepatanClass(k.avg_time_efficiency.avg_percentage)"
             >
               <div class="teks">
@@ -337,6 +336,7 @@
                 <i class="fa-solid fa-list-check"></i>
               </div>
             </div>
+
             <div class="total_seharusnya">
               <div class="teks">
                 <p>Total Beban Kerja (Seharusnya)</p>
@@ -609,9 +609,241 @@
                 <p>{{ k.name }}</p>
               </div>
               <div class="status_task">
-                <div class="bug" v-if="k.tags">
+                <!-- <div class="bug" v-if="k.tags">
                   <p>{{ k.tags[0] }}</p>
+                </div> -->
+                <div class="bug" @click="BugDetail(k)">
+                  <p>Bug</p>
                 </div>
+
+                <div
+                  class="background_bug"
+                  v-if="detailBug"
+                  @click.self="detailBug = null"
+                >
+                  <div class="bug_detail">
+                    <div class="header_bug">
+                      <div class="name_bug">
+                        <p>{{ detailBug.name }}</p>
+                      </div>
+                      <div class="status_bug">
+                        <div class="bug_priority"></div>
+                      </div>
+                    </div>
+                    <div class="description">
+                      <p>restart service kiklelang restart elasticsearch</p>
+                    </div>
+                    <div class="keterangan_waktu">
+                      <div class="jam">
+                        <i class="fa-regular fa-clock"></i>
+                        <!-- <p>Waktu Pengerjaan: {{ k.time_estimate_hours }} Jam</p> -->
+                        <p>Waktu Pengerjaan: 8 Jam</p>
+                      </div>
+                      <div class="start_date">
+                        <i class="fa-regular fa-calendar"></i>
+                        <!-- <p v-if="k.start_date">Mulai: {{ k.start_date }}</p>
+          <p v-if="!k.start_date">Mulai: <i>Tidak Valid</i></p> -->
+                        <p>Mulai: 20-08-2025</p>
+                      </div>
+                      <div class="deadline">
+                        <i class="fa-regular fa-calendar"></i>
+                        <!-- <p v-if="k.due_date">Target: {{ k.due_date }}</p>
+          <p v-if="!k.due_date">Target: <i>Tidak Valid</i></p> -->
+                        <p>Target: 20-08-2025</p>
+                      </div>
+                      <div class="done_date">
+                        <i class="fa-regular fa-calendar"></i>
+                        <!-- <p>Selesai: {{ k.date_done }}</p> -->
+                        <p>Selesai: 20-08-2025</p>
+                      </div>
+                      <div class="created_by">
+                        <i class="fa-regular fa-user"></i>
+                        <!-- <p>Dibuat oleh: {{ k.creator_name }}</p> -->
+                        <p>Dibuat oleh: Karyawan</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="bug_detail">
+                    <div class="header_bug">
+                      <div class="name_bug">
+                        <p>{{ detailBug.name }}</p>
+                      </div>
+                      <div class="status_bug">
+                        <div class="bug_priority"></div>
+                      </div>
+                    </div>
+                    <div class="description">
+                      <p>restart service kiklelang restart elasticsearch</p>
+                    </div>
+                    <div class="keterangan_waktu">
+                      <div class="jam">
+                        <i class="fa-regular fa-clock"></i>
+                        <!-- <p>Waktu Pengerjaan: {{ k.time_estimate_hours }} Jam</p> -->
+                        <p>Waktu Pengerjaan: 8 Jam</p>
+                      </div>
+                      <div class="start_date">
+                        <i class="fa-regular fa-calendar"></i>
+                        <!-- <p v-if="k.start_date">Mulai: {{ k.start_date }}</p>
+          <p v-if="!k.start_date">Mulai: <i>Tidak Valid</i></p> -->
+                        <p>Mulai: 20-08-2025</p>
+                      </div>
+                      <div class="deadline">
+                        <i class="fa-regular fa-calendar"></i>
+                        <!-- <p v-if="k.due_date">Target: {{ k.due_date }}</p>
+          <p v-if="!k.due_date">Target: <i>Tidak Valid</i></p> -->
+                        <p>Target: 20-08-2025</p>
+                      </div>
+                      <div class="done_date">
+                        <i class="fa-regular fa-calendar"></i>
+                        <!-- <p>Selesai: {{ k.date_done }}</p> -->
+                        <p>Selesai: 20-08-2025</p>
+                      </div>
+                      <div class="created_by">
+                        <i class="fa-regular fa-user"></i>
+                        <!-- <p>Dibuat oleh: {{ k.creator_name }}</p> -->
+                        <p>Dibuat oleh: Karyawan</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="bug_detail">
+                    <div class="header_bug">
+                      <div class="name_bug">
+                        <p>{{ detailBug.name }}</p>
+                      </div>
+                      <div class="status_bug">
+                        <div class="bug_priority"></div>
+                      </div>
+                    </div>
+                    <div class="description">
+                      <p>restart service kiklelang restart elasticsearch</p>
+                    </div>
+                    <div class="keterangan_waktu">
+                      <div class="jam">
+                        <i class="fa-regular fa-clock"></i>
+                        <!-- <p>Waktu Pengerjaan: {{ k.time_estimate_hours }} Jam</p> -->
+                        <p>Waktu Pengerjaan: 8 Jam</p>
+                      </div>
+                      <div class="start_date">
+                        <i class="fa-regular fa-calendar"></i>
+                        <!-- <p v-if="k.start_date">Mulai: {{ k.start_date }}</p>
+          <p v-if="!k.start_date">Mulai: <i>Tidak Valid</i></p> -->
+                        <p>Mulai: 20-08-2025</p>
+                      </div>
+                      <div class="deadline">
+                        <i class="fa-regular fa-calendar"></i>
+                        <!-- <p v-if="k.due_date">Target: {{ k.due_date }}</p>
+          <p v-if="!k.due_date">Target: <i>Tidak Valid</i></p> -->
+                        <p>Target: 20-08-2025</p>
+                      </div>
+                      <div class="done_date">
+                        <i class="fa-regular fa-calendar"></i>
+                        <!-- <p>Selesai: {{ k.date_done }}</p> -->
+                        <p>Selesai: 20-08-2025</p>
+                      </div>
+                      <div class="created_by">
+                        <i class="fa-regular fa-user"></i>
+                        <!-- <p>Dibuat oleh: {{ k.creator_name }}</p> -->
+                        <p>Dibuat oleh: Karyawan</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="bug_detail">
+                    <div class="header_bug">
+                      <div class="name_bug">
+                        <p>{{ detailBug.name }}</p>
+                      </div>
+                      <div class="status_bug">
+                        <div class="bug_priority"></div>
+                      </div>
+                    </div>
+                    <div class="description">
+                      <p>restart service kiklelang restart elasticsearch</p>
+                    </div>
+                    <div class="keterangan_waktu">
+                      <div class="jam">
+                        <i class="fa-regular fa-clock"></i>
+                        <!-- <p>Waktu Pengerjaan: {{ k.time_estimate_hours }} Jam</p> -->
+                        <p>Waktu Pengerjaan: 8 Jam</p>
+                      </div>
+                      <div class="start_date">
+                        <i class="fa-regular fa-calendar"></i>
+                        <!-- <p v-if="k.start_date">Mulai: {{ k.start_date }}</p>
+          <p v-if="!k.start_date">Mulai: <i>Tidak Valid</i></p> -->
+                        <p>Mulai: 20-08-2025</p>
+                      </div>
+                      <div class="deadline">
+                        <i class="fa-regular fa-calendar"></i>
+                        <!-- <p v-if="k.due_date">Target: {{ k.due_date }}</p>
+          <p v-if="!k.due_date">Target: <i>Tidak Valid</i></p> -->
+                        <p>Target: 20-08-2025</p>
+                      </div>
+                      <div class="done_date">
+                        <i class="fa-regular fa-calendar"></i>
+                        <!-- <p>Selesai: {{ k.date_done }}</p> -->
+                        <p>Selesai: 20-08-2025</p>
+                      </div>
+                      <div class="created_by">
+                        <i class="fa-regular fa-user"></i>
+                        <!-- <p>Dibuat oleh: {{ k.creator_name }}</p> -->
+                        <p>Dibuat oleh: Karyawan</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="bug_detail">
+                    <div class="header_bug">
+                      <div class="name_bug">
+                        <p>{{ detailBug.name }}</p>
+                      </div>
+                      <div class="status_bug">
+                        <div class="bug_priority"></div>
+                      </div>
+                    </div>
+                    <div class="description">
+                      <p>restart service kiklelang restart elasticsearch</p>
+                    </div>
+                    <div class="keterangan_waktu">
+                      <div class="jam">
+                        <i class="fa-regular fa-clock"></i>
+                        <!-- <p>Waktu Pengerjaan: {{ k.time_estimate_hours }} Jam</p> -->
+                        <p>Waktu Pengerjaan: 8 Jam</p>
+                      </div>
+                      <div class="start_date">
+                        <i class="fa-regular fa-calendar"></i>
+                        <!-- <p v-if="k.start_date">Mulai: {{ k.start_date }}</p>
+          <p v-if="!k.start_date">Mulai: <i>Tidak Valid</i></p> -->
+                        <p>Mulai: 20-08-2025</p>
+                      </div>
+                      <div class="deadline">
+                        <i class="fa-regular fa-calendar"></i>
+                        <!-- <p v-if="k.due_date">Target: {{ k.due_date }}</p>
+          <p v-if="!k.due_date">Target: <i>Tidak Valid</i></p> -->
+                        <p>Target: 20-08-2025</p>
+                      </div>
+                      <div class="done_date">
+                        <i class="fa-regular fa-calendar"></i>
+                        <!-- <p>Selesai: {{ k.date_done }}</p> -->
+                        <p>Selesai: 20-08-2025</p>
+                      </div>
+                      <div class="created_by">
+                        <i class="fa-regular fa-user"></i>
+                        <!-- <p>Dibuat oleh: {{ k.creator_name }}</p> -->
+                        <p>Dibuat oleh: Karyawan</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- <div
+                  class="background_bug"
+                  v-if="detailBug"
+                  @click.self="detailBug = null"
+                >
+                  <div class="bug_detail">
+                    <p>Detail Bug Karyawan</p>
+                    <p>{{ detailBug.name }}</p>
+                  </div>
+                </div> -->
+
                 <div
                   class="progres_task"
                   :class="statusTaskClass(k.status_name)"
@@ -698,6 +930,49 @@
     </div>
   </div>
 </template>
+
+<!-- Style detail bug -->
+<style scoped>
+.bug_detail {
+  border: 1px solid var(--border_color);
+  padding: 15px;
+  border-radius: 10px;
+  /* margin: 10px 0 20px 0; */
+  background-color: #fff;
+  width: 90vw;
+  overflow-y: auto;
+}
+
+.background_bug {
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 100px;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 1005;
+  pointer-events: all;
+  animation: fadeIn 0.18s ease-out both;
+  width: 100vw;
+  height: 100%;
+}
+
+.header_bug {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  align-items: center;
+}
+
+.name_bug {
+  /* color: var(--font-color); */
+  color: rgb(16, 50, 130);
+  font-weight: 500;
+}
+</style>
 
 <!-- Style Filter Sortir -->
 <style scoped>
@@ -1089,6 +1364,10 @@
   padding-top: 4px;
   color: var(--font-color);
 } */
+
+.status_task .bug {
+  cursor: pointer;
+}
 
 .status_task .task_project,
 .bug {
@@ -2044,6 +2323,7 @@ export default {
       sortKetepatan: "",
       sortKetepatanDetail: "",
       taskBug: "",
+      detailBug: null,
     };
   },
   mounted() {
@@ -2251,6 +2531,10 @@ export default {
         task_cancelled: status === "cancelled",
       };
     },
+    BugDetail(bug) {
+      this.detailBug = bug;
+      console.log(bug);
+    },
   },
   computed: {
     filteredKaryawan() {
@@ -2406,6 +2690,11 @@ export default {
         );
       }
       return hasil;
+    },
+
+    detailBugKaryawan() {
+      // let hasil = this.detailBug.tasks;
+      return this.detailBug?.tasks || [];
     },
 
     // filteredBugDetail() {
