@@ -7,6 +7,10 @@ export default defineNuxtPlugin(() => {
     baseURL: config.public.apiBaseUrl,
   });
 
+  // const apiTes = axios.create({
+  //   baseURL: "http://192.168.0.102:8001",
+  // });
+
   api.interceptors.request.use((req) => {
     if (typeof window !== "undefined") {
       const token = localStorage.getItem("token");
@@ -20,6 +24,7 @@ export default defineNuxtPlugin(() => {
   return {
     provide: {
       api,
+      // apiTes,
     },
   };
 });

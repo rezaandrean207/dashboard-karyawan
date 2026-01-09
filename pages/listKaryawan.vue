@@ -1,8 +1,4 @@
 <template>
-  <!-- <div>
-    <NuxtRouteAnnouncer />
-    <NuxtWelcome />
-  </div> -->
   <div class="konten">
     <div class="navbar">
       <div class="menu">
@@ -29,6 +25,10 @@
           <NuxtLink to="/bebanKerja" class="performance">
             <i class="fa-regular fa-clock"></i>
             <p>Beban Kerja</p>
+          </NuxtLink>
+          <NuxtLink to="/jadwalLibur" class="hari_libur">
+            <i class="fa-regular fa-calendar"></i>
+            <p>Jadwal Libur</p>
           </NuxtLink>
           <!-- <div class="setting">
           <i class="fa-solid fa-gear"></i>
@@ -80,6 +80,10 @@
         <NuxtLink to="/bebanKerja" class="performance">
           <i class="fa-regular fa-clock"></i>
           <p>Beban Kerja</p>
+        </NuxtLink>
+        <NuxtLink to="/jadwalLibur" class="hari_libur">
+          <i class="fa-regular fa-calendar"></i>
+          <p>Jadwal Libur</p>
         </NuxtLink>
 
         <!-- <NuxtLink to="/laporanKinerja" class="report">

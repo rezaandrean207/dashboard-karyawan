@@ -145,7 +145,8 @@ body {
 
 .listKaryawan,
 .performance,
-.report {
+.report,
+.hari_libur {
   padding: 10px 10px 10px 15px;
   border-radius: 10px;
   display: flex;
@@ -154,7 +155,8 @@ body {
 
 .listKaryawan:hover,
 .performance:hover,
-.report:hover {
+.report:hover,
+.hari_libur:hover {
   background-color: rgb(16, 67, 185);
 }
 

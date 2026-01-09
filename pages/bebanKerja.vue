@@ -30,6 +30,10 @@
             <i class="fa-regular fa-clock"></i>
             <p>Beban Kerja</p>
           </NuxtLink>
+          <NuxtLink to="/jadwalLibur" class="hari_libur">
+            <i class="fa-regular fa-calendar"></i>
+            <p>Jadwal Libur</p>
+          </NuxtLink>
           <!-- <div class="setting">
           <i class="fa-solid fa-gear"></i>
           <a href="">Pengaturan</a>
@@ -82,6 +86,10 @@
         <NuxtLink to="/bebanKerja" class="performance">
           <i class="fa-regular fa-clock"></i>
           <p>Beban Kerja</p>
+        </NuxtLink>
+        <NuxtLink to="/jadwalLibur" class="hari_libur">
+          <i class="fa-regular fa-calendar"></i>
+          <p>Jadwal Libur</p>
         </NuxtLink>
       </div>
 
@@ -205,6 +213,30 @@
           <p class="font_color">0</p>
         </div>
       </div> -->
+
+      <div class="holiday">
+        <div class="header_holiday">
+          <p>📅 Hari Libur</p>
+          <!-- <p>{{ daftarHari }}</p> -->
+        </div>
+        <div class="list_hari">
+          <div
+            class="hari_tanggal"
+            v-for="(h, index) in daftarHari"
+            :key="index"
+            v-if="daftarHari && daftarHari.length"
+          >
+            <h4>{{ h.hari }}, {{ h.tanggal.split("-")[0] }} {{ h.bulan }}</h4>
+            <p>{{ h.keterangan }}</p>
+
+            <!-- <h4>01 Kamis</h4>
+            <p>Hari Raya Idul Fitri</p> -->
+          </div>
+          <div class="no_tanggal" v-if="!daftarHari?.length">
+            <h4>Belum ada Hari libur</h4>
+          </div>
+        </div>
+      </div>
 
       <div class="filter">
         <div class="title">
@@ -393,7 +425,7 @@
     </div>
 
     <!-- Details Task -->
-    <div class="isi" v-else-if="detailKaryawan">
+    <div class="isi" :class="{ hidden: detailBug }" v-else-if="detailKaryawan">
       <div class="header_task">
         <div class="back_button" @click="kembali">
           <i class="fa-solid fa-arrow-left"></i>
@@ -602,8 +634,72 @@
         >
           <i>Data tidak tersedia</i>
         </div>
+
+        <div
+          class="background_bug"
+          v-if="detailBug"
+          @click.self="detailBug = null"
+        >
+          <div class="container_bug">
+            <div class="header_containerBug">
+              <i class="fa-solid fa-xmark" @click="closeDetailBug"></i>
+            </div>
+            <div class="bug_detail">
+              <div class="header_bug">
+                <div class="name_bug">
+                  <p>{{ detailBug.name }}</p>
+                </div>
+                <div class="status_bug">
+                  <div class="project_bug">
+                    <p>{{ detailBug.project_name }}</p>
+                  </div>
+                  <div class="tags">
+                    <!-- {{ detailBug.project_name }} -->
+                    Tags
+                  </div>
+                </div>
+              </div>
+              <div class="description_bug">
+                <p>Deskripsi Task</p>
+              </div>
+              <div class="keterangan_waktu">
+                <!-- <div class="jam">
+                  <i class="fa-regular fa-clock"></i>
+                  <p>Waktu Pengerjaan: {{ k.time_estimate_hours }} Jam</p>
+                  <p>Waktu Pengerjaan: 8 Jam</p>
+                </div> -->
+                <div class="start_date">
+                  <i class="fa-regular fa-calendar"></i>
+                  <!-- <p v-if="k.start_date">Mulai: {{ k.start_date }}</p>
+          <p v-if="!k.start_date">Mulai: <i>Tidak Valid</i></p> -->
+                  <p>Mulai: 20-08-2025</p>
+                </div>
+                <div class="deadline">
+                  <i class="fa-regular fa-calendar"></i>
+                  <!-- <p v-if="k.due_date">Target: {{ k.due_date }}</p>
+          <p v-if="!k.due_date">Target: <i>Tidak Valid</i></p> -->
+                  <p>Target: 20-08-2025</p>
+                </div>
+                <div class="done_date">
+                  <i class="fa-regular fa-calendar"></i>
+                  <!-- <p>Selesai: {{ k.date_done }}</p> -->
+                  <p>Selesai: 20-08-2025</p>
+                </div>
+                <div class="created_by">
+                  <i class="fa-regular fa-user"></i>
+                  <!-- <p>Dibuat oleh: {{ k.creator_name }}</p> -->
+                  <p>Bug Terbuat Oleh oleh: Karyawan</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div>
-          <div class="container_task" v-for="k in filteredKaryawanDetail">
+          <div
+            class="container_task"
+            v-for="k in filteredKaryawanDetail"
+            @click="handleCardClick(k)"
+          >
             <div class="header_container">
               <div class="name_task">
                 <p>{{ k.name }}</p>
@@ -612,7 +708,20 @@
                 <div class="bug" v-if="k.tags">
                   <p>{{ k.tags[0] }}</p>
                 </div>
-                
+                <!-- <div class="bug">
+                  <p>Bug</p>
+                </div> -->
+
+                <!-- <div
+                  class="background_bug"
+                  v-if="detailBug"
+                  @click.self="detailBug = null"
+                >
+                  <div class="bug_detail">
+                    <p>Detail Bug Karyawan</p>
+                    <p>{{ detailBug.name }}</p>
+                  </div>
+                </div> -->
 
                 <div
                   class="progres_task"
@@ -701,16 +810,54 @@
   </div>
 </template>
 
+<style scoped>
+.holiday {
+  background-color: #fff;
+  padding: 15px 20px;
+  margin-top: 20px;
+  width: 96%;
+  border: 1px solid var(--border_color);
+}
+
+.holiday .list_hari {
+  margin-top: 10px;
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.list_hari .hari_tanggal {
+  background-color: #efefef;
+  width: 19%;
+  padding: 10px;
+  border-radius: 10px;
+}
+</style>
+
 <!-- Style detail bug -->
 <style scoped>
+.hidden {
+  overflow: hidden;
+}
+
+.container_bug {
+  background-color: #fff;
+  padding: 10px 20px 15px 20px;
+  border-radius: 10px;
+  width: 80%;
+}
+
+.header_containerBug {
+  text-align: right;
+  font-size: 14px;
+}
+
 .bug_detail {
   border: 1px solid var(--border_color);
   padding: 15px;
   border-radius: 10px;
-  /* margin: 10px 0 20px 0; */
+  margin: 15px 0;
   background-color: #fff;
-  width: 90vw;
-  overflow-y: auto;
 }
 
 .background_bug {
@@ -720,14 +867,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  /* flex-direction: column; */
   flex-wrap: wrap;
   gap: 100px;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.6);
   z-index: 1005;
   pointer-events: all;
   animation: fadeIn 0.18s ease-out both;
   width: 100vw;
-  height: 100%;
+  height: 101vh;
+  overflow-y: scroll;
 }
 
 .header_bug {
@@ -741,6 +890,31 @@
   /* color: var(--font-color); */
   color: rgb(16, 50, 130);
   font-weight: 500;
+}
+
+.description_bug {
+  margin: 10px 0;
+  font-weight: 300;
+}
+
+.status_bug {
+  display: flex;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.project_bug,
+.tags {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: #fff;
+  border: 1px solid var(--border_color);
+  border-radius: 7px;
+  padding: 2px 5px;
+  padding-top: 4px;
+  color: var(--font-color);
 }
 </style>
 
@@ -1102,6 +1276,12 @@
   margin: 10px 0 20px 0;
   background-color: #fff;
   width: 96%;
+}
+
+.container_task:hover {
+  /* border: 1px solid rgb(125, 206, 233); */
+  filter: drop-shadow(2px 2px 4px rgb(125, 206, 233));
+  background-color: #f3f3f3;
 }
 
 .header_container {
@@ -2094,11 +2274,13 @@ export default {
       sortKetepatanDetail: "",
       taskBug: "",
       detailBug: null,
+      daftarHari: [],
     };
   },
   mounted() {
     this.setDefaultTanggal();
     this.ambilTask();
+    // this.hariLibur();
   },
   methods: {
     onDateChange() {
@@ -2113,6 +2295,7 @@ export default {
       if (this.isLoading) return;
 
       this.ambilTask();
+      this.hariLibur();
     },
     logout() {
       const token = useCookie("token");
@@ -2149,7 +2332,9 @@ export default {
           )}&end_date=${this.formatTanggal(this.end)}`
         );
         this.daftarKaryawan = task.data.assignees || [];
-
+        this.daftarHari = task.data.jadwal_libur || [];
+        // this.daftarHari = task.data.jadwal_libur
+        this.isLoading = true;
         console.log("Berhasil ambil task:", task);
       } catch (error) {
         console.error("Gagal ambil task:", error);
@@ -2197,6 +2382,22 @@ export default {
         this.loading = false;
       }
     },
+    // async hariLibur() {
+    //   console.log("Hari Libur sedang di proses");
+
+    //   try {
+    //     const holiday = await this.$api.get(
+    //       `/api/v1/workload/tasks-by-range?start_date=${this.formatTanggal(
+    //         this.start
+    //       )}&end_date=${this.formatTanggal(this.end)}`
+    //     );
+    //     this.daftarHari = holiday.data.jadwal_libur || [];
+    //     console.log("Berhasil");
+    //   } catch (error) {
+    //     console.error("Gagal ambil task:", error);
+    //     this.daftarHari = [];
+    //   }
+    // },
     menu() {
       this.sidebar = true;
     },
@@ -2301,9 +2502,17 @@ export default {
         task_cancelled: status === "cancelled",
       };
     },
+    handleCardClick(k) {
+      if (!k.tags) return;
+
+      this.BugDetail(k);
+    },
     BugDetail(bug) {
       this.detailBug = bug;
       console.log(bug);
+    },
+    closeDetailBug() {
+      this.detailBug = null;
     },
   },
   computed: {
@@ -2461,11 +2670,18 @@ export default {
       }
       return hasil;
     },
+    listHariTanggal() {
+      // let hasil = this.daftarHari;
+      // let hari = hasil.hari_libur;
 
-    detailBugKaryawan() {
-      // let hasil = this.detailBug.tasks;
-      return this.detailBug?.tasks || [];
+      // return hari;
+      return this.daftarHari.flatMap((bulan) => bulan.hari_libur);
     },
+
+    // detailBugKaryawan() {
+    //   // let hasil = this.detailBug.tasks;
+    //   return this.detailBug?.tasks || [];
+    // },
 
     // filteredBugDetail() {
     //   let hasilBug = this.detailKaryawanBug.tasks;
@@ -2476,6 +2692,7 @@ export default {
     //   return hasilBug;
     // },
   },
+
   watch: {
     start: "onDateChange",
     end: "onDateChange",

@@ -1,5 +1,5 @@
 <template>
-  <!-- <div class="container_progres">
+  <div class="container_progres">
     <div class="container_selesai">
       <span>Task Selesai</span>
       <span>2 Task</span>
@@ -14,82 +14,227 @@
       <span>Akan Datang</span>
       <span>5 Task</span>
       <p>48 Jam</p>
-    </div> -->
-
-  <!-- <div class="loading">
-    <div class="loading_tanggal">
-      <i class="fa-solid fa-spinner"></i>
-      <i class="fa-solid fa-circle-notch"></i>
-      <i class="fa-solid fa-arrows-spin"></i>
-      <i class="fa-solid fa-circle-notch fa-spin"></i>
-      <p>Tunggu Sebentar</p>
     </div>
-  </div> -->
-
-  <select name="" id="" class="filter_sortir">
-    <option value="">Semua</option>
-    <option value="highest">Tertinggi</option>
-    <option value="lowest">Terendah</option>
-  </select>
+  </div>
+  <div class="background_bug">
+    <div class="container_bug">
+      <div class="header_containerBug">
+        <i class="fa-solid fa-xmark"></i>
+      </div>
+      <div class="bug_detail">
+        <div class="header_bug">
+          <div class="name_bug">
+            <p>INFRA - Refused monitoring dan restart otomatis</p>
+          </div>
+          <div class="status_bug">
+            <div class="bug_priority"></div>
+          </div>
+        </div>
+        <div class="description">
+          <p>restart service kiklelang restart elasticsearch</p>
+        </div>
+        <div class="keterangan_waktu">
+          <div class="jam">
+            <i class="fa-regular fa-clock"></i>
+            <!-- <p>Waktu Pengerjaan: {{ k.time_estimate_hours }} Jam</p> -->
+            <p>Waktu Pengerjaan: 8 Jam</p>
+          </div>
+          <div class="start_date">
+            <i class="fa-regular fa-calendar"></i>
+            <!-- <p v-if="k.start_date">Mulai: {{ k.start_date }}</p>
+          <p v-if="!k.start_date">Mulai: <i>Tidak Valid</i></p> -->
+            <p>Mulai: 20-08-2025</p>
+          </div>
+          <div class="deadline">
+            <i class="fa-regular fa-calendar"></i>
+            <!-- <p v-if="k.due_date">Target: {{ k.due_date }}</p>
+          <p v-if="!k.due_date">Target: <i>Tidak Valid</i></p> -->
+            <p>Target: 20-08-2025</p>
+          </div>
+          <div class="done_date">
+            <i class="fa-regular fa-calendar"></i>
+            <!-- <p>Selesai: {{ k.date_done }}</p> -->
+            <p>Selesai: 20-08-2025</p>
+          </div>
+          <div class="created_by">
+            <i class="fa-regular fa-user"></i>
+            <!-- <p>Dibuat oleh: {{ k.creator_name }}</p> -->
+            <p>Dibuat oleh: Karyawan</p>
+          </div>
+        </div>
+      </div>
+      <div class="bug_detail">
+        <div class="header_bug">
+          <div class="name_bug">
+            <p>INFRA - Refused monitoring dan restart otomatis</p>
+          </div>
+          <div class="status_bug">
+            <div class="bug_priority"></div>
+          </div>
+        </div>
+        <div class="description">
+          <p>restart service kiklelang restart elasticsearch</p>
+        </div>
+        <div class="keterangan_waktu">
+          <div class="jam">
+            <i class="fa-regular fa-clock"></i>
+            <!-- <p>Waktu Pengerjaan: {{ k.time_estimate_hours }} Jam</p> -->
+            <p>Waktu Pengerjaan: 8 Jam</p>
+          </div>
+          <div class="start_date">
+            <i class="fa-regular fa-calendar"></i>
+            <!-- <p v-if="k.start_date">Mulai: {{ k.start_date }}</p>
+          <p v-if="!k.start_date">Mulai: <i>Tidak Valid</i></p> -->
+            <p>Mulai: 20-08-2025</p>
+          </div>
+          <div class="deadline">
+            <i class="fa-regular fa-calendar"></i>
+            <!-- <p v-if="k.due_date">Target: {{ k.due_date }}</p>
+          <p v-if="!k.due_date">Target: <i>Tidak Valid</i></p> -->
+            <p>Target: 20-08-2025</p>
+          </div>
+          <div class="done_date">
+            <i class="fa-regular fa-calendar"></i>
+            <!-- <p>Selesai: {{ k.date_done }}</p> -->
+            <p>Selesai: 20-08-2025</p>
+          </div>
+          <div class="created_by">
+            <i class="fa-regular fa-user"></i>
+            <!-- <p>Dibuat oleh: {{ k.creator_name }}</p> -->
+            <p>Dibuat oleh: Karyawan</p>
+          </div>
+        </div>
+      </div>
+      <div class="bug_detail">
+        <div class="header_bug">
+          <div class="name_bug">
+            <p>INFRA - Refused monitoring dan restart otomatis</p>
+          </div>
+          <div class="status_bug">
+            <div class="bug_priority"></div>
+          </div>
+        </div>
+        <div class="description">
+          <p>restart service kiklelang restart elasticsearch</p>
+        </div>
+        <div class="keterangan_waktu">
+          <div class="jam">
+            <i class="fa-regular fa-clock"></i>
+            <!-- <p>Waktu Pengerjaan: {{ k.time_estimate_hours }} Jam</p> -->
+            <p>Waktu Pengerjaan: 8 Jam</p>
+          </div>
+          <div class="start_date">
+            <i class="fa-regular fa-calendar"></i>
+            <!-- <p v-if="k.start_date">Mulai: {{ k.start_date }}</p>
+          <p v-if="!k.start_date">Mulai: <i>Tidak Valid</i></p> -->
+            <p>Mulai: 20-08-2025</p>
+          </div>
+          <div class="deadline">
+            <i class="fa-regular fa-calendar"></i>
+            <!-- <p v-if="k.due_date">Target: {{ k.due_date }}</p>
+          <p v-if="!k.due_date">Target: <i>Tidak Valid</i></p> -->
+            <p>Target: 20-08-2025</p>
+          </div>
+          <div class="done_date">
+            <i class="fa-regular fa-calendar"></i>
+            <!-- <p>Selesai: {{ k.date_done }}</p> -->
+            <p>Selesai: 20-08-2025</p>
+          </div>
+          <div class="created_by">
+            <i class="fa-regular fa-user"></i>
+            <!-- <p>Dibuat oleh: {{ k.creator_name }}</p> -->
+            <p>Dibuat oleh: Karyawan</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
-<!-- <script>
-export default {
-  data() {
-    return {
-      open: false,
-      search: "",
-      items: ["Satu", "Dua", "Tiga"]
-    };
-  },
-  computed: {
-    filtered() {
-      return this.items.filter(i =>
-        i.toLowerCase().includes(this.search.toLowerCase())
-      );
-    }
-  }
-};
-</script> -->
-
 <style scoped>
-.filter_sortir {
-  border: 1px solid #010101;
-  padding: 4px;
+.keterangan_waktu {
+  display: flex;
+  align-items: center;
+  gap: 20px;
   font-size: 14px;
-  border-radius: 6px;
-  width: 180px;
+  font-weight: 400;
+  margin: 10px 0;
+  flex-wrap: wrap;
+}
+
+.keterangan_waktu .jam,
+.start_date,
+.deadline,
+.done_date,
+.created_by {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  text-wrap: nowrap;
+  font-size: 13.5px;
+  font-weight: 400;
 }
 </style>
 
 <style scoped>
-.loading .loading_tanggal i {
-  /* border: 1px solid #010101; */
+.container_bug {
+  background-color: #fff;
+  padding: 10px 20px 15px 20px;
+  border-radius: 10px;
+  width: 80%;
+}
+
+.header_containerBug {
+  text-align: right;
+}
+
+.bug_detail {
+  /* position: fixed;
+  top: 0;
+  left: 0; */
+  border: 1px solid var(--border_color);
+  padding: 15px;
+  border-radius: 10px;
+  margin: 15px 0;
+  background-color: #fff;
+  /* width: 90vw; */
+  /* height: 20vh; */
+}
+
+.background_bug {
+  position: fixed;
+  left: 0;
+  top: 0;
   display: flex;
+  align-items: center;
   justify-content: center;
+  /* flex-direction: column; */
+  flex-wrap: wrap;
+  gap: 100px;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1005;
+  pointer-events: all;
+  animation: fadeIn 0.18s ease-out both;
+  width: 100vw;
+  height: 100%;
+}
+
+.header_bug {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
   align-items: center;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+.name_bug {
+  /* color: var(--font-color); */
+  color: rgb(16, 50, 130);
+  font-weight: 500;
 }
 
-.loading_tanggal .spin {
-  font-size: 28px;
-  color: rgb(16, 50, 130);
-  animation: spin 0.8s linear infinite;
-}
-
-.loading_tanggal i {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px; /* GENAP */
-  color: rgb(16, 50, 130);
-  animation: spin 1s linear infinite;
-  transform-origin: 50% 50%;
+.description {
+  margin: 10px 0;
+  font-weight: 300;
 }
 </style>
 
