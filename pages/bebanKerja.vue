@@ -2295,7 +2295,7 @@ export default {
       if (this.isLoading) return;
 
       this.ambilTask();
-      this.hariLibur();
+      // this.hariLibur();
     },
     logout() {
       const token = useCookie("token");
@@ -2334,7 +2334,7 @@ export default {
         this.daftarKaryawan = task.data.assignees || [];
         this.daftarHari = task.data.jadwal_libur || [];
         // this.daftarHari = task.data.jadwal_libur
-        this.isLoading = true;
+        // this.isLoading = true;
         console.log("Berhasil ambil task:", task);
       } catch (error) {
         console.error("Gagal ambil task:", error);
