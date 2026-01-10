@@ -1,5 +1,5 @@
 <template>
-  <div class="konten">
+  
     <div v-if="isLoading" class="loading">
       <div class="loading_tanggal">
         <i class="fa-solid fa-spinner"></i>
@@ -48,128 +48,6 @@
       </div>
     </div>
 
-    <div class="navbar">
-      <div class="menu">
-        <i class="fa-solid fa-bars" @click="menu"></i>
-      </div>
-      <p>Dashboard</p>
-    </div>
-
-    <div class="background" v-show="sidebar" @click="close">
-      <div
-        class="sidebar_responsive"
-        @click.stop
-        :class="{ slideOut: isClose }"
-      >
-        <div class="logo">
-          <img src="/img/logo dna.png" alt="" />
-          <div class="keterangan">
-            <h5>Digital Nayaka Abhinaya</h5>
-            <p>Kinerja Karyawan</p>
-          </div>
-        </div>
-
-        <div class="sidebar-text">
-          <NuxtLink to="/listKaryawan" class="listKaryawan">
-            <i class="fa-solid fa-users"></i>
-            <p>Daftar Karyawan</p>
-          </NuxtLink>
-          <NuxtLink to="/bebanKerja" class="performance">
-            <i class="fa-regular fa-clock"></i>
-            <p>Beban Kerja</p>
-          </NuxtLink>
-          <NuxtLink to="/jadwalLibur" class="hari_libur">
-            <i class="fa-regular fa-calendar"></i>
-            <p>Jadwal Libur</p>
-          </NuxtLink>
-          <!-- <div class="setting">
-          <i class="fa-solid fa-gear"></i>
-          <a href="">Pengaturan</a>
-        </div> -->
-        </div>
-
-        <div class="footer_sidebar">
-          <div class="user">
-            <p>Logged in sebagai</p>
-            <h4>Reza Andrean</h4>
-            <p>Karyawan</p>
-          </div>
-          <div class="sync">
-            <button
-              class="btn"
-              @click="syncData"
-              :disabled="loading"
-              :style="{
-                opacity: loading ? 0.6 : 1,
-                cursor: loading ? 'not-allowed' : 'pointer',
-              }"
-            >
-              <span v-if="loading" class="spinner"></span>
-              <!-- <i v-else class="fa-solid fa-rotate-right"></i> -->
-              <i v-else class="fa-solid fa-rotate-right"></i>
-
-              {{ loading ? "Menyinkronkan..." : "Sync" }}
-              <!-- <i v-else class="fa-solid fa-circle-check"></i>     -->
-            </button>
-          </div>
-          <button @click="logout" class="logout">Logout</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="sidebar">
-      <div class="logo">
-        <img src="/img/logo dna.png" alt="" />
-        <div class="keterangan">
-          <h5>Digital Nayaka Abhinaya</h5>
-          <p>Kinerja Karyawan</p>
-        </div>
-      </div>
-
-      <div class="sidebar-text">
-        <NuxtLink to="/listKaryawan" class="listKaryawan">
-          <i class="fa-solid fa-users"></i>
-          <p>Daftar Karyawan</p>
-        </NuxtLink>
-        <NuxtLink to="/bebanKerja" class="performance">
-          <i class="fa-regular fa-clock"></i>
-          <p>Beban Kerja</p>
-        </NuxtLink>
-        <NuxtLink to="/jadwalLibur" class="hari_libur">
-          <i class="fa-regular fa-calendar"></i>
-          <p>Jadwal Libur</p>
-        </NuxtLink>
-      </div>
-
-      <div class="footer_sidebar">
-        <div class="user">
-          <p>Logged in sebagai</p>
-          <h4>Reza Andrean</h4>
-          <p>Karyawan</p>
-        </div>
-        <div class="sync">
-          <button
-            class="btn"
-            @click="syncData"
-            :disabled="loading"
-            :style="{
-              opacity: loading ? 0.6 : 1,
-              cursor: loading ? 'not-allowed' : 'pointer',
-            }"
-          >
-            <span v-if="loading" class="spinner"></span>
-            <i v-else class="fa-solid fa-rotate-right"></i>
-            {{ loading ? "Menyinkronkan..." : "Sync" }}
-          </button>
-          <!-- <NuxtLink to="/historySync" class="btn">
-            <i class="fa-solid fa-clock-rotate-left"></i>
-            <p>History Sync</p>
-          </NuxtLink> -->
-        </div>
-        <button @click="logout" class="logout">Logout</button>
-      </div>
-    </div>
-
     <div class="isi" :class="{ hidden: createTanggal }">
       <h2>Jadwal Libur</h2>
 
@@ -209,7 +87,6 @@
         <p>pp</p>
       </div>
     </div>
-  </div>
 </template>
 
 <!-- Style Background tanggal -->
@@ -457,6 +334,9 @@
 </style>
 
 <script>
+  definePageMeta({
+    layout: "dashboard",
+  });
 export default {
   data() {
     return {

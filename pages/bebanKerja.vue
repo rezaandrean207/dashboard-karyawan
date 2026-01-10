@@ -1,193 +1,55 @@
 <template>
-  <div class="konten">
-    <div class="navbar">
-      <div class="menu">
-        <i class="fa-solid fa-bars" @click="menu"></i>
-      </div>
-      <p>Dashboard</p>
-    </div>
-
-    <div class="background" v-show="sidebar" @click="close">
-      <div
-        class="sidebar_responsive"
-        @click.stop
-        :class="{ slideOut: isClose }"
-      >
-        <div class="logo">
-          <img src="/img/logo dna.png" alt="" />
-          <div class="keterangan">
-            <h5>Digital Nayaka Abhinaya</h5>
-            <p>Kinerja Karyawan</p>
-          </div>
-        </div>
-
-        <div class="sidebar-text">
-          <NuxtLink to="/listKaryawan" class="listKaryawan">
-            <i class="fa-solid fa-users"></i>
-            <p>Daftar Karyawan</p>
-          </NuxtLink>
-          <NuxtLink to="/bebanKerja" class="performance">
-            <i class="fa-regular fa-clock"></i>
-            <p>Beban Kerja</p>
-          </NuxtLink>
-          <NuxtLink to="/jadwalLibur" class="hari_libur">
-            <i class="fa-regular fa-calendar"></i>
-            <p>Jadwal Libur</p>
-          </NuxtLink>
-          <!-- <div class="setting">
-          <i class="fa-solid fa-gear"></i>
-          <a href="">Pengaturan</a>
-        </div> -->
-        </div>
-
-        <div class="footer_sidebar">
-          <div class="user">
-            <p>Logged in sebagai</p>
-            <h4>Reza Andrean</h4>
-            <p>Karyawan</p>
-          </div>
-          <div class="sync">
-            <button
-              class="btn"
-              @click="syncData"
-              :disabled="loading"
-              :style="{
-                opacity: loading ? 0.6 : 1,
-                cursor: loading ? 'not-allowed' : 'pointer',
-              }"
-            >
-              <span v-if="loading" class="spinner"></span>
-              <!-- <i v-else class="fa-solid fa-rotate-right"></i> -->
-              <i v-else class="fa-solid fa-rotate-right"></i>
-
-              {{ loading ? "Menyinkronkan..." : "Sync" }}
-              <!-- <i v-else class="fa-solid fa-circle-check"></i>     -->
-            </button>
-          </div>
-          <button @click="logout" class="logout">Logout</button>
-        </div>
+  <div class="isi" v-if="detailKaryawan === null">
+    <div v-if="isLoading" class="loading">
+      <div class="loading_tanggal">
+        <i class="fa-solid fa-spinner"></i>
+        <p>Tunggu Sebentar</p>
       </div>
     </div>
 
-    <div class="sidebar">
-      <div class="logo">
-        <img src="/img/logo dna.png" alt="" />
-        <div class="keterangan">
-          <h5>Digital Nayaka Abhinaya</h5>
-          <p>Kinerja Karyawan</p>
-        </div>
+    <h2>Manajemen Beban Kerja</h2>
+    <p>
+      Pantau dan kelola beban kerja karyawan berdasarkan total jam dan jumlah
+      task
+    </p>
+    <!-- Filter -->
+    <div class="filter">
+      <div class="title">
+        <i class="fa-solid fa-filter"></i>
+        <p>Filter & Pencarian</p>
       </div>
-
-      <div class="sidebar-text">
-        <NuxtLink to="/listKaryawan" class="listKaryawan">
-          <i class="fa-solid fa-users"></i>
-          <p>Daftar Karyawan</p>
-        </NuxtLink>
-        <NuxtLink to="/bebanKerja" class="performance">
-          <i class="fa-regular fa-clock"></i>
-          <p>Beban Kerja</p>
-        </NuxtLink>
-        <NuxtLink to="/jadwalLibur" class="hari_libur">
-          <i class="fa-regular fa-calendar"></i>
-          <p>Jadwal Libur</p>
-        </NuxtLink>
-      </div>
-
-      <div class="footer_sidebar">
-        <div class="user">
-          <p>Logged in sebagai</p>
-          <h4>Reza Andrean</h4>
-          <p>Karyawan</p>
+      <form action="">
+        <div class="cari">
+          <label for="search">Cari Karyawan</label>
+          <input
+            type="search"
+            name="search"
+            placeholder="Cari nama karyawan"
+            v-model="searchInput"
+          />
         </div>
-        <div class="sync">
-          <button
-            class="btn"
-            @click="syncData"
-            :disabled="loading"
-            :style="{
-              opacity: loading ? 0.6 : 1,
-              cursor: loading ? 'not-allowed' : 'pointer',
-            }"
-          >
-            <span v-if="loading" class="spinner"></span>
-            <i v-else class="fa-solid fa-rotate-right"></i>
-            {{ loading ? "Menyinkronkan..." : "Sync" }}
-          </button>
-          <!-- <NuxtLink to="/historySync" class="btn">
-            <i class="fa-solid fa-clock-rotate-left"></i>
-            <p>History Sync</p>
-          </NuxtLink> -->
+        <div class="posisi">
+          <label for="posisi">Filter Posisi</label>
+          <select v-model="posisi">
+            <option value="" selected>Semua Posisi</option>
+            <option value="analis">Data Analys</option>
+            <option value="backend">Backend</option>
+            <option value="web">Web Developer</option>
+            <option value="mobile apps">Mobile Apps</option>
+            <option value="UI-UX">UI-UX</option>
+          </select>
         </div>
-        <button @click="logout" class="logout">Logout</button>
-      </div>
+        <div class="dates">
+          <label for="tanggal">Tanggal</label>
+          <div class="tanggal">
+            <input type="date" name="start" v-model="start" />
+            <span class="separator">➡️</span>
+            <input type="date" name="end" v-model="end" />
+          </div>
+        </div>
+      </form>
     </div>
-
-    <div class="isi" v-if="detailKaryawan === null">
-      <!-- Animasi sukses -->
-      <div v-if="sukses" class="success-animation">
-        <div class="sukses">
-          <div class="berhasil">
-            <div class="ceklis">
-              <i class="fa-solid fa-check"></i>
-            </div>
-            <p>Sinkronisasi Berhasil!</p>
-          </div>
-          <div class="silang" @click="closeSukses">
-            <i class="fa-solid fa-xmark"></i>
-          </div>
-        </div>
-      </div>
-
-      <div v-if="isLoading" class="loading">
-        <div class="loading_tanggal">
-          <i class="fa-solid fa-spinner"></i>
-          <p>Tunggu Sebentar</p>
-        </div>
-      </div>
-
-      <h2>Manajemen Beban Kerja</h2>
-      <p>
-        Pantau dan kelola beban kerja karyawan berdasarkan total jam dan jumlah
-        task
-      </p>
-      <!-- Filter -->
-      <div class="filter">
-        <div class="title">
-          <i class="fa-solid fa-filter"></i>
-          <p>Filter & Pencarian</p>
-        </div>
-        <form action="">
-          <div class="cari">
-            <label for="search">Cari Karyawan</label>
-            <input
-              type="search"
-              name="search"
-              placeholder="Cari nama karyawan"
-              v-model="searchInput"
-            />
-          </div>
-          <div class="posisi">
-            <label for="posisi">Filter Posisi</label>
-            <select v-model="posisi">
-              <option value="" selected>Semua Posisi</option>
-              <option value="analis">Data Analys</option>
-              <option value="backend">Backend</option>
-              <option value="web">Web Developer</option>
-              <option value="mobile apps">Mobile Apps</option>
-              <option value="UI-UX">UI-UX</option>
-            </select>
-          </div>
-          <div class="dates">
-            <label for="tanggal">Tanggal</label>
-            <div class="tanggal">
-              <input type="date" name="start" v-model="start" />
-              <span class="separator">➡️</span>
-              <input type="date" name="end" v-model="end" />
-            </div>
-          </div>
-        </form>
-      </div>
-      <!-- <div class="keterangan_kerja">
+    <!-- <div class="keterangan_kerja">
         <div class="total_karyawan">
           <p>Total Karyawan</p>
           <p class="font_color">1</p>
@@ -214,46 +76,46 @@
         </div>
       </div> -->
 
-      <div class="holiday">
-        <div class="header_holiday">
-          <p>📅 Hari Libur</p>
-          <!-- <p>{{ daftarHari }}</p> -->
-        </div>
-        <div class="list_hari">
-          <div
-            class="hari_tanggal"
-            v-for="(h, index) in daftarHari"
-            :key="index"
-            v-if="daftarHari && daftarHari.length"
-          >
-            <h4>{{ h.hari }}, {{ h.tanggal.split("-")[0] }} {{ h.bulan }}</h4>
-            <p>{{ h.keterangan }}</p>
+    <div class="holiday">
+      <div class="header_holiday">
+        <p>📅 Hari Libur</p>
+        <!-- <p>{{ daftarHari }}</p> -->
+      </div>
+      <div class="list_hari">
+        <div
+          class="hari_tanggal"
+          v-for="(h, index) in daftarHari"
+          :key="index"
+          v-if="daftarHari && daftarHari.length"
+        >
+          <h4>{{ h.hari }}, {{ h.tanggal.split("-")[0] }} {{ h.bulan }}</h4>
+          <p>{{ h.keterangan }}</p>
 
-            <!-- <h4>01 Kamis</h4>
+          <!-- <h4>01 Kamis</h4>
             <p>Hari Raya Idul Fitri</p> -->
-          </div>
-          <div class="no_tanggal" v-if="!daftarHari?.length">
-            <h4>Belum ada Hari libur</h4>
-          </div>
+        </div>
+        <div class="no_tanggal" v-if="!daftarHari?.length">
+          <h4>Belum ada Hari libur</h4>
         </div>
       </div>
+    </div>
 
-      <div class="filter">
-        <div class="title">
-          <i class="fa-solid fa-filter"></i>
-          <p>Sortir Kinerja Karyawan</p>
+    <div class="filter">
+      <div class="title">
+        <i class="fa-solid fa-filter"></i>
+        <p>Sortir Kinerja Karyawan</p>
+      </div>
+      <div class="filter_sortir">
+        <div class="style_sortir">
+          <label for="">Performa</label>
+          <select name="" id="" class="sortir_performa" v-model="sortPerform">
+            <option value="">Semua Performa</option>
+            <option value="highest">Tertinggi</option>
+            <option value="lowest">Terendah</option>
+          </select>
         </div>
-        <div class="filter_sortir">
-          <div class="style_sortir">
-            <label for="">Performa</label>
-            <select name="" id="" class="sortir_performa" v-model="sortPerform">
-              <option value="">Semua Performa</option>
-              <option value="highest">Tertinggi</option>
-              <option value="lowest">Terendah</option>
-            </select>
-          </div>
 
-          <!-- <div class="style_sortir">
+        <!-- <div class="style_sortir">
             <label for="">Performa Bug</label>
             <select
               name=""
@@ -267,452 +129,448 @@
             </select>
           </div> -->
 
-          <div class="style_sortir">
-            <label for="">Ketepatan Tugas</label>
-            <select
-              name=""
-              id=""
-              class="sortir_ketepatan"
-              v-model="sortKetepatan"
-            >
-              <option value="">Semua Ketepatan</option>
-              <option value="highest">Tertinggi</option>
-              <option value="lowest">Terendah</option>
-            </select>
-          </div>
+        <div class="style_sortir">
+          <label for="">Ketepatan Tugas</label>
+          <select
+            name=""
+            id=""
+            class="sortir_ketepatan"
+            v-model="sortKetepatan"
+          >
+            <option value="">Semua Ketepatan</option>
+            <option value="highest">Tertinggi</option>
+            <option value="lowest">Terendah</option>
+          </select>
+        </div>
 
-          <div class="style_sortir">
-            <label for="">Beban Kerja</label>
-            <select name="" id="" class="sortir_beban" v-model="sortBeban">
-              <option value="">Semua Beban Kerja</option>
-              <option value="highest">Tertinggi</option>
-              <option value="lowest">Terendah</option>
-            </select>
+        <div class="style_sortir">
+          <label for="">Beban Kerja</label>
+          <select name="" id="" class="sortir_beban" v-model="sortBeban">
+            <option value="">Semua Beban Kerja</option>
+            <option value="highest">Tertinggi</option>
+            <option value="lowest">Terendah</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="not_found" v-show="notFound">
+      <p><i>Not Found</i></p>
+    </div>
+
+    <div
+      class="kinerja_karyawan"
+      v-for="k in filteredKaryawan"
+      :key="k.clickup_id"
+    >
+      <div class="profil">
+        <div class="profil_karyawan">
+          <img src="/img/profil.png" alt="" />
+          <div class="about">
+            <h4>{{ k.username }}</h4>
+            <p>{{ k.role }}</p>
+          </div>
+        </div>
+
+        <div class="status_karyawan">
+          <div :class="availableClass(k.availability_status)">
+            <i class="fa-solid fa-circle"></i>
+            <p>{{ k.availability_status }}</p>
+          </div>
+          <div :class="workloadClass(k.workload_status)">
+            <i
+              class="fa-solid fa-arrow-trend-up"
+              v-if="k.workload_status === 'Overload'"
+            ></i>
+            <i
+              class="fa-solid fa-minus"
+              v-if="k.workload_status === 'Normal'"
+            ></i>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="16px"
+              viewBox="0 -960 960 960"
+              width="16px"
+              v-if="k.workload_status === 'Underload'"
+            >
+              <path
+                d="M640-240v-80h104L536-526 376-366 80-664l56-56 240 240 160-160 264 264v-104h80v240H640Z"
+              />
+            </svg>
+            <p>{{ k.workload_status }}</p>
+          </div>
+        </div>
+        <div
+          class="performa_karyawan"
+          :class="performaClass(k.performance_bugs.score)"
+        >
+          <i class="fa-solid fa-chart-line"></i>
+          <div class="text">
+            <p>Performa</p>
+            <span
+              ><strong>{{ k.performance_bugs.score }}%</strong></span
+            >
           </div>
         </div>
       </div>
 
-      <div class="not_found" v-show="notFound">
-        <p><i>Not Found</i></p>
-      </div>
-
-      <div
-        class="kinerja_karyawan"
-        v-for="k in filteredKaryawan"
-        :key="k.clickup_id"
-      >
-        <div class="profil">
-          <div class="profil_karyawan">
-            <img src="/img/profil.png" alt="" />
-            <div class="about">
-              <h4>{{ k.username }}</h4>
-              <p>{{ k.role }}</p>
+      <!-- <details class="details">
+          <summary class="beban_karyawan">Beban Kerja Karyawan</summary> -->
+      <div class="keterangan_karyawan">
+        <div class="container_flex">
+          <div
+            class="ketepatan_pengerjaan"
+            :class="ketepatanClass(k.avg_time_efficiency.avg_percentage)"
+          >
+            <div class="teks">
+              <p>Tepat Waktu Kerja</p>
+              <h4>{{ k.avg_time_efficiency.avg_percentage }}%</h4>
+            </div>
+            <div class="ikon">
+              <i class="fa-solid fa-list-check"></i>
             </div>
           </div>
 
-          <div class="status_karyawan">
-            <div :class="availableClass(k.availability_status)">
-              <i class="fa-solid fa-circle"></i>
-              <p>{{ k.availability_status }}</p>
+          <div class="total_seharusnya">
+            <div class="teks">
+              <p>Total Beban Kerja (Seharusnya)</p>
+              <h4>{{ k.expected_hours }} Jam</h4>
             </div>
-            <div :class="workloadClass(k.workload_status)">
-              <i
-                class="fa-solid fa-arrow-trend-up"
-                v-if="k.workload_status === 'Overload'"
-              ></i>
-              <i
-                class="fa-solid fa-minus"
-                v-if="k.workload_status === 'Normal'"
-              ></i>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="16px"
-                viewBox="0 -960 960 960"
-                width="16px"
-                v-if="k.workload_status === 'Underload'"
-              >
-                <path
-                  d="M640-240v-80h104L536-526 376-366 80-664l56-56 240 240 160-160 264 264v-104h80v240H640Z"
-                />
-              </svg>
-              <p>{{ k.workload_status }}</p>
+            <div class="ikon">
+              <i class="fa-regular fa-clock"></i>
             </div>
           </div>
           <div
-            class="performa_karyawan"
-            :class="performaClass(k.performance_bugs.score)"
+            class="total_beban"
+            :class="totalBebanClass(k.total_spent_hours.percentage)"
           >
-            <i class="fa-solid fa-chart-line"></i>
-            <div class="text">
-              <p>Performa</p>
-              <span
-                ><strong>{{ k.performance_bugs.score }}%</strong></span
-              >
+            <div class="teks">
+              <p>Total Beban Kerja (Aktif)</p>
+              <h4>
+                {{ k.total_spent_hours.percentage }}% ({{
+                  k.total_spent_hours.hours
+                }}
+                Jam)
+              </h4>
+            </div>
+            <div class="ikon">
+              <i class="fa-regular fa-clock"></i>
+            </div>
+          </div>
+          <div
+            class="performa_bug"
+            :class="performaClass(k.performance_bugs.bugs)"
+          >
+            <div class="teks">
+              <p>Performa Bug</p>
+              <h4>{{ k.performance_bugs.bugs }}%</h4>
+            </div>
+            <div class="ikon">
+              <i class="fa-solid fa-bug"></i>
             </div>
           </div>
         </div>
+      </div>
+      <!-- </details> -->
 
-        <!-- <details class="details">
-          <summary class="beban_karyawan">Beban Kerja Karyawan</summary> -->
-        <div class="keterangan_karyawan">
-          <div class="container_flex">
-            <div
-              class="ketepatan_pengerjaan"
-              :class="ketepatanClass(k.avg_time_efficiency.avg_percentage)"
-            >
-              <div class="teks">
-                <p>Tepat Waktu Kerja</p>
-                <h4>{{ k.avg_time_efficiency.avg_percentage }}%</h4>
-              </div>
-              <div class="ikon">
-                <i class="fa-solid fa-list-check"></i>
-              </div>
-            </div>
-
-            <div class="total_seharusnya">
-              <div class="teks">
-                <p>Total Beban Kerja (Seharusnya)</p>
-                <h4>{{ k.expected_hours }} Jam</h4>
-              </div>
-              <div class="ikon">
-                <i class="fa-regular fa-clock"></i>
-              </div>
-            </div>
-            <div
-              class="total_beban"
-              :class="totalBebanClass(k.total_spent_hours.percentage)"
-            >
-              <div class="teks">
-                <p>Total Beban Kerja (Aktif)</p>
-                <h4>
-                  {{ k.total_spent_hours.percentage }}% ({{
-                    k.total_spent_hours.hours
-                  }}
-                  Jam)
-                </h4>
-              </div>
-              <div class="ikon">
-                <i class="fa-regular fa-clock"></i>
-              </div>
-            </div>
-            <div
-              class="performa_bug"
-              :class="performaClass(k.performance_bugs.bugs)"
-            >
-              <div class="teks">
-                <p>Performa Bug</p>
-                <h4>{{ k.performance_bugs.bugs }}%</h4>
-              </div>
-              <div class="ikon">
-                <i class="fa-solid fa-bug"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- </details> -->
-
-        <div class="detail_task" @click="detail(k)">
-          <i class="fa-solid fa-list-check"></i>
-          <p>Informasi Detail</p>
-          <i class="fa-solid fa-arrow-up-from-bracket"></i>
-        </div>
-        <!-- <div class="detail_bug" @click="detailBug(k)">
+      <div class="detail_task" @click="detail(k)">
+        <i class="fa-solid fa-list-check"></i>
+        <p>Informasi Detail</p>
+        <i class="fa-solid fa-arrow-up-from-bracket"></i>
+      </div>
+      <!-- <div class="detail_bug" @click="detailBug(k)">
           <i class="fa-solid fa-list-check"></i>
           <p>Bug Detail (Bug)</p>
           <i class="fa-solid fa-arrow-up-from-bracket"></i>
         </div> -->
+    </div>
+  </div>
+
+  <!-- Details Task -->
+  <div class="isi" :class="{ hidden: detailBug }" v-else-if="detailKaryawan">
+    <div class="header_task">
+      <div class="back_button" @click="kembali">
+        <i class="fa-solid fa-arrow-left"></i>
+        <p>Kembali</p>
       </div>
     </div>
 
-    <!-- Details Task -->
-    <div class="isi" :class="{ hidden: detailBug }" v-else-if="detailKaryawan">
-      <div class="header_task">
-        <div class="back_button" @click="kembali">
-          <i class="fa-solid fa-arrow-left"></i>
-          <p>Kembali</p>
-        </div>
-      </div>
-
-      <div class="card_karyawan">
-        <div class="card_profile">
-          <div class="card_left">
-            <img src="/img/profil.png" alt="" />
-            <div class="card_name">
-              <h3>{{ detailKaryawan.username }}</h3>
-              <p>{{ detailKaryawan.role }}</p>
-              <div class="periode">
-                <p v-if="start === '' && end === ''">Seluruh Periode</p>
-                <p v-else>Periode: {{ start }} - {{ end }}</p>
-              </div>
+    <div class="card_karyawan">
+      <div class="card_profile">
+        <div class="card_left">
+          <img src="/img/profil.png" alt="" />
+          <div class="card_name">
+            <h3>{{ detailKaryawan.username }}</h3>
+            <p>{{ detailKaryawan.role }}</p>
+            <div class="periode">
+              <p v-if="start === '' && end === ''">Seluruh Periode</p>
+              <p v-else>Periode: {{ start }} - {{ end }}</p>
             </div>
           </div>
+        </div>
 
-          <div class="status_karyawan">
-            <div :class="availableClass(detailKaryawan.availability_status)">
-              <i class="fa-solid fa-circle"></i>
-              <p>{{ detailKaryawan.availability_status }}</p>
+        <div class="status_karyawan">
+          <div :class="availableClass(detailKaryawan.availability_status)">
+            <i class="fa-solid fa-circle"></i>
+            <p>{{ detailKaryawan.availability_status }}</p>
+          </div>
+          <div :class="workloadClass(detailKaryawan.workload_status)">
+            <i
+              class="fa-solid fa-arrow-trend-up"
+              v-if="detailKaryawan.workload_status === 'Overload'"
+            ></i>
+            <i
+              class="fa-solid fa-equals"
+              v-if="detailKaryawan.workload_status === 'Normal'"
+            ></i>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="16px"
+              viewBox="0 -960 960 960"
+              width="16px"
+              v-if="detailKaryawan.workload_status === 'Underload'"
+            >
+              <path
+                d="M640-240v-80h104L536-526 376-366 80-664l56-56 240 240 160-160 264 264v-104h80v240H640Z"
+              />
+            </svg>
+            <p>{{ detailKaryawan.workload_status }}</p>
+          </div>
+        </div>
+        <div
+          class="performa_karyawan"
+          :class="performaClass(detailKaryawan.performance_bugs.score)"
+        >
+          <i class="fa-solid fa-chart-line"></i>
+          <div class="text">
+            <p>Performa</p>
+            <span
+              ><strong
+                >{{ detailKaryawan.performance_bugs.score }}%</strong
+              ></span
+            >
+          </div>
+        </div>
+      </div>
+      <div class="keterangan_karyawan">
+        <div class="container_flex">
+          <div
+            class="ketepatan_pengerjaan"
+            v-if="detailKaryawan.avg_time_efficiency.avg_percentage"
+            :class="
+              ketepatanClass(detailKaryawan.avg_time_efficiency.avg_percentage)
+            "
+          >
+            <div class="teks">
+              <p>Tepat Waktu Kerja</p>
+              <h4>{{ detailKaryawan.avg_time_efficiency.avg_percentage }}%</h4>
             </div>
-            <div :class="workloadClass(detailKaryawan.workload_status)">
-              <i
-                class="fa-solid fa-arrow-trend-up"
-                v-if="detailKaryawan.workload_status === 'Overload'"
-              ></i>
-              <i
-                class="fa-solid fa-equals"
-                v-if="detailKaryawan.workload_status === 'Normal'"
-              ></i>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="16px"
-                viewBox="0 -960 960 960"
-                width="16px"
-                v-if="detailKaryawan.workload_status === 'Underload'"
-              >
-                <path
-                  d="M640-240v-80h104L536-526 376-366 80-664l56-56 240 240 160-160 264 264v-104h80v240H640Z"
-                />
-              </svg>
-              <p>{{ detailKaryawan.workload_status }}</p>
+            <div class="ikon">
+              <i class="fa-solid fa-list-check"></i>
+            </div>
+          </div>
+          <div class="total_seharusnya">
+            <div class="teks">
+              <p>Total Beban Kerja (Seharusnya)</p>
+              <h4>{{ detailKaryawan.expected_hours }} Jam</h4>
+            </div>
+            <div class="ikon">
+              <i class="fa-regular fa-clock"></i>
             </div>
           </div>
           <div
-            class="performa_karyawan"
-            :class="performaClass(detailKaryawan.performance_bugs.score)"
+            class="total_beban"
+            :class="
+              totalBebanClass(detailKaryawan.total_spent_hours.percentage)
+            "
           >
-            <i class="fa-solid fa-chart-line"></i>
-            <div class="text">
-              <p>Performa</p>
-              <span
-                ><strong
-                  >{{ detailKaryawan.performance_bugs.score }}%</strong
-                ></span
-              >
+            <div class="teks">
+              <p>Total Beban Kerja (Aktif)</p>
+              <h4>
+                {{ detailKaryawan.total_spent_hours.percentage }}% ({{
+                  detailKaryawan.total_spent_hours.hours
+                }}
+                Jam)
+              </h4>
+            </div>
+            <div class="ikon">
+              <i class="fa-regular fa-clock"></i>
             </div>
           </div>
-        </div>
-        <div class="keterangan_karyawan">
-          <div class="container_flex">
-            <div
-              class="ketepatan_pengerjaan"
-              v-if="detailKaryawan.avg_time_efficiency.avg_percentage"
-              :class="
-                ketepatanClass(
-                  detailKaryawan.avg_time_efficiency.avg_percentage
-                )
-              "
-            >
-              <div class="teks">
-                <p>Tepat Waktu Kerja</p>
-                <h4>
-                  {{ detailKaryawan.avg_time_efficiency.avg_percentage }}%
-                </h4>
-              </div>
-              <div class="ikon">
-                <i class="fa-solid fa-list-check"></i>
-              </div>
+          <div
+            class="performa_bug"
+            :class="performaClass(detailKaryawan.performance_bugs.bugs)"
+          >
+            <div class="teks">
+              <p>Performa Bug</p>
+              <h4>{{ detailKaryawan.performance_bugs.bugs }}%</h4>
             </div>
-            <div class="total_seharusnya">
-              <div class="teks">
-                <p>Total Beban Kerja (Seharusnya)</p>
-                <h4>{{ detailKaryawan.expected_hours }} Jam</h4>
-              </div>
-              <div class="ikon">
-                <i class="fa-regular fa-clock"></i>
-              </div>
-            </div>
-            <div
-              class="total_beban"
-              :class="
-                totalBebanClass(detailKaryawan.total_spent_hours.percentage)
-              "
-            >
-              <div class="teks">
-                <p>Total Beban Kerja (Aktif)</p>
-                <h4>
-                  {{ detailKaryawan.total_spent_hours.percentage }}% ({{
-                    detailKaryawan.total_spent_hours.hours
-                  }}
-                  Jam)
-                </h4>
-              </div>
-              <div class="ikon">
-                <i class="fa-regular fa-clock"></i>
-              </div>
-            </div>
-            <div
-              class="performa_bug"
-              :class="performaClass(detailKaryawan.performance_bugs.bugs)"
-            >
-              <div class="teks">
-                <p>Performa Bug</p>
-                <h4>{{ detailKaryawan.performance_bugs.bugs }}%</h4>
-              </div>
-              <div class="ikon">
-                <i class="fa-solid fa-bug"></i>
-              </div>
+            <div class="ikon">
+              <i class="fa-solid fa-bug"></i>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="container_progres">
-        <div class="container_selesai">
-          <p>Selesai</p>
-          <p>
-            <strong
-              >{{ detailKaryawan.task_status_summary.completed }} Task</strong
-            >
-          </p>
+    <div class="container_progres">
+      <div class="container_selesai">
+        <p>Selesai</p>
+        <p>
+          <strong
+            >{{ detailKaryawan.task_status_summary.completed }} Task</strong
+          >
+        </p>
+      </div>
+      <div class="container_onProgres">
+        <p>Sedang Dikerjakan</p>
+        <p>
+          <strong
+            >{{ detailKaryawan.task_status_summary.in_progress }} Task</strong
+          >
+        </p>
+      </div>
+      <div class="container_todo">
+        <p>Akan Datang</p>
+        <p>
+          <strong
+            >{{ detailKaryawan.task_status_summary.upcoming }} Task</strong
+          >
+        </p>
+      </div>
+      <div class="container_cancel">
+        <p>Dibatalkan</p>
+        <p>
+          <strong
+            >{{ detailKaryawan.task_status_summary.upcoming }} Task</strong
+          >
+        </p>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="filter_task">
+        <div class="style_progres">
+          <label for="">Progres</label>
+          <select name="" id="" class="select_task" v-model="progres">
+            <option value="">Semua Progress</option>
+            <option value="completed">Complete</option>
+            <option value="done dev">Done Dev</option>
+            <option value="in progress">In Progress</option>
+            <option value="in review">In Review</option>
+            <option value="to do">To Do</option>
+          </select>
         </div>
-        <div class="container_onProgres">
-          <p>Sedang Dikerjakan</p>
-          <p>
-            <strong
-              >{{ detailKaryawan.task_status_summary.in_progress }} Task</strong
-            >
-          </p>
+
+        <div class="sortir_style">
+          <label for="">Ketepatan Tugas</label>
+          <select
+            name=""
+            id=""
+            class="sortir_ketepatan sortir"
+            v-model="sortKetepatanDetail"
+          >
+            <option value="">Semua Ketepatan</option>
+            <option value="highest">Tertinggi</option>
+            <option value="lowest">Terendah</option>
+          </select>
         </div>
-        <div class="container_todo">
-          <p>Akan Datang</p>
-          <p>
-            <strong
-              >{{ detailKaryawan.task_status_summary.upcoming }} Task</strong
-            >
-          </p>
-        </div>
-        <div class="container_cancel">
-          <p>Dibatalkan</p>
-          <p>
-            <strong
-              >{{ detailKaryawan.task_status_summary.upcoming }} Task</strong
-            >
-          </p>
+
+        <div class="filter_bug">
+          <label for="">Tugas</label>
+          <select name="" id="" class="task_style" v-model="taskBug">
+            <option value="">Semua</option>
+            <option value="bug">Bug</option>
+            <option value="task">Task</option>
+          </select>
         </div>
       </div>
 
-      <div class="task">
-        <div class="filter_task">
-          <div class="style_progres">
-            <label for="">Progres</label>
-            <select name="" id="" class="select_task" v-model="progres">
-              <option value="">Semua Progress</option>
-              <option value="completed">Complete</option>
-              <option value="done dev">Done Dev</option>
-              <option value="in progress">In Progress</option>
-              <option value="in review">In Review</option>
-              <option value="to do">To Do</option>
-            </select>
+      <div
+        class="no_task"
+        v-if="!filteredKaryawanDetail || filteredKaryawanDetail.length === 0"
+      >
+        <i>Data tidak tersedia</i>
+      </div>
+
+      <div
+        class="background_bug"
+        v-if="detailBug"
+        @click.self="detailBug = null"
+      >
+        <div class="container_bug">
+          <div class="header_containerBug">
+            <i class="fa-solid fa-xmark" @click="closeDetailBug"></i>
           </div>
-
-          <div class="sortir_style">
-            <label for="">Ketepatan Tugas</label>
-            <select
-              name=""
-              id=""
-              class="sortir_ketepatan sortir"
-              v-model="sortKetepatanDetail"
-            >
-              <option value="">Semua Ketepatan</option>
-              <option value="highest">Tertinggi</option>
-              <option value="lowest">Terendah</option>
-            </select>
-          </div>
-
-          <div class="filter_bug">
-            <label for="">Tugas</label>
-            <select name="" id="" class="task_style" v-model="taskBug">
-              <option value="">Semua</option>
-              <option value="bug">Bug</option>
-              <option value="task">Task</option>
-            </select>
-          </div>
-        </div>
-
-        <div
-          class="no_task"
-          v-if="!filteredKaryawanDetail || filteredKaryawanDetail.length === 0"
-        >
-          <i>Data tidak tersedia</i>
-        </div>
-
-        <div
-          class="background_bug"
-          v-if="detailBug"
-          @click.self="detailBug = null"
-        >
-          <div class="container_bug">
-            <div class="header_containerBug">
-              <i class="fa-solid fa-xmark" @click="closeDetailBug"></i>
+          <div class="bug_detail">
+            <div class="header_bug">
+              <div class="name_bug">
+                <p>{{ detailBug.name }}</p>
+              </div>
+              <div class="status_bug">
+                <div class="project_bug">
+                  <p>{{ detailBug.project_name }}</p>
+                </div>
+                <div class="tags">
+                  <!-- {{ detailBug.project_name }} -->
+                  Tags
+                </div>
+              </div>
             </div>
-            <div class="bug_detail">
-              <div class="header_bug">
-                <div class="name_bug">
-                  <p>{{ detailBug.name }}</p>
-                </div>
-                <div class="status_bug">
-                  <div class="project_bug">
-                    <p>{{ detailBug.project_name }}</p>
-                  </div>
-                  <div class="tags">
-                    <!-- {{ detailBug.project_name }} -->
-                    Tags
-                  </div>
-                </div>
-              </div>
-              <div class="description_bug">
-                <p>Deskripsi Task</p>
-              </div>
-              <div class="keterangan_waktu">
-                <!-- <div class="jam">
+            <div class="description_bug">
+              <p>Deskripsi Task</p>
+            </div>
+            <div class="keterangan_waktu">
+              <!-- <div class="jam">
                   <i class="fa-regular fa-clock"></i>
                   <p>Waktu Pengerjaan: {{ k.time_estimate_hours }} Jam</p>
                   <p>Waktu Pengerjaan: 8 Jam</p>
                 </div> -->
-                <div class="start_date">
-                  <i class="fa-regular fa-calendar"></i>
-                  <!-- <p v-if="k.start_date">Mulai: {{ k.start_date }}</p>
+              <div class="start_date">
+                <i class="fa-regular fa-calendar"></i>
+                <!-- <p v-if="k.start_date">Mulai: {{ k.start_date }}</p>
           <p v-if="!k.start_date">Mulai: <i>Tidak Valid</i></p> -->
-                  <p>Mulai: 20-08-2025</p>
-                </div>
-                <div class="deadline">
-                  <i class="fa-regular fa-calendar"></i>
-                  <!-- <p v-if="k.due_date">Target: {{ k.due_date }}</p>
+                <p>Mulai: 20-08-2025</p>
+              </div>
+              <div class="deadline">
+                <i class="fa-regular fa-calendar"></i>
+                <!-- <p v-if="k.due_date">Target: {{ k.due_date }}</p>
           <p v-if="!k.due_date">Target: <i>Tidak Valid</i></p> -->
-                  <p>Target: 20-08-2025</p>
-                </div>
-                <div class="done_date">
-                  <i class="fa-regular fa-calendar"></i>
-                  <!-- <p>Selesai: {{ k.date_done }}</p> -->
-                  <p>Selesai: 20-08-2025</p>
-                </div>
-                <div class="created_by">
-                  <i class="fa-regular fa-user"></i>
-                  <!-- <p>Dibuat oleh: {{ k.creator_name }}</p> -->
-                  <p>Bug Terbuat Oleh oleh: Karyawan</p>
-                </div>
+                <p>Target: 20-08-2025</p>
+              </div>
+              <div class="done_date">
+                <i class="fa-regular fa-calendar"></i>
+                <!-- <p>Selesai: {{ k.date_done }}</p> -->
+                <p>Selesai: 20-08-2025</p>
+              </div>
+              <div class="created_by">
+                <i class="fa-regular fa-user"></i>
+                <!-- <p>Dibuat oleh: {{ k.creator_name }}</p> -->
+                <p>Bug Terbuat Oleh oleh: Karyawan</p>
               </div>
             </div>
           </div>
         </div>
-        <div>
-          <div
-            class="container_task"
-            v-for="k in filteredKaryawanDetail"
-            @click="handleCardClick(k)"
-          >
-            <div class="header_container">
-              <div class="name_task">
-                <p>{{ k.name }}</p>
+      </div>
+      <div>
+        <div
+          class="container_task"
+          v-for="k in filteredKaryawanDetail"
+          @click="handleCardClick(k)"
+        >
+          <div class="header_container">
+            <div class="name_task">
+              <p>{{ k.name }}</p>
+            </div>
+            <div class="status_task">
+              <div class="bug" v-if="k.tags">
+                <p>{{ k.tags[0] }}</p>
               </div>
-              <div class="status_task">
-                <div class="bug" v-if="k.tags">
-                  <p>{{ k.tags[0] }}</p>
-                </div>
-                <!-- <div class="bug">
+              <!-- <div class="bug">
                   <p>Bug</p>
                 </div> -->
 
-                <!-- <div
+              <!-- <div
                   class="background_bug"
                   v-if="detailBug"
                   @click.self="detailBug = null"
@@ -723,85 +581,80 @@
                   </div>
                 </div> -->
 
-                <div
-                  class="progres_task"
-                  :class="statusTaskClass(k.status_name)"
-                >
-                  <p>{{ statusLabel(k.status_name) }}</p>
-                </div>
-                <div
-                  class="task_priority"
-                  :class="priorityClass(k.priority_name)"
-                  v-if="k.priority_name"
-                >
-                  <p>{{ k.priority_name }}</p>
-                </div>
-
-                <!-- Dari Project mana task tersebut -->
-                <div class="task_project">
-                  <p>{{ k.project_name }}</p>
-                </div>
-              </div>
-            </div>
-            <div class="description">
-              <p>{{ k.description }}</p>
-            </div>
-
-            <!-- Ketika start date tersedia -->
-            <div
-              class="achievement"
-              v-if="k.time_efficiency_percentage"
-              :class="achivClass(k.time_efficiency_percentage)"
-            >
-              <div class="penghargaan">
-                <p>Ketepatan Pengerjaan Tugas</p>
-                <h4>{{ k.time_efficiency_percentage }}%</h4>
-                <h4>{{ k.remaining_duration }}</h4>
-              </div>
-            </div>
-
-            <!-- Ketika start date tidak tersedia-->
-            <div
-              class="achievement not_special"
-              v-if="
-                (k.status_name === 'done dev' ||
-                  k.status_name === 'completed') &&
-                !k.start_date
-              "
-            >
-              <div class="penghargaan">
-                <p>Ketepatan Pengerjaan Tugas</p>
-                <h4>Tidak Tersedia</h4>
-              </div>
-            </div>
-            <div class="keterangan_waktu">
-              <div class="jam">
-                <i class="fa-regular fa-clock"></i>
-                <p>Waktu Pengerjaan: {{ k.time_estimate_hours }} Jam</p>
-              </div>
-              <div class="start_date">
-                <i class="fa-regular fa-calendar"></i>
-                <p v-if="k.start_date">Mulai: {{ k.start_date }}</p>
-                <p v-if="!k.start_date">Mulai: <i>Tidak Valid</i></p>
-              </div>
-              <div class="deadline">
-                <i class="fa-regular fa-calendar"></i>
-                <p v-if="k.due_date">Target: {{ k.due_date }}</p>
-                <p v-if="!k.due_date">Target: <i>Tidak Valid</i></p>
+              <div class="progres_task" :class="statusTaskClass(k.status_name)">
+                <p>{{ statusLabel(k.status_name) }}</p>
               </div>
               <div
-                class="done_date"
-                v-if="
-                  k.status_name === 'done dev' || k.status_name === 'completed'
-                "
+                class="task_priority"
+                :class="priorityClass(k.priority_name)"
+                v-if="k.priority_name"
               >
-                <i class="fa-regular fa-calendar"></i>
-                <p>Selesai: {{ k.date_done }}</p>
+                <p>{{ k.priority_name }}</p>
               </div>
-              <div class="created_by">
-                <i class="fa-regular fa-user"></i>
-                <p>Dibuat oleh: {{ k.creator_name }}</p>
+
+              <!-- Dari Project mana task tersebut -->
+              <div class="task_project">
+                <p>{{ k.project_name }}</p>
               </div>
+            </div>
+          </div>
+          <div class="description">
+            <p>{{ k.description }}</p>
+          </div>
+
+          <!-- Ketika start date tersedia -->
+          <div
+            class="achievement"
+            v-if="k.time_efficiency_percentage"
+            :class="achivClass(k.time_efficiency_percentage)"
+          >
+            <div class="penghargaan">
+              <p>Ketepatan Pengerjaan Tugas</p>
+              <h4>{{ k.time_efficiency_percentage }}%</h4>
+              <h4>{{ k.remaining_duration }}</h4>
+            </div>
+          </div>
+
+          <!-- Ketika start date tidak tersedia-->
+          <div
+            class="achievement not_special"
+            v-if="
+              (k.status_name === 'done dev' || k.status_name === 'completed') &&
+              !k.start_date
+            "
+          >
+            <div class="penghargaan">
+              <p>Ketepatan Pengerjaan Tugas</p>
+              <h4>Tidak Tersedia</h4>
+            </div>
+          </div>
+          <div class="keterangan_waktu">
+            <div class="jam">
+              <i class="fa-regular fa-clock"></i>
+              <p>Waktu Pengerjaan: {{ k.time_estimate_hours }} Jam</p>
+            </div>
+            <div class="start_date">
+              <i class="fa-regular fa-calendar"></i>
+              <p v-if="k.start_date">Mulai: {{ k.start_date }}</p>
+              <p v-if="!k.start_date">Mulai: <i>Tidak Valid</i></p>
+            </div>
+            <div class="deadline">
+              <i class="fa-regular fa-calendar"></i>
+              <p v-if="k.due_date">Target: {{ k.due_date }}</p>
+              <p v-if="!k.due_date">Target: <i>Tidak Valid</i></p>
+            </div>
+            <div
+              class="done_date"
+              v-if="
+                k.status_name === 'done dev' || k.status_name === 'completed'
+              "
+            >
+              <i class="fa-regular fa-calendar"></i>
+              <p>Selesai: {{ k.date_done }}</p>
+            </div>
+            <div class="created_by">
+              <i class="fa-regular fa-user"></i>
+              <p>Dibuat oleh: {{ k.creator_name }}</p>
             </div>
           </div>
         </div>
@@ -2247,6 +2100,9 @@ form select {
 </style>
 
 <script>
+definePageMeta({
+  layout: "dashboard",
+});
 export default {
   data() {
     return {

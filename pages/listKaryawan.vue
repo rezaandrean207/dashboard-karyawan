@@ -1,209 +1,83 @@
 <template>
-  <div class="konten">
-    <div class="navbar">
-      <div class="menu">
-        <i class="fa-solid fa-bars" @click="menu"></i>
-      </div>
-      <p>Dashboard</p>
-    </div>
-
-    <div class="background" v-show="sidebar" @click="close">
-      <div class="sidebar_responsive" v-show="sidebar">
-        <div class="logo">
-          <img src="/img/logo dna.png" alt="" />
-          <div class="keterangan">
-            <h5>Digital Nayaka Abhinaya</h5>
-            <p>Kinerja Karyawan</p>
-          </div>
-        </div>
-
-        <div class="sidebar-text">
-          <NuxtLink to="/listKaryawan" class="listKaryawan">
-            <i class="fa-solid fa-users"></i>
-            <p>Daftar Karyawan</p>
-          </NuxtLink>
-          <NuxtLink to="/bebanKerja" class="performance">
-            <i class="fa-regular fa-clock"></i>
-            <p>Beban Kerja</p>
-          </NuxtLink>
-          <NuxtLink to="/jadwalLibur" class="hari_libur">
-            <i class="fa-regular fa-calendar"></i>
-            <p>Jadwal Libur</p>
-          </NuxtLink>
-          <!-- <div class="setting">
-          <i class="fa-solid fa-gear"></i>
-          <a href="">Pengaturan</a>
-        </div> -->
-        </div>
-
-        <div class="footer_sidebar">
-          <div class="user">
-            <p>Logged in sebagai</p>
-            <h4>Reza Andrean</h4>
-            <p>Karyawan</p>
-          </div>
-          <div class="sync">
-            <button
-              class="btn"
-              @click="syncData"
-              :disabled="loading"
-              :style="{
-                opacity: loading ? 0.6 : 1,
-                cursor: loading ? 'not-allowed' : 'pointer',
-              }"
-            >
-              <span v-if="loading" class="spinner"></span>
-              <i v-else class="fa-solid fa-rotate-right"></i>
-              {{ loading ? "Menyinkronkan..." : "Sync" }}
-            </button>
-          </div>
-          <button @click="logout" class="logout">Logout</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <div class="logo">
-        <img src="/img/logo dna.png" alt="" />
-        <div class="keterangan">
-          <h5>Digital Nayaka Abhinaya</h5>
-          <p>Kinerja Karyawan</p>
-        </div>
-      </div>
-
-      <div class="sidebar-text">
-        <NuxtLink to="/listKaryawan" class="listKaryawan">
-          <i class="fa-solid fa-users"></i>
-          <p>Daftar Karyawan</p>
-        </NuxtLink>
-        <NuxtLink to="/bebanKerja" class="performance">
-          <i class="fa-regular fa-clock"></i>
-          <p>Beban Kerja</p>
-        </NuxtLink>
-        <NuxtLink to="/jadwalLibur" class="hari_libur">
-          <i class="fa-regular fa-calendar"></i>
-          <p>Jadwal Libur</p>
-        </NuxtLink>
-
-        <!-- <NuxtLink to="/laporanKinerja" class="report">
-          <i class="fa-solid fa-chart-simple"></i>
-          <p>Laporan Kinerja</p>
-        </NuxtLink> -->
-        <!-- <div class="setting">
-          <i class="fa-solid fa-gear"></i>
-          <a href="">Pengaturan</a>
-        </div> -->
-      </div>
-
-      <div class="footer_sidebar">
-        <div class="user">
-          <p>Logged in sebagai</p>
-          <h4>Reza Andrean</h4>
-          <p>Karyawan</p>
-        </div>
-        <div class="sync">
-          <button
-            class="btn"
-            @click="syncData"
-            :disabled="loading"
-            :style="{
-              opacity: loading ? 0.6 : 1,
-              cursor: loading ? 'not-allowed' : 'pointer',
-            }"
-          >
-            <span v-if="loading" class="spinner"></span>
-            <!-- <i v-else class="fa-solid fa-rotate-right"></i> -->
-            <i v-else class="fa-solid fa-rotate-right"></i>
-
-            {{ loading ? "Menyinkronkan..." : "Sync" }}
-            <!-- <i v-else class="fa-solid fa-circle-check"></i>     -->
-          </button>
-        </div>
-
-        <button @click="logout" class="logout">Logout</button>
-      </div>
-    </div>
-
-    <!-- Isi Konten -->
-    <div class="isi">
-      <!-- Animasi sukses -->
-      <!-- <div class="success-animation">
+  <!-- Isi Konten -->
+  <div class="isi">
+    <!-- Animasi sukses -->
+    <!-- <div class="success-animation">
       </div> -->
 
-      <div v-if="sukses" class="success-animation">
-        <div class="sukses">
-          <div class="berhasil">
-            <div class="ceklis">
-              <i class="fa-solid fa-check"></i>
-            </div>
-            <p>Sinkronisasi Berhasil!</p>
+    <div v-if="sukses" class="success-animation">
+      <div class="sukses">
+        <div class="berhasil">
+          <div class="ceklis">
+            <i class="fa-solid fa-check"></i>
           </div>
-          <div class="silang" @click="closeSukses">
-            <i class="fa-solid fa-xmark"></i>
-          </div>
+          <p>Sinkronisasi Berhasil!</p>
+        </div>
+        <div class="silang" @click="closeSukses">
+          <i class="fa-solid fa-xmark"></i>
         </div>
       </div>
+    </div>
 
-      <h2>Daftar Karyawan</h2>
-      <p>Kelola dan pantau kinerja karyawan</p>
+    <h2>Daftar Karyawan</h2>
+    <p>Kelola dan pantau kinerja karyawan</p>
 
-      <!-- Filter -->
-      <div class="filter">
-        <div class="title">
-          <i class="fa-solid fa-filter"></i>
-          <p>Filter & Pencarian</p>
-        </div>
-        <div class="filter_detail">
-          <form action="">
-            <input
-              type="search"
-              placeholder="Cari nama karyawan"
-              v-model="searchInput"
-              @submit.prevent
-            />
-            <select v-model="posisi">
-              <option value="" selected>Semua Posisi</option>
-              <option value="pm">Project Manager</option>
-              <option value="analis">Data Analys</option>
-              <option value="backend">Backend</option>
-              <option value="backend-web">Backend-Web Developer</option>
-              <option value="web">Web Developer</option>
-              <option value="mobile apps">Mobile Apps</option>
-              <option value="UI-UX">UI-UX</option>
-              <!-- <option value="UI/UX Designer">UI/UX Designer</option>
+    <!-- Filter -->
+    <div class="filter">
+      <div class="title">
+        <i class="fa-solid fa-filter"></i>
+        <p>Filter & Pencarian</p>
+      </div>
+      <div class="filter_detail">
+        <form action="">
+          <input
+            type="search"
+            placeholder="Cari nama karyawan"
+            v-model="searchInput"
+            @submit.prevent
+          />
+          <select v-model="posisi">
+            <option value="" selected>Semua Posisi</option>
+            <option value="pm">Project Manager</option>
+            <option value="analis">Data Analys</option>
+            <option value="backend">Backend</option>
+            <option value="backend-web">Backend-Web Developer</option>
+            <option value="web">Web Developer</option>
+            <option value="mobile apps">Mobile Apps</option>
+            <option value="UI-UX">UI-UX</option>
+            <!-- <option value="UI/UX Designer">UI/UX Designer</option>
               <option value="Project Manager">Project Manager</option> -->
-            </select>
-          </form>
-          <div class="total_karyawan">
-            <i class="fa-solid fa-users"></i>
-            <div class="jumlah_karyawan">
-              <p>Total Karyawan</p>
-              <p class="jumlah">
-                <strong>{{ daftarKaryawan.length }} Karyawan</strong>
-              </p>
-            </div>
+          </select>
+        </form>
+        <div class="total_karyawan">
+          <i class="fa-solid fa-users"></i>
+          <div class="jumlah_karyawan">
+            <p>Total Karyawan</p>
+            <p class="jumlah">
+              <strong>{{ daftarKaryawan.length }} Karyawan</strong>
+            </p>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Daftar Karyawan -->
-      <div class="daftarKaryawan">
-        <div
-          class="karyawan"
-          @click="openDetail(k)"
-          v-for="(k, index) in filteredKaryawan"
-          :key="index"
-        >
-          <div class="identitas">
-            <!-- <img :src="k.user.profilPicture" alt="" /> -->
-            <img src="/img/profil.png" alt="" />
-            <h4>{{ k.name }}</h4>
-            <div class="peran">
-              <i class="fa-solid fa-briefcase"></i>
-              <p>{{ k.role }}</p>
-            </div>
-            <!-- <div
+    <!-- Daftar Karyawan -->
+    <div class="daftarKaryawan">
+      <div
+        class="karyawan"
+        @click="openDetail(k)"
+        v-for="(k, index) in filteredKaryawan"
+        :key="index"
+      >
+        <div class="identitas">
+          <!-- <img :src="k.user.profilPicture" alt="" /> -->
+          <img src="/img/profil.png" alt="" />
+          <h4>{{ k.name }}</h4>
+          <div class="peran">
+            <i class="fa-solid fa-briefcase"></i>
+            <p>{{ k.role }}</p>
+          </div>
+          <!-- <div
               class="bebanKerja"
               :class="{
                 kuning: kategoriBeban(k.beban) === 'Sedang',
@@ -217,21 +91,21 @@
                 {{ kategoriBeban(k.beban) }}
               </p>
             </div> -->
+        </div>
+        <div class="kinerja">
+          <div class="proyekAktif">
+            <p>Status:</p>
+            <p>{{ k.status }}</p>
           </div>
-          <div class="kinerja">
-            <div class="proyekAktif">
-              <p>Status:</p>
-              <p>{{ k.status }}</p>
-            </div>
-            <!-- <div class="performa">
+          <!-- <div class="performa">
               <p>Performa:</p>
               <p>{{ k.performa }}</p>
             </div> -->
-          </div>
         </div>
+      </div>
 
-        <!-- Duplikat Karyawan -->
-        <!-- <div class="karyawan">
+      <!-- Duplikat Karyawan -->
+      <!-- <div class="karyawan">
           <div class="identitas">
             <img src="../img/karyawan.jpg" alt="" />
             <h4>Budi Santoso</h4>
@@ -381,49 +255,49 @@
             </div>
           </div>
         </div> -->
-      </div>
     </div>
+  </div>
 
-    <!-- Detail Karyawan -->
-    <div v-if="detailKaryawan" class="background">
-      <div class="detailKaryawan" v-if="detailKaryawan">
-        <div class="header">
-          <h3>Detail Karyawan</h3>
-          <i class="fa-solid fa-xmark" @click="close"></i>
+  <!-- Detail Karyawan -->
+  <div v-if="detailKaryawan" class="background">
+    <div class="detailKaryawan" v-if="detailKaryawan">
+      <div class="header">
+        <h3>Detail Karyawan</h3>
+        <i class="fa-solid fa-xmark" @click="close"></i>
+      </div>
+
+      <div class="profilImage">
+        <img src="/img/profil.png" alt="" />
+        <p>{{ selected.name }}</p>
+        <div class="peran">
+          <i class="fa-solid fa-briefcase"></i>
+          <p>{{ selected.role }}</p>
         </div>
-
-        <div class="profilImage">
-          <img src="/img/profil.png" alt="" />
-          <p>{{ selected.name }}</p>
-          <div class="peran">
-            <i class="fa-solid fa-briefcase"></i>
-            <p>{{ selected.role }}</p>
-          </div>
-          <div class="bebanKerja" :class="bebanClass(selected.beban)">
-            <i class="fa-solid fa-clock"></i>
-            <p>Beban Kerja: {{ kategoriBeban(selected.beban) }}</p>
-          </div>
+        <div class="bebanKerja" :class="bebanClass(selected.beban)">
+          <i class="fa-solid fa-clock"></i>
+          <p>Beban Kerja: {{ kategoriBeban(selected.beban) }}</p>
         </div>
+      </div>
 
-        <div class="infoKontak">
-          <p class="judul">Informasi Kontak</p>
-          <div class="emailTelepon">
-            <div class="email">
-              <i class="fa-solid fa-envelope"></i>
-              <div class="isiEmail">
-                <p class="keterangan">Email</p>
-                <p>{{ selected.email }}</p>
-              </div>
+      <div class="infoKontak">
+        <p class="judul">Informasi Kontak</p>
+        <div class="emailTelepon">
+          <div class="email">
+            <i class="fa-solid fa-envelope"></i>
+            <div class="isiEmail">
+              <p class="keterangan">Email</p>
+              <p>{{ selected.email }}</p>
             </div>
-            <!-- <div class="telepon">
+          </div>
+          <!-- <div class="telepon">
               <i class="fa-solid fa-phone"></i>
               <div class="isiTelepon">
                 <p class="keterangan">Telepon</p>
                 <p>{{ selected.gaji }}</p>
               </div>
             </div> -->
-          </div>
-          <!--
+        </div>
+        <!--
             <div class="alamat">
               <i class="fa-solid fa-location-dot"></i>
               <div class="detailAlamat">
@@ -432,9 +306,9 @@
               </div>
             </div>
             -->
-        </div>
+      </div>
 
-        <!-- <div class="infoKerja">
+      <!-- <div class="infoKerja">
           <p class="judul">Informasi Pekerjaan</p>
           <div class="kerja">
             <div class="join">
@@ -454,55 +328,55 @@
           </div>
         </div> -->
 
-        <div class="statistikKinerja">
-          <p class="judul">Kinerja & Statistik</p>
-          <div class="statistik">
-            <div class="proyek">
-              <div class="judul">
-                <p>Proyek</p>
-                <h3>{{ selected.project_count }}</h3>
-              </div>
-              <div class="logo">
-                <i class="fa-solid fa-check"></i>
-              </div>
+      <div class="statistikKinerja">
+        <p class="judul">Kinerja & Statistik</p>
+        <div class="statistik">
+          <div class="proyek">
+            <div class="judul">
+              <p>Proyek</p>
+              <h3>{{ selected.project_count }}</h3>
             </div>
-
-            <div class="completed">
-              <div class="judul">
-                <p>Completed</p>
-                <!-- <p>Selesai</p> -->
-                <h3>{{ selected.completed_tasks }} Task</h3>
-              </div>
-              <div class="logo">
-                <i class="fa-solid fa-check"></i>
-              </div>
+            <div class="logo">
+              <i class="fa-solid fa-check"></i>
             </div>
+          </div>
 
-            <div class="on_progress">
-              <div class="judul">
-                <p>On Progress</p>
-                <!-- <p>Dikerjakan</p> -->
-                <h3>{{ selected.in_progress_tasks }} Task</h3>
-              </div>
-              <div class="logo">
-                <i class="fa-solid fa-chart-simple"></i>
-              </div>
+          <div class="completed">
+            <div class="judul">
+              <p>Completed</p>
+              <!-- <p>Selesai</p> -->
+              <h3>{{ selected.completed_tasks }} Task</h3>
+            </div>
+            <div class="logo">
+              <i class="fa-solid fa-check"></i>
+            </div>
+          </div>
+
+          <div class="on_progress">
+            <div class="judul">
+              <p>On Progress</p>
+              <!-- <p>Dikerjakan</p> -->
+              <h3>{{ selected.in_progress_tasks }} Task</h3>
+            </div>
+            <div class="logo">
+              <i class="fa-solid fa-chart-simple"></i>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- <div class="keahlian">
+      <!-- <div class="keahlian">
           <p class="judul">Keahlian</p>
           <div class="daftarSkil">
             <div class="skil">
               <p>{{ selected.keahlian }}Frontend</p>
             </div> -->
-        <!-- <div class="skil"><p>Backend</p></div> -->
-        <!-- </div>
+      <!-- <div class="skil"><p>Backend</p></div> -->
+      <!-- </div>
         </div> -->
-      </div>
     </div>
   </div>
+  <!-- </div> -->
 </template>
 
 <style scoped>
@@ -846,6 +720,9 @@ form input {
 </style>
 
 <script>
+definePageMeta({
+  layout: "dashboard",
+});
 export default {
   data() {
     return {

@@ -6,4 +6,8 @@ export default defineNuxtRouteMiddleware((to) => {
   } else if (token.value && to.path === "/login" || to.path === "/") {
     return navigateTo("/listKaryawan")
   }
+  // const usurerRole = useCookie("role").value
+  // if (to.path === "/admin/listKaryawan" && usurerRole !== "admin") {
+  //   return navigateTo("/user")
+  // }
 })
