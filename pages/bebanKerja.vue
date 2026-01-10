@@ -380,16 +380,17 @@
             </div>
             <div
               class="total_beban"
-              :class="totalBebanClass(k.total_spent_hours.percentage)"
+              :class="totalBebanClass(k.total_spent_hours?.percentage)"
             >
               <div class="teks">
                 <p>Total Beban Kerja (Aktif)</p>
-                <h4>
+                <h4 v-if="k.total_spent_hours">
                   {{ k.total_spent_hours.percentage }}% ({{
                     k.total_spent_hours.hours
                   }}
                   Jam)
                 </h4>
+                <h4 v-else>0% (0 Jam)</h4>
               </div>
               <div class="ikon">
                 <i class="fa-regular fa-clock"></i>
@@ -2459,7 +2460,7 @@ export default {
         late: achiv < 100,
       };
     },
-    totalBebanClass(beban) {
+    totalBebanClass(beban = 0) {
       return {
         special: beban > 100,
         ontime: beban >= 85 && beban <= 100,
