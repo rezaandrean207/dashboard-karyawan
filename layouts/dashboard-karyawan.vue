@@ -1,4 +1,5 @@
 <template>
+ 
   <!-- Animasi sukses -->
   <div v-if="sukses" class="success-animation">
     <div class="sukses">
@@ -22,7 +23,7 @@
     </div>
 
     <div class="background" v-show="sidebar" @click="close">
-      <div class="sidebar_responsive"@click.stop>
+      <div class="sidebar_responsive" v-show="sidebar">
         <div class="logo">
           <img src="/img/logo dna.png" alt="" />
           <div class="keterangan">
@@ -32,66 +33,46 @@
         </div>
 
         <div class="sidebar-text">
-          <NuxtLink
-            to="/admin/listKaryawan"
+          <!-- <NuxtLink
+            to="/listKaryawan"
             class="listKaryawan"
-            :class="{ active: $route.path === '/admin/listKaryawan' }"
+            :class="{ active: $route.path === '/listKaryawan' }"
           >
             <i class="fa-solid fa-users"></i>
             <p>Daftar Karyawan</p>
           </NuxtLink>
           <NuxtLink
-            to="/admin/bebanKerja"
+            to="/bebanKerja"
             class="performance"
-            :class="{ active: $route.path === '/admin/bebanKerja' }"
+            :class="{ active: $route.path === '/bebanKerja' }"
           >
             <i class="fa-regular fa-clock"></i>
             <p>Beban Kerja</p>
           </NuxtLink>
           <NuxtLink
-            to="/admin/jadwalLibur"
+            to="/jadwalLibur"
             class="hari_libur"
-            :class="{ active: $route.path === '/admin/jadwalLibur' }"
+            :class="{ active: $route.path === '/jadwalLibur' }"
           >
             <i class="fa-regular fa-calendar"></i>
             <p>Jadwal Libur</p>
-          </NuxtLink>
-          <details class="setting">
-            <summary>
-              <span class="material-symbols-outlined"> settings </span>Setting
-            </summary>
-            <div class="submenu">
-              <NuxtLink
-                to="/admin/settingBug"
-                class="submenu-item"
-                :class="{ active: $route.path === '/admin/settingBug' }"
-              >
-                <!-- <i class="fa-solid fa-gear"></i> -->
-                <!-- <span class="material-symbols-outlined"> settings </span> -->
-                <!-- <i class="fa-solid fa-bug"></i> -->
-                <p>Bug Setting</p>
-              </NuxtLink>
-            </div>
-          </details>
+          </NuxtLink> -->
           <NuxtLink
-            to="/admin/grouping"
+            to="/karyawan/performaSaya"
             class="hari_libur"
-            :class="{ active: $route.path === '/admin/grouping' }"
+            :class="{ active: $route.path === '/karyawan/performaSaya' }"
           >
             <i class="fa-regular fa-calendar"></i>
-            <p>Grouping</p>
+            <p>Performa Saya</p>
           </NuxtLink>
-          <!-- <div class="setting">
-          <i class="fa-solid fa-gear"></i>
-          <a href="">Pengaturan</a>
-        </div> -->
         </div>
 
         <div class="footer_sidebar">
           <div class="user">
             <p>Logged in sebagai</p>
-            <h4>Admin</h4>
-            <!-- <p>Admin</p> -->
+            <h4>Karyawan</h4>
+            <!-- <h4>Reza Andrean</h4> -->
+            <!-- <p>Karyawan</p> -->
           </div>
           <div class="sync">
             <button
@@ -124,7 +105,7 @@
       </div>
 
       <div class="sidebar-text">
-        <NuxtLink
+        <!-- <NuxtLink
           to="/admin/listKaryawan"
           class="listKaryawan"
           :class="{ active: $route.path === '/admin/listKaryawan' }"
@@ -147,48 +128,23 @@
         >
           <i class="fa-regular fa-calendar"></i>
           <p>Jadwal Libur</p>
-        </NuxtLink>
-        <details class="setting">
-          <summary>
-            <span class="material-symbols-outlined"> settings </span>Setting
-          </summary>
-          <div class="submenu">
-            <NuxtLink
-              to="/admin/settingBug"
-              class="submenu-item"
-              :class="{ active: $route.path === '/admin/settingBug' }"
-            >
-              <!-- <i class="fa-solid fa-gear"></i> -->
-              <!-- <span class="material-symbols-outlined"> settings </span> -->
-              <!-- <i class="fa-solid fa-bug"></i> -->
-              <p>Bug Setting</p>
-            </NuxtLink>
-          </div>
-        </details>
-        <NuxtLink
-          to="/admin/grouping"
-          class="hari_libur"
-          :class="{ active: $route.path === '/admin/grouping' }"
-        >
-          <span class="material-symbols-outlined"> group </span>
-          <p>Grouping</p>
-        </NuxtLink>
-
-        <!-- <NuxtLink to="/laporanKinerja" class="report">
-          <i class="fa-solid fa-chart-simple"></i>
-          <p>Laporan Kinerja</p>
         </NuxtLink> -->
-        <!-- <div class="setting">
-          <i class="fa-solid fa-gear"></i>
-          <a href="">Pengaturan</a>
-        </div> -->
+        <NuxtLink
+          to="/karyawan/performaSaya"
+          class="hari_libur"
+          :class="{ active: $route.path === '/karyawan/performaSaya' }"
+        >
+          <i class="fa-regular fa-calendar"></i>
+          <p>Performa Saya</p>
+        </NuxtLink>
       </div>
 
       <div class="footer_sidebar">
         <div class="user">
           <p>Logged in sebagai</p>
-          <h4>Admin</h4>
-          <!-- <p>Admin</p> -->
+          <h4>Karyawan</h4>
+          <!-- <h4>Reza Andrean</h4> -->
+          <!-- <p>Karyawan</p> -->
         </div>
         <div class="sync">
           <button
@@ -213,83 +169,90 @@
       </div>
     </div>
     <NuxtPage />
+    
   </div>
 </template>
+
+<!-- Background Notifikasi  -->
+<style scoped>
+.background-notif {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: flex-end;
+  z-index: 1000;
+}
+
+.sidebar_notif {
+  width: 350px;
+  height: 100%;
+  background-color: #fff;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.header_notif {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.header_notif .judul-notif {
+  color: rgb(16, 50, 130);
+}
+
+.close_notif {
+  cursor: pointer;
+}
+
+.container-notif {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.isi_notif {
+  background-color: #ddd;
+  padding: 10px;
+  border-radius: 8px;
+}
+</style>
 
 <style scoped>
 .active {
   background-color: rgb(16, 67, 185);
 }
 
-details {
-  height: auto;
-  cursor: pointer;
-  /* margin-bottom: 10px auto; */
-}
-
-details summary {
-  list-style: none;
-  padding: 10px 10px 10px 15px;
-  border-radius: 10px;
+.notifikasi {
   display: flex;
   align-items: center;
-  /* width: 100%; */
+  gap: 10px;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #f5f5f5;
+  padding: 15px 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+  z-index: 1000;
+  cursor: pointer;
 }
 
-details[open] summary {
-  background-color: rgb(16, 67, 185);
+.notifikasi i {
+  font-size: 20px;
+  color: #333;
 }
 
-details summary:hover {
-  background-color: rgb(16, 67, 185);
-}
-
-details summary::-webkit-details-marker {
-  display: none;
-}
-
-details[open] .submenu {
-  margin-top: 10px;
-  /* border: 1px solid rgb(0, 46, 154); */
-}
-
-details[open] {
-  /* background-color: rgb(16, 67, 185); */
-  border-radius: 10px;
-}
-
-.submenu {
-  margin-top: 8px;
-  margin-left: 25px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  animation: fadeSlide 0.2s ease;
-  border-left: 1px solid rgb(16, 67, 185);
-}
-
-@keyframes fadeSlide {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.submenu-item {
-  padding: 8px 10px;
-  border-radius: 6px;
-  font-size: 14px;
-  color: #cfd8ff;
-  text-decoration: none;
-  transition: background-color 0.2s ease;
-}
-
-.submenu-item:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+.notifikasi:hover {
+  background-color: #e0e0e0;
 }
 </style>
 
@@ -301,6 +264,7 @@ export default {
       sidebar: false,
       loading: false,
       sukses: false,
+      notif: false,
     };
   },
   methods: {
@@ -355,6 +319,9 @@ export default {
     },
     closeSukses() {
       this.sukses = false;
+    },
+    openNotif() {
+      this.notif = true;
     },
   },
 };

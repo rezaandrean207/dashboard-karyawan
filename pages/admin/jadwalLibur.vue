@@ -1,93 +1,182 @@
 <template>
-  
-    <div v-if="isLoading" class="loading">
-      <div class="loading_tanggal">
-        <i class="fa-solid fa-spinner"></i>
-        <p>Tunggu Sebentar</p>
-      </div>
+  <div v-if="isLoading" class="loading">
+    <div class="loading_tanggal">
+      <i class="fa-solid fa-spinner"></i>
+      <p>Tunggu Sebentar</p>
     </div>
-    <div class="background_tanggal" v-if="createTanggal">
-      <div class="create_tanggal">
-        <div class="header_tanggal">
-          <h3>Tambah Hari Libur</h3>
-          <i class="fa-solid fa-xmark" @click="closeSetTanggal"></i>
+  </div>
+  <div class="background_delete" v-if="hapus">
+    <div class="delete_tanggal">
+      <!-- <div class="header_delete">
+        <h3>Hapus Hari Libur</h3>
+        <i class="fa-solid fa-xmark" @click="closeSetTanggal"></i>
+      </div> -->
+      <p>Apakah anda yakin <br />ingin menghapus hari libur ini?</p>
+      <div class="submit_delete">
+        <div class="batal">
+          <button @click="closeSetTanggal" type="button">Batal</button>
         </div>
-        <p>
-          Tambahkan hari libur untuk bulan {{ bulanDipilih }} {{ tahunAktif }}
-        </p>
-
-        <form action="" class="form_tanggal" @submit.prevent="saveTanggal">
-          <div class="tanggal">
-            <label for="tanggal">Tanggal</label>
-            <input type="date" v-model="tanggal" />
-          </div>
-          <div class="hari">
-            <label for="hari">Nama Hari Libur</label>
-            <input
-              type="text"
-              placeholder="Contoh: Hari Raya Idul Fitri"
-              v-model="hari"
-            />
-          </div>
-          <div class="submit_tanggal">
-            <div class="batal">
-              <button @click="closeSetTanggal" type="button">Batal</button>
-            </div>
-            <div class="simpan">
-              <button
-                @click="saveTanggal"
-                :disabled="isDisabled"
-                type="button"
-                :class="{ disabled_btn: isDisabled }"
-              >
-                Simpan
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <div class="isi" :class="{ hidden: createTanggal }">
-      <h2>Jadwal Libur</h2>
-
-      <div class="years">
-        <button type="button" @click="kurang()"><</button>
-        <p>{{ tahunAktif }}</p>
-
-        <button type="button" @click="tambah()">></button>
-      </div>
-
-      <div class="bulan">
-        <div class="month" v-for="k in daftarHari.data">
-          <p class="month_name">{{ k.nama }}</p>
-          <div class="holiday">
-            <div class="list_hari" v-for="h in k.hari_libur">
-              <div class="keterangan_libur">
-                <h4>{{ h.tanggal.split("-")[0] }} {{ h.nama_hari }}</h4>
-                <p>{{ h.keterangan }}</p>
-              </div>
-              <i
-                class="fa-solid fa-xmark"
-                @click="deleteTanggal(h.tanggal)"
-              ></i>
-            </div>
-          </div>
-          <div class="set_tanggal" @click="setTanggal(k)">
-            <i class="fa-solid fa-plus"></i>
-          </div>
+        <div class="simpan">
+          <button
+            @click="deleteTanggal(selectedData?.tanggal)"
+            :disabled="isLoading"
+            type="button"
+            :class="{ disabled_btn: isLoading }"
+          >
+            Ya, Hapus
+          </button>
         </div>
       </div>
+    </div>
+  </div>
+  <div class="background_tanggal" v-if="createTanggal">
+    <div class="create_tanggal">
+      <div class="header_tanggal">
+        <h3>Tambah Hari Libur</h3>
+        <i class="fa-solid fa-xmark" @click="closeSetTanggal"></i>
+      </div>
+      <p>
+        Tambahkan hari libur untuk bulan {{ bulanDipilih }} {{ tahunAktif }}
+      </p>
 
-      <!-- <div class="button_save">
+      <form action="" class="form_tanggal" @submit.prevent="saveTanggal">
+        <div class="tanggal">
+          <label for="tanggal">Tanggal</label>
+          <input type="date" v-model="tanggal" />
+        </div>
+        <div class="hari">
+          <label for="hari">Nama Hari Libur</label>
+          <input
+            type="text"
+            placeholder="Contoh: Hari Raya Idul Fitri"
+            v-model="hari"
+          />
+        </div>
+        <div class="submit_tanggal">
+          <div class="batal">
+            <button @click="closeSetTanggal" type="button">Batal</button>
+          </div>
+          <div class="simpan">
+            <button
+              @click="saveTanggal"
+              :disabled="isDisabled"
+              type="button"
+              :class="{ disabled_btn: isDisabled }"
+            >
+              Simpan
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="isi" :class="{ hidden: createTanggal }">
+    <h2>Jadwal Libur</h2>
+
+    <div class="years">
+      <button type="button" @click="kurang()"><</button>
+      <p>{{ tahunAktif }}</p>
+
+      <button type="button" @click="tambah()">></button>
+    </div>
+
+    <div class="bulan">
+      <div class="month" v-for="k in daftarHari.data">
+        <p class="month_name">{{ k.nama }}</p>
+        <div class="holiday">
+          <div
+            class="list_hari"
+            v-for="h in k.hari_libur"
+            v-if="k.hari_libur && k.hari_libur.length"
+          >
+            <div class="keterangan_libur">
+              <h4>{{ h.tanggal.split("-")[0] }} {{ h.nama_hari }}</h4>
+              <p>{{ h.keterangan }}</p>
+            </div>
+            <!-- <i class="fa-solid fa-xmark" @click="deleteTanggal(h.tanggal)"></i> -->
+            <i class="fa-solid fa-xmark" @click="openDelete(h)"></i>
+          </div>
+          <div class="belum_tersedia" v-else>
+            <h4>Hari Libur belum tersedia</h4>
+          </div>
+        </div>
+        <div class="set_tanggal" @click="setTanggal(k)">
+          <i class="fa-solid fa-plus"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="button_save">
         <button type="submit">Simpan Semua Perubahan</button>
       </div> -->
 
-      <div class="kosong">
-        <p>pp</p>
-      </div>
+    <div class="kosong">
+      <p>pp</p>
     </div>
+  </div>
 </template>
+
+<!-- Style Background Delete -->
+<style scoped>
+.background_delete {
+  position: fixed;
+  z-index: 9999;
+  background-color: rgb(0, 0, 0, 0.1);
+  width: 100vw;
+  height: 101vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.background_delete .delete_tanggal {
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  /* width: 33%; */
+}
+
+.delete_tanggal p {
+  text-align: center;
+}
+
+.delete_tanggal .header_delete {
+  text-align: right;
+}
+
+.delete_tanggal .submit_delete {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  /* margin-top: 30px; */
+}
+
+.submit_delete .batal button {
+  padding: 8px 10px;
+  border-radius: 6px;
+  background-color: #fff;
+  border: 1px solid #dedede;
+}
+
+.submit_delete .batal button:hover {
+  background-color: #f7f7f7;
+}
+
+.submit_delete .simpan button {
+  padding: 8px 10px;
+  border-radius: 6px;
+  background-color: blue;
+  color: #fff;
+}
+
+.submit_delete .simpan button:hover {
+  background-color: rgb(0, 0, 180);
+}
+</style>
 
 <!-- Style Background tanggal -->
 <style scoped>
@@ -256,8 +345,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  width: 100%;
+  justify-content: space-between;
+  gap: 20px;
+  width: 49%;
+  /* height: 50vh; */
+  max-height: 50vh;
   border: 2px solid var(--border_color);
   background-color: #fff;
   padding: 35px 0;
@@ -312,6 +404,21 @@
   /* justify-content: flex-start; */
   gap: 14px;
   flex-wrap: wrap;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 6px;
+  border-radius: 10px;
+}
+
+.belum_tersedia {
+  font-size: 16px;
+  font-weight: 500;
+  color: #888888;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .list_hari {
@@ -323,7 +430,7 @@
   border-radius: 10px;
   background-color: #f4f4f4;
   /* gap: 8px; */
-  width: 24%;
+  width: 48%;
   /* width: 260px; */
 }
 
@@ -333,10 +440,33 @@
 }
 </style>
 
+<!-- Responsive -->
+<style scoped>
+@media (max-width: 1024px) {
+  .create_tanggal {
+    width: 80%;
+  }
+
+  .bulan .month {
+    width: 100%;
+    height: auto;
+  }
+
+  .list_hari {
+    width: 100%;
+  }
+
+  .holiday {
+    width: 90%;
+    padding: 5px 0;
+  }
+}
+</style>
+
 <script>
-  definePageMeta({
-    layout: "dashboard",
-  });
+definePageMeta({
+  layout: "dashboard",
+});
 export default {
   data() {
     return {
@@ -348,6 +478,8 @@ export default {
       tahunAktif: 2026,
       isLoading: false,
       bulanDipilih: "",
+      hapus: false,
+      selectedData: null,
     };
   },
   mounted() {
@@ -394,6 +526,7 @@ export default {
     async deleteTanggal(data) {
       console.log("Delete diklik");
       this.isLoading = true;
+      this.hapus = false;
       try {
         const [tanggal, bulan, tahun] = data.split("-");
         const res = await this.$api.delete("/api/v1/hari-libur/hapus", {
@@ -409,6 +542,10 @@ export default {
       } finally {
         this.isLoading = false;
       }
+    },
+    openDelete(hari) {
+      this.hapus = true;
+      this.selectedData = hari;
     },
     tambah() {
       this.tahunAktif++;
@@ -442,12 +579,21 @@ export default {
     },
     closeSetTanggal() {
       this.createTanggal = false;
+      this.hapus = false;
+      this.tanggal = "";
+      this.hari = "";
     },
   },
   computed: {
     isDisabled() {
       return !this.tanggal || !this.hari;
     },
+    // selectedData() {
+    //   let selected = this.daftarHari.data.flatMap((bulan) => bulan.hari_libur);
+    //   // .filter((h) => h.tanggal === this.tanggal);
+
+    //   return selected;
+    // },
   },
   watch: {
     tahunAktif() {

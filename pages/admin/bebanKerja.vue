@@ -42,9 +42,30 @@
         <div class="dates">
           <label for="tanggal">Tanggal</label>
           <div class="tanggal">
-            <input type="date" name="start" v-model="start" />
+            <!-- <input type="date" name="start" v-model="start" /> -->
+            <VueDatePicker
+              format="dd-MM-yyyy"
+              v-model="start"
+              model-type="yyyy-MM-dd"
+              :time-config="{ enableTimePicker: false }"
+            />
             <span class="separator">➡️</span>
-            <input type="date" name="end" v-model="end" />
+            <!-- <input type="date" name="end" v-model="end" /> -->
+            <VueDatePicker
+              format="dd-MM-yyyy"
+              v-model="end"
+              model-type="yyyy-MM-dd"
+              :time-config="{ enableTimePicker: false }"
+            />
+            <!-- <VueDatePicker v-model="date">
+              <template
+                #preset-date-range-button="{ label, value, presetDate }"
+              >
+                <span role="button" :tabindex="0" @click="presetDate(value)">
+                  {{ label }}
+                </span>
+              </template>
+            </VueDatePicker> -->
           </div>
         </div>
       </form>
@@ -668,7 +689,7 @@
   background-color: #fff;
   padding: 15px 20px;
   margin-top: 20px;
-  width: 96%;
+  width: 100%;
   border: 1px solid var(--border_color);
 }
 
@@ -862,7 +883,7 @@
   /* background-color: #f5f5f5; */
   border-radius: 10px;
   gap: 20px;
-  width: 96%;
+  width: 100%;
 }
 
 .container_selesai,
@@ -1015,7 +1036,7 @@
   align-items: center;
   gap: 20px;
   margin-top: 20px;
-  width: 96%;
+  width: 100%;
 }
 
 .header_task .back_button {
@@ -1064,7 +1085,7 @@
   top: 20px; */
   margin: 20px 0;
   background-color: #fff;
-  width: 96%;
+  width: 100%;
 }
 
 .card_karyawan .card_profile {
@@ -1128,7 +1149,7 @@
   border-radius: 10px;
   margin: 10px 0 20px 0;
   background-color: #fff;
-  width: 96%;
+  width: 100%;
 }
 
 .container_task:hover {
@@ -1408,7 +1429,7 @@
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
-  width: 96%;
+  width: 100%;
   gap: 15px;
 }
 
@@ -1485,7 +1506,7 @@
 .kinerja_karyawan {
   border: var(--borderCard);
   margin-top: 20px;
-  width: 96%;
+  width: 100%;
   border-radius: 10px;
   padding: 25px;
   background-color: #fff;
@@ -2103,6 +2124,8 @@ form select {
 definePageMeta({
   layout: "dashboard",
 });
+import { VueDatePicker } from "@vuepic/vue-datepicker";
+
 export default {
   data() {
     return {
@@ -2133,6 +2156,9 @@ export default {
       daftarHari: [],
     };
   },
+  components: {
+    VueDatePicker,
+  },
   mounted() {
     this.setDefaultTanggal();
     this.ambilTask();
@@ -2141,18 +2167,27 @@ export default {
   methods: {
     onDateChange() {
       if (!this.start || !this.end) return;
-
-      // Normalisasi range
-      if (this.start > this.end) {
-        this.end = this.start;
-        return;
-      }
-
       if (this.isLoading) return;
 
+      const startDate = new Date(this.start);
+      const endDate = new Date(this.end);
+
+      if (startDate > endDate) {
+        this.start = this.end;
+        return;
+      }
+      const format = (date) => date.toISOString().split("T")[0];
+
+      // this.$router.replace({
+      //   query: {
+      //     startDate: format(startDate),
+      //     endDate: format(endDate),
+      //   },
+      // });
+
       this.ambilTask();
-      this.hariLibur();
     },
+
     logout() {
       const token = useCookie("token");
       token.value = null;
@@ -2166,13 +2201,36 @@ export default {
     setDefaultTanggal() {
       if (this.start && this.end) return;
       const today = new Date();
-      const sevenDaysAgo = new Date();
-      sevenDaysAgo.setDate(today.getDate() - 30);
+      const firstDay = new Date();
+      // sevenDaysAgo.setDate(today.getDate() - 30);
+      firstDay.setDate(1);
 
       // Format ke YYYY-MM-DD (format input type="date")
       const format = (date) => date.toISOString().split("T")[0];
-      this.start = format(sevenDaysAgo);
+
+      this.start = format(firstDay);
       this.end = format(today);
+
+      // console.log("tes", this.$route.query);
+
+      // if (this.$route.query.startDate) {
+      //   this.start = this.$route.startDate;
+      // } else {
+      //   this.start = format(firstDay);
+      // }
+
+      // if (this.$route.query.endDate) {
+      //   this.end = this.$route.endDate;
+      // } else {
+      //   this.end = format(today);
+      // }
+
+      // this.$router.replace({
+      //   query: {
+      //     startDate: this.start,
+      //     endDate: this.end,
+      //   },
+      // });
     },
     closeSukses() {
       this.sukses = false;
@@ -2190,7 +2248,6 @@ export default {
         this.daftarKaryawan = task.data.assignees || [];
         this.daftarHari = task.data.jadwal_libur || [];
         // this.daftarHari = task.data.jadwal_libur
-        this.isLoading = true;
         console.log("Berhasil ambil task:", task);
       } catch (error) {
         console.error("Gagal ambil task:", error);

@@ -41,12 +41,10 @@
             <option value="pm">Project Manager</option>
             <option value="analis">Data Analys</option>
             <option value="backend">Backend</option>
-            <option value="backend-web">Backend-Web Developer</option>
+            <!-- <option value="backend-web">Backend-Web Developer</option> -->
             <option value="web">Web Developer</option>
             <option value="mobile apps">Mobile Apps</option>
             <option value="UI-UX">UI-UX</option>
-            <!-- <option value="UI/UX Designer">UI/UX Designer</option>
-              <option value="Project Manager">Project Manager</option> -->
           </select>
         </form>
         <div class="total_karyawan">
@@ -103,158 +101,6 @@
             </div> -->
         </div>
       </div>
-
-      <!-- Duplikat Karyawan -->
-      <!-- <div class="karyawan">
-          <div class="identitas">
-            <img src="../img/karyawan.jpg" alt="" />
-            <h4>Budi Santoso</h4>
-            <div class="peran">
-              <i class="fa-solid fa-briefcase"></i>
-              <p>Frontend Developer</p>
-            </div>
-            <div class="bebanKerja">
-              <i class="fa-solid fa-clock"></i>
-              <p>Sedang</p>
-            </div>
-          </div>
-          <div class="kinerja">
-            <div class="proyekAktif">
-              <p>Proyek Aktif:</p>
-              <p>3</p>
-            </div>
-            <div class="performa">
-              <p>Performa:</p>
-              <p>92%</p>
-            </div>
-          </div>
-        </div>
-
-        
-        <div class="karyawan">
-          <div class="identitas">
-            <img src="../img/karyawan.jpg" alt="" />
-            <h4>Budi Santoso</h4>
-            <div class="peran">
-              <i class="fa-solid fa-briefcase"></i>
-              <p>Frontend Developer</p>
-            </div>
-            <div class="bebanKerja">
-              <i class="fa-solid fa-clock"></i>
-              <p>Sedang</p>
-            </div>
-          </div>
-          <div class="kinerja">
-            <div class="proyekAktif">
-              <p>Proyek Aktif:</p>
-              <p>3</p>
-            </div>
-            <div class="performa">
-              <p>Performa:</p>
-              <p>92%</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="karyawan">
-          <div class="identitas">
-            <img src="../img/karyawan.jpg" alt="" />
-            <h4>Budi Santoso</h4>
-            <div class="peran">
-              <i class="fa-solid fa-briefcase"></i>
-              <p>Frontend Developer</p>
-            </div>
-            <div class="bebanKerja">
-              <i class="fa-solid fa-clock"></i>
-              <p>Sedang</p>
-            </div>
-          </div>
-          <div class="kinerja">
-            <div class="proyekAktif">
-              <p>Proyek Aktif:</p>
-              <p>3</p>
-            </div>
-            <div class="performa">
-              <p>Performa:</p>
-              <p>92%</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="karyawan">
-          <div class="identitas">
-            <img src="../img/karyawan.jpg" alt="" />
-            <h4>Budi Santoso</h4>
-            <div class="peran">
-              <i class="fa-solid fa-briefcase"></i>
-              <p>Frontend Developer</p>
-            </div>
-            <div class="bebanKerja">
-              <i class="fa-solid fa-clock"></i>
-              <p>Sedang</p>
-            </div>
-          </div>
-          <div class="kinerja">
-            <div class="proyekAktif">
-              <p>Proyek Aktif:</p>
-              <p>3</p>
-            </div>
-            <div class="performa">
-              <p>Performa:</p>
-              <p>92%</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="karyawan">
-          <div class="identitas">
-            <img src="../img/karyawan.jpg" alt="" />
-            <h4>Budi Santoso</h4>
-            <div class="peran">
-              <i class="fa-solid fa-briefcase"></i>
-              <p>Frontend Developer</p>
-            </div>
-            <div class="bebanKerja">
-              <i class="fa-solid fa-clock"></i>
-              <p>Sedang</p>
-            </div>
-          </div>
-          <div class="kinerja">
-            <div class="proyekAktif">
-              <p>Proyek Aktif:</p>
-              <p>3</p>
-            </div>
-            <div class="performa">
-              <p>Performa:</p>
-              <p>92%</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="karyawan">
-          <div class="identitas">
-            <img src="../img/karyawan.jpg" alt="" />
-            <h4>Budi Santoso</h4>
-            <div class="peran">
-              <i class="fa-solid fa-briefcase"></i>
-              <p>Frontend Developer</p>
-            </div>
-            <div class="bebanKerja">
-              <i class="fa-solid fa-clock"></i>
-              <p>Sedang</p>
-            </div>
-          </div>
-          <div class="kinerja">
-            <div class="proyekAktif">
-              <p>Proyek Aktif:</p>
-              <p>3</p>
-            </div>
-            <div class="performa">
-              <p>Performa:</p>
-              <p>92%</p>
-            </div>
-          </div>
-        </div> -->
     </div>
   </div>
 

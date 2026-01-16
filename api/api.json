@@ -1,0 +1,12 @@
+
+
+    notifications": {
+        "workload": {
+            "message": "Jam kerjamu masih kurang, segera minta task tambahan."
+        },
+        "on_time": {
+            "message": "Ketepatan waktu kerjamu kurang maksimal, harap lebih disiplin dengan deadline."
+        },
+        "performance": {
+            "message": "Skor performa keseluruhanmu perlu ditingkatkan, ayo semangat!"
+        }
