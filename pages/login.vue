@@ -398,11 +398,11 @@ a {
 }
 </style>
 
-<!-- <script setup>
+<script setup>
 definePageMeta({
   layout: "auth",
 });
-</script> -->
+</script>
 
 <script>
 export default {

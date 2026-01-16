@@ -19,10 +19,6 @@ export default defineNuxtRouteMiddleware((to) => {
 
   // 3. Proteksi role admin
   if (to.path.startsWith("/admin") && role !== "admin") {
-    return navigateTo("");
-  }
-
-  if (to.path.startsWith("/karyawan") && role === "admin") {
     return navigateTo("/");
   }
 });
