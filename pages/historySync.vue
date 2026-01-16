@@ -173,7 +173,7 @@ export default {
     logout(){
       const token = useCookie("token");
       token.value = null;
-      this.$router.push('/login');
+      this.$router.push('/');
     },
     async syncData() {
       const { $api } = useNuxtApp();

@@ -31,10 +31,10 @@
 body {
   background-color: #f8fcff;
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
   color: #010101;
   overflow-x: hidden;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
   font-family: "Poppins", sans-serif;
 }
 
@@ -42,6 +42,7 @@ body {
   display: flex;
   justify-content: center;
   gap: 40px;
+  height: 100dvh;
 }
 
 .konten .navbar {
@@ -60,7 +61,6 @@ body {
 }
 
 .konten .background .sidebar_responsive {
-  width: 50%;
   background-color: rgb(16, 50, 130);
   height: 100dvh;
   text-align: center;
@@ -96,11 +96,15 @@ body {
 .konten .sidebar {
   width: 18%;
   background-color: rgb(16, 50, 130);
-  height: 100vh;
+  height: 100dvh;
+  overflow-y: hidden;
   text-align: center;
   color: #fff;
-  position: fixed;
-  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* position: fixed;
+  left: 0; */
 }
 
 .sidebar .logo,
@@ -165,7 +169,13 @@ body {
   margin-right: 10px;
 }
 
-.sidebar-text a {
+.sidebar-text span.material-symbols-outlined {
+  /* font-size: 20px; */
+  margin-right: 10px;
+}
+
+.sidebar-text a,
+.sidebar-text details {
   color: #fff;
   font-size: 15px;
   height: 6vh;
@@ -174,8 +184,8 @@ body {
 
 .sidebar .footer_sidebar,
 .sidebar_responsive .footer_sidebar {
-  position: absolute;
-  bottom: 0;
+  /* position: absolute;
+  bottom: 0; */
   /* border: 1px solid #010101; */
   border-top: 1px solid rgb(85, 57, 223);
   padding: 18px;
@@ -258,21 +268,22 @@ body {
 
 /* Konten */
 .konten .isi {
-  width: 80%;
-  position: absolute;
-  height: 100vh;
+  width: 100%;
+  /* position: absolute; */
+  max-height: 100dvh;
+  overflow-y: auto;
   right: 0;
 }
 
 .isi h2 {
   margin-top: 40px;
   color: rgb(16, 50, 130);
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
 }
 
 .isi .filter {
   background-color: #fff;
-  width: 96%;
+  width: 100%;
   /* height: 20vh; */
   margin-top: 35px;
   padding: 16px;
@@ -299,11 +310,11 @@ body {
   gap: 10px;
 }
 
-form .dates {
+.dates {
   width: 35%;
 }
 
-form .dates .tanggal {
+.dates .tanggal {
   display: flex;
   justify-content: center;
   border: var(--borderCard);
@@ -317,7 +328,7 @@ form .dates .tanggal {
   font-size: 18px;
 }
 
-form .tanggal_mulai,
+.tanggal_mulai,
 .tanggal_akhir,
 .posisi,
 .cari {
@@ -367,13 +378,14 @@ form select {
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
-  width: 99%;
+  width: 100%;
 }
 
 .karyawan {
   margin-top: 20px;
   border: var(--borderCard);
-  width: 22.8%;
+  background-color: #fff;
+  width: 23.7%;
   /* height: 35vh; */
   text-align: center;
   border-radius: 15px;
@@ -386,7 +398,7 @@ form select {
 .karyawan:hover {
   border: 1px solid rgb(68, 41, 203);
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .karyawan .identitas img {
@@ -779,6 +791,10 @@ form select {
     /* left: 20px; */
   }
 
+  .konten .background .sidebar_responsive {
+    width: 40%;
+  }
+
   .karyawan {
     width: 48%;
     /* height: 38vh; */
@@ -818,7 +834,7 @@ form select {
   }
 
   .konten .isi {
-    width: 96%;
+    width: 10%;
     overflow-x: hidden;
     position: relative;
     top: 10vh;
@@ -921,7 +937,14 @@ form select {
   .success-animation .sukses {
     font-size: 13px;
     padding: 12px;
-    top: 0;
+    /* top: 0; */
+  }
+}
+
+/* Handphone Kecil / Compact Layout */
+@media (max-width: 430px) {
+  .konten .background .sidebar_responsive {
+    width: 60%;
   }
 }
 
@@ -1025,12 +1048,12 @@ form select {
 .success-animation {
   position: fixed;
   left: 50%;
+  top: 5%;
   transform: translateX(-50%);
   width: 100%;
   display: flex;
   justify-content: center;
   z-index: 1000;
-  margin-top: 16px;
 }
 
 @keyframes fadeIn {

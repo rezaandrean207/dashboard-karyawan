@@ -2,29 +2,48 @@
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
-  css: ["@fortawesome/fontawesome-free/css/all.min.css"],
+  css: [
+    "@fortawesome/fontawesome-free/css/all.min.css",
+    "@vuepic/vue-datepicker/dist/main.css",
+  ],
+  build: {
+    transpile: ["@vuepic/vue-datepicker"],
+  },
   runtimeConfig: {
     public: {
-      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || "https://api.clickup.devlmu.com", // cukup didefinisikan, nilainya diambil dari .env
+      apiBaseUrl:
+        process.env.NUXT_PUBLIC_API_BASE_URL ||
+        "https://api.clickup.devlmu.com", // cukup didefinisikan, nilainya diambil dari .env
     },
   },
-  app: {
-    head: {
-      link: [
-        { rel: "preconnect", href: "https://fonts.googleapis.com" },
-        {
-          rel: "preconnect",
-          href: "https://fonts.gstatic.com",
-          crossorigin: "",
-        },
-        {
-          rel: "stylesheet",
-          href: "https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap",
-        },
-        { rel: "stylesheet", href: "/css/style.css" },
-      ],
-    },
+ app: {
+  head: {
+    link: [
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossorigin: "",
+      },
+
+      // Google Font
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap",
+      },
+
+      // Material Symbols
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined",
+      },
+
+      // CSS utama
+      { rel: "stylesheet", href: "/css/style.css" },
+    ],
   },
+},
+
 
   // nitro: {
   //   devProxy: {

@@ -3,17 +3,16 @@ import axios from "axios";
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig();
 
-  const api = axios.create({
-    baseURL: config.public.apiBaseUrl,
-  });
+  const apiDev = config.public.apiBaseUrl;
+  const apiLocal = "http://192.168.0.102:8001";
 
-  // const apiTes = axios.create({
-  //   baseURL: "http://192.168.0.102:8001",
-  // });
+  const api = axios.create({
+    baseURL: apiDev,
+  });
 
   api.interceptors.request.use((req) => {
     if (typeof window !== "undefined") {
-      const token = localStorage.getItem("token");
+      const token = useCookie("token").value;
       if (token) {
         req.headers.Authorization = `Bearer ${token}`;
       }

@@ -91,7 +91,6 @@
   </div>
 </template>
 
-
 <style>
 .shake {
   -webkit-animation: shake-horizontal 0.2s
@@ -399,8 +398,11 @@ a {
 }
 </style>
 
-<script setup>
-</script>
+<!-- <script setup>
+definePageMeta({
+  layout: "auth",
+});
+</script> -->
 
 <script>
 export default {
@@ -436,17 +438,20 @@ export default {
           path: "/",
         });
 
+        const role = useCookie("role", {
+          maxAge: 60 * 60 * 24, // 1 hari
+          sameSite: "lax",
+          path: "/",
+        });
+
         token.value = res.data.data.token;
+        role.value = res.data.data.role;
 
-        const username = this.form.username;
-
-        if (username === "admin") {
-          // 👉 Redirect otomatis
-          router.push("/listKaryawan");
-          console.log("Anda masuk ke dashboard ", username);
-        } else if (username === "karyawan") {
-          router.push("/detailTask");
-          console.log("Anda masuk ke dashboard karyawan");
+        // ✅ REDIRECT SEKALI
+        if (role.value === "admin") {
+          router.replace("/admin/listKaryawan");
+        } else {
+          router.replace("/karyawan/performaSaya");
         }
       } catch (error) {
         console.error("API Error:", error);
