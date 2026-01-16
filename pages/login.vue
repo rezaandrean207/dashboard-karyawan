@@ -399,9 +399,9 @@ a {
 </style>
 
 <script setup>
-definePageMeta({
-  layout: "auth",
-});
+// definePageMeta({
+//   layout: "auth",
+// });
 </script>
 
 <script>
@@ -430,7 +430,7 @@ export default {
           username: this.form.username,
           password: this.form.password,
         });
-        console.log("Login sukses:", res.data.token);
+        console.log("Login sukses:", res.data.data.token);
 
         const token = useCookie("token", {
           maxAge: 60 * 60 * 24, // 1 hari
@@ -448,7 +448,7 @@ export default {
         role.value = res.data.data.role;
 
         // ✅ REDIRECT SEKALI
-        if (role.value === "admin") {
+        if (res.data.data.role === "admin") {
           router.replace("/admin/listKaryawan");
         } else {
           router.replace("/karyawan/performaSaya");
