@@ -293,7 +293,7 @@
       <div
         class="background_bug"
         v-if="detailBug"
-        @click.self="detailBug = null"
+        @click.self="closeDetailBug()"
       >
         <div class="container_bug">
           <div class="header_containerBug">
@@ -302,11 +302,11 @@
           <div class="bug_detail">
             <div class="header_bug">
               <div class="name_bug">
-                <p>{{ detailBug.name }}</p>
+                <p>{{ detailBug.task_name }}</p>
               </div>
               <div class="status_bug">
                 <div class="project_bug">
-                  <p>{{ detailBug.project_name }}</p>
+                  <p>{{ detailBug.bug_label }}</p>
                 </div>
                 <div class="tags">
                   <!-- {{ detailBug.project_name }} -->
@@ -314,9 +314,9 @@
                 </div>
               </div>
             </div>
-            <div class="description_bug">
+            <!-- <div class="description_bug">
               <p>Deskripsi Task</p>
-            </div>
+            </div> -->
             <div class="keterangan_waktu">
               <!-- <div class="jam">
                   <i class="fa-regular fa-clock"></i>
@@ -325,30 +325,25 @@
                 </div> -->
               <div class="start_date">
                 <i class="fa-regular fa-calendar"></i>
-                <!-- <p v-if="k.start_date">Mulai: {{ k.start_date }}</p>
-          <p v-if="!k.start_date">Mulai: <i>Tidak Valid</i></p> -->
-                <p>Mulai: 20-08-2025</p>
+                <p>Mulai: {{ detailBug.start_date }}</p>
               </div>
               <div class="deadline">
                 <i class="fa-regular fa-calendar"></i>
-                <!-- <p v-if="k.due_date">Target: {{ k.due_date }}</p>
-          <p v-if="!k.due_date">Target: <i>Tidak Valid</i></p> -->
-                <p>Target: 20-08-2025</p>
+                <p>Target: {{ detailBug.due_date }}</p>
               </div>
               <div class="done_date">
                 <i class="fa-regular fa-calendar"></i>
-                <!-- <p>Selesai: {{ k.date_done }}</p> -->
-                <p>Selesai: 20-08-2025</p>
+                <p>Selesai: {{ detailBug.date_done }}</p>
               </div>
               <div class="created_by">
                 <i class="fa-regular fa-user"></i>
-                <!-- <p>Dibuat oleh: {{ k.creator_name }}</p> -->
-                <p>Bug Terbuat Oleh oleh: Karyawan</p>
+                <p>Bug Terbuat oleh: {{ detailBug.assignee_name }}</p>
               </div>
             </div>
           </div>
         </div>
       </div>
+
       <div>
         <div
           class="container_task"
@@ -459,105 +454,105 @@
     </div>
   </div>
 
-  <div
+  <details class="notifikasi-detail" v-if="hasNotifikasi">
+    <summary class="notifikasi" :class="{ gap: !hasNotifikasi }">
+      <i class="fa-regular fa-bell"></i>
+
+      <!-- <span class="notif-dot" v-if="hasNotifikasi"></span> -->
+      <span class="notif-dot"></span>
+      <h4>Peringatan</h4>
+    </summary>
+    <div class="sidebar_notif">
+      <!-- <div class="header_notif">
+        <h4 class="judul-notif">Notifikasi Sistem</h4>
+      </div> -->
+      <div class="container-notif">
+        <div class="isi_notif" v-for="notif in listNotifikasi" :key="notif.id">
+          <!-- <h4 v-if="notif.workload">Beban Kerja</h4>
+          <h4 v-else-if="notif.on_time">Tepat Waktu Kerja</h4>
+          <h4 v-else-if="notif.performance">Performa Karyawan</h4> -->
+          <h4>{{ notif.name }}</h4>
+          <p>{{ notif.message }}</p>
+        </div>
+        <div
+          class="isi-not-found"
+          v-if="!listNotifikasi || listNotifikasi.length === 0"
+        >
+          <!-- <h4>Header Notifikasi</h4> -->
+          <p>Belum ada notifikasi baru.</p>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- <div
     class="notifikasi"
     :class="{ gap: !hasNotifikasi }"
     @click="openNotif()"
     v-if="notif === false"
   >
     <i class="fa-regular fa-bell"></i>
-    <!-- <svg
-      xmlns="http://www.w3.org/2000/svg"
-      height="24px"
-      viewBox="0 -960 960 960"
-      width="24px"
-      fill="#fff"
-    >
-      <path
-        d="M480-80q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80Zm0-420ZM160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v13q-11 22-16 45t-4 47q-10-2-19.5-3.5T480-720q-66 0-113 47t-47 113v280h320v-257q18 8 38.5 12.5T720-520v240h80v80H160Zm560-400q-50 0-85-35t-35-85q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35Z"
-      />
-    </svg> -->
-    <!-- DOT MERAH -->
     <span class="notif-dot" v-if="hasNotifikasi"></span>
-    <h4>Notifikasi</h4>
-  </div>
+    <h4>Peringatan</h4>
+  </div> -->
 </template>
 
-<!-- Sidebar Notifikasi  -->
+<!-- Style detail -->
 <style scoped>
-.notif-dot {
-  position: relative;
-  top: -6px;
-  right: 12px;
-  width: 8px;
-  height: 8px;
-  background-color: #ea3323;
-  border-radius: 50%;
-}
-
-.notifikasi {
-  display: flex;
-  align-items: center;
-  /* gap: 3px; */
+details {
   position: fixed;
   top: 20px;
-  right: 20px;
-  /* background-color: #f5f5f5; */
-  background-color: rgb(0, 0, 169);
-  color: #fff;
-  padding: 15px 25px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border: 1px solid #ddd;
+  /* width: 50%; */
+  width: 650px;
   z-index: 1000;
-  cursor: pointer;
 }
 
-.gap {
-  gap: 10px;
-}
-
-.notifikasi i {
-  font-size: 20px;
-  color: #fff;
-}
-
-.notifikasi:hover {
-  background-color: rgb(0, 0, 227);
-}
-
-.notifikasi:active {
-  background-color: rgb(0, 0, 130);
-}
-
-.background-notif {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.2);
+details summary {
   display: flex;
-  justify-content: flex-end;
-  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  /* gap: 3px;
+  position: fixed;
+  top: 20px;
+  width: 50%;
+  right: 20px;
+  background-color: #f5f5f5;
+  background-color: rgb(0, 0, 169); */
+  background-color: rgb(255, 217, 217);
+  /* color: #fff; */
+  color: rgb(214, 16, 16);
+  padding: 25px;
+  border-radius: 8px;
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
+  box-shadow: -2px 0 8px rgba(134, 0, 0, 0.1);
+  border: 1px solid rgb(214, 16, 16);
+  cursor: pointer;
+  /* height: 50px; */
+}
+.sidebar_notif {
+  /* width: 350px; */
+  /* width: 100%; */
+  height: 100%;
+  background-color: rgb(255, 217, 217);
+  border-radius: 8px;
+  /* background-color: #fff; */
+  /* background-color: #f4f4f4; */
+  box-shadow: -2px 0 8px rgba(134, 0, 0, 0.1);
+  padding: 20px;
+  margin-top: 10px;
+  border: 1px solid rgb(214, 16, 16);
 }
 
-.sidebar_notif {
-  width: 350px;
-  height: 100%;
-  /* background-color: #fff; */
-  background-color: #f4f4f4;
-  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  animation: slideIn 0.2s ease-out;
+details[open] .sidebar-notif {
+  animation: slideIn 0.2s ease-out forwards;
 }
 
 @keyframes slideIn {
   from {
-    transform: translateX(100px);
+    transform: translateY(-10px);
   }
   to {
-    transform: translateX(0);
+    transform: translateY(0);
   }
 }
 
@@ -578,29 +573,73 @@
 }
 
 .container-notif {
-  margin-top: 20px;
+  /* margin-top: 20px; */
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
 .isi_notif {
-  background-color: #e7e7e7;
-  border: 1px solid #ccc;
+  /* background-color: #e7e7e7; */
+  /* border: 1px solid #ccc; */
+  border: 1px solid rgb(214, 16, 16);
   padding: 10px;
   border-radius: 8px;
 }
 
 .isi_notif h4 {
-  padding-bottom: 5px;
+  /* padding-bottom: 5px; */
   margin-bottom: 5px;
-  color: rgb(16, 50, 130);
-  border-bottom: 1px solid #dddddd;
+  color: rgb(214, 16, 16);
+  /* color: rgb(16, 50, 130); */
+  /* border-bottom: 1px solid #dddddd; */
 }
 
 .isi_notif p {
   font-size: 14px;
   color: #555;
+}
+</style>
+
+<!-- Sidebar Notifikasi  -->
+<style scoped>
+.notif-dot {
+  position: relative;
+  top: -6px;
+  right: 22px;
+  width: 8px;
+  height: 8px;
+  background-color: #ea3323;
+  border-radius: 50%;
+}
+
+.gap {
+  gap: 10px;
+}
+
+.notifikasi i {
+  font-size: 20px;
+  color: rgb(214, 16, 16);
+}
+
+.notifikasi:hover {
+  background-color: rgb(252, 198, 198);
+}
+
+.notifikasi:active {
+  background-color: rgb(252, 198, 198);
+}
+
+.background-notif {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: flex-end;
+  z-index: 1000;
 }
 </style>
 
@@ -2086,11 +2125,11 @@ export default {
 
       // Normalisasi range
       if (this.start > this.end) {
-        this.end = this.start;
+        this.start = this.end;
         return;
       }
 
-      // if (this.isLoading) return;
+      if (this.isLoading) return;
 
       this.ambilTask();
       // this.hariLibur();
@@ -2126,8 +2165,8 @@ export default {
       try {
         const task = await this.$api.get(
           `/api/v1/workload/tasks-by-range?start_date=${this.formatTanggal(
-            this.start
-          )}&end_date=${this.formatTanggal(this.end)}`
+            this.start,
+          )}&end_date=${this.formatTanggal(this.end)}`,
         );
         // this.daftarKaryawan = task.data.assignees || [];
         console.log("TASK DATA:", task.data);
@@ -2293,13 +2332,17 @@ export default {
       };
     },
     handleCardClick(k) {
-      if (!k.tags) return;
+      if (k.tags[0] !== "bugs") return;
 
-      this.BugDetail(k);
+      console.log("HandleCardClick berhasil di klik");
+
+      this.showBugDetail(k);
     },
-    BugDetail(bug) {
-      this.detailBug = bug;
-      console.log(bug);
+
+    showBugDetail(task) {
+      this.detailBug = task.bug_source_info;
+      console.log(task);
+      console.log("Data detailBug", this.detailBug);
     },
     closeDetailBug() {
       this.detailBug = null;

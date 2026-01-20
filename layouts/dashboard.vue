@@ -22,7 +22,7 @@
     </div>
 
     <div class="background" v-show="sidebar" @click="close">
-      <div class="sidebar_responsive"@click.stop>
+      <div class="sidebar_responsive" @click.stop>
         <div class="logo">
           <img src="/img/logo dna.png" alt="" />
           <div class="keterangan">
@@ -70,6 +70,13 @@
                 <!-- <span class="material-symbols-outlined"> settings </span> -->
                 <!-- <i class="fa-solid fa-bug"></i> -->
                 <p>Bug Setting</p>
+              </NuxtLink>
+              <NuxtLink
+                to="/admin/changePassword"
+                class="submenu-item"
+                :class="{ active: $route.path === '/admin/changePassword' }"
+              >
+                <p>Ubah Password</p>
               </NuxtLink>
             </div>
           </details>
@@ -158,10 +165,14 @@
               class="submenu-item"
               :class="{ active: $route.path === '/admin/settingBug' }"
             >
-              <!-- <i class="fa-solid fa-gear"></i> -->
-              <!-- <span class="material-symbols-outlined"> settings </span> -->
-              <!-- <i class="fa-solid fa-bug"></i> -->
               <p>Bug Setting</p>
+            </NuxtLink>
+            <NuxtLink
+              to="/admin/changePassword"
+              class="submenu-item"
+              :class="{ active: $route.path === '/admin/changePassword' }"
+            >
+              <p>Ubah Password</p>
             </NuxtLink>
           </div>
         </details>
@@ -172,6 +183,14 @@
         >
           <span class="material-symbols-outlined"> group </span>
           <p>Grouping</p>
+        </NuxtLink>
+        <NuxtLink
+          to="/admin/ganttChart"
+          class="hari_libur"
+          :class="{ active: $route.path === '/admin/ganttChart' }"
+        >
+          <span class="material-symbols-outlined"> group </span>
+          <p>Gantt Chart</p>
         </NuxtLink>
 
         <!-- <NuxtLink to="/laporanKinerja" class="report">
@@ -264,7 +283,7 @@ details[open] {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  animation: fadeSlide 0.2s ease;
+  animation: fadeSlide 0.3s ease;
   border-left: 1px solid rgb(16, 67, 185);
 }
 
@@ -280,12 +299,14 @@ details[open] {
 }
 
 .submenu-item {
-  padding: 8px 10px;
+  padding: 8px 15px;
   border-radius: 6px;
   font-size: 14px;
   color: #cfd8ff;
   text-decoration: none;
   transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
 }
 
 .submenu-item:hover {

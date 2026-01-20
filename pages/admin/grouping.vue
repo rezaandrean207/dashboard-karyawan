@@ -7,10 +7,11 @@
   </div>
   <div class="isi">
     <h2>Grouping</h2>
-    <p>
+    <!-- <p>
       Karyawan dengan performa rendah (< {{ searchInput }}%) berdasarkan
       kategori
-    </p>
+    </p> -->
+    <p>Karyawan dengan performa rendah (< 85%) berdasarkan kategori</p>
     <div class="filter">
       <div class="title">
         <i class="fa-solid fa-filter"></i>
@@ -44,6 +45,15 @@
                 </span>
               </template>
             </VueDatePicker> -->
+          </div>
+        </div>
+        <div class="kurang-lebih-dari">
+          <label for="">Kurang/lebih dari</label>
+          <div class="kurang-lebih">
+            <select name="" id="" v-model="kurangLebih">
+              <option value="kurangDari">Kurang Dari</option>
+              <option value="lebihDari">Lebih Dari</option>
+            </select>
           </div>
         </div>
         <div class="search-input">
@@ -83,7 +93,10 @@
               </div>
             </div>
             <div class="right">
-              <h4>{{ k.value }}%</h4>
+              <h4 :class="teksColorClass(k.value)" v-if="k.missing_hours">
+                {{ k.value }}% ({{ k.missing_hours }} Jam)
+              </h4>
+              <h4 :class="teksColorClass(k.value)" v-else>{{ k.value }}%</h4>
               <p>{{ kategori.category }}</p>
             </div>
           </div>
@@ -186,12 +199,18 @@
   gap: 20px;
 }
 
-.search-input label {
+.kurang-lebih-dari {
+  width: 20%;
+}
+
+.search-input label,
+.kurang-lebih-dari label {
   font-size: 14px;
   font-weight: 600;
 }
 
-.search {
+.search,
+.kurang-lebih {
   /* background-color: #ddd; */
   border: 1px solid #ddd;
   padding: 10px;
@@ -199,12 +218,29 @@
   /* width: 30%; */
 }
 
-.search input {
+.search input,
+.kurang-lebih select {
   border: 1px solid #ddd;
   width: 100%;
   height: 100%;
   border-radius: 5px;
   padding: 10px;
+}
+</style>
+
+<!-- Teks color -->
+<style scoped>
+.late {
+  color: red;
+}
+
+.ontime {
+  color: green;
+}
+
+.special {
+  color: gold;
+  filter: drop-shadow(2px 2px 4px rgb(255, 251, 228));
 }
 </style>
 
@@ -228,6 +264,7 @@ export default {
       isClose: false,
       default: 85,
       searchInput: 85,
+      kurangLebih: "kurangDari",
     };
   },
   components: {
@@ -239,6 +276,13 @@ export default {
     // this.hariLibur();
   },
   methods: {
+    teksColorClass(warna) {
+      return {
+        special: warna > 100,
+        ontime: warna == 100,
+        late: warna < 100,
+      };
+    },
     onDateChange() {
       if (!this.start || !this.end) return;
       if (this.isLoading) return;
@@ -389,12 +433,36 @@ export default {
         return this.daftarKaryawan || [];
       }
 
-      return (this.daftarKaryawan || [])
-        .map((group) => ({
-          ...group,
-          data: group.data.filter((k) => Number(k.value) < limit),
-        }))
-        .filter((group) => group.data.length > 0);
+      // if (!["kurangDari", "lebihDari"].includes(this.kurangLebih)) {
+      //   return this.daftarKaryawan || [];
+      // }
+
+      // const operator =
+      //   this.kurangLebih === "kurangDari" ? (v) => v < limit : (v) => v > limit;
+
+      // return (this.daftarKaryawan || [])
+      //   .map((group) => ({
+      //     ...group,
+      //     data: group.data.filter((k) => operator(Number(k.value))),
+      //   }))
+      //   .filter((group) => group.data.length);
+
+      if (this.kurangLebih === "kurangDari") {
+        return (this.daftarKaryawan || [])
+          .map((group) => ({
+            ...group,
+            data: group.data.filter((k) => Number(k.value) < limit),
+          }))
+          .filter((group) => group.data.length > 0);
+      }
+      if (this.kurangLebih === "lebihDari") {
+        return (this.daftarKaryawan || [])
+          .map((group) => ({
+            ...group,
+            data: group.data.filter((k) => Number(k.value) > limit),
+          }))
+          .filter((group) => group.data.length > 0);
+      }
     },
   },
 

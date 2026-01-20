@@ -1,5 +1,4 @@
 <template>
- 
   <!-- Animasi sukses -->
   <div v-if="sukses" class="success-animation">
     <div class="sukses">
@@ -62,8 +61,18 @@
             class="hari_libur"
             :class="{ active: $route.path === '/karyawan/performaSaya' }"
           >
-            <i class="fa-regular fa-calendar"></i>
+            <span class="material-symbols-outlined"> bar_chart </span>
             <p>Performa Saya</p>
+          </NuxtLink>
+          <NuxtLink
+            to="/karyawan/changePasswordKaryawan"
+            class="hari_libur"
+            :class="{
+              active: $route.path === '/karyawan/changePasswordKaryawan',
+            }"
+          >
+            <span class="material-symbols-outlined"> password_2 </span>
+            <p>Ganti Password</p>
           </NuxtLink>
         </div>
 
@@ -74,7 +83,7 @@
             <!-- <h4>Reza Andrean</h4> -->
             <!-- <p>Karyawan</p> -->
           </div>
-          <div class="sync">
+          <!-- <div class="sync">
             <button
               class="btn"
               @click="syncData"
@@ -88,7 +97,7 @@
               <i v-else class="fa-solid fa-rotate-right"></i>
               {{ loading ? "Menyinkronkan..." : "Sync" }}
             </button>
-          </div>
+          </div> -->
           <button @click="logout" class="logout">Logout</button>
         </div>
       </div>
@@ -134,8 +143,18 @@
           class="hari_libur"
           :class="{ active: $route.path === '/karyawan/performaSaya' }"
         >
-          <i class="fa-regular fa-calendar"></i>
+          <span class="material-symbols-outlined"> bar_chart </span>
           <p>Performa Saya</p>
+        </NuxtLink>
+        <NuxtLink
+          to="/karyawan/changePasswordKaryawan"
+          class="hari_libur"
+          :class="{
+            active: $route.path === '/karyawan/changePasswordKaryawan',
+          }"
+        >
+          <span class="material-symbols-outlined"> password_2 </span>
+          <p>Ganti Password</p>
         </NuxtLink>
       </div>
 
@@ -146,7 +165,7 @@
           <!-- <h4>Reza Andrean</h4> -->
           <!-- <p>Karyawan</p> -->
         </div>
-        <div class="sync">
+        <!-- <div class="sync">
           <button
             class="btn"
             @click="syncData"
@@ -157,19 +176,17 @@
             }"
           >
             <span v-if="loading" class="spinner"></span>
-            <!-- <i v-else class="fa-solid fa-rotate-right"></i> -->
+
             <i v-else class="fa-solid fa-rotate-right"></i>
 
             {{ loading ? "Menyinkronkan..." : "Sync" }}
-            <!-- <i v-else class="fa-solid fa-circle-check"></i>     -->
           </button>
-        </div>
+        </div> -->
 
         <button @click="logout" class="logout">Logout</button>
       </div>
     </div>
     <NuxtPage />
-    
   </div>
 </template>
 
@@ -253,6 +270,10 @@
 
 .notifikasi:hover {
   background-color: #e0e0e0;
+}
+
+.user {
+  margin-bottom: 15px;
 }
 </style>
 

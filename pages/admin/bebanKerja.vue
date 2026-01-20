@@ -501,7 +501,7 @@
           <label for="">Tugas</label>
           <select name="" id="" class="task_style" v-model="taskBug">
             <option value="">Semua</option>
-            <option value="bug">Bug</option>
+            <option value="bugs">Bug</option>
             <option value="task">Task</option>
           </select>
         </div>
@@ -517,7 +517,7 @@
       <div
         class="background_bug"
         v-if="detailBug"
-        @click.self="detailBug = null"
+        @click.self="closeDetailBug()"
       >
         <div class="container_bug">
           <div class="header_containerBug">
@@ -526,21 +526,21 @@
           <div class="bug_detail">
             <div class="header_bug">
               <div class="name_bug">
-                <p>{{ detailBug.name }}</p>
+                <p>{{ detailBug.task_name }}</p>
               </div>
               <div class="status_bug">
-                <div class="project_bug">
-                  <p>{{ detailBug.project_name }}</p>
-                </div>
                 <div class="tags">
                   <!-- {{ detailBug.project_name }} -->
                   Tags
                 </div>
+                <div class="project_bug">
+                  <p>{{ detailBug.bug_label }}</p>
+                </div>
               </div>
             </div>
-            <div class="description_bug">
+            <!-- <div class="description_bug">
               <p>Deskripsi Task</p>
-            </div>
+            </div> -->
             <div class="keterangan_waktu">
               <!-- <div class="jam">
                   <i class="fa-regular fa-clock"></i>
@@ -549,49 +549,43 @@
                 </div> -->
               <div class="start_date">
                 <i class="fa-regular fa-calendar"></i>
-                <!-- <p v-if="k.start_date">Mulai: {{ k.start_date }}</p>
-          <p v-if="!k.start_date">Mulai: <i>Tidak Valid</i></p> -->
-                <p>Mulai: 20-08-2025</p>
+                <p>Mulai: {{ detailBug.start_date }}</p>
               </div>
               <div class="deadline">
                 <i class="fa-regular fa-calendar"></i>
-                <!-- <p v-if="k.due_date">Target: {{ k.due_date }}</p>
-          <p v-if="!k.due_date">Target: <i>Tidak Valid</i></p> -->
-                <p>Target: 20-08-2025</p>
+                <p>Target: {{ detailBug.due_date }}</p>
               </div>
               <div class="done_date">
                 <i class="fa-regular fa-calendar"></i>
-                <!-- <p>Selesai: {{ k.date_done }}</p> -->
-                <p>Selesai: 20-08-2025</p>
+                <p>Selesai: {{ detailBug.date_done }}</p>
               </div>
               <div class="created_by">
                 <i class="fa-regular fa-user"></i>
-                <!-- <p>Dibuat oleh: {{ k.creator_name }}</p> -->
-                <p>Bug Terbuat Oleh oleh: Karyawan</p>
+                <p>Bug Terbuat oleh: {{ detailBug.assignee_name }}</p>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div>
-        <div
-          class="container_task"
-          v-for="k in filteredKaryawanDetail"
-          @click="handleCardClick(k)"
-        >
-          <div class="header_container">
-            <div class="name_task">
-              <p>{{ k.name }}</p>
+
+      <div
+        class="container_task"
+        v-for="k in filteredKaryawanDetail"
+        @click.stop="handleCardClick(k)"
+      >
+        <div class="header_container">
+          <div class="name_task">
+            <p>{{ k.name }}</p>
+          </div>
+          <div class="status_task">
+            <div class="bug" v-if="k.bug_label">
+              <p>{{ k.bug_label }}</p>
             </div>
-            <div class="status_task">
-              <div class="bug" v-if="k.tags">
-                <p>{{ k.tags[0] }}</p>
-              </div>
-              <!-- <div class="bug">
+            <!-- <div class="bug">
                   <p>Bug</p>
                 </div> -->
 
-              <!-- <div
+            <!-- <div
                   class="background_bug"
                   v-if="detailBug"
                   @click.self="detailBug = null"
@@ -602,81 +596,81 @@
                   </div>
                 </div> -->
 
-              <div class="progres_task" :class="statusTaskClass(k.status_name)">
-                <p>{{ statusLabel(k.status_name) }}</p>
-              </div>
-              <div
-                class="task_priority"
-                :class="priorityClass(k.priority_name)"
-                v-if="k.priority_name"
-              >
-                <p>{{ k.priority_name }}</p>
-              </div>
-
-              <!-- Dari Project mana task tersebut -->
-              <div class="task_project">
-                <p>{{ k.project_name }}</p>
-              </div>
-            </div>
-          </div>
-          <div class="description">
-            <p>{{ k.description }}</p>
-          </div>
-
-          <!-- Ketika start date tersedia -->
-          <div
-            class="achievement"
-            v-if="k.time_efficiency_percentage"
-            :class="achivClass(k.time_efficiency_percentage)"
-          >
-            <div class="penghargaan">
-              <p>Ketepatan Pengerjaan Tugas</p>
-              <h4>{{ k.time_efficiency_percentage }}%</h4>
-              <h4>{{ k.remaining_duration }}</h4>
-            </div>
-          </div>
-
-          <!-- Ketika start date tidak tersedia-->
-          <div
-            class="achievement not_special"
-            v-if="
-              (k.status_name === 'done dev' || k.status_name === 'completed') &&
-              !k.start_date
-            "
-          >
-            <div class="penghargaan">
-              <p>Ketepatan Pengerjaan Tugas</p>
-              <h4>Tidak Tersedia</h4>
-            </div>
-          </div>
-          <div class="keterangan_waktu">
-            <div class="jam">
-              <i class="fa-regular fa-clock"></i>
-              <p>Waktu Pengerjaan: {{ k.time_estimate_hours }} Jam</p>
-            </div>
-            <div class="start_date">
-              <i class="fa-regular fa-calendar"></i>
-              <p v-if="k.start_date">Mulai: {{ k.start_date }}</p>
-              <p v-if="!k.start_date">Mulai: <i>Tidak Valid</i></p>
-            </div>
-            <div class="deadline">
-              <i class="fa-regular fa-calendar"></i>
-              <p v-if="k.due_date">Target: {{ k.due_date }}</p>
-              <p v-if="!k.due_date">Target: <i>Tidak Valid</i></p>
+            <div class="progres_task" :class="statusTaskClass(k.status_name)">
+              <p>{{ statusLabel(k.status_name) }}</p>
             </div>
             <div
-              class="done_date"
-              v-if="
-                k.status_name === 'done dev' || k.status_name === 'completed'
-              "
+              class="task_priority"
+              :class="priorityClass(k.priority_name)"
+              v-if="k.priority_name"
             >
-              <i class="fa-regular fa-calendar"></i>
-              <p>Selesai: {{ k.date_done }}</p>
+              <p>{{ k.priority_name }}</p>
             </div>
-            <div class="created_by">
-              <i class="fa-regular fa-user"></i>
-              <p>Dibuat oleh: {{ k.creator_name }}</p>
+
+            <!-- Dari Project mana task tersebut -->
+            <div class="task_project">
+              <p>{{ k.project_name }}</p>
             </div>
+          </div>
+        </div>
+        <div class="description">
+          <p>{{ k.description }}</p>
+        </div>
+
+        <!-- Ketika start date tersedia -->
+        <div
+          class="achievement"
+          v-if="k.time_efficiency_percentage"
+          :class="achivClass(k.time_efficiency_percentage)"
+        >
+          <div class="penghargaan">
+            <p>Ketepatan Pengerjaan Tugas</p>
+            <h4>{{ k.time_efficiency_percentage }}%</h4>
+            <h4>{{ k.remaining_duration }}</h4>
+          </div>
+          <div class="ikon" v-if="k.bug_label === 'Bug Terbuat'">
+            <i class="fa-solid fa-bug"></i>
+          </div>
+        </div>
+
+        <!-- Ketika start date tidak tersedia-->
+        <div
+          class="achievement not_special"
+          v-if="
+            (k.status_name === 'done dev' || k.status_name === 'completed') &&
+            !k.start_date
+          "
+        >
+          <div class="penghargaan">
+            <p>Ketepatan Pengerjaan Tugas</p>
+            <h4>Tidak Tersedia</h4>
+          </div>
+        </div>
+        <div class="keterangan_waktu">
+          <div class="jam">
+            <i class="fa-regular fa-clock"></i>
+            <p>Waktu Pengerjaan: {{ k.time_estimate_hours }} Jam</p>
+          </div>
+          <div class="start_date">
+            <i class="fa-regular fa-calendar"></i>
+            <p v-if="k.start_date">Mulai: {{ k.start_date }}</p>
+            <p v-if="!k.start_date">Mulai: <i>Tidak Valid</i></p>
+          </div>
+          <div class="deadline">
+            <i class="fa-regular fa-calendar"></i>
+            <p v-if="k.due_date">Target: {{ k.due_date }}</p>
+            <p v-if="!k.due_date">Target: <i>Tidak Valid</i></p>
+          </div>
+          <div
+            class="done_date"
+            v-if="k.status_name === 'done dev' || k.status_name === 'completed'"
+          >
+            <i class="fa-regular fa-calendar"></i>
+            <p>Selesai: {{ k.date_done }}</p>
+          </div>
+          <div class="created_by">
+            <i class="fa-regular fa-user"></i>
+            <p>Dibuat oleh: {{ k.creator_name }}</p>
           </div>
         </div>
       </div>
@@ -702,7 +696,7 @@
 
 .list_hari .hari_tanggal {
   background-color: #efefef;
-  width: 19%;
+  width: 24%;
   padding: 10px;
   border-radius: 10px;
 }
@@ -943,7 +937,23 @@
 
 <!-- Style Responsive -->
 <style scoped>
+@media (max-width: 1024px) {
+  .list_hari .hari_tanggal {
+    width: 32.3%;
+  }
+}
+
+@media (max-width: 768px) {
+  .list_hari .hari_tanggal {
+    width: 48.6%;
+  }
+}
+
 @media (max-width: 576px) {
+  .list_hari .hari_tanggal {
+    width: 48%;
+  }
+
   .dates {
     width: 100%;
   }
@@ -1252,7 +1262,9 @@
 
 .achievement {
   display: flex;
-  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  /* gap: 10px; */
   border-radius: 10px;
   padding: 12px;
 }
@@ -2242,8 +2254,8 @@ export default {
       try {
         const task = await this.$api.get(
           `/api/v1/workload/tasks-by-range?start_date=${this.formatTanggal(
-            this.start
-          )}&end_date=${this.formatTanggal(this.end)}`
+            this.start,
+          )}&end_date=${this.formatTanggal(this.end)}`,
         );
         this.daftarKaryawan = task.data.assignees || [];
         this.daftarHari = task.data.jadwal_libur || [];
@@ -2354,6 +2366,7 @@ export default {
         "to do": "To Do",
         "in review": "In Review",
         cancelled: "Cancel",
+        backlog: "Backlog",
       };
       return map[status] ?? "-";
     },
@@ -2408,7 +2421,7 @@ export default {
     },
     statusTaskClass(status) {
       return {
-        task_todo: status === "to do",
+        task_todo: status === "to do" || status === "backlog",
         task_selesai: status === "done dev" || status === "completed",
         task_inProgress: status === "in progress",
         task_inReview: status === "in review",
@@ -2416,13 +2429,18 @@ export default {
       };
     },
     handleCardClick(k) {
-      if (!k.tags) return;
+      // if (k.tags[0] !== "bugs") return;
+      if (k.bug_label !== "Bug Fixing") return;
 
-      this.BugDetail(k);
+      console.log("HandleCardClick berhasil di klik");
+
+      this.showBugDetail(k);
     },
-    BugDetail(bug) {
-      this.detailBug = bug;
-      console.log(bug);
+
+    showBugDetail(task) {
+      this.detailBug = task.bug_source_info;
+      console.log(task);
+      console.log("Data detailBug", this.detailBug);
     },
     closeDetailBug() {
       this.detailBug = null;
@@ -2436,7 +2454,7 @@ export default {
       // filter nama
       if (this.searchInput) {
         hasil = hasil.filter((k) =>
-          k.name.toLowerCase().includes(this.searchInput.toLowerCase())
+          k.name.toLowerCase().includes(this.searchInput.toLowerCase()),
         );
         this.notFound = hasil.length === 0;
       } else {
@@ -2446,7 +2464,7 @@ export default {
       // filter posisi (role)
       if (this.posisi) {
         hasil = hasil.filter(
-          (k) => k.role.toLowerCase() === this.posisi.toLowerCase()
+          (k) => k.role.toLowerCase() === this.posisi.toLowerCase(),
         );
       }
 
@@ -2457,7 +2475,8 @@ export default {
         hasil = hasil
           .filter(
             (k) =>
-              k.performance_bugs && typeof k.performance_bugs.score === "number"
+              k.performance_bugs &&
+              typeof k.performance_bugs.score === "number",
           )
 
           .sort((a, b) => {
@@ -2476,7 +2495,7 @@ export default {
         hasil = hasil
           .filter(
             (k) =>
-              k.performance_bugs && typeof k.performance_bugs.bugs === "number"
+              k.performance_bugs && typeof k.performance_bugs.bugs === "number",
           )
 
           .sort((a, b) => {
@@ -2496,7 +2515,7 @@ export default {
           .filter(
             (k) =>
               k.avg_time_efficiency &&
-              typeof k.avg_time_efficiency.avg_percentage === "number"
+              typeof k.avg_time_efficiency.avg_percentage === "number",
           )
           .sort((a, b) => {
             if (this.sortKetepatan === "highest") {
@@ -2517,7 +2536,7 @@ export default {
           .filter(
             (k) =>
               k.total_spent_hours &&
-              typeof k.total_spent_hours.percentage === "number"
+              typeof k.total_spent_hours.percentage === "number",
           )
           .sort((a, b) => {
             if (this.sortBeban === "highest") {
@@ -2543,7 +2562,7 @@ export default {
       // filter berdasarkan progress task (jika dipilih)
       if (this.progres) {
         hasil = hasil.filter(
-          (k) => k.status_name.toLowerCase() === this.progres.toLowerCase()
+          (k) => k.status_name.toLowerCase() === this.progres.toLowerCase(),
         );
       }
       // Filter Sortir
@@ -2572,15 +2591,18 @@ export default {
       //   );
       // }
 
-      if (this.taskBug === "bug") {
-        hasil = hasil.filter((k) =>
-          k.tags?.some((t) => t.toLowerCase() === "bug")
-        );
-      } else if (this.taskBug === "task") {
-        hasil = hasil.filter(
-          (k) => !k.tags?.some((t) => t.toLowerCase() === "bug")
-        );
+      // Filter BUG / TASK
+      const isBugTask = (task) =>
+        task.bug_label?.toLowerCase() === "bug terbuat";
+
+      if (this.taskBug === "bugs") {
+        hasil = hasil.filter(isBugTask);
       }
+
+      if (this.taskBug === "task") {
+        hasil = hasil.filter((task) => !isBugTask(task));
+      }
+
       return hasil;
     },
     listHariTanggal() {

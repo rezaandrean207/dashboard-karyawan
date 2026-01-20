@@ -1,12 +1,1910 @@
-
-
-    notifications": {
-        "workload": {
-            "message": "Jam kerjamu masih kurang, segera minta task tambahan."
+{
+    "assignees": [
+        {
+            "clickup_id": 101582116,
+            "username": "Adi Nugroho",
+            "role": "infra",
+            "name": "Adi Nugroho",
+            "availability_status": "Available",
+            "workload_status": "Underload",
+            "performance_bugs": {
+                "workload_score": 33.33,
+                "bugs": 115,
+                "time_score": 1.5372,
+                "score": 58.92
+            },
+            "total_spent_hours": {
+                "hours": 32,
+                "percentage": 33.33
+            },
+            "expected_hours": 96,
+            "total_tasks": 2,
+            "total_upcoming_hours": 0,
+            "task_status_summary": {
+                "upcoming": 0,
+                "in_progress": 0,
+                "completed": 2,
+                "cancelled": 0,
+                "backlog": 0
+            },
+            "completion_summary": {
+                "total_completed": 2,
+                "on_time_count": 0
+            },
+            "avg_time_efficiency": {
+                "total_percentage": 307.44,
+                "avg_percentage": 153.72,
+                "total_completed_tasks": 2
+            },
+            "tasks": [
+                {
+                    "id": "86ew6ypr3",
+                    "name": "INFRA - Cek Bug dan Cloud Bandwith",
+                    "description": "",
+                    "status_id": "p90187531463_WRlbetQg",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "14-01-2026 13:16:54",
+                    "project_name": "Kei Learning",
+                    "start_date": "14-01-2026 12:00:00",
+                    "due_date": "14-01-2026 14:00:00",
+                    "time_estimate_hours": 2,
+                    "time_spent_hours": 8,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "urgent",
+                    "tags": [
+                        "infra"
+                    ],
+                    "time_efficiency_percentage": 156.01,
+                    "remaining_duration": "Lebih Cepat: 0 jam 43 menit 6 detik"
+                },
+                {
+                    "id": "86ew1buha",
+                    "name": "INFRA - Refused monitoring dan restart otomatis",
+                    "description": "restart service kiklelang\nrestart elasticsearch",
+                    "status_id": "c90189201519_WRlbetQg",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "06-01-2026 20:23:31",
+                    "project_name": "Klik Lelang",
+                    "start_date": "05-01-2026 08:30:00",
+                    "due_date": "07-01-2026 17:00:00",
+                    "time_estimate_hours": 30,
+                    "time_spent_hours": 16,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "urgent",
+                    "tags": [
+                        "infra"
+                    ],
+                    "time_efficiency_percentage": 151.43,
+                    "remaining_duration": "Lebih Cepat: 9 jam 0 menit 0 detik"
+                }
+            ]
         },
-        "on_time": {
-            "message": "Ketepatan waktu kerjamu kurang maksimal, harap lebih disiplin dengan deadline."
+        {
+            "clickup_id": 101582111,
+            "username": "Aditya Permadi",
+            "role": "backend",
+            "name": "Aditya Permadi",
+            "availability_status": "Working",
+            "workload_status": "Overload",
+            "performance_bugs": {
+                "workload_score": 164.58,
+                "bugs": 115,
+                "time_score": 1.3961000000000001,
+                "score": 200
+            },
+            "total_spent_hours": {
+                "hours": 158,
+                "percentage": 164.58
+            },
+            "expected_hours": 96,
+            "total_tasks": 7,
+            "total_upcoming_hours": 0,
+            "task_status_summary": {
+                "upcoming": 0,
+                "in_progress": 1,
+                "completed": 6,
+                "cancelled": 0,
+                "backlog": 0
+            },
+            "completion_summary": {
+                "total_completed": 6,
+                "on_time_count": 0
+            },
+            "avg_time_efficiency": {
+                "total_percentage": 837.65,
+                "avg_percentage": 139.61,
+                "total_completed_tasks": 6
+            },
+            "tasks": [
+                {
+                    "id": "86ew7ewj2",
+                    "name": "BACKEND - Fase 5 - Kutipan Risalah Lelang",
+                    "description": "*Cek Task Realte Flow nya\nAPI Admin\nAPI FrontEnd\n- API List Event Cabang\n- API Detail Lelang\n- API  Lihat Semua Unit\n- API Menampilkan Risalah Lelang\n- API Bidder Accept Kutipan Risalah Lelang",
+                    "status_id": "c90189201519_F8827O1p",
+                    "status_name": "in progress",
+                    "status_type": "custom",
+                    "project_name": "Klik Lelang",
+                    "start_date": "19-01-2026 08:30:00",
+                    "due_date": "26-01-2026 17:00:00",
+                    "time_estimate_hours": 60,
+                    "time_spent_hours": 0,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "high",
+                    "tags": [
+                        "backend"
+                    ]
+                },
+                {
+                    "id": "86ew6qa0j",
+                    "name": "BACKEND - Improvement API /check/pemotongan_nipl",
+                    "description": "untuk saat ini pemotongan tiket hit satu-satu berdasarkan id_user yang dirasa berat.\nuntuk meningkatkan peforma, mungkin dibuat array atau berdasarkan status",
+                    "status_id": "c90189201519_7IFqe835",
+                    "status_name": "done dev",
+                    "status_type": "done",
+                    "date_done": "14-01-2026 08:49:18",
+                    "project_name": "Klik Lelang",
+                    "start_date": "15-01-2026 04:00:00",
+                    "due_date": "15-01-2026 17:00:00",
+                    "time_estimate_hours": 24,
+                    "time_spent_hours": 0,
+                    "category": "",
+                    "creator_name": "Andri",
+                    "priority_name": "urgent",
+                    "tags": [
+                        "backend"
+                    ],
+                    "time_efficiency_percentage": 100,
+                    "remaining_duration": "Lebih Cepat: 32 jam 10 menit 41 detik"
+                },
+                {
+                    "id": "86ew6q7yd",
+                    "name": "BACKEND - Select ALL pada API setup_pemotongan_nipl",
+                    "description": "Improve API setup_pemotongan_nipl agar dapat mengaktifkan maupun menonaktifkan semua cabang",
+                    "status_id": "c90189201519_7IFqe835",
+                    "status_name": "done dev",
+                    "status_type": "done",
+                    "date_done": "14-01-2026 08:49:36",
+                    "project_name": "Klik Lelang",
+                    "start_date": "14-01-2026 04:00:00",
+                    "due_date": "14-01-2026 17:00:00",
+                    "time_estimate_hours": 24,
+                    "time_spent_hours": 16,
+                    "category": "",
+                    "creator_name": "Andri",
+                    "priority_name": "normal",
+                    "tags": [
+                        "backend"
+                    ],
+                    "time_efficiency_percentage": 200,
+                    "remaining_duration": "Lebih Cepat: 8 jam 10 menit 24 detik"
+                },
+                {
+                    "id": "86ew6hk61",
+                    "name": "BACKEND - Testing integrasi baf fase 2",
+                    "description": "",
+                    "status_id": "p90187531463_7IFqe835",
+                    "status_name": "done dev",
+                    "status_type": "done",
+                    "date_done": "13-01-2026 15:08:50",
+                    "project_name": "Balaps",
+                    "start_date": "13-01-2026 15:00:00",
+                    "due_date": "13-01-2026 17:00:00",
+                    "time_estimate_hours": 2,
+                    "time_spent_hours": 8,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "high",
+                    "tags": [
+                        "backend"
+                    ],
+                    "time_efficiency_percentage": 200,
+                    "remaining_duration": "Lebih Cepat: 1 jam 51 menit 10 detik"
+                },
+                {
+                    "id": "86ew5yr3u",
+                    "name": "BACKEND - FASE 4 QA TESTING",
+                    "description": "",
+                    "status_id": "c90189201519_WRlbetQg",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "12-01-2026 15:24:26",
+                    "project_name": "Klik Lelang",
+                    "start_date": "12-01-2026 08:30:00",
+                    "due_date": "13-01-2026 08:30:00",
+                    "time_estimate_hours": 8,
+                    "time_spent_hours": 8,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "high",
+                    "tags": [
+                        "backend"
+                    ],
+                    "time_efficiency_percentage": 130.29,
+                    "remaining_duration": "Lebih Cepat: 2 jam 5 menit 34 detik"
+                },
+                {
+                    "id": "86ew1zxqj",
+                    "name": "BACKEND - FASE 5 - Pelajari flow 018 023",
+                    "description": "",
+                    "status_id": "c90189201519_7IFqe835",
+                    "status_name": "done dev",
+                    "status_type": "done",
+                    "date_done": "06-01-2026 07:50:06",
+                    "project_name": "Klik Lelang",
+                    "start_date": "05-01-2026 08:30:00",
+                    "due_date": "06-01-2026 08:30:00",
+                    "time_estimate_hours": 8,
+                    "time_spent_hours": 16,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "high",
+                    "tags": [
+                        "backend",
+                        "analis teknis"
+                    ],
+                    "time_efficiency_percentage": 105.88,
+                    "remaining_duration": "Lebih Cepat: 0 jam 30 menit 0 detik"
+                },
+                {
+                    "id": "86evy7etu",
+                    "name": "BACKEND - FASE 4 - 020",
+                    "description": "",
+                    "status_id": "c90189201519_WRlbetQg",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "02-01-2026 07:44:01",
+                    "project_name": "Klik Lelang",
+                    "start_date": "29-12-2025 10:15:00",
+                    "due_date": "02-01-2026 08:30:00",
+                    "time_estimate_hours": 32,
+                    "time_spent_hours": 40,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "urgent",
+                    "tags": [
+                        "backend"
+                    ],
+                    "time_efficiency_percentage": 101.48,
+                    "remaining_duration": "Lebih Cepat: 0 jam 30 menit 0 detik"
+                }
+            ]
         },
-        "performance": {
-            "message": "Skor performa keseluruhanmu perlu ditingkatkan, ayo semangat!"
+        {
+            "clickup_id": 101582118,
+            "username": "Alfitra Fadjri",
+            "role": "web",
+            "name": "Alfitra Fadjri",
+            "availability_status": "Available",
+            "workload_status": "Underload",
+            "performance_bugs": {
+                "workload_score": 0,
+                "bugs": 115,
+                "time_score": 0,
+                "score": 0
+            },
+            "total_spent_hours": {
+                "hours": 0,
+                "percentage": 0
+            },
+            "expected_hours": 96,
+            "total_tasks": 0,
+            "total_upcoming_hours": 0,
+            "task_status_summary": {
+                "upcoming": 0,
+                "in_progress": 0,
+                "completed": 0,
+                "cancelled": 0,
+                "backlog": 0
+            },
+            "completion_summary": {
+                "total_completed": 0,
+                "on_time_count": 0
+            },
+            "avg_time_efficiency": {
+                "total_percentage": 0,
+                "avg_percentage": 0,
+                "total_completed_tasks": 0
+            },
+            "tasks": []
+        },
+        {
+            "clickup_id": 101582112,
+            "username": "Andhika Adjie Pradhana",
+            "role": "backend",
+            "name": "Andhika Adjie Pradhana",
+            "availability_status": "Working",
+            "workload_status": "Overload",
+            "performance_bugs": {
+                "workload_score": 200,
+                "bugs": 115,
+                "time_score": 0.8437,
+                "score": 194.05
+            },
+            "total_spent_hours": {
+                "hours": 195,
+                "percentage": 200
+            },
+            "expected_hours": 96,
+            "total_tasks": 4,
+            "total_upcoming_hours": 0,
+            "task_status_summary": {
+                "upcoming": 0,
+                "in_progress": 1,
+                "completed": 3,
+                "cancelled": 0,
+                "backlog": 0
+            },
+            "on_time_performance_score": 71.07,
+            "completion_summary": {
+                "total_completed": 3,
+                "on_time_count": 2
+            },
+            "avg_time_efficiency": {
+                "total_percentage": 253.12,
+                "avg_percentage": 84.37,
+                "total_completed_tasks": 3
+            },
+            "tasks": [
+                {
+                    "id": "86ew52k3n",
+                    "name": "BACKEND - Optimize Query Distribusi Prospect",
+                    "description": "query\nindex\nrelation db",
+                    "status_id": "p90187531463_F8827O1p",
+                    "status_name": "in progress",
+                    "status_type": "custom",
+                    "project_name": "STrack",
+                    "start_date": "12-01-2026 08:30:00",
+                    "due_date": "23-01-2026 08:30:00",
+                    "time_estimate_hours": 70,
+                    "time_spent_hours": 0,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "urgent",
+                    "tags": [
+                        "backend"
+                    ]
+                },
+                {
+                    "id": "86ew431z4",
+                    "name": "MEETING STRACK DOKUMENTASI",
+                    "description": "",
+                    "status_id": "p90187531463_7IFqe835",
+                    "status_name": "done dev",
+                    "status_type": "done",
+                    "date_done": "07-01-2026 14:54:03",
+                    "project_name": "STrack",
+                    "start_date": "07-01-2026 14:00:00",
+                    "due_date": "07-01-2026 15:00:00",
+                    "time_estimate_hours": 1,
+                    "time_spent_hours": 8,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "normal",
+                    "tags": [
+                        "analis teknis"
+                    ],
+                    "time_efficiency_percentage": 110.98,
+                    "remaining_duration": "Lebih Cepat: 0 jam 5 menit 57 detik"
+                },
+                {
+                    "id": "86ew3fay6",
+                    "name": "BACKEND - RESEARCH BI SNAP LANJUTAN",
+                    "description": "mendalami lebih lagi terkait hasil yang dipelajari adit\noutput seperti apa service yang akan di tet , dan perlu modul apa saja",
+                    "status_id": "c90189201519_7IFqe835",
+                    "status_name": "done dev",
+                    "status_type": "done",
+                    "date_done": "12-01-2026 11:37:45",
+                    "project_name": "Klik Lelang",
+                    "start_date": "06-01-2026 08:30:00",
+                    "due_date": "09-01-2026 08:30:00",
+                    "time_estimate_hours": 24,
+                    "time_spent_hours": 0.00020666666666666666,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "urgent",
+                    "tags": [
+                        "analis teknis"
+                    ],
+                    "time_efficiency_percentage": 55.08,
+                    "remaining_duration": "Terlambat: 12 jam 7 menit 46 detik"
+                },
+                {
+                    "id": "86evtmaq2",
+                    "name": "BACKEND - Research Dokumentasi VA BNI",
+                    "description": "Pahami  masing masing fungsi dokumentasi\nCatat masing” function pada dokumentasi untuk apa aja\nCatat pertanyaan / yang tidak dimengerti dari dokumentasi BNI tersebut\n\nlink dokumentasi VA BNI :",
+                    "status_id": "c90189201519_7IFqe835",
+                    "status_name": "done dev",
+                    "status_type": "done",
+                    "date_done": "02-01-2026 09:48:14",
+                    "project_name": "Klik Lelang",
+                    "start_date": "08-12-2025 04:00:00",
+                    "due_date": "31-12-2025 04:00:00",
+                    "time_estimate_hours": 100,
+                    "time_spent_hours": 160,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "high",
+                    "tags": [
+                        "backend",
+                        "database",
+                        "research"
+                    ],
+                    "time_efficiency_percentage": 87.06,
+                    "remaining_duration": "Terlambat: 19 jam 48 menit 15 detik"
+                }
+            ]
+        },
+        {
+            "clickup_id": 101582119,
+            "username": "Arif Hidayat",
+            "role": "mobile apps",
+            "name": "Arif Hidayat",
+            "availability_status": "Working",
+            "workload_status": "Underload",
+            "performance_bugs": {
+                "workload_score": 66.67,
+                "bugs": 115,
+                "time_score": 1.2773999999999999,
+                "score": 97.94
+            },
+            "total_spent_hours": {
+                "hours": 64,
+                "percentage": 66.67
+            },
+            "expected_hours": 96,
+            "total_tasks": 3,
+            "total_upcoming_hours": 0,
+            "task_status_summary": {
+                "upcoming": 0,
+                "in_progress": 1,
+                "completed": 2,
+                "cancelled": 0,
+                "backlog": 0
+            },
+            "completion_summary": {
+                "total_completed": 2,
+                "on_time_count": 0
+            },
+            "avg_time_efficiency": {
+                "total_percentage": 255.48000000000002,
+                "avg_percentage": 127.74,
+                "total_completed_tasks": 2
+            },
+            "tasks": [
+                {
+                    "id": "86ew7f6v9",
+                    "name": "APPS - Perbaikan BUG dan Optimize",
+                    "description": "Bug berdasarkan crash analytics",
+                    "status_id": "c90189201519_F8827O1p",
+                    "status_name": "in progress",
+                    "status_type": "custom",
+                    "project_name": "Klik Lelang",
+                    "start_date": "19-01-2026 08:30:00",
+                    "due_date": "23-01-2026 17:00:00",
+                    "time_estimate_hours": 40,
+                    "time_spent_hours": 0,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "urgent",
+                    "tags": [
+                        "mobile apps"
+                    ]
+                },
+                {
+                    "id": "86ew5yr85",
+                    "name": "MOBILE APPS - FASE 4 QA TESTING",
+                    "description": "",
+                    "status_id": "c90189201519_WRlbetQg",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "12-01-2026 16:45:14",
+                    "project_name": "Klik Lelang",
+                    "start_date": "12-01-2026 08:30:00",
+                    "due_date": "13-01-2026 08:30:00",
+                    "time_estimate_hours": 8,
+                    "time_spent_hours": 8,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "high",
+                    "tags": [
+                        "mobile apps"
+                    ],
+                    "time_efficiency_percentage": 109.04,
+                    "remaining_duration": "Lebih Cepat: 0 jam 44 menit 46 detik"
+                },
+                {
+                    "id": "86evxuh32",
+                    "name": "APPS - Fase 4 - 020 Implementasi API",
+                    "description": "",
+                    "status_id": "c90189201519_WRlbetQg",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "08-01-2026 11:17:29",
+                    "project_name": "Klik Lelang",
+                    "start_date": "07-01-2026 04:00:00",
+                    "due_date": "08-01-2026 17:30:00",
+                    "time_estimate_hours": 16,
+                    "time_spent_hours": 24,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "high",
+                    "tags": [
+                        "mobile apps"
+                    ],
+                    "time_efficiency_percentage": 146.44,
+                    "remaining_duration": "Lebih Cepat: 5 jam 42 menit 31 detik"
+                }
+            ]
+        },
+        {
+            "clickup_id": 101582122,
+            "username": "Christian Wibisono",
+            "role": "pm",
+            "name": "Christian Wibisono",
+            "availability_status": "Available",
+            "workload_status": "Underload",
+            "performance_bugs": {
+                "workload_score": 16.67,
+                "bugs": 75,
+                "time_score": -1.7365000000000002,
+                "score": -21.71
+            },
+            "total_spent_hours": {
+                "hours": 16,
+                "percentage": 16.67
+            },
+            "expected_hours": 96,
+            "total_tasks": 2,
+            "total_upcoming_hours": 0,
+            "task_status_summary": {
+                "upcoming": 0,
+                "in_progress": 0,
+                "completed": 2,
+                "cancelled": 0,
+                "backlog": 0
+            },
+            "on_time_performance_score": -173.65,
+            "completion_summary": {
+                "total_completed": 2,
+                "on_time_count": 2
+            },
+            "avg_time_efficiency": {
+                "total_percentage": -347.29,
+                "avg_percentage": -173.65,
+                "total_completed_tasks": 2
+            },
+            "tasks": [
+                {
+                    "id": "86evmvtk9",
+                    "name": "Network",
+                    "description": "",
+                    "status_id": "p90187211964_ph3cJFLL",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "07-01-2026 16:30:45",
+                    "project_name": "List",
+                    "start_date": "01-01-2026 04:00:00",
+                    "due_date": "03-01-2026 04:00:00",
+                    "time_estimate_hours": 8,
+                    "time_spent_hours": 48,
+                    "category": "",
+                    "creator_name": "Nurmian Petronella",
+                    "bug_label": "Bug Terbuat",
+                    "time_efficiency_percentage": -47.29,
+                    "remaining_duration": "Terlambat: 26 jam 30 menit 46 detik"
+                },
+                {
+                    "id": "86evqmd99",
+                    "name": "tes tampilan",
+                    "description": "",
+                    "status_id": "p90187211964_ph3cJFLL",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "07-01-2026 09:01:08",
+                    "project_name": "List",
+                    "start_date": "24-12-2025 04:00:00",
+                    "due_date": "25-12-2025 04:00:00",
+                    "time_estimate_hours": 8,
+                    "time_spent_hours": 96,
+                    "category": "",
+                    "creator_name": "Christian Wibisono",
+                    "bug_label": "Bug Terbuat",
+                    "time_efficiency_percentage": -300,
+                    "remaining_duration": "Terlambat: 82 jam 1 menit 9 detik"
+                }
+            ]
+        },
+        {
+            "clickup_id": 101582121,
+            "username": "Deni Candra",
+            "role": "pm",
+            "name": "Deni Candra",
+            "availability_status": "Available",
+            "workload_status": "Underload",
+            "performance_bugs": {
+                "workload_score": 8.33,
+                "bugs": 115,
+                "time_score": 0,
+                "score": 0
+            },
+            "total_spent_hours": {
+                "hours": 8,
+                "percentage": 8.33
+            },
+            "expected_hours": 96,
+            "total_tasks": 1,
+            "total_upcoming_hours": 0,
+            "task_status_summary": {
+                "upcoming": 0,
+                "in_progress": 0,
+                "completed": 0,
+                "cancelled": 1,
+                "backlog": 0
+            },
+            "completion_summary": {
+                "total_completed": 0,
+                "on_time_count": 0
+            },
+            "avg_time_efficiency": {
+                "total_percentage": 0,
+                "avg_percentage": 0,
+                "total_completed_tasks": 0
+            },
+            "tasks": [
+                {
+                    "id": "86ew2yypy",
+                    "name": "BUG TESTING",
+                    "description": "ini test bug",
+                    "status_id": "p90187531463_JgFZ3AhJ",
+                    "status_name": "cancelled",
+                    "status_type": "closed",
+                    "date_done": "05-01-2026 15:24:21",
+                    "project_name": "Others",
+                    "date_closed": "05-01-2026 15:24:21",
+                    "start_date": "05-01-2026 04:00:00",
+                    "time_estimate_hours": 8,
+                    "time_spent_hours": 8,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "high",
+                    "tags": [
+                        "bug"
+                    ]
+                }
+            ]
+        },
+        {
+            "clickup_id": 101582114,
+            "username": "Dwi A Sobarna",
+            "role": "mobile apps",
+            "name": "Dwi A Sobarna",
+            "availability_status": "Working",
+            "workload_status": "Underload",
+            "performance_bugs": {
+                "workload_score": 76.04,
+                "bugs": 115,
+                "time_score": 1.2412,
+                "score": 108.54
+            },
+            "total_spent_hours": {
+                "hours": 73,
+                "percentage": 76.04
+            },
+            "expected_hours": 96,
+            "total_tasks": 4,
+            "total_upcoming_hours": 0,
+            "task_status_summary": {
+                "upcoming": 0,
+                "in_progress": 1,
+                "completed": 3,
+                "cancelled": 0,
+                "backlog": 0
+            },
+            "completion_summary": {
+                "total_completed": 3,
+                "on_time_count": 0
+            },
+            "avg_time_efficiency": {
+                "total_percentage": 372.36,
+                "avg_percentage": 124.12,
+                "total_completed_tasks": 3
+            },
+            "tasks": [
+                {
+                    "id": "86ew7f6v9",
+                    "name": "APPS - Perbaikan BUG dan Optimize",
+                    "description": "Bug berdasarkan crash analytics",
+                    "status_id": "c90189201519_F8827O1p",
+                    "status_name": "in progress",
+                    "status_type": "custom",
+                    "project_name": "Klik Lelang",
+                    "start_date": "19-01-2026 08:30:00",
+                    "due_date": "23-01-2026 17:00:00",
+                    "time_estimate_hours": 40,
+                    "time_spent_hours": 0,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "urgent",
+                    "tags": [
+                        "mobile apps"
+                    ]
+                },
+                {
+                    "id": "86ew5yr85",
+                    "name": "MOBILE APPS - FASE 4 QA TESTING",
+                    "description": "",
+                    "status_id": "c90189201519_WRlbetQg",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "12-01-2026 16:45:14",
+                    "project_name": "Klik Lelang",
+                    "start_date": "12-01-2026 08:30:00",
+                    "due_date": "13-01-2026 08:30:00",
+                    "time_estimate_hours": 8,
+                    "time_spent_hours": 8,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "high",
+                    "tags": [
+                        "mobile apps"
+                    ],
+                    "time_efficiency_percentage": 109.04,
+                    "remaining_duration": "Lebih Cepat: 0 jam 44 menit 46 detik"
+                },
+                {
+                    "id": "86ew431z4",
+                    "name": "MEETING STRACK DOKUMENTASI",
+                    "description": "",
+                    "status_id": "p90187531463_7IFqe835",
+                    "status_name": "done dev",
+                    "status_type": "done",
+                    "date_done": "07-01-2026 14:54:03",
+                    "project_name": "STrack",
+                    "start_date": "07-01-2026 14:00:00",
+                    "due_date": "07-01-2026 15:00:00",
+                    "time_estimate_hours": 1,
+                    "time_spent_hours": 8,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "normal",
+                    "tags": [
+                        "analis teknis"
+                    ],
+                    "time_efficiency_percentage": 110.98,
+                    "remaining_duration": "Lebih Cepat: 0 jam 5 menit 57 detik"
+                },
+                {
+                    "id": "86evxugxf",
+                    "name": "APPS - Fase 4 - 020 Implementasi UI",
+                    "description": "",
+                    "status_id": "c90189201519_WRlbetQg",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "06-01-2026 11:18:57",
+                    "project_name": "Klik Lelang",
+                    "start_date": "05-01-2026 08:30:00",
+                    "due_date": "07-01-2026 08:30:00",
+                    "time_estimate_hours": 24,
+                    "time_spent_hours": 16,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "high",
+                    "tags": [
+                        "mobile apps"
+                    ],
+                    "time_efficiency_percentage": 152.34,
+                    "remaining_duration": "Lebih Cepat: 6 jam 11 menit 3 detik"
+                }
+            ]
+        },
+        {
+            "clickup_id": 101582120,
+            "username": "Egin Tia Yulanda",
+            "role": "web",
+            "name": "Egin Tia Yulanda",
+            "availability_status": "Working",
+            "workload_status": "Overload",
+            "performance_bugs": {
+                "workload_score": 122.92,
+                "bugs": 115,
+                "time_score": 1.1964,
+                "score": 169.12
+            },
+            "total_spent_hours": {
+                "hours": 118,
+                "percentage": 122.92
+            },
+            "expected_hours": 96,
+            "total_tasks": 6,
+            "total_upcoming_hours": 0,
+            "task_status_summary": {
+                "upcoming": 1,
+                "in_progress": 1,
+                "completed": 4,
+                "cancelled": 0,
+                "backlog": 0
+            },
+            "completion_summary": {
+                "total_completed": 4,
+                "on_time_count": 0
+            },
+            "avg_time_efficiency": {
+                "total_percentage": 478.57000000000005,
+                "avg_percentage": 119.64,
+                "total_completed_tasks": 4
+            },
+            "tasks": [
+                {
+                    "id": "86ew7f7jy",
+                    "name": "WEB - Optimze UI dan BUG",
+                    "description": "Perbaikan tampilan mobile lebih rapi\nImprovement Code",
+                    "status_id": "c90189201519_ar3PNuGb",
+                    "status_name": "to do",
+                    "status_type": "unstarted",
+                    "project_name": "Klik Lelang",
+                    "start_date": "19-01-2026 08:30:00",
+                    "due_date": "20-01-2026 17:00:00",
+                    "time_estimate_hours": 16,
+                    "time_spent_hours": 0,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "urgent",
+                    "tags": [
+                        "web"
+                    ]
+                },
+                {
+                    "id": "86ew6qamq",
+                    "name": "WEB BALANG - Implementasi perubahan API /check/pemotongan_nipl",
+                    "description": "",
+                    "status_id": "c90189201519_F8827O1p",
+                    "status_name": "in progress",
+                    "status_type": "custom",
+                    "project_name": "Klik Lelang",
+                    "start_date": "19-01-2026 04:00:00",
+                    "due_date": "19-01-2026 17:00:00",
+                    "time_estimate_hours": 24,
+                    "time_spent_hours": 0,
+                    "category": "",
+                    "creator_name": "Andri",
+                    "priority_name": "urgent",
+                    "tags": [
+                        "web"
+                    ]
+                },
+                {
+                    "id": "86ew6q9gc",
+                    "name": "WEB BALANG - Implementasi Select ALL pada fitur pemotorngan NIPL",
+                    "description": "Tambahkan fitur select all pada saat mengaktifkan maupun menonaktifkan Pemotongan tiket",
+                    "status_id": "c90189201519_7IFqe835",
+                    "status_name": "done dev",
+                    "status_type": "done",
+                    "date_done": "15-01-2026 15:40:31",
+                    "project_name": "Klik Lelang",
+                    "start_date": "15-01-2026 04:00:00",
+                    "due_date": "15-01-2026 17:00:00",
+                    "time_estimate_hours": 24,
+                    "time_spent_hours": 16,
+                    "category": "",
+                    "creator_name": "Andri",
+                    "priority_name": "normal",
+                    "tags": [
+                        "web"
+                    ],
+                    "time_efficiency_percentage": 117.26,
+                    "remaining_duration": "Lebih Cepat: 1 jam 19 menit 29 detik"
+                },
+                {
+                    "id": "86ew5yrqa",
+                    "name": "WEB - FASE 4 QA TESTING",
+                    "description": "",
+                    "status_id": "c90189201519_WRlbetQg",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "12-01-2026 16:54:39",
+                    "project_name": "Klik Lelang",
+                    "start_date": "12-01-2026 08:30:00",
+                    "due_date": "13-01-2026 08:30:00",
+                    "time_estimate_hours": 8,
+                    "time_spent_hours": 8,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "high",
+                    "tags": [
+                        "web"
+                    ],
+                    "time_efficiency_percentage": 107,
+                    "remaining_duration": "Lebih Cepat: 0 jam 35 menit 21 detik"
+                },
+                {
+                    "id": "86evxuhaw",
+                    "name": "WEB - Fase 4 - 020 - Web Bidder",
+                    "description": "Implementasi UI\nImplementasi API",
+                    "status_id": "c90189201519_WRlbetQg",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "08-01-2026 08:22:42",
+                    "project_name": "Klik Lelang",
+                    "start_date": "05-01-2026 08:30:00",
+                    "due_date": "08-01-2026 17:00:00",
+                    "time_estimate_hours": 32,
+                    "time_spent_hours": 32,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "high",
+                    "tags": [
+                        "web"
+                    ],
+                    "time_efficiency_percentage": 132.08,
+                    "remaining_duration": "Lebih Cepat: 8 jam 37 menit 18 detik"
+                },
+                {
+                    "id": "86evxugp6",
+                    "name": "WEB - Fase 4 - 020 - Web Balang",
+                    "description": "Implementasi UI\nImplementasi API",
+                    "status_id": "c90189201519_WRlbetQg",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "05-01-2026 10:27:06",
+                    "project_name": "Klik Lelang",
+                    "start_date": "31-12-2025 04:00:00",
+                    "due_date": "05-01-2026 17:30:00",
+                    "time_estimate_hours": 30,
+                    "time_spent_hours": 40,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "high",
+                    "tags": [
+                        "web"
+                    ],
+                    "time_efficiency_percentage": 122.23,
+                    "remaining_duration": "Lebih Cepat: 6 jam 32 menit 54 detik"
+                }
+            ]
+        },
+        {
+            "clickup_id": 101582115,
+            "username": "Fahri kurniawan",
+            "role": "backend",
+            "name": "Fahri kurniawan",
+            "availability_status": "Working",
+            "workload_status": "Overload",
+            "performance_bugs": {
+                "workload_score": 189.58,
+                "bugs": 115,
+                "time_score": 1.0272,
+                "score": 200
+            },
+            "total_spent_hours": {
+                "hours": 182,
+                "percentage": 189.58
+            },
+            "expected_hours": 96,
+            "total_tasks": 4,
+            "total_upcoming_hours": 0,
+            "task_status_summary": {
+                "upcoming": 0,
+                "in_progress": 1,
+                "completed": 3,
+                "cancelled": 0,
+                "backlog": 0
+            },
+            "on_time_performance_score": 99.95,
+            "completion_summary": {
+                "total_completed": 3,
+                "on_time_count": 1
+            },
+            "avg_time_efficiency": {
+                "total_percentage": 308.15999999999997,
+                "avg_percentage": 102.72,
+                "total_completed_tasks": 3
+            },
+            "tasks": [
+                {
+                    "id": "86ew6hkqf",
+                    "name": "BACKEND - Fase 2 - R\u0026D Video Player",
+                    "description": "research terkait pengembangan sistem moodle Video Player di bawah ini :\nPengaturan kualitas video tersedia, jika melakukan upload beberapa video dengan resolusi berbeda (misal satu file 480p dan satu file 720p)\nPause dengan space atau klik video\nJika pengaturan kualitas video dan subtitle di buat otomatis maka membutuhkan 2 package.\nfluent-ffmpeg:\nFree\nEkstrak Audio\nDownscaling video",
+                    "status_id": "p90187531463_F8827O1p",
+                    "status_name": "in progress",
+                    "status_type": "custom",
+                    "project_name": "Kei Learning",
+                    "start_date": "14-01-2026 08:30:00",
+                    "due_date": "23-01-2026 08:30:00",
+                    "time_estimate_hours": 60,
+                    "time_spent_hours": 0,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "urgent",
+                    "tags": [
+                        "analis teknis",
+                        "backend"
+                    ]
+                },
+                {
+                    "id": "86ew2w3vg",
+                    "name": "BACKEND - FASE 1 - Research UI",
+                    "description": "terkait UI , outputnya apakah memungkinkan untuk pengembangan fitur tersebut , dan berapa lama ? ( 001 , 002 , 005  )",
+                    "status_id": "p90187531463_WRlbetQg",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "09-01-2026 07:55:59",
+                    "project_name": "Kei Learning",
+                    "start_date": "08-01-2026 08:30:00",
+                    "due_date": "09-01-2026 08:30:00",
+                    "time_estimate_hours": 12,
+                    "time_spent_hours": 16,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "urgent",
+                    "tags": [
+                        "analis teknis",
+                        "backend"
+                    ],
+                    "time_efficiency_percentage": 105.88,
+                    "remaining_duration": "Lebih Cepat: 0 jam 30 menit 0 detik"
+                },
+                {
+                    "id": "86ew2vrge",
+                    "name": "BACKEND - Fase 1 - Research Video Player",
+                    "description": "research terkait pengembangan sistem moodle di bawah ini :\nterkait video player terlebih dahulu , outputnya apakah memungkinkan untuk pengembangan fitur tersebut , dan berapa lama ? ( 008 , 009 , 011 , 012 , 017 )",
+                    "status_id": "p90187531463_WRlbetQg",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "07-01-2026 08:05:22",
+                    "project_name": "Kei Learning",
+                    "start_date": "05-01-2026 08:30:00",
+                    "due_date": "07-01-2026 08:30:00",
+                    "time_estimate_hours": 30,
+                    "time_spent_hours": 24,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "urgent",
+                    "tags": [
+                        "analis teknis",
+                        "backend"
+                    ],
+                    "time_efficiency_percentage": 102.33,
+                    "remaining_duration": "Lebih Cepat: 0 jam 24 menit 38 detik"
+                },
+                {
+                    "id": "86evxa2rd",
+                    "name": "BACKEND - FASE 2 LOGIC Dashboard",
+                    "description": "Perhitungan performa bug\nPerhitungan performa lead\nPerhitungan DevOps",
+                    "status_id": "p90187531463_7IFqe835",
+                    "status_name": "done dev",
+                    "status_type": "done",
+                    "date_done": "05-01-2026 08:32:17",
+                    "project_name": "Others",
+                    "start_date": "22-12-2025 20:30:00",
+                    "due_date": "05-01-2026 08:30:00",
+                    "time_estimate_hours": 80,
+                    "time_spent_hours": 88,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "urgent",
+                    "tags": [
+                        "backend",
+                        "analis teknis"
+                    ],
+                    "time_efficiency_percentage": 99.95,
+                    "remaining_duration": "Terlambat: 0 jam 2 menit 18 detik"
+                }
+            ]
+        },
+        {
+            "clickup_id": 101585223,
+            "username": "Nurmian Petronella",
+            "role": "analis",
+            "name": "Nurmian Petronella",
+            "availability_status": "Working",
+            "workload_status": "Underload",
+            "performance_bugs": {
+                "workload_score": 58.33,
+                "bugs": 50,
+                "time_score": 1.0094,
+                "score": 29.44
+            },
+            "total_spent_hours": {
+                "hours": 56,
+                "percentage": 58.33
+            },
+            "expected_hours": 96,
+            "total_tasks": 5,
+            "total_upcoming_hours": 0,
+            "task_status_summary": {
+                "upcoming": 0,
+                "in_progress": 1,
+                "completed": 3,
+                "cancelled": 0,
+                "backlog": 1
+            },
+            "completion_summary": {
+                "total_completed": 3,
+                "on_time_count": 0
+            },
+            "avg_time_efficiency": {
+                "total_percentage": 302.82,
+                "avg_percentage": 100.94,
+                "total_completed_tasks": 3
+            },
+            "tasks": [
+                {
+                    "id": "86evjdknh",
+                    "name": "023 - Pelunasan ke FIF (SPP)",
+                    "description": "Proses Pelunasan atas bidder yang sudah lunas dan akan diproses pelunasan ke FIF oleh tim HO klik\nlink drawio :  \nlink wireframe :  \nlink mermaid (alternatif) : https://mermaid.ink",
+                    "status_id": "c90189201519_WRlbetQg",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "15-01-2026 16:15:34",
+                    "project_name": "Klik Lelang",
+                    "start_date": "13-01-2026 04:00:00",
+                    "due_date": "15-01-2026 19:00:00",
+                    "time_estimate_hours": 16,
+                    "time_spent_hours": 32,
+                    "category": "",
+                    "creator_name": "Heru Septiadi",
+                    "priority_name": "normal",
+                    "tags": [
+                        "analis"
+                    ],
+                    "bug_label": "Bug Terbuat",
+                    "time_efficiency_percentage": 102.82,
+                    "remaining_duration": "Lebih Cepat: 0 jam 44 menit 26 detik"
+                },
+                {
+                    "id": "86evnvgzw",
+                    "name": "018 - Fase 5 - Penambahan image Kutipan Risalah Lelang",
+                    "description": "muncul risalah lelang dahulu, baru masuk ke tampilan unit lelang\n1. Balang HO, upload risalah lelang ketika pembuatan lelang\n2. bidder bisa lihar risalah lelang melalui iklan lelang\n3. setelah risalah lelang di OK kan bidder, baru iklan lelang muncul\n\nlink drawio :  Halaman : 018 - Risalah lelang by Pejabat Lelang",
+                    "status_id": "c90189201519_F8827O1p",
+                    "status_name": "in progress",
+                    "status_type": "custom",
+                    "project_name": "Klik Lelang",
+                    "start_date": "12-01-2026 04:00:00",
+                    "due_date": "20-01-2026 04:00:00",
+                    "time_estimate_hours": 24,
+                    "time_spent_hours": 0,
+                    "category": "",
+                    "creator_name": "Nurmian Petronella",
+                    "priority_name": "normal",
+                    "tags": [
+                        "analis"
+                    ],
+                    "bug_label": "Bug Terbuat"
+                },
+                {
+                    "id": "86ew0b19h",
+                    "name": "024 - flow sistem keuangan klik",
+                    "description": "link drawio =",
+                    "status_id": "c90189201519_WRlbetQg",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "12-01-2026 17:42:38",
+                    "project_name": "Klik Lelang",
+                    "start_date": "08-01-2026 04:00:00",
+                    "due_date": "12-01-2026 19:00:00",
+                    "time_estimate_hours": 8,
+                    "time_spent_hours": 32,
+                    "category": "",
+                    "creator_name": "Heru Septiadi",
+                    "tags": [
+                        "analis"
+                    ],
+                    "time_efficiency_percentage": 100,
+                    "remaining_duration": "Lebih Cepat: 1 jam 17 menit 21 detik"
+                },
+                {
+                    "id": "86ew1bmmj",
+                    "name": "Belajar sistem Keilearning",
+                    "description": "",
+                    "status_id": "p90187531463_nEuUA0oD",
+                    "status_name": "backlog",
+                    "status_type": "open",
+                    "project_name": "Kei Learning",
+                    "start_date": "05-01-2026 04:00:00",
+                    "due_date": "06-01-2026 04:00:00",
+                    "time_estimate_hours": 8,
+                    "time_spent_hours": 0,
+                    "category": "",
+                    "creator_name": "Heru Septiadi"
+                },
+                {
+                    "id": "86evrygjr",
+                    "name": "021 - Search transaksi",
+                    "description": "Cabang Klik ingin melakukan search berdasarkan No Pol, No Ka, No Sin pada menu Transaksi\nlink drawio :  \nlink wireframe :",
+                    "status_id": "c90189201519_WRlbetQg",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "06-01-2026 17:51:02",
+                    "project_name": "Klik Lelang",
+                    "start_date": "30-12-2025 04:00:00",
+                    "due_date": "06-01-2026 19:00:00",
+                    "time_estimate_hours": 8,
+                    "time_spent_hours": 56,
+                    "category": "",
+                    "creator_name": "Heru Septiadi",
+                    "tags": [
+                        "analis"
+                    ],
+                    "time_efficiency_percentage": 100,
+                    "remaining_duration": "Lebih Cepat: 1 jam 8 menit 57 detik"
+                }
+            ]
+        },
+        {
+            "clickup_id": 101582117,
+            "username": "Sani Rosa",
+            "role": "UI-UX",
+            "name": "Sani Rosa",
+            "availability_status": "Available",
+            "workload_status": "Overload",
+            "performance_bugs": {
+                "workload_score": 145.83,
+                "bugs": 115,
+                "time_score": 0.6984,
+                "score": 117.12
+            },
+            "total_spent_hours": {
+                "hours": 140,
+                "percentage": 145.83
+            },
+            "expected_hours": 96,
+            "total_tasks": 7,
+            "total_upcoming_hours": 0,
+            "task_status_summary": {
+                "upcoming": 0,
+                "in_progress": 0,
+                "completed": 7,
+                "cancelled": 0,
+                "backlog": 0
+            },
+            "on_time_performance_score": -11.54,
+            "completion_summary": {
+                "total_completed": 7,
+                "on_time_count": 4
+            },
+            "avg_time_efficiency": {
+                "total_percentage": 488.87,
+                "avg_percentage": 69.84,
+                "total_completed_tasks": 7
+            },
+            "tasks": [
+                {
+                    "id": "86ew7euvy",
+                    "name": "UI/UX - Fase 5 - WEB ADMIN",
+                    "description": "",
+                    "status_id": "c90189201519_WRlbetQg",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "19-01-2026 09:41:59",
+                    "project_name": "Klik Lelang",
+                    "start_date": "19-01-2026 08:30:00",
+                    "due_date": "21-01-2026 08:30:00",
+                    "time_estimate_hours": 28,
+                    "time_spent_hours": 8,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "high",
+                    "tags": [
+                        "ui/ux"
+                    ],
+                    "time_efficiency_percentage": 200,
+                    "remaining_duration": "Lebih Cepat: 16 jam 48 menit 1 detik"
+                },
+                {
+                    "id": "86ew5yx4r",
+                    "name": "UI/UX - FASE 4 QA TESTING",
+                    "description": "",
+                    "status_id": "c90189201519_WRlbetQg",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "13-01-2026 09:15:13",
+                    "project_name": "Klik Lelang",
+                    "start_date": "12-01-2026 08:30:00",
+                    "due_date": "13-01-2026 08:30:00",
+                    "time_estimate_hours": 8,
+                    "time_spent_hours": 16,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "high",
+                    "tags": [
+                        "ui/ux"
+                    ],
+                    "time_efficiency_percentage": 91.62,
+                    "remaining_duration": "Terlambat: 0 jam 45 menit 14 detik"
+                },
+                {
+                    "id": "86ew1zw4e",
+                    "name": "UI/UX - FASE 5 - 018 - Penambahan image Kutipan Risalah Lelang",
+                    "description": "UI/UX disisi bidder terlebih dahulu\ntampilan di apps bidder dirubah berdasarkan kelompok cabang\nweb dan apps",
+                    "status_id": "c90189201519_WRlbetQg",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "12-01-2026 12:03:42",
+                    "project_name": "Klik Lelang",
+                    "start_date": "07-01-2026 08:30:00",
+                    "due_date": "12-01-2026 08:30:00",
+                    "time_estimate_hours": 40,
+                    "time_spent_hours": 32,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "high",
+                    "tags": [
+                        "ui/ux"
+                    ],
+                    "time_efficiency_percentage": 86.81,
+                    "remaining_duration": "Terlambat: 3 jam 33 menit 43 detik"
+                },
+                {
+                    "id": "86ew3ar95",
+                    "name": "Merapikan dokumentasi manual book balaps versi mobile",
+                    "description": "",
+                    "status_id": "p90187531463_WRlbetQg",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "07-01-2026 14:19:41",
+                    "project_name": "Others",
+                    "start_date": "06-01-2026 10:00:00",
+                    "due_date": "08-01-2026 10:00:00",
+                    "time_estimate_hours": 16,
+                    "time_spent_hours": 16,
+                    "category": "",
+                    "creator_name": "Christian Wibisono",
+                    "priority_name": "low",
+                    "time_efficiency_percentage": 135.05,
+                    "remaining_duration": "Lebih Cepat: 4 jam 40 menit 19 detik"
+                },
+                {
+                    "id": "86ew1zwug",
+                    "name": "UI/UX - FASE 5 - Pelajari flow 018 023",
+                    "description": "",
+                    "status_id": "c90189201519_WRlbetQg",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "12-01-2026 12:03:35",
+                    "project_name": "Klik Lelang",
+                    "start_date": "05-01-2026 08:30:00",
+                    "due_date": "06-01-2026 08:30:00",
+                    "time_estimate_hours": 8,
+                    "time_spent_hours": 48,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "high",
+                    "tags": [
+                        "ui/ux",
+                        "infra",
+                        "database"
+                    ],
+                    "time_efficiency_percentage": -300,
+                    "remaining_duration": "Terlambat: 39 jam 33 menit 36 detik"
+                },
+                {
+                    "id": "86ew1c1er",
+                    "name": "UI/UX - Diskusi dan perbaikan tampilan wireframe dari team Analisa",
+                    "description": "",
+                    "status_id": "c90189201519_WRlbetQg",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "02-01-2026 12:55:48",
+                    "project_name": "Klik Lelang",
+                    "start_date": "31-12-2025 08:30:00",
+                    "due_date": "02-01-2026 08:30:00",
+                    "time_estimate_hours": 16,
+                    "time_spent_hours": 24,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "normal",
+                    "tags": [
+                        "ui/ux"
+                    ],
+                    "time_efficiency_percentage": 75.39,
+                    "remaining_duration": "Terlambat: 4 jam 25 menit 49 detik"
+                },
+                {
+                    "id": "86evxugj6",
+                    "name": "UI/UX - Fase 4 - 020 Web dan Apps bidder / cabang",
+                    "description": "",
+                    "status_id": "c90189201519_WRlbetQg",
+                    "status_name": "completed",
+                    "status_type": "done",
+                    "date_done": "31-12-2025 15:47:13",
+                    "project_name": "Klik Lelang",
+                    "start_date": "31-12-2025 04:00:00",
+                    "due_date": "02-01-2026 17:00:00",
+                    "time_estimate_hours": 24,
+                    "time_spent_hours": 16,
+                    "category": "",
+                    "creator_name": "Deni Candra",
+                    "priority_name": "normal",
+                    "tags": [
+                        "ui/ux"
+                    ],
+                    "time_efficiency_percentage": 200,
+                    "remaining_duration": "Lebih Cepat: 19 jam 12 menit 47 detik"
+                }
+            ]
+        },
+        {
+            "clickup_id": 300608838,
+            "username": "aufa",
+            "role": "backend",
+            "name": "aufa",
+            "availability_status": "Working",
+            "workload_status": "Underload",
+            "performance_bugs": {
+                "workload_score": 41.67,
+                "bugs": 115,
+                "time_score": 0.0291,
+                "score": 1.39
+            },
+            "total_spent_hours": {
+                "hours": 40,
+                "percentage": 41.67
+            },
+            "expected_hours": 96,
+            "total_tasks": 6,
+            "total_upcoming_hours": 0,
+            "task_status_summary": {
+                "upcoming": 0,
+                "in_progress": 2,
+                "completed": 3,
+                "cancelled": 0,
+                "backlog": 1
+            },
+            "on_time_performance_score": -45.63,
+            "completion_summary": {
+                "total_completed": 3,
+                "on_time_count": 2
+            },
+            "avg_time_efficiency": {
+                "total_percentage": 8.740000000000002,
+                "avg_percentage": 2.91,
+                "total_completed_tasks": 3
+            },
+            "tasks": [
+                {
+                    "id": "86ew451hk",
+                    "name": "PENYEBAB - BUG",
+                    "description": "",
+                    "status_id": "p90187211964_MO5fe3B7",
+                    "status_name": "done dev",
+                    "status_type": "done",
+                    "date_done": "07-01-2026 16:15:04",
+                    "project_name": "List",
+                    "start_date": "08-01-2026 04:00:00",
+                    "due_date": "10-01-2026 04:00:00",
+                    "time_estimate_hours": 8,
+                    "time_spent_hours": 16,
+                    "category": "",
+                    "creator_name": "aufa",
+                    "priority_name": "high",
+                    "tags": [
+                        "bugs"
+                    ],
+                    "time_efficiency_percentage": 100,
+                    "remaining_duration": "Lebih Cepat: 59 jam 44 menit 55 detik"
+                },
+                {
+                    "id": "86ew44v1g",
+                    "name": "fixing bug",
+                    "description": "",
+                    "status_id": "p90187531463_F8827O1p",
+                    "status_name": "in progress",
+                    "status_type": "custom",
+                    "project_name": "UJI COBA",
+                    "start_date": "08-01-2026 04:00:00",
+                    "due_date": "09-01-2026 04:00:00",
+                    "time_estimate_hours": 8,
+                    "time_spent_hours": 0,
+                    "category": "",
+                    "creator_name": "aufa",
+                    "priority_name": "high",
+                    "tags": [
+                        "bug fixing"
+                    ]
+                },
+                {
+                    "id": "86ew453e0",
+                    "name": "FIXING - BUG",
+                    "description": "",
+                    "status_id": "p90187211964_WHuZIUgS",
+                    "status_name": "in progress",
+                    "status_type": "custom",
+                    "project_name": "List",
+                    "start_date": "07-01-2026 04:00:00",
+                    "due_date": "09-01-2026 04:00:00",
+                    "time_estimate_hours": 8,
+                    "time_spent_hours": 0,
+                    "category": "",
+                    "creator_name": "aufa",
+                    "priority_name": "urgent",
+                    "tags": [
+                        "bugs"
+                    ]
+                },
+                {
+                    "id": "86evngabx",
+                    "name": "bug of network",
+                    "description": "",
+                    "status_id": "p90187211964_YSJMaUcM",
+                    "status_name": "backlog",
+                    "status_type": "open",
+                    "project_name": "List",
+                    "start_date": "07-01-2026 04:00:00",
+                    "due_date": "09-01-2026 04:00:00",
+                    "time_estimate_hours": 8,
+                    "time_spent_hours": 0,
+                    "category": "",
+                    "creator_name": "Christian Wibisono",
+                    "tags": [
+                        "bugs"
+                    ],
+                    "bug_label": "Bug Fixing",
+                    "bug_source_info": {
+                        "task_name": "Network",
+                        "assignee_name": "Christian Wibisono",
+                        "start_date": "01-01-2026 04:00:00",
+                        "due_date": "03-01-2026 04:00:00",
+                        "date_done": "07-01-2026 16:30:45",
+                        "date_closed": null,
+                        "bug_label": "Bug Terbuat"
+                    }
+                },
+                {
+                    "id": "86ew4564n",
+                    "name": "BUG PARAH BANGET",
+                    "description": "",
+                    "status_id": "p90187211964_MO5fe3B7",
+                    "status_name": "done dev",
+                    "status_type": "done",
+                    "date_done": "07-01-2026 16:20:15",
+                    "project_name": "List",
+                    "start_date": "01-01-2026 04:00:00",
+                    "due_date": "03-01-2026 04:00:00",
+                    "time_estimate_hours": 8,
+                    "time_spent_hours": 48,
+                    "category": "",
+                    "creator_name": "aufa",
+                    "priority_name": "high",
+                    "time_efficiency_percentage": -46.32,
+                    "remaining_duration": "Terlambat: 26 jam 20 menit 16 detik"
+                },
+                {
+                    "id": "86ew44w7n",
+                    "name": "FITUR - BACKEND",
+                    "description": "",
+                    "status_id": "p90187531463_7IFqe835",
+                    "status_name": "done dev",
+                    "status_type": "done",
+                    "date_done": "07-01-2026 16:05:21",
+                    "project_name": "UJI COBA",
+                    "start_date": "01-01-2026 04:00:00",
+                    "due_date": "03-01-2026 04:00:00",
+                    "time_estimate_hours": 8,
+                    "time_spent_hours": 48,
+                    "category": "",
+                    "creator_name": "aufa",
+                    "priority_name": "normal",
+                    "tags": [
+                        "backend"
+                    ],
+                    "time_efficiency_percentage": -44.94,
+                    "remaining_duration": "Terlambat: 26 jam 5 menit 22 detik"
+                }
+            ]
         }
+    ],
+    "count": 13,
+    "grouping": [
+        {
+            "category": "Total Beban Kerja",
+            "data": [
+                {
+                    "clickup_id": 101582118,
+                    "name": "Alfitra Fadjri",
+                    "role": "web",
+                    "value": 0,
+                    "missing_hours": 81.6
+                },
+                {
+                    "clickup_id": 101582121,
+                    "name": "Deni Candra",
+                    "role": "pm",
+                    "value": 8.33,
+                    "missing_hours": 73.6
+                },
+                {
+                    "clickup_id": 101582122,
+                    "name": "Christian Wibisono",
+                    "role": "pm",
+                    "value": 16.67,
+                    "missing_hours": 65.6
+                },
+                {
+                    "clickup_id": 101582116,
+                    "name": "Adi Nugroho",
+                    "role": "infra",
+                    "value": 33.33,
+                    "missing_hours": 49.6
+                },
+                {
+                    "clickup_id": 300608838,
+                    "name": "aufa",
+                    "role": "backend",
+                    "value": 41.67,
+                    "missing_hours": 41.6
+                },
+                {
+                    "clickup_id": 101585223,
+                    "name": "Nurmian Petronella",
+                    "role": "analis",
+                    "value": 58.33,
+                    "missing_hours": 25.6
+                },
+                {
+                    "clickup_id": 101582119,
+                    "name": "Arif Hidayat",
+                    "role": "mobile apps",
+                    "value": 66.67,
+                    "missing_hours": 17.6
+                },
+                {
+                    "clickup_id": 101582114,
+                    "name": "Dwi A Sobarna",
+                    "role": "mobile apps",
+                    "value": 76.04,
+                    "missing_hours": 8.6
+                },
+                {
+                    "clickup_id": 101582120,
+                    "name": "Egin Tia Yulanda",
+                    "role": "web",
+                    "value": 122.92,
+                    "missing_hours": 0
+                },
+                {
+                    "clickup_id": 101582117,
+                    "name": "Sani Rosa",
+                    "role": "UI-UX",
+                    "value": 145.83,
+                    "missing_hours": 0
+                },
+                {
+                    "clickup_id": 101582111,
+                    "name": "Aditya Permadi",
+                    "role": "backend",
+                    "value": 164.58,
+                    "missing_hours": 0
+                },
+                {
+                    "clickup_id": 101582115,
+                    "name": "Fahri kurniawan",
+                    "role": "backend",
+                    "value": 189.58,
+                    "missing_hours": 0
+                },
+                {
+                    "clickup_id": 101582112,
+                    "name": "Andhika Adjie Pradhana",
+                    "role": "backend",
+                    "value": 200,
+                    "missing_hours": 0
+                }
+            ]
+        },
+        {
+            "category": "Tepat Waktu Kerja",
+            "data": [
+                {
+                    "clickup_id": 101582122,
+                    "name": "Christian Wibisono",
+                    "role": "pm",
+                    "value": -173.65
+                },
+                {
+                    "clickup_id": 300608838,
+                    "name": "aufa",
+                    "role": "backend",
+                    "value": -45.63
+                },
+                {
+                    "clickup_id": 101582117,
+                    "name": "Sani Rosa",
+                    "role": "UI-UX",
+                    "value": -11.54
+                },
+                {
+                    "clickup_id": 101582112,
+                    "name": "Andhika Adjie Pradhana",
+                    "role": "backend",
+                    "value": 71.07
+                },
+                {
+                    "clickup_id": 101582115,
+                    "name": "Fahri kurniawan",
+                    "role": "backend",
+                    "value": 99.95
+                }
+            ]
+        },
+        {
+            "category": "Performa Bug",
+            "data": [
+                {
+                    "clickup_id": 101585223,
+                    "name": "Nurmian Petronella",
+                    "role": "analis",
+                    "value": 50
+                },
+                {
+                    "clickup_id": 101582122,
+                    "name": "Christian Wibisono",
+                    "role": "pm",
+                    "value": 75
+                },
+                {
+                    "clickup_id": 101582121,
+                    "name": "Deni Candra",
+                    "role": "pm",
+                    "value": 115
+                },
+                {
+                    "clickup_id": 101582112,
+                    "name": "Andhika Adjie Pradhana",
+                    "role": "backend",
+                    "value": 115
+                },
+                {
+                    "clickup_id": 101582119,
+                    "name": "Arif Hidayat",
+                    "role": "mobile apps",
+                    "value": 115
+                },
+                {
+                    "clickup_id": 101582118,
+                    "name": "Alfitra Fadjri",
+                    "role": "web",
+                    "value": 115
+                },
+                {
+                    "clickup_id": 101582116,
+                    "name": "Adi Nugroho",
+                    "role": "infra",
+                    "value": 115
+                },
+                {
+                    "clickup_id": 101582114,
+                    "name": "Dwi A Sobarna",
+                    "role": "mobile apps",
+                    "value": 115
+                },
+                {
+                    "clickup_id": 101582120,
+                    "name": "Egin Tia Yulanda",
+                    "role": "web",
+                    "value": 115
+                },
+                {
+                    "clickup_id": 101582115,
+                    "name": "Fahri kurniawan",
+                    "role": "backend",
+                    "value": 115
+                },
+                {
+                    "clickup_id": 101582111,
+                    "name": "Aditya Permadi",
+                    "role": "backend",
+                    "value": 115
+                },
+                {
+                    "clickup_id": 101582117,
+                    "name": "Sani Rosa",
+                    "role": "UI-UX",
+                    "value": 115
+                },
+                {
+                    "clickup_id": 300608838,
+                    "name": "aufa",
+                    "role": "backend",
+                    "value": 115
+                }
+            ]
+        },
+        {
+            "category": "Performa",
+            "data": [
+                {
+                    "clickup_id": 101582122,
+                    "name": "Christian Wibisono",
+                    "role": "pm",
+                    "value": -21.71
+                },
+                {
+                    "clickup_id": 101582118,
+                    "name": "Alfitra Fadjri",
+                    "role": "web",
+                    "value": 0
+                },
+                {
+                    "clickup_id": 101582121,
+                    "name": "Deni Candra",
+                    "role": "pm",
+                    "value": 0
+                },
+                {
+                    "clickup_id": 300608838,
+                    "name": "aufa",
+                    "role": "backend",
+                    "value": 1.39
+                },
+                {
+                    "clickup_id": 101585223,
+                    "name": "Nurmian Petronella",
+                    "role": "analis",
+                    "value": 29.44
+                },
+                {
+                    "clickup_id": 101582116,
+                    "name": "Adi Nugroho",
+                    "role": "infra",
+                    "value": 58.92
+                },
+                {
+                    "clickup_id": 101582119,
+                    "name": "Arif Hidayat",
+                    "role": "mobile apps",
+                    "value": 97.94
+                },
+                {
+                    "clickup_id": 101582114,
+                    "name": "Dwi A Sobarna",
+                    "role": "mobile apps",
+                    "value": 108.54
+                },
+                {
+                    "clickup_id": 101582117,
+                    "name": "Sani Rosa",
+                    "role": "UI-UX",
+                    "value": 117.12
+                },
+                {
+                    "clickup_id": 101582120,
+                    "name": "Egin Tia Yulanda",
+                    "role": "web",
+                    "value": 169.12
+                },
+                {
+                    "clickup_id": 101582112,
+                    "name": "Andhika Adjie Pradhana",
+                    "role": "backend",
+                    "value": 194.05
+                },
+                {
+                    "clickup_id": 101582115,
+                    "name": "Fahri kurniawan",
+                    "role": "backend",
+                    "value": 200
+                },
+                {
+                    "clickup_id": 101582111,
+                    "name": "Aditya Permadi",
+                    "role": "backend",
+                    "value": 200
+                }
+            ]
+        }
+    ],
+    "jadwal_libur": [
+        {
+            "bulan": "Januari",
+            "hari": "Jumat",
+            "keterangan": "Hari libur Isra Mi'raj",
+            "tanggal": "16-01-2026"
+        }
+    ],
+    "notifications": []
+}

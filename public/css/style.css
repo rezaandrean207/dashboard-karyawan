@@ -102,9 +102,6 @@ body {
   color: #fff;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  /* position: fixed;
-  left: 0; */
 }
 
 .sidebar .logo,
@@ -113,8 +110,8 @@ body {
   align-items: center;
   gap: 10px;
   border-bottom: 1px solid rgb(85, 57, 223);
-  padding: 0 25px;
-  height: 12%;
+  padding: 25px;
+  /* flex: 1; */
 }
 
 .logo img {
@@ -144,7 +141,20 @@ body {
   padding: 5px 15px;
   width: 100%;
   gap: 12px;
-  height: 54%;
+  flex: 1; /* INI KUNCINYA */
+  overflow-y: auto;
+  overflow-y: auto;
+
+  /* Firefox */
+  scrollbar-width: none;
+
+  /* Internet Explorer / Edge lama */
+  -ms-overflow-style: none;
+}
+
+/* Chrome, Edge, Safari */
+.sidebar-text::-webkit-scrollbar {
+  display: none;
 }
 
 .listKaryawan,
@@ -178,19 +188,25 @@ body {
 .sidebar-text details {
   color: #fff;
   font-size: 15px;
-  height: 6vh;
+  /* height: 6vh; */
   text-align: justify;
 }
 
-.sidebar .footer_sidebar,
-.sidebar_responsive .footer_sidebar {
-  /* position: absolute;
-  bottom: 0; */
+.sidebar .footer_sidebar {
   /* border: 1px solid #010101; */
   border-top: 1px solid rgb(85, 57, 223);
   padding: 18px;
   width: 100%;
+  margin-top: auto;
   /* height: 25%; */
+}
+.sidebar_responsive .footer_sidebar {
+  position: absolute;
+  bottom: 0;
+  border-top: 1px solid rgb(85, 57, 223);
+  padding: 18px;
+  width: 100%;
+  margin-top: auto;
 }
 
 .footer_sidebar .user {
@@ -268,11 +284,21 @@ body {
 
 /* Konten */
 .konten .isi {
-  width: 100%;
+  width: 96%;
   /* position: absolute; */
   max-height: 100dvh;
   overflow-y: auto;
   right: 0;
+  /* Firefox */
+  scrollbar-width: none;
+
+  /* Internet Explorer / Edge lama */
+  -ms-overflow-style: none;
+}
+
+/* Chrome, Edge, Safari */
+.isi::-webkit-scrollbar {
+  display: none;
 }
 
 .isi h2 {
@@ -834,7 +860,7 @@ form select {
   }
 
   .konten .isi {
-    width: 10%;
+    width: 96%;
     overflow-x: hidden;
     position: relative;
     top: 10vh;
