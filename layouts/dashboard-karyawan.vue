@@ -21,8 +21,8 @@
       <p>Dashboard</p>
     </div>
 
-    <div class="background" v-show="sidebar" @click="close">
-      <div class="sidebar_responsive" v-show="sidebar">
+    <div class="background" v-if="sidebar" @click="close">
+      <div class="sidebar_responsive" @click.stop>
         <div class="logo">
           <img src="/img/logo dna.png" alt="" />
           <div class="keterangan">
@@ -191,7 +191,7 @@
 </template>
 
 <!-- Background Notifikasi  -->
-<style scoped>
+<!-- <style scoped>
 .background-notif {
   position: fixed;
   top: 0;
@@ -240,36 +240,11 @@
   padding: 10px;
   border-radius: 8px;
 }
-</style>
+</style> -->
 
 <style scoped>
 .active {
   background-color: rgb(16, 67, 185);
-}
-
-.notifikasi {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background-color: #f5f5f5;
-  padding: 15px 25px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border: 1px solid #ddd;
-  z-index: 1000;
-  cursor: pointer;
-}
-
-.notifikasi i {
-  font-size: 20px;
-  color: #333;
-}
-
-.notifikasi:hover {
-  background-color: #e0e0e0;
 }
 
 .user {

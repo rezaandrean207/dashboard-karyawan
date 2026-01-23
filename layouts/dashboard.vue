@@ -14,14 +14,14 @@
     </div>
   </div>
   <div class="konten">
-    <div class="navbar">
+    <div class="navbar" v-if="!isAppView">
       <div class="menu">
         <i class="fa-solid fa-bars" @click="menu"></i>
       </div>
       <p>Dashboard</p>
     </div>
 
-    <div class="background" v-show="sidebar" @click="close">
+    <div class="background" v-if="sidebar" @click="close">
       <div class="sidebar_responsive" @click.stop>
         <div class="logo">
           <img src="/img/logo dna.png" alt="" />
@@ -56,37 +56,37 @@
             <i class="fa-regular fa-calendar"></i>
             <p>Jadwal Libur</p>
           </NuxtLink>
-          <details class="setting">
-            <summary>
-              <span class="material-symbols-outlined"> settings </span>Setting
-            </summary>
-            <div class="submenu">
-              <NuxtLink
-                to="/admin/settingBug"
-                class="submenu-item"
-                :class="{ active: $route.path === '/admin/settingBug' }"
-              >
-                <!-- <i class="fa-solid fa-gear"></i> -->
-                <!-- <span class="material-symbols-outlined"> settings </span> -->
-                <!-- <i class="fa-solid fa-bug"></i> -->
-                <p>Bug Setting</p>
-              </NuxtLink>
-              <NuxtLink
-                to="/admin/changePassword"
-                class="submenu-item"
-                :class="{ active: $route.path === '/admin/changePassword' }"
-              >
-                <p>Ubah Password</p>
-              </NuxtLink>
-            </div>
-          </details>
+          <div class="submenu" v-if="openMenu">
+            <NuxtLink
+              to="/admin/settingBug"
+              class="submenu-item"
+              :class="{ active: $route.path === '/admin/settingBug' }"
+            >
+              <p>Bug Setting</p>
+            </NuxtLink>
+            <NuxtLink
+              to="/admin/changePassword"
+              class="submenu-item"
+              :class="{ active: $route.path === '/admin/changePassword' }"
+            >
+              <p>Ubah Password</p>
+            </NuxtLink>
+          </div>
           <NuxtLink
             to="/admin/grouping"
             class="hari_libur"
             :class="{ active: $route.path === '/admin/grouping' }"
           >
-            <i class="fa-regular fa-calendar"></i>
+            <span class="material-symbols-outlined"> group </span>
             <p>Grouping</p>
+          </NuxtLink>
+          <NuxtLink
+            to="/admin/ganttChart"
+            class="hari_libur"
+            :class="{ active: $route.path === '/admin/ganttChart' }"
+          >
+            <span class="material-symbols-outlined"> bar_chart_4_bars </span>
+            <p>Gantt Chart</p>
           </NuxtLink>
           <!-- <div class="setting">
           <i class="fa-solid fa-gear"></i>
@@ -155,11 +155,32 @@
           <i class="fa-regular fa-calendar"></i>
           <p>Jadwal Libur</p>
         </NuxtLink>
-        <details class="setting">
-          <summary>
+
+        <NuxtLink
+          to="/admin/grouping"
+          class="hari_libur"
+          :class="{ active: $route.path === '/admin/grouping' }"
+        >
+          <span class="material-symbols-outlined"> group </span>
+          <p>Grouping</p>
+        </NuxtLink>
+        <NuxtLink
+          to="/admin/ganttChart"
+          class="hari_libur"
+          :class="{ active: $route.path === '/admin/ganttChart' }"
+        >
+          <span class="material-symbols-outlined"> bar_chart_4_bars </span>
+          <p>Gantt Chart</p>
+        </NuxtLink>
+        <div class="setting">
+          <div
+            class="setting-header"
+            @click="openMenu = !openMenu"
+            :class="{ active: openMenu }"
+          >
             <span class="material-symbols-outlined"> settings </span>Setting
-          </summary>
-          <div class="submenu">
+          </div>
+          <div class="submenu" v-if="openMenu">
             <NuxtLink
               to="/admin/settingBug"
               class="submenu-item"
@@ -175,23 +196,7 @@
               <p>Ubah Password</p>
             </NuxtLink>
           </div>
-        </details>
-        <NuxtLink
-          to="/admin/grouping"
-          class="hari_libur"
-          :class="{ active: $route.path === '/admin/grouping' }"
-        >
-          <span class="material-symbols-outlined"> group </span>
-          <p>Grouping</p>
-        </NuxtLink>
-        <NuxtLink
-          to="/admin/ganttChart"
-          class="hari_libur"
-          :class="{ active: $route.path === '/admin/ganttChart' }"
-        >
-          <span class="material-symbols-outlined"> group </span>
-          <p>Gantt Chart</p>
-        </NuxtLink>
+        </div>
 
         <!-- <NuxtLink to="/laporanKinerja" class="report">
           <i class="fa-solid fa-chart-simple"></i>
@@ -240,13 +245,16 @@
   background-color: rgb(16, 67, 185);
 }
 
-details {
+.setting {
   height: auto;
   cursor: pointer;
+  /* margin-top: 12px; */
+  /* padding: 10px 0;
+  border-radius: 10px; */
   /* margin-bottom: 10px auto; */
 }
 
-details summary {
+.setting-header {
   list-style: none;
   padding: 10px 10px 10px 15px;
   border-radius: 10px;
@@ -255,30 +263,21 @@ details summary {
   /* width: 100%; */
 }
 
-details[open] summary {
+/* details[open] summary {
+  background-color: rgb(16, 67, 185);
+} */
+
+.setting .setting-header:hover {
   background-color: rgb(16, 67, 185);
 }
 
-details summary:hover {
-  background-color: rgb(16, 67, 185);
-}
-
-details summary::-webkit-details-marker {
+.setting .setting-header::-webkit-details-marker {
   display: none;
-}
-
-details[open] .submenu {
-  margin-top: 10px;
-  /* border: 1px solid rgb(0, 46, 154); */
-}
-
-details[open] {
-  /* background-color: rgb(16, 67, 185); */
-  border-radius: 10px;
 }
 
 .submenu {
   margin-top: 8px;
+  height: fit-content;
   margin-left: 25px;
   display: flex;
   flex-direction: column;
@@ -322,6 +321,7 @@ export default {
       sidebar: false,
       loading: false,
       sukses: false,
+      openMenu: false,
     };
   },
   methods: {
@@ -376,6 +376,11 @@ export default {
     },
     closeSukses() {
       this.sukses = false;
+    },
+  },
+  computed: {
+    isAppView() {
+      return this.$route.query.view === "app";
     },
   },
 };

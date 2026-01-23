@@ -5,7 +5,7 @@
       <p>Tunggu Sebentar</p>
     </div>
   </div>
-  <div class="isi">
+  <div class="isi" :class="{ viewApp: isAppView }">
     <h2>Grouping</h2>
     <!-- <p>
       Karyawan dengan performa rendah (< {{ searchInput }}%) berdasarkan
@@ -359,8 +359,8 @@ export default {
       try {
         const task = await this.$api.get(
           `/api/v1/workload/tasks-by-range?start_date=${this.formatTanggal(
-            this.start
-          )}&end_date=${this.formatTanggal(this.end)}`
+            this.start,
+          )}&end_date=${this.formatTanggal(this.end)}`,
         );
         this.daftarKaryawan = task.data.grouping || [];
         // this.daftarHari = task.data.jadwal_libur || [];
@@ -463,6 +463,9 @@ export default {
           }))
           .filter((group) => group.data.length > 0);
       }
+    },
+    isAppView() {
+      return this.$route.query.view === "app";
     },
   },
 

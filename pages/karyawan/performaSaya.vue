@@ -92,6 +92,38 @@
       </form>
     </div>
 
+    <div class="notifikasi-detail" v-if="hasNotifikasi">
+      <div class="notifikasi" :class="{ gap: !hasNotifikasi }">
+        <i class="fa-regular fa-bell"></i>
+
+        <!-- <span class="notif-dot" v-if="hasNotifikasi"></span> -->
+        <span class="notif-dot"></span>
+        <h4>{{ listNotifikasi.length }} Peringatan</h4>
+      </div>
+      <!-- <div class="header_notif">
+        <h4 class="judul-notif">Notifikasi Sistem</h4>
+      </div> -->
+      <div class="container-notif">
+        <div class="isi_notif" v-for="notif in listNotifikasi" :key="notif.id">
+          <span class="material-symbols-outlined"> error </span>
+          <!-- <h4 v-if="notif.workload">Beban Kerja</h4>
+          <h4 v-else-if="notif.on_time">Tepat Waktu Kerja</h4>
+          <h4 v-else-if="notif.performance">Performa Karyawan</h4> -->
+          <div class="teks-notif">
+            <h4>{{ notif.name }}</h4>
+            <p>{{ notif.message }}</p>
+          </div>
+        </div>
+        <div
+          class="isi-not-found"
+          v-if="!listNotifikasi || listNotifikasi.length === 0"
+        >
+          <!-- <h4>Header Notifikasi</h4> -->
+          <p>Belum ada notifikasi baru.</p>
+        </div>
+      </div>
+    </div>
+
     <div class="card_karyawan" v-if="detailKaryawan">
       <div class="card_profile">
         <div class="card_left">
@@ -454,37 +486,6 @@
     </div>
   </div>
 
-  <details class="notifikasi-detail" v-if="hasNotifikasi">
-    <summary class="notifikasi" :class="{ gap: !hasNotifikasi }">
-      <i class="fa-regular fa-bell"></i>
-
-      <!-- <span class="notif-dot" v-if="hasNotifikasi"></span> -->
-      <span class="notif-dot"></span>
-      <h4>Peringatan</h4>
-    </summary>
-    <div class="sidebar_notif">
-      <!-- <div class="header_notif">
-        <h4 class="judul-notif">Notifikasi Sistem</h4>
-      </div> -->
-      <div class="container-notif">
-        <div class="isi_notif" v-for="notif in listNotifikasi" :key="notif.id">
-          <!-- <h4 v-if="notif.workload">Beban Kerja</h4>
-          <h4 v-else-if="notif.on_time">Tepat Waktu Kerja</h4>
-          <h4 v-else-if="notif.performance">Performa Karyawan</h4> -->
-          <h4>{{ notif.name }}</h4>
-          <p>{{ notif.message }}</p>
-        </div>
-        <div
-          class="isi-not-found"
-          v-if="!listNotifikasi || listNotifikasi.length === 0"
-        >
-          <!-- <h4>Header Notifikasi</h4> -->
-          <p>Belum ada notifikasi baru.</p>
-        </div>
-      </div>
-    </div>
-  </details>
-
   <!-- <div
     class="notifikasi"
     :class="{ gap: !hasNotifikasi }"
@@ -499,36 +500,28 @@
 
 <!-- Style detail -->
 <style scoped>
-details {
-  position: fixed;
-  top: 20px;
-  /* width: 50%; */
-  width: 650px;
-  z-index: 1000;
+.notifikasi-detail {
+  width: 80%;
+  border: 1px solid rgb(255, 189, 189);
+  margin-top: 20px;
+  border-radius: 5px;
 }
 
-details summary {
+.notifikasi-detail .notifikasi {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* gap: 3px;
-  position: fixed;
-  top: 20px;
-  width: 50%;
-  right: 20px;
-  background-color: #f5f5f5;
-  background-color: rgb(0, 0, 169); */
   background-color: rgb(255, 217, 217);
   /* color: #fff; */
   color: rgb(214, 16, 16);
-  padding: 25px;
-  border-radius: 8px;
+  padding: 10px 0;
+  /* border-radius: 8px; */
   /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
   box-shadow: -2px 0 8px rgba(134, 0, 0, 0.1);
-  border: 1px solid rgb(214, 16, 16);
+  border-bottom: 1px solid rgb(255, 208, 208);
   cursor: pointer;
-  /* height: 50px; */
 }
+
 .sidebar_notif {
   /* width: 350px; */
   /* width: 100%; */
@@ -540,7 +533,7 @@ details summary {
   box-shadow: -2px 0 8px rgba(134, 0, 0, 0.1);
   padding: 20px;
   margin-top: 10px;
-  border: 1px solid rgb(214, 16, 16);
+  border: 1px solid rgb(255, 208, 208);
 }
 
 details[open] .sidebar-notif {
@@ -576,21 +569,28 @@ details[open] .sidebar-notif {
   /* margin-top: 20px; */
   display: flex;
   flex-direction: column;
-  gap: 15px;
 }
 
 .isi_notif {
   /* background-color: #e7e7e7; */
   /* border: 1px solid #ccc; */
-  border: 1px solid rgb(214, 16, 16);
-  padding: 10px;
-  border-radius: 8px;
+  /* border: 1px solid rgb(214, 16, 16); */
+  padding: 15px 10px;
+  /* border-radius: 8px; */
+  display: flex;
+  /* align-items: center; */
+  gap: 10px;
+  border-top: 1px solid rgb(255, 208, 208);
+}
+
+.isi_notif span {
+  color: rgb(214, 16, 16);
+  padding-top: 4px;
 }
 
 .isi_notif h4 {
   /* padding-bottom: 5px; */
   margin-bottom: 5px;
-  color: rgb(214, 16, 16);
   /* color: rgb(16, 50, 130); */
   /* border-bottom: 1px solid #dddddd; */
 }
