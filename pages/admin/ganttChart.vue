@@ -5,6 +5,7 @@
 
     <!-- Filter -->
 
+    <!-- Filter Tanggal Gantt dan Assignee -->
     <div class="filter-gant">
       <div class="search-tanggal">
         <div class="dates">
@@ -82,7 +83,7 @@
         <div class="container-task" :style="{ minWidth: totalWidth + 'px' }">
           <div
             class="task-row"
-            v-for="task in daftarTask"
+            v-for="task in  filteredTask"
             :key="task.id"
             :style="{
               minHeight: task.tasks.length * 32 + 26 + 'px',
@@ -382,7 +383,9 @@ export default {
       tanggalPerBulan: {},
       daftarTask: [],
       open: false,
+      filteredTask: [],
       selected: [],
+      
     };
   },
   components: {
@@ -391,7 +394,8 @@ export default {
   mounted() {
     this.setDefaultTanggal();
     this.tanggalPerBulan = this.generateDateRange(this.startDate, this.endDate);
-    this.ambilTask();
+    this.ambilTask();      
+
   },
   methods: {
     taskBarClass(status) {
@@ -403,6 +407,19 @@ export default {
         task_cancelled: status === "cancelled",
       };
     },
+
+     filterAssignee() {
+    if (this.selected.length === 0) {
+      this.filteredTask = this.daftarTask
+      return
+    }
+
+    this.filteredTask = this.daftarTask.filter(task =>
+      this.selected.includes(task.assignee)
+    )
+  },
+
+
     onDateChange() {
       if (!this.startDate || !this.endDate) return;
       if (this.isLoading) return;
@@ -473,6 +490,8 @@ export default {
         );
 
         this.daftarTask = task.data;
+            this.filteredTask = this.daftarTask;
+
         console.log("daftar task", this.daftarTask);
       } catch (err) {
         console.log("Gagal mengambil task", err);
@@ -536,10 +555,14 @@ export default {
     totalWidth() {
       return this.flatDates.length * 100;
     },
+    
   },
   watch: {
     startDate: "onDateChange",
     endDate: "onDateChange",
+    selected() {
+    this.filterAssignee()
+  }
   },
 };
 </script>
