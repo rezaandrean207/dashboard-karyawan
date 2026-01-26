@@ -88,6 +88,12 @@
       </div>
     </div>
 
+    <div class="zoom-control">
+  <button @click="zoomOut">➖</button>
+  <span>{{ Math.round(zoomLevel * 100) }}%</span>
+  <button @click="zoomIn">➕</button>
+</div>
+
     <div class="kalender">
       <div class="gantt-wrapper">
         <div class="header-container" :style="{ minWidth: totalWidth + 'px' }">
@@ -98,12 +104,17 @@
             <div class="dates-range">
               <p>{{ startDate }} - {{ endDate }}</p>
             </div>
-            <div
-              class="daftar-tanggal"
-              :style="{ minWidth: totalWidth + 'px' }"
-            >
+           <div
+  class="daftar-tanggal"
+  :style="{
+    minWidth: totalWidth + 'px',
+    backgroundImage: gridBackground
+  }"
+>
+
               <div
-                class="hari-tanggal"
+                 class="hari-tanggal"
+                :style="{ width: cellWidth + 'px' }"
                 v-for="(item, index) in flatDates"
                 :key="index"
               >
@@ -124,7 +135,12 @@
           >
             <!-- <div class="task-name">{{ task.assignee }}</div> -->
 
-            <div class="task-timeline" :style="{ minWidth: totalWidth + 'px' }">
+            <div   class="task-timeline"
+                                  :style="{
+    minWidth: totalWidth + 'px',
+    backgroundImage: gridBackground
+  }"
+>
               <div
                 class="task-bar"
                 v-for="(k, index) in task.tasks"
@@ -132,18 +148,17 @@
                 :class="taskBarClass(k.status_name)"
                 :style="{
                   marginLeft:
-                    Math.max(0, dayDiff(startDate, k.start_date)) * 100 + 'px',
+                  Math.max(0, dayDiff(startDate, k.start_date)) * cellWidth + 'px',
 
                   width:
                     (Math.min(
-                      dayDiff(startDate, k.due_date),
-                      dayDiff(startDate, endDate),
-                    ) -
-                      Math.max(0, dayDiff(startDate, k.start_date)) +
-                      1) *
-                      100 +
-                    'px',
-                  top: 8 + index * 36 + 'px',
+                    dayDiff(startDate, k.due_date),
+                    dayDiff(startDate, endDate),
+                  ) -
+                  Math.max(0, dayDiff(startDate, k.start_date)) +
+                  1) *
+                  cellWidth +
+                  'px',
                 }"
               >
                 <p>{{ k.name }}</p>
@@ -165,7 +180,6 @@
 .multi-select {
   width: 25%;
   position: relative;
-  z-index: 98;
 }
 
 .select-box {
@@ -208,7 +222,7 @@
   margin-top: 4px;
   max-height: 200px;
   overflow-y: auto;
-  z-index: 10;
+  z-index: 9999;
 }
 
 .option {
@@ -316,7 +330,29 @@
 }
 </style>
 
+
 <style scoped>
+
+.zoom-control {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.zoom-control button {
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.zoom-control button:hover {
+  background: #f3f4f6;
+}
+
+
 /* SCROLL VIEWPORT */
 .kalender {
   height: 80vh;
@@ -388,7 +424,6 @@
 }
 
 .hari-tanggal {
-  width: 100px;
   text-align: center;
   line-height: 40px;
   border-right: 1px solid #aeb0b3;
@@ -396,6 +431,7 @@
   font-size: 13px;
   flex-shrink: 0;
 }
+
 
 .task-row {
   /* height: 40px; */
@@ -425,14 +461,9 @@
 
 .task-timeline {
   position: relative;
-  background: repeating-linear-gradient(
-    to right,
-    #ffffff 0px,
-    #fbfbfb 99px,
-    #dbdee1 100px
-  );
   border-bottom: 1px solid #e5e7eb;
 }
+
 
 .task-bar {
   position: absolute;
@@ -492,6 +523,7 @@ export default {
       isLoading: false,
       selected: [], // assignee
       selectedStatus: [], // status_name
+      zoomLevel: 1,
     };
   },
   components: {
@@ -502,16 +534,30 @@ export default {
     this.tanggalPerBulan = this.generateDateRange(this.startDate, this.endDate);
     this.ambilTask();
   },
-  methods: {
-    taskBarClass(status) {
-      return {
-        task_todo: status === "to do" || status === "backlog",
-        task_selesai: status === "done dev" || status === "completed",
-        task_inProgress: status === "in progress",
-        task_inReview: status === "in review",
-        task_cancelled: status === "cancelled",
-      };
-    },
+methods: {
+  taskBarClass(status) {
+    return {
+      task_todo: status === "to do" || status === "backlog",
+      task_selesai: status === "done dev" || status === "completed",
+      task_inProgress: status === "in progress",
+      task_inReview: status === "in review",
+      task_cancelled: status === "cancelled",
+    };
+  },
+
+  zoomIn() {
+    if (this.zoomLevel < 2) {
+      this.zoomLevel += 0.25;
+    }
+  },
+
+  zoomOut() {
+    if (this.zoomLevel > 0.5) {
+      this.zoomLevel -= 0.25;
+    }
+  },
+
+
 
     // filterAssignee() {
     //   if (this.selected.length === 0) {
@@ -654,6 +700,19 @@ export default {
         { label: "Cancelled", value: "cancelled" },
       ];
     },
+   cellWidth() {
+  return 100 * this.zoomLevel;
+  },
+
+  gridBackground() {
+  return `repeating-linear-gradient(
+    to right,
+    #ffffff 0px,
+    #fbfbfb ${this.cellWidth - 1}px,
+    #dbdee1 ${this.cellWidth}px
+  )`;
+},
+
     flatDates() {
       const result = [];
 
@@ -669,7 +728,7 @@ export default {
       return result;
     },
     totalWidth() {
-      return this.flatDates.length * 100;
+      return this.flatDates.length * this.cellWidth;
     },
 
     filteredTask() {
