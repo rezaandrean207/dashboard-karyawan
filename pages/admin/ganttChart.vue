@@ -1,4 +1,10 @@
 <template>
+  <div v-if="isLoading" class="loading">
+    <div class="loading_tanggal">
+      <i class="fa-solid fa-spinner"></i>
+      <p>Tunggu Sebentar</p>
+    </div>
+  </div>
   <div class="isi">
     <!-- <h2>Gantt Chart</h2>
     <p>Daftar task karyawan menggunakan chart</p> -->
@@ -8,7 +14,7 @@
     <!-- Filter Tanggal Gantt dan Assignee -->
     <div class="filter-gant">
       <div class="search-tanggal">
-        <div class="dates">
+        <div class="dates-gant">
           <!-- <label for="tanggal">Tanggal</label> -->
           <div class="tanggal">
             <VueDatePicker
@@ -37,19 +43,46 @@
         </div>
       </div>
 
+      <!-- Assignee to -->
       <div class="multi-select">
-        <div class="select-box" @click="open = !open">
+        <div class="select-box" @click="openAssignee = !openAssignee">
           <span v-if="selected.length">
             {{ selected.join(", ") }}
           </span>
           <span v-else class="placeholder"> Pilih assignee </span>
-          <i class="arrow">▾</i>
+          <span class="material-symbols-outlined"> keyboard_arrow_down </span>
         </div>
 
-        <div class="dropdown" v-if="open">
+        <div class="dropdown" v-if="openAssignee" @click.stop>
           <label v-for="task in daftarTask" :key="task.id" class="option">
             <input type="checkbox" :value="task.assignee" v-model="selected" />
             {{ task.assignee }}
+          </label>
+        </div>
+      </div>
+
+      <!-- Status Task -->
+      <div class="multi-select">
+        <div class="select-box" @click="openStatus = !openStatus">
+          <span v-if="selectedStatus.length">
+            {{ selectedStatus.join(", ") }}
+          </span>
+          <span v-else class="placeholder">Pilih status</span>
+          <span class="material-symbols-outlined">keyboard_arrow_down</span>
+        </div>
+
+        <div class="dropdown" v-if="openStatus" @click.stop>
+          <label
+            v-for="status in statusOptions"
+            :key="status.value"
+            class="option"
+          >
+            <input
+              type="checkbox"
+              :value="status.value"
+              v-model="selectedStatus"
+            />
+            {{ status.label }}
           </label>
         </div>
       </div>
@@ -83,10 +116,10 @@
         <div class="container-task" :style="{ minWidth: totalWidth + 'px' }">
           <div
             class="task-row"
-            v-for="task in  filteredTask"
+            v-for="task in filteredTask"
             :key="task.id"
             :style="{
-              minHeight: task.tasks.length * 32 + 26 + 'px',
+              minHeight: task.tasks.length * 32 + 16 + 'px',
             }"
           >
             <div class="task-name">{{ task.assignee }}</div>
@@ -95,6 +128,7 @@
               <div
                 class="task-bar"
                 v-for="(k, index) in task.tasks"
+                v-if="task.tasks.length > 0"
                 :class="taskBarClass(k.status_name)"
                 :style="{
                   marginLeft:
@@ -109,10 +143,13 @@
                       1) *
                       100 +
                     'px',
-                  top: 8 + index * 36 + 'px',
+                  top: 8 + index * 26 + 'px',
                 }"
               >
-                <p>{{ k.id }}</p>
+                <p>{{ k.project_name }}</p>
+              </div>
+              <div class="no-task" v-else>
+                <p>Task belum Tersedia</p>
               </div>
             </div>
           </div>
@@ -131,18 +168,27 @@
 }
 
 .select-box {
-  border: 1px solid #ccc;
-  padding: 8px 12px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 5px;
+  transition: all 0.2s ease;
+  padding: 16px 12px;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
+}
+
+.select-box:hover {
+  border-color: #3b82f6;
 }
 
 .dropdown {
   position: absolute;
   width: 100%;
   background: white;
-  border: 1px solid #ccc;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
   margin-top: 4px;
   max-height: 200px;
   overflow-y: auto;
@@ -155,6 +201,10 @@
   padding: 6px 10px;
 }
 
+.option:hover {
+  background: #f9fafb;
+}
+
 .placeholder {
   color: #999;
 }
@@ -165,13 +215,31 @@
 .filter-gant {
   display: flex;
   align-items: center;
+  /* border: 1px solid #010101; */
+  margin-top: 10px;
+  gap: 10px;
   /* width: 100%; */
 }
 
 .search-tanggal {
   display: flex;
-  margin-top: 20px;
+  /* margin-top: 20px; */
   gap: 20px;
+}
+
+.dates-gant {
+  /* border: 1px solid #eee; */
+}
+
+.dates-gant .tanggal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: var(--borderCard);
+  border-radius: 5px;
+  padding: 10px 15px;
+  gap: 15px;
+  background-color: #fff;
 }
 
 .kurang-lebih-dari {
@@ -203,32 +271,29 @@
 }
 
 .task_selesai {
-  background-color: rgb(216, 255, 216);
-  border: 1px solid rgb(115, 255, 115);
-  color: green;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border: none;
 }
 
 .task_inProgress {
-  /* background-color: rgb(216, 216, 255);
-  border: 1px solid rgb(176, 176, 255); */
-  background-color: #fdff8b;
-  border: 1px solid #ffff47;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border: none;
+  color: #78350f;
 }
 
 .task_todo {
-  background-color: #b3b7bd;
-  border: 1px solid rgb(176, 176, 255);
+  background: linear-gradient(135deg, #9ca3af, #6b7280);
+  border: none;
 }
 
 .task_inReview {
-  background-color: #14b8a6;
-  border: 1px solid rgb(176, 176, 255);
+  background: linear-gradient(135deg, #14b8a6, #0d9488);
+  border: none;
 }
 
 .task_cancelled {
-  background-color: #ffb3b3;
-  border: 1px solid #ff4d4d;
-  color: #800000;
+  background: linear-gradient(135deg, #f87171, #ef4444);
+  border: none;
 }
 </style>
 
@@ -237,13 +302,11 @@
 .kalender {
   height: 70vh;
   overflow: auto;
-  border: 1px solid #c8c8c8;
-  /* background: #f7f7f7; */
-  background-color: #fff;
   margin: 20px 0;
-  /* display: flex; */
   padding-bottom: 10px;
-  /* gap: 10px; */
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
 }
 
 .header-container {
@@ -252,23 +315,25 @@
   top: 0;
   left: 0;
   z-index: 100;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 .header-name {
   padding: 26px 0;
   flex-shrink: 0;
   width: 200px;
-  border-bottom: 1px solid #c8c8c8;
-  border-right: 1px solid #c8c8c8;
   text-align: center;
   font-weight: 600;
   font-size: 18px;
-  /* background: #f7f7f7; */
-  background-color: #fff;
   position: sticky;
   /* top: 0; */
   left: 0;
   z-index: 101;
+  background: #ffffff;
+  color: #111827;
+  border-right: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .header-gant {
@@ -285,14 +350,12 @@
   height: 40px;
   display: flex;
   align-items: center;
-  /* justify-content: center; */
   padding-left: 20%;
-  /* justify-content: center; */
-  border-right: 1px solid #c8c8c8;
-  background: #f7f7f7;
+  background: #f9fafb;
+  color: #374151;
+  border-right: 1px solid #e5e7eb;
   position: sticky;
   top: 0;
-  /* left: 10px; */
   z-index: 9;
 }
 
@@ -300,16 +363,18 @@
 .daftar-tanggal {
   display: flex;
   height: 40px;
-  background: #fff;
-  border-bottom: 1px solid #c8c8c8;
-  border-top: 1px solid #c8c8c8;
+  background: #ffffff;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .hari-tanggal {
   width: 100px;
   text-align: center;
   line-height: 40px;
-  border-right: 1px solid #e0e0e0;
+  border-right: 1px solid #aeb0b3;
+  color: #6b7280;
+  font-size: 13px;
   flex-shrink: 0;
 }
 
@@ -318,46 +383,18 @@
   display: flex;
   position: relative;
   min-height: 40px;
-  /* background: #fff; */
-  /* background: rgba(255, 0, 0, 0.1); */
-}
-
-.task-timeline {
-  /* align-items: center; */
-  flex: 1; /* ⬅️ PALING PENTING */
-  position: relative;
-  border-bottom: 1px solid #ddd;
-  border-right: 1px solid #ddd;
-  background: #f7f7f7;
-}
-
-.task-bar {
-  position: absolute;
-  top: auto;
-  height: 24px;
-  /* background: red; */
-  border-radius: 4px;
-  text-align: center;
-  /* border: 1px solid rgb(108, 108, 255); */
-  font-size: 12px;
-  font-weight: 500;
-  /* color: #fff; */
-  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 20px;
+  background: #ffffff;
 }
 
 .task-name {
   flex-shrink: 0;
   width: 200px;
-  background: #fff;
-  border-right: 1px solid #c8c8c8;
-  border-bottom: 1px solid #c8c8c8;
+  background: #ffffff;
+  color: #1f2937;
+  border-right: 1px solid #e5e7eb;
+  border-bottom: 1px solid #f1f5f9;
   display: flex;
   align-items: center;
-  /* justify-content: center; */
   font-size: 16px;
   font-weight: 500;
   padding-left: 10px;
@@ -365,6 +402,52 @@
   /* top: 0; */
   left: 0;
   z-index: 99;
+}
+
+.task-timeline {
+  position: relative;
+  background: repeating-linear-gradient(
+    to right,
+    #ffffff 0px,
+    #fbfbfb 99px,
+    #dbdee1 100px
+  );
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.task-bar {
+  position: absolute;
+  height: 24px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.task-bar:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+  z-index: 20;
+}
+
+.no-task {
+  font-size: 12px;
+  font-weight: 400;
+  font-style: italic;
+  position: relative;
+  top: 3px;
+  left: 10px;
 }
 </style>
 
@@ -382,10 +465,11 @@ export default {
       endDate: "",
       tanggalPerBulan: {},
       daftarTask: [],
-      open: false,
-      filteredTask: [],
-      selected: [],
-      
+      openAssignee: false,
+      openStatus: false,
+      isLoading: false,
+      selected: [], // assignee
+      selectedStatus: [], // status_name
     };
   },
   components: {
@@ -394,8 +478,7 @@ export default {
   mounted() {
     this.setDefaultTanggal();
     this.tanggalPerBulan = this.generateDateRange(this.startDate, this.endDate);
-    this.ambilTask();      
-
+    this.ambilTask();
   },
   methods: {
     taskBarClass(status) {
@@ -408,17 +491,16 @@ export default {
       };
     },
 
-     filterAssignee() {
-    if (this.selected.length === 0) {
-      this.filteredTask = this.daftarTask
-      return
-    }
+    // filterAssignee() {
+    //   if (this.selected.length === 0) {
+    //     this.filteredTask = this.daftarTask;
+    //     return;
+    //   }
 
-    this.filteredTask = this.daftarTask.filter(task =>
-      this.selected.includes(task.assignee)
-    )
-  },
-
+    //   this.filteredTask = this.daftarTask.filter((task) =>
+    //     this.selected.includes(task.assignee),
+    //   );
+    // },
 
     onDateChange() {
       if (!this.startDate || !this.endDate) return;
@@ -483,6 +565,7 @@ export default {
     },
     async ambilTask() {
       console.log("Task sedang di proses");
+      this.isLoading = true;
 
       try {
         const task = await this.$api.get(
@@ -490,11 +573,13 @@ export default {
         );
 
         this.daftarTask = task.data;
-            this.filteredTask = this.daftarTask;
+        // this.filteredTask = this.daftarTask;
 
         console.log("daftar task", this.daftarTask);
       } catch (err) {
         console.log("Gagal mengambil task", err);
+      } finally {
+        this.isLoading = false;
       }
     },
 
@@ -538,6 +623,15 @@ export default {
     },
   },
   computed: {
+    statusOptions() {
+      return [
+        { label: "Completed", value: "completed" },
+        { label: "Done Dev", value: "done dev" },
+        { label: "In Review", value: "in review" },
+        { label: "In Progress", value: "in progress" },
+        { label: "Cancelled", value: "cancelled" },
+      ];
+    },
     flatDates() {
       const result = [];
 
@@ -555,14 +649,43 @@ export default {
     totalWidth() {
       return this.flatDates.length * 100;
     },
-    
+
+    filteredTask() {
+      return (
+        this.daftarTask
+          // 1️⃣ filter assignee
+          .filter((item) => {
+            if (this.selected.length === 0) return true;
+            return this.selected.includes(item.assignee);
+          })
+
+          // 2️⃣ filter task by status
+          .map((item) => {
+            let tasks = item.tasks;
+
+            if (this.selectedStatus.length > 0) {
+              tasks = tasks.filter((t) =>
+                this.selectedStatus.includes(t.status_name),
+              );
+            }
+
+            return {
+              ...item,
+              tasks,
+            };
+          })
+
+        // 3️⃣ buang assignee tanpa task
+        // .filter((item) => item.tasks.length > 0)
+      );
+    },
   },
   watch: {
     startDate: "onDateChange",
     endDate: "onDateChange",
     selected() {
-    this.filterAssignee()
-  }
+      this.filterAssignee();
+    },
   },
 };
 </script>
