@@ -119,7 +119,7 @@
             v-for="task in filteredTask"
             :key="task.id"
             :style="{
-              minHeight: task.tasks.length * 32 + 16 + 'px',
+              minHeight: task.tasks.length * 36 + 30 + 'px',
             }"
           >
             <div class="task-name">{{ task.assignee }}</div>
@@ -143,10 +143,10 @@
                       1) *
                       100 +
                     'px',
-                  top: 8 + index * 26 + 'px',
+                  top: 8 + index * 36 + 'px',
                 }"
               >
-                <p>{{ k.project_name }}</p>
+                <p>{{ k.name }}</p>
               </div>
               <div class="no-task" v-else>
                 <p>Task belum Tersedia</p>
@@ -163,9 +163,9 @@
 <style scoped>
 /* Gaya Utama (Desktop) */
 .multi-select {
-  width: 260px;
+  width: 25%;
   position: relative;
-  z-index: 105;
+  z-index: 98;
 }
 
 .select-box {
@@ -186,9 +186,15 @@
 
 /* Gaya Mobile (Tablet ke bawah) */
 @media (max-width: 768px) {
-  .multi-select, 
+  .multi-select,
   .select-box {
     width: 100%; /* Menggabungkan selector agar lebih ringkas */
+  }
+
+  .search-tanggal,
+  .dates-gant,
+  .tanggal {
+    width: 100%;
   }
 }
 
@@ -227,7 +233,7 @@
   display: flex;
   align-items: center;
   /* border: 1px solid #010101; */
-  margin-top: 10px;
+  margin-top: 20px;
   gap: 10px;
   /* width: 100%; */
 }
@@ -236,10 +242,12 @@
   display: flex;
   /* margin-top: 20px; */
   gap: 20px;
+  /* width: 35%; */
 }
 
 .dates-gant {
   /* border: 1px solid #eee; */
+  width: 100%;
 }
 
 .dates-gant .tanggal {
@@ -311,7 +319,7 @@
 <style scoped>
 /* SCROLL VIEWPORT */
 .kalender {
-  height: 70vh;
+  height: 80vh;
   overflow: auto;
   margin: 20px 0;
   padding-bottom: 10px;
@@ -325,7 +333,7 @@
   position: sticky;
   top: 0;
   left: 0;
-  z-index: 100;
+  z-index: 90;
   background: #ffffff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
@@ -340,7 +348,7 @@
   position: sticky;
   /* top: 0; */
   left: 0;
-  z-index: 101;
+  z-index: 90;
   background: #ffffff;
   color: #111827;
   border-right: 1px solid #e5e7eb;
@@ -412,7 +420,7 @@
   position: sticky;
   /* top: 0; */
   left: 0;
-  z-index: 99;
+  z-index: 89;
 }
 
 .task-timeline {
@@ -428,22 +436,25 @@
 
 .task-bar {
   position: absolute;
-  height: 24px;
-  border-radius: 999px;
-  font-size: 11px;
+  text-align: center;
+  text-wrap: wrap;
+  min-height: 28px;
+  border-radius: 9px;
+  font-size: 10px;
   font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 12px;
+  padding: 5px 12px;
   color: #ffffff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal; /* IZINKAN TURUN BARIS */
+  word-break: break-word; /* potong kata panjang */
+  line-height: 1.4;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
+  cursor: pointer;
 }
 
 .task-bar:hover {
@@ -687,16 +698,16 @@ export default {
           })
 
         // 3️⃣ buang assignee tanpa task
-        // .filter((item) => item.tasks.length > 0)
+        .filter((item) => item.tasks.length > 0)
       );
     },
   },
   watch: {
     startDate: "onDateChange",
     endDate: "onDateChange",
-    selected() {
-      this.filterAssignee();
-    },
+    // selected() {
+    //   this.filterAssignee();
+    // },
   },
 };
 </script>
