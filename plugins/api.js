@@ -4,10 +4,10 @@ export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig();
 
   const apiDev = config.public.apiBaseUrl;
-  const apiLocal = "http://192.168.0.102:8001";
+  const apiLocal = "http://192.168.3.54:8001";
 
   const api = axios.create({
-    baseURL: apiDev,
+    baseURL: apiLocal,
   });
 
   api.interceptors.request.use((req) => {

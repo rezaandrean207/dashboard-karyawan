@@ -122,7 +122,7 @@
               minHeight: task.tasks.length * 36 + 30 + 'px',
             }"
           >
-            <div class="task-name">{{ task.assignee }}</div>
+            <!-- <div class="task-name">{{ task.assignee }}</div> -->
 
             <div class="task-timeline" :style="{ minWidth: totalWidth + 'px' }">
               <div
