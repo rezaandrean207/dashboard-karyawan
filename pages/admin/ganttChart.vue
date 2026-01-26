@@ -5,7 +5,7 @@
       <p>Tunggu Sebentar</p>
     </div>
   </div>
-  <div class="isi">
+  <div class="isi" :class="{ viewApp: isAppView }">
     <!-- <h2>Gantt Chart</h2>
     <p>Daftar task karyawan menggunakan chart</p> -->
 
@@ -54,9 +54,13 @@
         </div>
 
         <div class="dropdown" v-if="openAssignee" @click.stop>
-          <label v-for="task in daftarTask" :key="task.id" class="option">
-            <input type="checkbox" :value="task.assignee" v-model="selected" />
-            {{ task.assignee }}
+          <label
+            v-for="assignee in assigneeOptions"
+            :key="assignee"
+            class="option"
+          >
+            <input type="checkbox" :value="assignee" v-model="selected" />
+            {{ assignee }}
           </label>
         </div>
       </div>
@@ -88,37 +92,30 @@
       </div>
     </div>
 
-    <div class="zoom-control">
-  <button @click="zoomOut">➖</button>
-  <span>{{ Math.round(zoomLevel * 100) }}%</span>
-  <button @click="zoomIn">➕</button>
-</div>
-
     <div class="kalender">
       <div class="gantt-wrapper">
         <div class="header-container" :style="{ minWidth: totalWidth + 'px' }">
-          <div class="header-name">
+          <!-- <div class="header-name">
             <p>Name</p>
-          </div>
+          </div> -->
           <div class="header-gant">
             <div class="dates-range">
               <p>{{ startDate }} - {{ endDate }}</p>
             </div>
-           <div
-  class="daftar-tanggal"
-  :style="{
-    minWidth: totalWidth + 'px',
-    backgroundImage: gridBackground
-  }"
->
-
+            <div
+              class="daftar-tanggal"
+              :style="{ minWidth: totalWidth + 'px' }"
+            >
               <div
-                 class="hari-tanggal"
-                :style="{ width: cellWidth + 'px' }"
+                class="hari-tanggal"
+                :class="{ weekend: isWeekend(item) }"
                 v-for="(item, index) in flatDates"
                 :key="index"
               >
-                <p>{{ item.day }}</p>
+                <p>
+                  {{ item.day
+                  }}<span v-if="item.day === 1">/{{ item.month }}</span>
+                </p>
               </div>
             </div>
           </div>
@@ -127,44 +124,44 @@
         <div class="container-task" :style="{ minWidth: totalWidth + 'px' }">
           <div
             class="task-row"
-            v-for="task in filteredTask"
+            v-for="(task, index) in filteredTask"
             :key="task.id"
-            :style="{
-              minHeight: task.tasks.length * 36 + 30 + 'px',
-            }"
+            style="min-height: 44px"
           >
-            <!-- <div class="task-name">{{ task.assignee }}</div> -->
-
-            <div   class="task-timeline"
-                                  :style="{
-    minWidth: totalWidth + 'px',
-    backgroundImage: gridBackground
-  }"
->
+            <div class="task-timeline" :style="{ minWidth: totalWidth + 'px' }">
               <div
-                class="task-bar"
-                v-for="(k, index) in task.tasks"
-                v-if="task.tasks.length > 0"
-                :class="taskBarClass(k.status_name)"
+                class="task-assignee"
                 :style="{
                   marginLeft:
-                  Math.max(0, dayDiff(startDate, k.start_date)) * cellWidth + 'px',
+                    Math.max(0, dayDiff(startDate, task.start_date)) * 100 +
+                    'px',
 
                   width:
                     (Math.min(
-                    dayDiff(startDate, k.due_date),
-                    dayDiff(startDate, endDate),
-                  ) -
-                  Math.max(0, dayDiff(startDate, k.start_date)) +
-                  1) *
-                  cellWidth +
-                  'px',
+                      dayDiff(startDate, task.due_date),
+                      dayDiff(startDate, endDate),
+                    ) -
+                      Math.max(0, dayDiff(startDate, task.start_date)) +
+                      1) *
+                      100 +
+                    'px',
+
+                  // top: '8px',
                 }"
               >
-                <p>{{ k.name }}</p>
+                {{ task.assignee_to }}
               </div>
-              <div class="no-task" v-else>
-                <p>Task belum Tersedia</p>
+              <div
+                class="task-bar"
+                :class="taskBarClass(task.status_name)"
+                :style="{
+                  marginLeft: taskOffset(task) * 100 + 'px',
+                  width: taskWidth(task) + 'px',
+
+                  // top: '8px',
+                }"
+              >
+                <p>{{ task.name }}</p>
               </div>
             </div>
           </div>
@@ -180,6 +177,7 @@
 .multi-select {
   width: 25%;
   position: relative;
+  z-index: 98;
 }
 
 .select-box {
@@ -222,7 +220,7 @@
   margin-top: 4px;
   max-height: 200px;
   overflow-y: auto;
-  z-index: 9999;
+  z-index: 10;
 }
 
 .option {
@@ -330,29 +328,7 @@
 }
 </style>
 
-
 <style scoped>
-
-.zoom-control {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  margin: 10px 0;
-}
-
-.zoom-control button {
-  border: 1px solid #e5e7eb;
-  background: #fff;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.zoom-control button:hover {
-  background: #f3f4f6;
-}
-
-
 /* SCROLL VIEWPORT */
 .kalender {
   height: 80vh;
@@ -424,6 +400,7 @@
 }
 
 .hari-tanggal {
+  width: 100px;
   text-align: center;
   line-height: 40px;
   border-right: 1px solid #aeb0b3;
@@ -432,6 +409,12 @@
   flex-shrink: 0;
 }
 
+.weekend {
+  /* background: #fef2f2;
+  color: #b91c1c; */
+  background: #f5f5f5;
+  color: grey;
+}
 
 .task-row {
   /* height: 40px; */
@@ -459,14 +442,27 @@
   z-index: 89;
 }
 
-.task-timeline {
-  position: relative;
-  border-bottom: 1px solid #e5e7eb;
+.task-assignee {
+  font-size: 11px;
+  font-weight: 600;
+  color: #374151;
+  /* margin-bottom: 4px; */
+  padding-left: 4px;
 }
 
+.task-timeline {
+  position: relative;
+  background: repeating-linear-gradient(
+    to right,
+    #ffffff 0px,
+    #fbfbfb 99px,
+    #dbdee1 100px
+  );
+  /* border-bottom: 1px solid #e5e7eb; */
+}
 
 .task-bar {
-  position: absolute;
+  position: relative;
   text-align: center;
   text-wrap: wrap;
   min-height: 28px;
@@ -523,7 +519,6 @@ export default {
       isLoading: false,
       selected: [], // assignee
       selectedStatus: [], // status_name
-      zoomLevel: 1,
     };
   },
   components: {
@@ -534,30 +529,16 @@ export default {
     this.tanggalPerBulan = this.generateDateRange(this.startDate, this.endDate);
     this.ambilTask();
   },
-methods: {
-  taskBarClass(status) {
-    return {
-      task_todo: status === "to do" || status === "backlog",
-      task_selesai: status === "done dev" || status === "completed",
-      task_inProgress: status === "in progress",
-      task_inReview: status === "in review",
-      task_cancelled: status === "cancelled",
-    };
-  },
-
-  zoomIn() {
-    if (this.zoomLevel < 2) {
-      this.zoomLevel += 0.25;
-    }
-  },
-
-  zoomOut() {
-    if (this.zoomLevel > 0.5) {
-      this.zoomLevel -= 0.25;
-    }
-  },
-
-
+  methods: {
+    taskBarClass(status) {
+      return {
+        task_todo: status === "to do" || status === "backlog",
+        task_selesai: status === "done dev" || status === "completed",
+        task_inProgress: status === "in progress",
+        task_inReview: status === "in review",
+        task_cancelled: status === "cancelled",
+      };
+    },
 
     // filterAssignee() {
     //   if (this.selected.length === 0) {
@@ -651,6 +632,20 @@ methods: {
       }
     },
 
+    toDate(dateStr) {
+      if (!dateStr) return null;
+
+      // YYYY-MM-DD
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+        return new Date(dateStr + "T00:00:00");
+      }
+
+      // DD-MM-YYYY HH:mm:ss
+      const [date] = dateStr.split(" ");
+      const [d, m, y] = date.split("-");
+      return new Date(y, m - 1, d);
+    },
+
     generateDateRange(start, end) {
       const result = {};
       let current = new Date(start);
@@ -674,6 +669,27 @@ methods: {
 
       return result;
     },
+    isWeekend(item) {
+      const [year, month] = item.month.split("-");
+      const date = new Date(year, month - 1, item.day);
+
+      return date.getDay() === 0 || date.getDay() === 6;
+    },
+    taskOffset(task) {
+      return Math.max(0, this.dayDiff(this.startDate, task.start_date));
+    },
+    taskWidth(task) {
+      const start = this.taskOffset(task);
+      const end = Math.min(
+        this.dayDiff(this.startDate, task.due_date),
+        this.dayDiff(this.startDate, this.endDate),
+      );
+
+      if (end < start) return 0;
+
+      return (end - start + 1) * 100;
+    },
+
     dayDiff(start, end) {
       const normalize = (d) => {
         if (!d) return null;
@@ -691,6 +707,10 @@ methods: {
     },
   },
   computed: {
+    assigneeOptions() {
+      return [...new Set(this.daftarTask.map((t) => t.assignee_to))];
+    },
+
     statusOptions() {
       return [
         { label: "Completed", value: "completed" },
@@ -700,19 +720,6 @@ methods: {
         { label: "Cancelled", value: "cancelled" },
       ];
     },
-   cellWidth() {
-  return 100 * this.zoomLevel;
-  },
-
-  gridBackground() {
-  return `repeating-linear-gradient(
-    to right,
-    #ffffff 0px,
-    #fbfbfb ${this.cellWidth - 1}px,
-    #dbdee1 ${this.cellWidth}px
-  )`;
-},
-
     flatDates() {
       const result = [];
 
@@ -728,37 +735,45 @@ methods: {
       return result;
     },
     totalWidth() {
-      return this.flatDates.length * this.cellWidth;
+      return this.flatDates.length * 100;
     },
 
     filteredTask() {
+      const start = this.toDate(this.startDate);
+      const end = this.toDate(this.endDate);
+
       return (
         this.daftarTask
           // 1️⃣ filter assignee
-          .filter((item) => {
-            if (this.selected.length === 0) return true;
-            return this.selected.includes(item.assignee);
+          .filter((task) => {
+            if (!this.selected.length) return true;
+            return this.selected.includes(task.assignee_to);
           })
 
-          // 2️⃣ filter task by status
-          .map((item) => {
-            let tasks = item.tasks;
-
-            if (this.selectedStatus.length > 0) {
-              tasks = tasks.filter((t) =>
-                this.selectedStatus.includes(t.status_name),
-              );
-            }
-
-            return {
-              ...item,
-              tasks,
-            };
+          // 2️⃣ filter status
+          .filter((task) => {
+            if (!this.selectedStatus.length) return true;
+            return this.selectedStatus.includes(task.status_name);
           })
 
-        // 3️⃣ buang assignee tanpa task
-        .filter((item) => item.tasks.length > 0)
+          // 3️⃣ buang task tanpa due_date
+          .filter((task) => task.due_date !== null)
+
+          // 4️⃣ FILTER TANGGAL (FINAL & BENAR)
+          .filter((task) => {
+            if (!task.start_date || !task.due_date) return false;
+
+            const taskStart = this.toDate(task.start_date);
+            const taskEnd = this.toDate(task.due_date);
+
+            // overlap check
+            return taskStart <= end && taskEnd >= start;
+          })
       );
+    },
+
+    isAppView() {
+      return this.$route.query.view === "app";
     },
   },
   watch: {
