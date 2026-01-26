@@ -161,6 +161,7 @@
 
 <!-- Style multi select -->
 <style scoped>
+/* Gaya Utama (Desktop) */
 .multi-select {
   width: 260px;
   position: relative;
@@ -176,10 +177,19 @@
   cursor: pointer;
   display: flex;
   justify-content: space-between;
+  box-sizing: border-box; /* Tambahkan ini agar padding tidak merusak lebar */
 }
 
 .select-box:hover {
   border-color: #3b82f6;
+}
+
+/* Gaya Mobile (Tablet ke bawah) */
+@media (max-width: 768px) {
+  .multi-select, 
+  .select-box {
+    width: 100%; /* Menggabungkan selector agar lebih ringkas */
+  }
 }
 
 .dropdown {
@@ -213,6 +223,7 @@
 <!-- Style Filter -->
 <style scoped>
 .filter-gant {
+  flex-wrap: wrap;
   display: flex;
   align-items: center;
   /* border: 1px solid #010101; */
