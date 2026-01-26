@@ -5,7 +5,7 @@
       <p>Tunggu Sebentar</p>
     </div>
   </div>
-  <div class="isi">
+  <div class="isi" :class="{ viewApp: isAppView }">
     <!-- <h2>Gantt Chart</h2>
     <p>Daftar task karyawan menggunakan chart</p> -->
 
@@ -697,9 +697,12 @@ export default {
             };
           })
 
-        // 3️⃣ buang assignee tanpa task
-        .filter((item) => item.tasks.length > 0)
+          // 3️⃣ buang assignee tanpa task
+          .filter((item) => item.tasks.length > 0)
       );
+    },
+    isAppView() {
+      return this.$route.query.view === "app";
     },
   },
   watch: {
