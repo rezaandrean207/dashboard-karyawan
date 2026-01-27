@@ -7,7 +7,7 @@ export default defineNuxtPlugin(() => {
   const apiLocal = "http://192.168.3.54:8001";
 
   const api = axios.create({
-    baseURL: apiLocal,
+    baseURL: apiDev,
   });
 
   api.interceptors.request.use((req) => {

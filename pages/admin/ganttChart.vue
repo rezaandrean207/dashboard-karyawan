@@ -46,11 +46,16 @@
       <!-- Assignee to -->
       <div class="multi-select">
         <div class="select-box" @click="openAssignee = !openAssignee">
-          <span v-if="selected.length">
+          <span class="selected-text" v-if="selected.length">
             {{ selected.join(", ") }}
           </span>
-          <span v-else class="placeholder"> Pilih assignee </span>
-          <span class="material-symbols-outlined"> keyboard_arrow_down </span>
+          <span v-else class="placeholder">Pilih assignee</span>
+          <span
+            class="material-symbols-outlined arrow"
+            :class="{ open: openAssignee }"
+          >
+            keyboard_arrow_down
+          </span>
         </div>
 
         <div class="dropdown" v-if="openAssignee" @click.stop>
@@ -68,11 +73,16 @@
       <!-- Status Task -->
       <div class="multi-select">
         <div class="select-box" @click="openStatus = !openStatus">
-          <span v-if="selectedStatus.length">
+          <span class="selected-text" v-if="selectedStatus.length">
             {{ selectedStatus.join(", ") }}
           </span>
-          <span v-else class="placeholder">Pilih status</span>
-          <span class="material-symbols-outlined">keyboard_arrow_down</span>
+          <span v-else class="placeholder">Pilih assignee</span>
+          <span
+            class="material-symbols-outlined arrow"
+            :class="{ open: openStatus }"
+          >
+            keyboard_arrow_down
+          </span>
         </div>
 
         <div class="dropdown" v-if="openStatus" @click.stop>
@@ -108,7 +118,7 @@
             >
               <div
                 class="hari-tanggal"
-                :class="{ weekend: isWeekend(item) }"
+                :class="{ weekend: isWeekend(item), holiday: isHoliday(item) }"
                 v-for="(item, index) in flatDates"
                 :key="index"
               >
@@ -122,10 +132,15 @@
         </div>
 
         <div class="container-task" :style="{ minWidth: totalWidth + 'px' }">
+          <div class="no-task" v-if="filteredTask.length === 0">
+            <span class="icon">📭</span>
+            <p>Task belum tersedia</p>
+          </div>
           <div
             class="task-row"
+            v-else
             v-for="(task, index) in filteredTask"
-            :key="task.id"
+            :key="`${task.assignee_to}-${task.id}`"
             style="min-height: 44px"
           >
             <div class="task-timeline" :style="{ minWidth: totalWidth + 'px' }">
@@ -153,7 +168,7 @@
               </div>
               <div
                 class="task-bar"
-                :class="taskBarClass(task.status_name)"
+                :class="taskBarClass(task.role)"
                 :style="{
                   marginLeft: taskOffset(task) * 100 + 'px',
                   width: taskWidth(task) + 'px',
@@ -171,70 +186,183 @@
   </div>
 </template>
 
+<!-- Conditioning Colour -->
+<style scoped>
+.task_selesai {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border: none;
+}
+
+.task_inProgress {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border: none;
+  color: #78350f;
+}
+
+.task_todo {
+  background: linear-gradient(135deg, #9ca3af, #6b7280);
+  border: none;
+}
+
+.task_inReview {
+  background: linear-gradient(135deg, #14b8a6, #0d9488);
+  border: none;
+}
+
+.task_cancelled {
+  background: linear-gradient(135deg, #f87171, #ef4444);
+  border: none;
+}
+
+.infra {
+  background: linear-gradient(135deg, #4b6cb7, #182848);
+  border: none;
+  color: #ffffff;
+}
+
+.backend {
+  background: linear-gradient(135deg, #2e8b8b, #0f766e);
+  border: none;
+  color: #ffffff;
+}
+
+.web {
+  background: linear-gradient(135deg, #4fc3f7, #0284c7);
+  border: none;
+  color: #ffffff;
+}
+
+.mobile {
+  background: linear-gradient(135deg, #6366f1, #4338ca);
+  border: none;
+  color: #ffffff;
+}
+
+.analis {
+  background: linear-gradient(135deg, #fbbf24, #d97706);
+  border: none;
+  color: #78350f;
+}
+
+.ui-ux {
+  background: linear-gradient(135deg, #a855f7, #7e22ce);
+  border: none;
+  color: #ffffff;
+}
+
+.pm {
+  background: linear-gradient(135deg, #2e7d32, #166534);
+  border: none;
+  color: #ffffff;
+}
+</style>
+
 <!-- Style multi select -->
 <style scoped>
 /* Gaya Utama (Desktop) */
 .multi-select {
   width: 25%;
   position: relative;
+  font-size: 14px;
   z-index: 98;
 }
 
 .select-box {
+  min-height: 38px;
   background: #ffffff;
   border: 1px solid #e5e7eb;
-  border-radius: 5px;
-  transition: all 0.2s ease;
-  padding: 16px 12px;
+  border-radius: 4px;
+  padding: 6px 12px;
   cursor: pointer;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  box-sizing: border-box; /* Tambahkan ini agar padding tidak merusak lebar */
+  transition: all 0.2s ease;
 }
 
 .select-box:hover {
   border-color: #3b82f6;
 }
 
-/* Gaya Mobile (Tablet ke bawah) */
-@media (max-width: 768px) {
-  .multi-select,
-  .select-box {
-    width: 100%; /* Menggabungkan selector agar lebih ringkas */
-  }
-
-  .search-tanggal,
-  .dates-gant,
-  .tanggal {
-    width: 100%;
-  }
+.select-box:focus-within {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
-.dropdown {
-  position: absolute;
-  width: 100%;
-  background: white;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
-  margin-top: 4px;
-  max-height: 200px;
-  overflow-y: auto;
-  z-index: 10;
+/* TEXT */
+.selected-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.option {
-  display: flex;
-  gap: 8px;
-  padding: 6px 10px;
+/* ARROW */
+.arrow {
+  font-size: 20px;
+  color: #6b7280;
+  transition: transform 0.2s ease;
 }
 
-.option:hover {
-  background: #f9fafb;
+.arrow.open {
+  transform: rotate(180deg);
 }
 
 .placeholder {
-  color: #999;
+  color: #9ca3af;
+}
+
+/* DROPDOWN */
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+  padding: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+  animation: dropdownIn 0.15s ease;
+  z-index: 99;
+}
+
+@keyframes dropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* OPTION */
+.option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.option:hover {
+  background: #f1f5f9;
+}
+
+.option input {
+  accent-color: #2563eb;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .multi-select {
+    width: 100%;
+  }
 }
 </style>
 
@@ -266,72 +394,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: var(--borderCard);
+  /* border: var(--borderCard); */
   border-radius: 5px;
-  padding: 10px 15px;
-  gap: 15px;
-  background-color: #fff;
-}
-
-.kurang-lebih-dari {
-  width: 20%;
-}
-
-.search-input label,
-.kurang-lebih-dari label {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.search,
-.kurang-lebih {
-  /* background-color: #ddd; */
-  border: 1px solid #ddd;
-  padding: 10px;
-  border-radius: 10px;
-  /* width: 30%; */
-}
-
-.search input,
-.kurang-lebih select {
-  border: 1px solid #ddd;
-  width: 100%;
-  height: 100%;
-  border-radius: 5px;
-  padding: 10px;
-}
-
-.task_selesai {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
-  border: none;
-}
-
-.task_inProgress {
-  background: linear-gradient(135deg, #fbbf24, #f59e0b);
-  border: none;
-  color: #78350f;
-}
-
-.task_todo {
-  background: linear-gradient(135deg, #9ca3af, #6b7280);
-  border: none;
-}
-
-.task_inReview {
-  background: linear-gradient(135deg, #14b8a6, #0d9488);
-  border: none;
-}
-
-.task_cancelled {
-  background: linear-gradient(135deg, #f87171, #ef4444);
-  border: none;
+  /* padding: 10px 15px; */
+  gap: 5px;
+  /* background-color: #fff; */
 }
 </style>
 
 <style scoped>
 /* SCROLL VIEWPORT */
 .kalender {
-  height: 80vh;
+  max-height: 80vh;
   overflow: auto;
   margin: 20px 0;
   padding-bottom: 10px;
@@ -412,8 +486,14 @@
 .weekend {
   /* background: #fef2f2;
   color: #b91c1c; */
-  background: #f5f5f5;
+  /* background: #f5f5f5; */
+  background: #f3f4f6;
   color: grey;
+  border-left: 1px solid #e5e7eb;
+}
+
+.holiday {
+  background: linear-gradient(135deg, #fdecea, #fbd5d5);
 }
 
 .task-row {
@@ -466,7 +546,7 @@
   text-align: center;
   text-wrap: wrap;
   min-height: 28px;
-  border-radius: 9px;
+  border-radius: 8px;
   font-size: 10px;
   font-weight: 600;
   display: flex;
@@ -477,26 +557,39 @@
   white-space: normal; /* IZINKAN TURUN BARIS */
   word-break: break-word; /* potong kata panjang */
   line-height: 1.4;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    /* transform 0.2s ease, */
+    box-shadow 0.2s ease,
+    transform 0.15s ease,
+    filter 0.15s ease;
   cursor: pointer;
+
+  /* transition:
+    transform 0.15s ease,
+    filter 0.15s ease; */
 }
 
 .task-bar:hover {
   transform: translateY(-1px);
+  filter: brightness(1.08);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
   z-index: 20;
 }
 
 .no-task {
-  font-size: 12px;
-  font-weight: 400;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 12px;
+
+  background: #f9fafb;
+  border-left: 3px solid #e5e7eb;
+  color: #6b7280;
+
+  font-size: 13px;
   font-style: italic;
-  position: relative;
-  top: 3px;
-  left: 10px;
 }
 </style>
 
@@ -527,16 +620,18 @@ export default {
   mounted() {
     this.setDefaultTanggal();
     this.tanggalPerBulan = this.generateDateRange(this.startDate, this.endDate);
-    this.ambilTask();
+    // this.ambilTask();
   },
   methods: {
-    taskBarClass(status) {
+    taskBarClass(role) {
       return {
-        task_todo: status === "to do" || status === "backlog",
-        task_selesai: status === "done dev" || status === "completed",
-        task_inProgress: status === "in progress",
-        task_inReview: status === "in review",
-        task_cancelled: status === "cancelled",
+        infra: role === "infra",
+        backend: role === "backend",
+        web: role === "web",
+        mobile: role === "mobile apps",
+        analis: role === "analis",
+        "ui-ux": role === "UI-UX",
+        pm: role === "pm",
       };
     },
 
@@ -675,6 +770,15 @@ export default {
 
       return date.getDay() === 0 || date.getDay() === 6;
     },
+    isHoliday(item) {
+      const holidays = this.daftarTask.holidays || [];
+
+      const [year, month] = item.month.split("-");
+      const dateStr = `${item.day.toString().padStart(2, "0")}-${month}-${year}`;
+
+      return holidays.some((h) => h.tanggal === dateStr);
+    },
+
     taskOffset(task) {
       return Math.max(0, this.dayDiff(this.startDate, task.start_date));
     },
@@ -708,7 +812,13 @@ export default {
   },
   computed: {
     assigneeOptions() {
-      return [...new Set(this.daftarTask.map((t) => t.assignee_to))];
+      return [
+        ...new Set(
+          this.daftarTask.tasks
+            .filter((t) => t.assignee_to && t.assignee_to !== "Unassigned")
+            .map((t) => t.assignee_to),
+        ),
+      ];
     },
 
     statusOptions() {
@@ -742,31 +852,30 @@ export default {
       const start = this.toDate(this.startDate);
       const end = this.toDate(this.endDate);
 
+      const hasil = this.daftarTask?.tasks || [];
+
       return (
-        this.daftarTask
+        hasil
           // 1️⃣ filter assignee
-          .filter((task) => {
-            if (!this.selected.length) return true;
-            return this.selected.includes(task.assignee_to);
-          })
+          .filter(
+            (task) =>
+              !this.selected.length || this.selected.includes(task.assignee_to),
+          )
 
           // 2️⃣ filter status
-          .filter((task) => {
-            if (!this.selectedStatus.length) return true;
-            return this.selectedStatus.includes(task.status_name);
-          })
+          .filter(
+            (task) =>
+              !this.selectedStatus.length ||
+              this.selectedStatus.includes(task.status_name),
+          )
 
-          // 3️⃣ buang task tanpa due_date
-          .filter((task) => task.due_date !== null)
-
-          // 4️⃣ FILTER TANGGAL (FINAL & BENAR)
+          // 3️⃣ filter tanggal (overlap)
           .filter((task) => {
             if (!task.start_date || !task.due_date) return false;
 
             const taskStart = this.toDate(task.start_date);
             const taskEnd = this.toDate(task.due_date);
 
-            // overlap check
             return taskStart <= end && taskEnd >= start;
           })
       );
@@ -779,6 +888,10 @@ export default {
   watch: {
     startDate: "onDateChange",
     endDate: "onDateChange",
+
+    selectedStatus(val) {
+      console.log("STATUS AKTIF:", val);
+    },
     // selected() {
     //   this.filterAssignee();
     // },

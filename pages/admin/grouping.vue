@@ -64,6 +64,7 @@
         </div>
       </div>
     </div>
+
     <div class="container-kategory">
       <div
         class="kategory"
@@ -94,7 +95,7 @@
             </div>
             <div class="right">
               <h4 :class="teksColorClass(k.value)" v-if="k.missing_hours">
-                {{ k.value }}% ({{ k.missing_hours }} Jam)
+                {{ k.value }}% <span>({{ k.missing_hours }} Jam)</span>
               </h4>
               <h4 :class="teksColorClass(k.value)" v-else>{{ k.value }}%</h4>
               <p>{{ kategori.category }}</p>
@@ -106,53 +107,98 @@
   </div>
 </template>
 
+<!-- Responsive -->
 <style scoped>
+@media (max-width: 768px) {
+  .dates,
+  .kurang-lebih-dari,
+  .search-input {
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .right h4 {
+    display: flex;
+    flex-direction: column;
+  }
+}
+</style>
+
+<style scoped>
+* {
+  -webkit-font-smoothing: antialiased;
+}
+
 .container-kategory {
-  margin-top: 20px;
-  width: 96%;
+  margin-top: 24px;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 .kategory {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
+  background: #ffffff;
+  padding: 20px 24px;
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
 }
 
 .header-kategory {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+.header-kategory h4 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.header-kategory p {
+  font-size: 14px;
+  color: #6b7280;
 }
 
 .container-karyawan {
   margin-top: 20px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px;
 }
 
 .group-karyawan {
   display: flex;
   justify-content: space-between;
-  background-color: #f6f6f6;
-  padding: 15px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
+  align-items: center;
+  background: #f9fafb;
+  padding: 16px 18px;
+  border-radius: 14px;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.group-karyawan:hover {
+  background: #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
 }
 
 .group-karyawan .left {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 14px;
 }
 
 .left .index {
-  background-color: #e4e5ee;
-  width: 40px;
-  height: 40px;
+  background: linear-gradient(135deg, #6366f1, #4338ca);
+  width: 36px;
+  height: 36px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -162,45 +208,62 @@
 .left .profil-karyawan {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .profil-karyawan img {
-  width: 42px;
-  object-fit: cover;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e5e7eb;
 }
 
-.profil-karyawan .name-role h4 {
+.name-role h4 {
+  font-size: 15px;
   font-weight: 600;
 }
 
-.profil-karyawan .name-role p {
-  font-size: 14px;
-  font-weight: 300;
+.name-role p {
+  font-size: 13px;
+  color: #6b7280;
 }
 
 .group-karyawan .right {
-  text-align: end;
+  text-align: right;
 }
 
 .right h4 {
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.right span {
+  font-size: 13px;
+  font-weight: 400;
+  color: #6b7280;
 }
 
 .right p {
-  font-weight: 300;
-  font-size: 14px;
+  font-size: 13px;
+  color: #9ca3af;
 }
 
 .search-tanggal {
   display: flex;
   margin-top: 20px;
   gap: 20px;
+  /* border: 1px solid #010101; */
+  flex-wrap: wrap;
 }
 
-.kurang-lebih-dari {
-  width: 20%;
+.dates {
+  width: 35%;
+}
+
+.kurang-lebih-dari,
+.search-input {
+  width: 25%;
 }
 
 .search-input label,
@@ -213,7 +276,7 @@
 .kurang-lebih {
   /* background-color: #ddd; */
   border: 1px solid #ddd;
-  padding: 10px;
+  /* padding: 10px; */
   border-radius: 10px;
   /* width: 30%; */
 }
@@ -272,7 +335,7 @@ export default {
   },
   mounted() {
     this.setDefaultTanggal();
-    this.ambilTask();
+    // this.ambilTask();
     // this.hariLibur();
   },
   methods: {

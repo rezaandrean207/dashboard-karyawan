@@ -119,7 +119,7 @@
 
 <!-- Style Background Delete -->
 <style scoped>
-.background_delete {
+/* .background_delete {
   position: fixed;
   z-index: 9999;
   background-color: rgb(0, 0, 0, 0.1);
@@ -129,15 +129,18 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
-}
-.background_delete .delete_tanggal {
-  background-color: #fff;
-  padding: 25px;
-  border-radius: 8px;
+} */
+
+.background_delete,
+.background_tanggal {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.35);
+  backdrop-filter: blur(4px);
   display: flex;
-  flex-direction: column;
-  gap: 15px;
-  /* width: 33%; */
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
 }
 
 .delete_tanggal p {
@@ -176,6 +179,33 @@
 .submit_delete .simpan button:hover {
   background-color: rgb(0, 0, 180);
 }
+
+.delete_tanggal {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.delete_tanggal,
+.create_tanggal {
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 16px;
+    width: 420px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    animation: modalFade 0.25s ease;
+  }
+
+  @keyframes modalFade {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
 </style>
 
 <!-- Style Background tanggal -->
@@ -491,7 +521,7 @@ export default {
 
       try {
         const holiday = await this.$api(
-          `/api/v1/hari-libur/lihat?tahun=${this.tahunAktif}`
+          `/api/v1/hari-libur/lihat?tahun=${this.tahunAktif}`,
         );
         this.daftarHari = holiday.data;
         console.log("Berhasil");
