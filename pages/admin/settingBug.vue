@@ -79,98 +79,14 @@
   </div>
 </template>
 
-<!-- Style container Bug -->
-<!-- <style scoped>
-.container_bug {
-  display: flex;
-  /* justify-content: space-between; */
-  align-items: center;
-  width: 96%;
-  margin-top: 20px;
-  gap: 14px;
-  flex-wrap: wrap;
+<!-- Responsive -->
+<style scoped>
+@media (max-width: 768px) {
+  .bug-item .priority-penalty-name {
+    width: 100%;
+  }
 }
-
-.card-setting {
-  width: 19%;
-  background: #fff;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-  border: 1px solid #eee;
-}
-
-.card-setting h4 {
-  margin-bottom: 16px;
-}
-
-.card-setting span {
-  font-weight: 700;
-}
-
-.form-group {
-  margin-top: 14px;
-  border-top: 1px solid #eee;
-  padding-top: 12px;
-}
-
-.form-group label {
-  display: block;
-  font-size: 13px;
-  margin-bottom: 4px;
-  color: #444;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 8px 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-}
-
-.submit-button {
-  margin-top: 30px;
-  /* text-align: right; */
-  width: 96%;
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-.reset button {
-  background: #fff;
-  border: 1px solid #ddd;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.reset button:hover {
-  background: #f3f4f6;
-}
-
-.save button {
-  background: #1d4ed8;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.save button:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}
-
-.save button:disabled:hover {
-  background: #ccc;
-}
-
-.save button:hover {
-  background: #1e40af;
-}
-</style> -->
+</style>
 
 <!-- Style success message -->
 <style scoped>
@@ -220,13 +136,12 @@
 
 <style scoped>
 .container {
-  width: 96%;
-  margin-top: 20px;
-  border: 1px solid #eee;
-  border-radius: 8px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-  background: #fff;
-  padding: 20px;
+  width: 100%;
+  margin-top: 24px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
 }
 
 .bug-setting {
@@ -234,33 +149,37 @@
 }
 
 .header-setting {
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 10px;
-  /* margin-bottom: 10px; */
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
 }
 
-.header-setting .priority-penalty-labels {
+.priority-penalty-labels {
   display: flex;
   justify-content: space-between;
-  width: 40%;
-  padding-left: 10px;
+  width: 45%;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
 }
 
 .bug-item {
   display: flex;
   justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid #f0f0f0;
+  padding: 14px 0;
 }
 
-.bug-item .priority-penalty-name {
+.bug-item:not(:last-child) {
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.priority-penalty-name {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 42%;
+  width: 55%;
+  padding-left: 6px;
   font-size: 14px;
-  font-weight: 500;
-  padding-left: 10px;
 }
 
 .input-group {
@@ -269,75 +188,89 @@
   gap: 6px;
 }
 
-.priority-penalty-name .input-group input {
-  width: 95px;
-  padding: 5px;
-  border: 1px solid #ddd;
-  background-color: #f6f6f6;
-  border-radius: 4px;
+.input-group input {
+  width: 90px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.input-group input:focus {
+  outline: none;
+  background: #ffffff;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.input-group span {
+  font-weight: 600;
+  color: #6b7280;
 }
 
 .submit-button {
-  margin-top: 30px;
-  /* text-align: right; */
+  margin-top: 32px;
   width: 96%;
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 12px;
 }
 
 .reset button {
-  background: #fff;
-  border: 1px solid #ddd;
-  padding: 10px 20px;
-  border-radius: 6px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  padding: 10px 22px;
+  border-radius: 10px;
+  font-weight: 500;
+  color: #374151;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .reset button:hover {
-  background: #f3f4f6;
+  background: #f9fafb;
 }
 
 .save button {
-  background: #1d4ed8;
-  color: #fff;
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: #ffffff;
   border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
+  padding: 10px 24px;
+  border-radius: 10px;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.save button:hover:not(:disabled) {
+  filter: brightness(1.05);
 }
 
 .save button:disabled {
-  background: #ccc;
+  background: #cbd5f5;
   cursor: not-allowed;
 }
 
-.save button:disabled:hover {
-  background: #ccc;
-}
-
-.save button:hover {
-  background: #1e40af;
-}
-
 .low {
-  color: grey;
+  color: #6b7280;
 }
 
 .normal {
-  color: blue;
+  color: #2563eb;
 }
 
 .high {
-  color: orange;
+  color: #d97706;
 }
 
 .urgent {
-  color: red;
+  color: #dc2626;
 }
 
 .noBug {
-  color: green;
+  color: #16a34a;
 }
 </style>
 

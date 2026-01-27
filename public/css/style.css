@@ -342,10 +342,11 @@ body {
 .dates .tanggal {
   display: flex;
   justify-content: center;
-  border: var(--borderCard);
+  align-items: center;
+  /* border: var(--borderCard); */
   border-radius: 10px;
-  padding: 10px 15px;
-  gap: 15px;
+  /* padding: 10px 15px; */
+  gap: 6px;
   background-color: #fff;
 }
 
