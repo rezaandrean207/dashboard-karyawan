@@ -1,117 +1,133 @@
 <template>
+  <!-- Loading Animation -->
   <div v-if="isLoading" class="loading">
     <div class="loading_tanggal">
       <i class="fa-solid fa-spinner"></i>
       <p>Tunggu Sebentar</p>
     </div>
   </div>
+
+  <!-- Isi Konten -->
   <div class="isi" :class="{ viewApp: isAppView }">
-    <!-- <h2>Gantt Chart</h2>
-    <p>Daftar task karyawan menggunakan chart</p> -->
+    <!-- Header -->
+    <div class="header-gant-chart">
+      <div class="icon-header">
+        <span class="material-symbols-outlined"> deployed_code </span>
+        <p>Gantt Chart</p>
+      </div>
 
-    <!-- Filter -->
-
-    <!-- Filter Tanggal Gantt dan Assignee -->
-    <div class="filter-gant">
-      <div class="search-tanggal">
-        <div class="dates-gant">
-          <!-- <label for="tanggal">Tanggal</label> -->
-          <div class="tanggal">
-            <VueDatePicker
-              format="dd-MM-yyyy"
-              v-model="startDate"
-              model-type="yyyy-MM-dd"
-              :time-config="{ enableTimePicker: false }"
-            />
-            <span class="separator">➡️</span>
-            <VueDatePicker
-              format="dd-MM-yyyy"
-              v-model="endDate"
-              model-type="yyyy-MM-dd"
-              :time-config="{ enableTimePicker: false }"
-            />
-            <!-- <VueDatePicker v-model="date">
-              <template
-                #preset-date-range-button="{ label, value, presetDate }"
-              >
-                <span role="button" :tabindex="0" @click="presetDate(value)">
-                  {{ label }}
-                </span>
-              </template>
-            </VueDatePicker> -->
+      <!-- Filter Tanggal Gantt dan Assignee -->
+      <div class="filter-gant">
+        <div class="search-tanggal">
+          <div class="dates-gant">
+            <!-- <label for="tanggal">Tanggal</label> -->
+            <div class="tanggal">
+              <VueDatePicker
+                format="dd-MM-yyyy"
+                v-model="startDate"
+                model-type="yyyy-MM-dd"
+                :time-config="{ enableTimePicker: false }"
+              />
+              <span class="separator">➡️</span>
+              <VueDatePicker
+                format="dd-MM-yyyy"
+                v-model="endDate"
+                model-type="yyyy-MM-dd"
+                :time-config="{ enableTimePicker: false }"
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Assignee to -->
-      <div class="multi-select">
-        <div class="select-box" @click="openAssignee = !openAssignee">
-          <span class="selected-text" v-if="selected.length">
-            {{ selected.join(", ") }}
-          </span>
-          <span v-else class="placeholder">Pilih assignee</span>
-          <span
-            class="material-symbols-outlined arrow"
-            :class="{ open: openAssignee }"
-          >
-            keyboard_arrow_down
-          </span>
+        <!-- Assignee to -->
+        <div class="multi-select">
+          <div class="select-box" @click="openAssignee = !openAssignee">
+            <span class="selected-text" v-if="selected.length">
+              {{ selected.join(", ") }}
+            </span>
+            <span v-else class="placeholder">Pilih assignee</span>
+            <span
+              class="material-symbols-outlined arrow"
+              :class="{ open: openAssignee }"
+            >
+              keyboard_arrow_down
+            </span>
+          </div>
+
+          <div class="dropdown" v-if="openAssignee" @click.stop>
+            <label
+              v-for="assignee in assigneeOptions"
+              :key="assignee"
+              class="option"
+            >
+              <input type="checkbox" :value="assignee" v-model="selected" />
+              {{ assignee }}
+            </label>
+          </div>
         </div>
 
-        <div class="dropdown" v-if="openAssignee" @click.stop>
-          <label
-            v-for="assignee in assigneeOptions"
-            :key="assignee"
-            class="option"
-          >
-            <input type="checkbox" :value="assignee" v-model="selected" />
-            {{ assignee }}
-          </label>
-        </div>
-      </div>
+        <!-- Status Task -->
+        <div class="multi-select">
+          <div class="select-box" @click="openStatus = !openStatus">
+            <span class="selected-text" v-if="selectedStatus.length">
+              {{ selectedStatus.join(", ") }}
+            </span>
+            <span v-else class="placeholder">Pilih status</span>
+            <span
+              class="material-symbols-outlined arrow"
+              :class="{ open: openStatus }"
+            >
+              keyboard_arrow_down
+            </span>
+          </div>
 
-      <!-- Status Task -->
-      <div class="multi-select">
-        <div class="select-box" @click="openStatus = !openStatus">
-          <span class="selected-text" v-if="selectedStatus.length">
-            {{ selectedStatus.join(", ") }}
-          </span>
-          <span v-else class="placeholder">Pilih assignee</span>
-          <span
-            class="material-symbols-outlined arrow"
-            :class="{ open: openStatus }"
-          >
-            keyboard_arrow_down
-          </span>
-        </div>
-
-        <div class="dropdown" v-if="openStatus" @click.stop>
-          <label
-            v-for="status in statusOptions"
-            :key="status.value"
-            class="option"
-          >
-            <input
-              type="checkbox"
-              :value="status.value"
-              v-model="selectedStatus"
-            />
-            {{ status.label }}
-          </label>
+          <div class="dropdown" v-if="openStatus" @click.stop>
+            <label
+              v-for="status in statusOptions"
+              :key="status.value"
+              class="option"
+            >
+              <input
+                type="checkbox"
+                :value="status.value"
+                v-model="selectedStatus"
+              />
+              {{ status.label }}
+            </label>
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- Kalender -->
     <div class="kalender">
       <div class="gantt-wrapper">
+        <div
+          v-if="todayOffset !== null"
+          class="today-line"
+          :style="{ left: todayOffset + 'px' }"
+        >
+          <span class="today-label">Today</span>
+        </div>
+
         <div class="header-container" :style="{ minWidth: totalWidth + 'px' }">
           <!-- <div class="header-name">
             <p>Name</p>
           </div> -->
           <div class="header-gant">
-            <div class="dates-range">
-              <p>{{ startDate }} - {{ endDate }}</p>
+            <div class="dates-range" :style="{ minWidth: totalWidth + 'px' }">
+              <div class="bulan-header" style="display: flex; width: 100%">
+                <div
+                  v-for="(days, month, index) in tanggalPerBulan"
+                  :key="month"
+                  :style="{ width: bulanWidths[index] + 'px' }"
+                  class="bulan-item"
+                >
+                  {{ formatMonth(month) }}
+                </div>
+              </div>
             </div>
+
             <div
               class="daftar-tanggal"
               :style="{ minWidth: totalWidth + 'px' }"
@@ -119,12 +135,12 @@
               <div
                 class="hari-tanggal"
                 :class="{ weekend: isWeekend(item), holiday: isHoliday(item) }"
+                :style="{ minWidth: dayWidth + 'px' }"
                 v-for="(item, index) in flatDates"
                 :key="index"
               >
                 <p>
-                  {{ item.day
-                  }}<span v-if="item.day === 1">/{{ item.month }}</span>
+                  {{ item.day }}
                 </p>
               </div>
             </div>
@@ -143,8 +159,14 @@
             :key="`${task.assignee_to}-${task.id}`"
             style="min-height: 44px"
           >
-            <div class="task-timeline" :style="{ minWidth: totalWidth + 'px' }">
-              <div
+            <div
+              class="task-timeline"
+              :style="{
+                minWidth: totalWidth + 'px',
+                '--day-width': dayWidth + 'px',
+              }"
+            >
+              <!-- <div
                 class="task-assignee"
                 :style="{
                   marginLeft:
@@ -165,23 +187,39 @@
                 }"
               >
                 {{ task.assignee_to }}
-              </div>
+              </div> -->
               <div
                 class="task-bar"
                 :class="taskBarClass(task.role)"
                 :style="{
-                  marginLeft: taskOffset(task) * 100 + 'px',
-                  width: taskWidth(task) + 'px',
+                  marginLeft: taskOffset(task) * dayWidth + 'px',
+                  width: taskWidth(task) * dayWidth + 'px',
 
                   // top: '8px',
                 }"
               >
-                <p>{{ task.name }}</p>
+                <span class="assignee">{{ task.assignee_to }}</span>
+                <span class="task-title">{{ task.name }}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Zoom -->
+    <div class="zoom-wrapper">
+      <div class="zoom-panel">
+        <button class="zoom-btn" @click="zoomOut">−</button>
+
+        <span class="zoom-level">{{ dayWidth }}%</span>
+
+        <button class="zoom-btn" @click="zoomIn">+</button>
+      </div>
+    </div>
+
+    <div class="kosong">
+      <p>tes</p>
     </div>
   </div>
 </template>
@@ -257,18 +295,86 @@
 }
 </style>
 
-<!-- Style multi select -->
+<!-- Header -->
 <style scoped>
+.header-gant-chart {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 60px;
+}
+
+.icon-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon-header p {
+  font-size: 20px;
+  font-weight: 700;
+  /* padding-right: 20px; */
+  color: #0f172a;
+}
+
+.icon-header span {
+  width: 50px;
+  height: 48px;
+  font-size: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+
+  background: linear-gradient(
+    135deg,
+    #3b82f6,
+    /* blue-500 */ #1e40af /* blue-800 */
+  );
+
+  color: #ffffff;
+
+  box-shadow:
+    0 6px 18px rgba(59, 130, 246, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.filter-gant {
+  flex-wrap: wrap;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-tanggal {
+  display: flex;
+  gap: 20px;
+}
+
+.dates-gant {
+  width: 100%;
+  margin-right: 10px;
+}
+
+.dates-gant .tanggal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  gap: 5px;
+}
+
 /* Gaya Utama (Desktop) */
 .multi-select {
-  width: 25%;
+  width: 200px;
   position: relative;
   font-size: 14px;
   z-index: 98;
 }
 
 .select-box {
-  min-height: 38px;
+  height: 40px;
   background: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 4px;
@@ -366,56 +472,18 @@
 }
 </style>
 
-<!-- Style Filter -->
+<!-- Kalender -->
 <style scoped>
-.filter-gant {
-  flex-wrap: wrap;
-  display: flex;
-  align-items: center;
-  /* border: 1px solid #010101; */
-  margin-top: 20px;
-  gap: 10px;
-  /* width: 100%; */
-}
-
-.search-tanggal {
-  display: flex;
-  /* margin-top: 20px; */
-  gap: 20px;
-  /* width: 35%; */
-}
-
-.dates-gant {
-  /* border: 1px solid #eee; */
-  width: 100%;
-}
-
-.dates-gant .tanggal {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* border: var(--borderCard); */
-  border-radius: 5px;
-  /* padding: 10px 15px; */
-  gap: 5px;
-  /* background-color: #fff; */
-}
-</style>
-
-<style scoped>
-/* SCROLL VIEWPORT */
 .kalender {
   max-height: 80vh;
   overflow: auto;
-  margin: 20px 0;
+  margin-top: 20px;
   padding-bottom: 10px;
   background-color: #ffffff;
   border: 1px solid #e5e7eb;
-  border-radius: 12px;
 }
 
 .header-container {
-  display: flex;
   position: sticky;
   top: 0;
   left: 0;
@@ -446,41 +514,97 @@
 
 /* CANVAS PANJANG */
 .gantt-wrapper {
+  position: relative;
   min-height: 100%;
   /* background: #f7f7f7; */
 }
 
+.today-line {
+  position: absolute;
+  top: 59px;
+  bottom: 0;
+
+  width: 2px;
+  background: linear-gradient(to bottom, #3b82f6, #1e40af);
+
+  z-index: 15;
+  pointer-events: none;
+}
+
+/* label kecil di atas */
+.today-label {
+  position: sticky;
+  top: 0px;
+  transform: translateX(-50%);
+
+  font-size: 10px;
+  font-weight: 700;
+
+  background: #3b82f6;
+  color: #ffffff;
+
+  padding: 2px 6px;
+  border-radius: 4px;
+  /* border-radius: 999px; */
+
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.4);
+  /* z-index: 99; */
+}
+
 /* HEADER RANGE */
 .dates-range {
-  height: 40px;
+  /* height: 35px; */
   display: flex;
   align-items: center;
-  padding-left: 20%;
+  /* padding-left: 20%; */
   background: #f9fafb;
-  color: #374151;
-  border-right: 1px solid #e5e7eb;
+  border-right: 1px solid #979797;
   position: sticky;
   top: 0;
   z-index: 9;
+  font-size: 14px;
+  font-weight: 700;
+  color: #475569;
+}
+
+.bulan-header {
+  height: 35px;
+  display: flex;
+  /* border-bottom: 1px solid #e5e7eb; */
+  background: #f3f4f6;
+  font-weight: 700;
+  color: #1f2937;
+  font-size: 16px;
+}
+
+.bulan-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px solid #aeb0b3;
 }
 
 /* HEADER TANGGAL */
 .daftar-tanggal {
   display: flex;
-  height: 40px;
+  height: 30px;
   background: #ffffff;
   border-top: 1px solid #e5e7eb;
   border-bottom: 1px solid #e5e7eb;
+  border-right: 1px solid #010101;
 }
 
 .hari-tanggal {
-  width: 100px;
+  /* width: 100px; */
   text-align: center;
-  line-height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* line-height: 40px; */
   border-right: 1px solid #aeb0b3;
   color: #6b7280;
   font-size: 13px;
-  flex-shrink: 0;
+  /* flex-shrink: 0; */
 }
 
 .weekend {
@@ -532,13 +656,21 @@
 
 .task-timeline {
   position: relative;
-  background: repeating-linear-gradient(
+  /* background: repeating-linear-gradient(
     to right,
     #ffffff 0px,
     #fbfbfb 99px,
     #dbdee1 100px
+  ); */
+
+  background-image: repeating-linear-gradient(
+    to right,
+    rgba(15, 23, 42, 0.04) 0px,
+    rgba(15, 23, 42, 0.04) 1px,
+    /* transparent 1px, */ transparent var(--day-width)
   );
   /* border-bottom: 1px solid #e5e7eb; */
+  /* background-size: var(--day-width) 100%; */
 }
 
 .task-bar {
@@ -550,8 +682,9 @@
   font-size: 10px;
   font-weight: 600;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: 2px;
   padding: 5px 12px;
   color: #ffffff;
   white-space: normal; /* IZINKAN TURUN BARIS */
@@ -564,10 +697,30 @@
     transform 0.15s ease,
     filter 0.15s ease;
   cursor: pointer;
+  margin-top: 8px;
+
+  z-index: 16;
 
   /* transition:
     transform 0.15s ease,
     filter 0.15s ease; */
+}
+
+.task-bar .assignee {
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+  opacity: 0.85;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin: 1px 0;
+}
+
+.task-bar .task-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.3;
 }
 
 .task-bar:hover {
@@ -581,15 +734,96 @@
   height: 44px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding-left: 12px;
+  gap: 10px;
 
-  background: #f9fafb;
-  border-left: 3px solid #e5e7eb;
-  color: #6b7280;
+  padding-left: 14px;
+  border-left: 3px solid #c7d2fe;
 
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+
+  color: #475569;
   font-size: 13px;
   font-style: italic;
+}
+
+.kosong {
+  /* display: none; */
+  height: 50px;
+  color: #fff;
+}
+</style>
+
+<!-- Zoom -->
+<style scoped>
+.zoom-wrapper {
+  width: 99%;
+  text-align: right;
+  margin-top: 5px;
+}
+
+.zoom-panel {
+  /* position: absolute;
+  top: 10px;
+  right: 16px; */
+
+  display: inline-flex;
+  align-items: center;
+  /* justify-content: right; */
+  gap: 6px;
+
+  padding: 6px 10px;
+  border-radius: 12px;
+
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 1px solid #bfdbfe;
+
+  box-shadow:
+    0 8px 24px rgba(59, 130, 246, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+
+  z-index: 99;
+}
+
+/* tombol */
+.zoom-btn {
+  width: 32px;
+  height: 32px;
+
+  border-radius: 8px;
+  border: none;
+
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: all 0.15s ease;
+}
+
+.zoom-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.4);
+}
+
+.zoom-btn:active {
+  transform: scale(0.95);
+}
+
+/* level text */
+.zoom-level {
+  min-width: 48px;
+  text-align: center;
+
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e3a8a;
 }
 </style>
 
@@ -612,6 +846,10 @@ export default {
       isLoading: false,
       selected: [], // assignee
       selectedStatus: [], // status_name
+      dayWidth: 100, // px per hari (default)
+      minZoom: 40,
+      maxZoom: 160,
+      zoomStep: 20,
     };
   },
   components: {
@@ -621,6 +859,29 @@ export default {
     this.setDefaultTanggal();
     this.tanggalPerBulan = this.generateDateRange(this.startDate, this.endDate);
     // this.ambilTask();
+
+    this.$nextTick(() => {
+      const el = document.querySelector(".kalender");
+      if (!el) return;
+
+      // zoom dengan Ctrl+Wheel
+      el.addEventListener(
+        "wheel",
+        (e) => {
+          if (!e.ctrlKey) return;
+          e.preventDefault();
+          if (e.deltaY < 0) this.zoomIn();
+          else this.zoomOut();
+        },
+        { passive: false },
+      );
+
+      // scroll otomatis ke Today
+      if (this.todayOffset !== null) {
+        const scrollLeft = this.todayOffset - el.clientWidth / 2;
+        el.scrollLeft = Math.max(0, scrollLeft);
+      }
+    });
   },
   methods: {
     taskBarClass(role) {
@@ -634,17 +895,6 @@ export default {
         pm: role === "pm",
       };
     },
-
-    // filterAssignee() {
-    //   if (this.selected.length === 0) {
-    //     this.filteredTask = this.daftarTask;
-    //     return;
-    //   }
-
-    //   this.filteredTask = this.daftarTask.filter((task) =>
-    //     this.selected.includes(task.assignee),
-    //   );
-    // },
 
     onDateChange() {
       if (!this.startDate || !this.endDate) return;
@@ -685,27 +935,6 @@ export default {
 
       this.startDate = format(firstDay);
       this.endDate = format(today);
-
-      // console.log("tes", this.$route.query);
-
-      // if (this.$route.query.startDate) {
-      //   this.start = this.$route.startDate;
-      // } else {
-      //   this.start = format(firstDay);
-      // }
-
-      // if (this.$route.query.endDate) {
-      //   this.end = this.$route.endDate;
-      // } else {
-      //   this.end = format(today);
-      // }
-
-      // this.$router.replace({
-      //   query: {
-      //     startDate: this.start,
-      //     endDate: this.end,
-      //   },
-      // });
     },
     async ambilTask() {
       console.log("Task sedang di proses");
@@ -715,16 +944,28 @@ export default {
         const task = await this.$api.get(
           `/api/v1/gantt/tasks?start_date=${this.formatTanggal(this.startDate)}&end_date=${this.formatTanggal(this.endDate)}`,
         );
-
         this.daftarTask = task.data;
-        // this.filteredTask = this.daftarTask;
-
         console.log("daftar task", this.daftarTask);
       } catch (err) {
         console.log("Gagal mengambil task", err);
       } finally {
         this.isLoading = false;
       }
+    },
+    formatRange(start, end) {
+      const startDate = new Date(start);
+      const endDate = new Date(end);
+
+      const optionsStart = { day: "numeric", month: "short" };
+      const optionsEnd = { day: "numeric", month: "short", year: "numeric" };
+
+      // Contoh: "1 Jan 2025 - 20 Jan 2025"
+      return `${startDate.toLocaleDateString("id-ID", optionsStart)} - ${endDate.toLocaleDateString("id-ID", optionsEnd)}`;
+    },
+    formatMonth(monthKey) {
+      const [year, month] = monthKey.split("-");
+      const date = new Date(year, month - 1);
+      return date.toLocaleString("id-ID", { month: "short", year: "numeric" });
     },
 
     toDate(dateStr) {
@@ -791,7 +1032,7 @@ export default {
 
       if (end < start) return 0;
 
-      return (end - start + 1) * 100;
+      return end - start + 1;
     },
 
     dayDiff(start, end) {
@@ -809,8 +1050,41 @@ export default {
       const e = new Date(normalize(end));
       return Math.floor((e - s) / (1000 * 60 * 60 * 24));
     },
+
+    zoomIn() {
+      this.dayWidth = Math.min(this.maxZoom, this.dayWidth + this.zoomStep);
+    },
+    zoomOut() {
+      this.dayWidth = Math.max(this.minZoom, this.dayWidth - this.zoomStep);
+    },
+    
   },
   computed: {
+    bulanWidths() {
+      return Object.values(this.tanggalPerBulan).map(
+        (days) => days.length * this.dayWidth,
+      );
+    },
+    todayOffset() {
+      if (!this.startDate || !this.endDate) return null;
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const start = new Date(this.startDate);
+      start.setHours(0, 0, 0, 0);
+
+      const end = new Date(this.endDate);
+      end.setHours(0, 0, 0, 0);
+
+      // kalau hari ini di luar range
+      if (today < start || today > end) return null;
+
+      const diffTime = today - start;
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+      return diffDays * this.dayWidth; // 1 hari = 100px
+    },
     assigneeOptions() {
       return [
         ...new Set(
@@ -845,7 +1119,7 @@ export default {
       return result;
     },
     totalWidth() {
-      return this.flatDates.length * 100;
+      return this.flatDates.length * this.dayWidth;
     },
 
     filteredTask() {
