@@ -880,7 +880,7 @@ export default {
           })
 
         // 3️⃣ buang assignee tanpa task
-        .filter((item) => item.tasks.length > 0)
+        // .filter((item) => item.tasks.length > 0)
       );
     },
     isAppView() {
