@@ -501,7 +501,7 @@
 <!-- Style detail -->
 <style scoped>
 .notifikasi-detail {
-  width: 80%;
+  width: 100%;
   border: 1px solid rgb(255, 189, 189);
   margin-top: 20px;
   border-radius: 5px;
