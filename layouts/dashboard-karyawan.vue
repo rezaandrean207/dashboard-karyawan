@@ -50,7 +50,7 @@
           </NuxtLink>
           <NuxtLink
             to="/jadwalLibur"
-            class="hari_libur"
+            class="menu-item"
             :class="{ active: $route.path === '/jadwalLibur' }"
           >
             <i class="fa-regular fa-calendar"></i>
@@ -58,7 +58,7 @@
           </NuxtLink> -->
           <NuxtLink
             to="/karyawan/performaSaya"
-            class="hari_libur"
+            class="menu-item"
             :class="{ active: $route.path === '/karyawan/performaSaya' }"
           >
             <span class="material-symbols-outlined"> bar_chart </span>
@@ -66,7 +66,7 @@
           </NuxtLink>
           <NuxtLink
             to="/karyawan/changePasswordKaryawan"
-            class="hari_libur"
+            class="menu-item"
             :class="{
               active: $route.path === '/karyawan/changePasswordKaryawan',
             }"
@@ -132,7 +132,7 @@
         </NuxtLink>
         <NuxtLink
           to="/admin/jadwalLibur"
-          class="hari_libur"
+          class="menu-item"
           :class="{ active: $route.path === '/admin/jadwalLibur' }"
         >
           <i class="fa-regular fa-calendar"></i>
@@ -140,7 +140,7 @@
         </NuxtLink> -->
         <NuxtLink
           to="/karyawan/performaSaya"
-          class="hari_libur"
+          class="menu-item"
           :class="{ active: $route.path === '/karyawan/performaSaya' }"
         >
           <span class="material-symbols-outlined"> bar_chart </span>
@@ -148,7 +148,7 @@
         </NuxtLink>
         <NuxtLink
           to="/karyawan/changePasswordKaryawan"
-          class="hari_libur"
+          class="menu-item"
           :class="{
             active: $route.path === '/karyawan/changePasswordKaryawan',
           }"
@@ -245,6 +245,7 @@
 <style scoped>
 .active {
   background-color: rgb(16, 67, 185);
+  opacity: 1;
 }
 
 .user {

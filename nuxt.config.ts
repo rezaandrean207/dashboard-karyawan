@@ -5,6 +5,8 @@ export default defineNuxtConfig({
   css: [
     "@fortawesome/fontawesome-free/css/all.min.css",
     "@vuepic/vue-datepicker/dist/main.css",
+    "~/assets/css/variables.css",
+    "~/assets/css/style.css",
   ],
   build: {
     transpile: ["@vuepic/vue-datepicker"],
@@ -16,34 +18,33 @@ export default defineNuxtConfig({
         "https://api.clickup.devlmu.com", // cukup didefinisikan, nilainya diambil dari .env
     },
   },
- app: {
-  head: {
-    link: [
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      {
-        rel: "preconnect",
-        href: "https://fonts.gstatic.com",
-        crossorigin: "",
-      },
+  app: {
+    head: {
+      link: [
+        { rel: "preconnect", href: "https://fonts.googleapis.com" },
+        {
+          rel: "preconnect",
+          href: "https://fonts.gstatic.com",
+          crossorigin: "",
+        },
 
-      // Google Font
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap",
-      },
+        // Google Font
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap",
+        },
 
-      // Material Symbols
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined",
-      },
+        // Material Symbols
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined",
+        },
 
-      // CSS utama
-      { rel: "stylesheet", href: "/css/style.css" },
-    ],
+        // CSS utama
+        { rel: "stylesheet", href: "/css/style.css" },
+      ],
+    },
   },
-},
-
 
   // nitro: {
   //   devProxy: {

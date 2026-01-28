@@ -134,12 +134,15 @@
             >
               <div
                 class="hari-tanggal"
-                :class="{ weekend: isWeekend(item), holiday: isHoliday(item) }"
+                :class="{
+                  weekend: isWeekend(item),
+                  holiday: isHoliday(item),
+                }"
                 :style="{ minWidth: dayWidth + 'px' }"
                 v-for="(item, index) in flatDates"
                 :key="index"
               >
-                <p>
+                <p :class="{ today: isToday(item) }">
                   {{ item.day }}
                 </p>
               </div>
@@ -293,6 +296,13 @@
   border: none;
   color: #ffffff;
 }
+
+.hari-tanggal .today {
+  background: #eff6ff;
+  color: #2563eb;
+  border-radius: 6px;
+  padding: 2px 6px;
+}
 </style>
 
 <!-- Header -->
@@ -303,6 +313,13 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 60px;
+
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #ffffff, #f8fafc);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 8px 24px rgba(0, 0, 0, 0.06);
 }
 
 .icon-header {
@@ -375,8 +392,6 @@
 
 .select-box {
   height: 40px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
   border-radius: 4px;
   padding: 6px 12px;
   cursor: pointer;
@@ -384,10 +399,14 @@
   align-items: center;
   justify-content: space-between;
   transition: all 0.2s ease;
+
+  border: 1px solid var(--border-soft);
+  background: linear-gradient(180deg, #ffffff, #f8fafc);
 }
 
 .select-box:hover {
-  border-color: #3b82f6;
+  border-color: #93c5fd;
+  background: #ffffff;
 }
 
 .select-box:focus-within {
@@ -474,8 +493,12 @@
 
 <!-- Kalender -->
 <style scoped>
+* {
+  box-sizing: border-box;
+}
+
 .kalender {
-  max-height: 80vh;
+  max-height: 75vh;
   overflow: auto;
   margin-top: 20px;
   padding-bottom: 10px;
@@ -520,12 +543,17 @@
 }
 
 .today-line {
-  position: absolute  ;
+  position: absolute;
   top: 59px;
   bottom: 0;
-
-  width: 2px;
-  background: linear-gradient(to bottom, #3b82f6, #1e40af);
+  width: 1.5px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    #3b82f6 20%,
+    #1e40af 80%,
+    transparent
+  );
 
   z-index: 15;
   pointer-events: none;
@@ -539,7 +567,8 @@
   top: 4px;
   transform: translateX(-50%);
 
-  font-size: 10px;
+  font-size: 9px;
+  letter-spacing: 0.06em;
   font-weight: 700;
 
   background: #3b82f6;
@@ -572,10 +601,16 @@
   height: 35px;
   display: flex;
   /* border-bottom: 1px solid #e5e7eb; */
-  background: #f3f4f6;
+  /* background: #f3f4f6; */
   font-weight: 700;
-  color: #1f2937;
-  font-size: 16px;
+  /* color: #1f2937; */
+  /* font-size: 16px; */
+  background: linear-gradient(180deg, #f8fafc, #f1f5f9);
+  border-bottom: 1px solid var(--border-soft);
+
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: #334155;
 }
 
 .bulan-item {
@@ -590,9 +625,8 @@
   display: flex;
   height: 30px;
   background: #ffffff;
-  border-top: 1px solid #e5e7eb;
-  border-bottom: 1px solid #e5e7eb;
-  border-right: 1px solid #010101;
+  border-top: 1px solid var(--border-soft);
+  border-bottom: 1px solid var(--border-soft);
 }
 
 .hari-tanggal {
@@ -601,10 +635,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* line-height: 40px; */
-  border-right: 1px solid #aeb0b3;
-  color: #6b7280;
+  border-right: 1px solid var(--border-muted);
+  font-weight: 500;
+  color: var(--text-muted);
   font-size: 13px;
+  margin: 0;
+  line-height: 1;
   /* flex-shrink: 0; */
 }
 
@@ -618,7 +654,7 @@
 }
 
 .holiday {
-  background: linear-gradient(135deg, #fdecea, #fbd5d5);
+  background: linear-gradient(135deg, #fff1f2, #ffe4e6);
 }
 
 .task-row {
@@ -666,10 +702,19 @@
 
   background-image: repeating-linear-gradient(
     to right,
-    rgba(15, 23, 42, 0.04) 0px,
-    rgba(15, 23, 42, 0.04) 1px,
-    /* transparent 1px, */ transparent var(--day-width)
+    transparent 0,
+    transparent calc(var(--day-width) - 1px),
+    rgba(15, 23, 42, 0.06) calc(var(--day-width) - 1px),
+    rgba(15, 23, 42, 0.06) var(--day-width)
   );
+
+  /* background-image: repeating-linear-gradient(
+    to right,
+    rgba(15, 23, 42, 0.04) 0px,
+    #aeb0b3 1px,
+    transparent 1px,
+    transparent var(--day-width)
+  ); */
   /* border-bottom: 1px solid #e5e7eb; */
   /* background-size: var(--day-width) 100%; */
 }
@@ -691,7 +736,9 @@
   white-space: normal; /* IZINKAN TURUN BARIS */
   word-break: break-word; /* potong kata panjang */
   line-height: 1.4;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
   transition:
     /* transform 0.2s ease, */
     box-shadow 0.2s ease,
@@ -775,8 +822,11 @@
   padding: 6px 10px;
   border-radius: 12px;
 
-  background: linear-gradient(135deg, #eff6ff, #dbeafe);
-  border: 1px solid #bfdbfe;
+  /* background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 1px solid #bfdbfe; */
+
+  backdrop-filter: blur(10px);
+  background: rgba(239, 246, 255, 0.85);
 
   box-shadow:
     0 8px 24px rgba(59, 130, 246, 0.25),
@@ -880,7 +930,10 @@ export default {
       // scroll otomatis ke Today
       if (this.todayOffset !== null) {
         const scrollLeft = this.todayOffset - el.clientWidth / 2;
-        el.scrollLeft = Math.max(0, scrollLeft);
+        el.scrollTo({
+          left: Math.max(0, scrollLeft),
+          behavior: "smooth",
+        });
       }
     });
   },
@@ -1037,6 +1090,16 @@ export default {
       const dateStr = `${item.day.toString().padStart(2, "0")}-${month}-${year}`;
 
       return holidays.some((h) => h.tanggal === dateStr);
+    },
+    isToday(item) {
+      const d = this.createDate(item);
+      const t = new Date();
+
+      return d.toDateString() === t.toDateString();
+    },
+    createDate(item) {
+      const [year, month] = item.month.split("-");
+      return new Date(year, month - 1, item.day);
     },
 
     taskOffset(task) {

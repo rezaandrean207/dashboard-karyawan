@@ -752,6 +752,8 @@
   justify-content: space-between;
   font-size: 16px;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .name_bug {
@@ -1034,11 +1036,6 @@
 <style scoped>
 .performance {
   background-color: rgb(16, 67, 185);
-}
-
-:global(:root) {
-  --border_color: rgb(193, 222, 232);
-  --font-color: rgb(16, 50, 130);
 }
 
 .isi .header_task {
@@ -2434,7 +2431,7 @@ export default {
     },
     handleCardClick(k) {
       // if (k.tags[0] !== "bugs") return;
-      if (k.bug_label !== "Bug Fixing") return;
+      if (!k.bug_label) return;
 
       console.log("HandleCardClick berhasil di klik");
 

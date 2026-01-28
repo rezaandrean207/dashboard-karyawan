@@ -34,7 +34,7 @@
         <div class="sidebar-text">
           <NuxtLink
             to="/admin/listKaryawan"
-            class="listKaryawan"
+            class="menu-item"
             :class="{ active: $route.path === '/admin/listKaryawan' }"
           >
             <i class="fa-solid fa-users"></i>
@@ -42,7 +42,7 @@
           </NuxtLink>
           <NuxtLink
             to="/admin/bebanKerja"
-            class="performance"
+            class="menu-item"
             :class="{ active: $route.path === '/admin/bebanKerja' }"
           >
             <i class="fa-regular fa-clock"></i>
@@ -50,15 +50,16 @@
           </NuxtLink>
           <NuxtLink
             to="/admin/jadwalLibur"
-            class="hari_libur"
+            class="menu-item"
             :class="{ active: $route.path === '/admin/jadwalLibur' }"
           >
             <i class="fa-regular fa-calendar"></i>
             <p>Jadwal Libur</p>
           </NuxtLink>
+
           <NuxtLink
             to="/admin/grouping"
-            class="hari_libur"
+            class="menu-item"
             :class="{ active: $route.path === '/admin/grouping' }"
           >
             <span class="material-symbols-outlined"> group </span>
@@ -66,7 +67,7 @@
           </NuxtLink>
           <NuxtLink
             to="/admin/ganttChart"
-            class="hari_libur"
+            class="menu-item"
             :class="{ active: $route.path === '/admin/ganttChart' }"
           >
             <span class="material-symbols-outlined"> bar_chart_4_bars </span>
@@ -74,7 +75,7 @@
           </NuxtLink>
           <div class="setting">
             <div
-              class="setting-header"
+              class="menu-item"
               @click="openMenu = !openMenu"
               :class="{ active: openMenu }"
             >
@@ -97,6 +98,11 @@
               </NuxtLink>
             </div>
           </div>
+
+          <!-- <NuxtLink to="/laporanKinerja" class="report">
+          <i class="fa-solid fa-chart-simple"></i>
+          <p>Laporan Kinerja</p>
+        </NuxtLink> -->
           <!-- <div class="setting">
           <i class="fa-solid fa-gear"></i>
           <a href="">Pengaturan</a>
@@ -142,7 +148,7 @@
       <div class="sidebar-text">
         <NuxtLink
           to="/admin/listKaryawan"
-          class="listKaryawan"
+          class="menu-item"
           :class="{ active: $route.path === '/admin/listKaryawan' }"
         >
           <i class="fa-solid fa-users"></i>
@@ -150,7 +156,7 @@
         </NuxtLink>
         <NuxtLink
           to="/admin/bebanKerja"
-          class="performance"
+          class="menu-item"
           :class="{ active: $route.path === '/admin/bebanKerja' }"
         >
           <i class="fa-regular fa-clock"></i>
@@ -158,7 +164,7 @@
         </NuxtLink>
         <NuxtLink
           to="/admin/jadwalLibur"
-          class="hari_libur"
+          class="menu-item"
           :class="{ active: $route.path === '/admin/jadwalLibur' }"
         >
           <i class="fa-regular fa-calendar"></i>
@@ -167,7 +173,7 @@
 
         <NuxtLink
           to="/admin/grouping"
-          class="hari_libur"
+          class="menu-item"
           :class="{ active: $route.path === '/admin/grouping' }"
         >
           <span class="material-symbols-outlined"> group </span>
@@ -175,7 +181,7 @@
         </NuxtLink>
         <NuxtLink
           to="/admin/ganttChart"
-          class="hari_libur"
+          class="menu-item"
           :class="{ active: $route.path === '/admin/ganttChart' }"
         >
           <span class="material-symbols-outlined"> bar_chart_4_bars </span>
@@ -183,7 +189,7 @@
         </NuxtLink>
         <div class="setting">
           <div
-            class="setting-header"
+            class="menu-item"
             @click="openMenu = !openMenu"
             :class="{ active: openMenu }"
           >
@@ -252,6 +258,7 @@
 <style scoped>
 .active {
   background-color: rgb(16, 67, 185);
+  opacity: 1;
 }
 
 .setting {
@@ -269,6 +276,8 @@
   border-radius: 10px;
   display: flex;
   align-items: center;
+  opacity: 0.75;
+  color: #fff;
   /* width: 100%; */
 }
 
@@ -278,6 +287,7 @@
 
 .setting .setting-header:hover {
   background-color: rgb(16, 67, 185);
+  opacity: 1;
 }
 
 .setting .setting-header::-webkit-details-marker {
