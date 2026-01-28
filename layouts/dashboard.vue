@@ -56,22 +56,6 @@
             <i class="fa-regular fa-calendar"></i>
             <p>Jadwal Libur</p>
           </NuxtLink>
-          <div class="submenu" v-if="openMenu">
-            <NuxtLink
-              to="/admin/settingBug"
-              class="submenu-item"
-              :class="{ active: $route.path === '/admin/settingBug' }"
-            >
-              <p>Bug Setting</p>
-            </NuxtLink>
-            <NuxtLink
-              to="/admin/changePassword"
-              class="submenu-item"
-              :class="{ active: $route.path === '/admin/changePassword' }"
-            >
-              <p>Ubah Password</p>
-            </NuxtLink>
-          </div>
           <NuxtLink
             to="/admin/grouping"
             class="hari_libur"
@@ -88,6 +72,31 @@
             <span class="material-symbols-outlined"> bar_chart_4_bars </span>
             <p>Gantt Chart</p>
           </NuxtLink>
+          <div class="setting">
+            <div
+              class="setting-header"
+              @click="openMenu = !openMenu"
+              :class="{ active: openMenu }"
+            >
+              <span class="material-symbols-outlined"> settings </span>Setting
+            </div>
+            <div class="submenu" v-if="openMenu">
+              <NuxtLink
+                to="/admin/settingBug"
+                class="submenu-item"
+                :class="{ active: $route.path === '/admin/settingBug' }"
+              >
+                <p>Bug Setting</p>
+              </NuxtLink>
+              <NuxtLink
+                to="/admin/changePassword"
+                class="submenu-item"
+                :class="{ active: $route.path === '/admin/changePassword' }"
+              >
+                <p>Ubah Password</p>
+              </NuxtLink>
+            </div>
+          </div>
           <!-- <div class="setting">
           <i class="fa-solid fa-gear"></i>
           <a href="">Pengaturan</a>

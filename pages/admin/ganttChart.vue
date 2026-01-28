@@ -190,10 +190,10 @@
               </div> -->
               <div
                 class="task-bar"
-                :class="taskBarClass(task.role)"
                 :style="{
                   marginLeft: taskOffset(task) * dayWidth + 'px',
                   width: taskWidth(task) * dayWidth + 'px',
+                  background: gradientFromColor(task.color),
 
                   // top: '8px',
                 }"
@@ -520,7 +520,7 @@
 }
 
 .today-line {
-  position: absolute;
+  position: absolute  ;
   top: 59px;
   bottom: 0;
 
@@ -533,8 +533,10 @@
 
 /* label kecil di atas */
 .today-label {
-  position: sticky;
-  top: 0px;
+  /* position: sticky;
+  top: 65px; */
+  position: relative;
+  top: 4px;
   transform: translateX(-50%);
 
   font-size: 10px;
@@ -543,9 +545,8 @@
   background: #3b82f6;
   color: #ffffff;
 
-  padding: 2px 6px;
+  padding: 6px 20px;
   border-radius: 4px;
-  /* border-radius: 999px; */
 
   box-shadow: 0 2px 6px rgba(59, 130, 246, 0.4);
   /* z-index: 99; */
@@ -742,8 +743,8 @@
   background: linear-gradient(135deg, #f8fafc, #f1f5f9);
 
   color: #475569;
-  font-size: 13px;
   font-style: italic;
+  font-size: 13px;
 }
 
 .kosong {
@@ -884,6 +885,24 @@ export default {
     });
   },
   methods: {
+    shadeColor(color, percent) {
+      let r = parseInt(color.slice(1, 3), 16);
+      let g = parseInt(color.slice(3, 5), 16);
+      let b = parseInt(color.slice(5, 7), 16);
+
+      r = Math.min(255, Math.max(0, r + r * percent));
+      g = Math.min(255, Math.max(0, g + g * percent));
+      b = Math.min(255, Math.max(0, b + b * percent));
+
+      return `rgb(${r}, ${g}, ${b})`;
+    },
+    gradientFromColor(color) {
+      return `linear-gradient(
+    135deg,
+    ${this.shadeColor(color, 0.1)},
+    ${this.shadeColor(color, -0.5)}
+  )`;
+    },
     taskBarClass(role) {
       return {
         infra: role === "infra",
@@ -1057,7 +1076,6 @@ export default {
     zoomOut() {
       this.dayWidth = Math.max(this.minZoom, this.dayWidth - this.zoomStep);
     },
-    
   },
   computed: {
     bulanWidths() {

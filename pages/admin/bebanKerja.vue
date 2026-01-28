@@ -1425,6 +1425,8 @@
   font-weight: 500;
   text-align: center;
   font-size: 25px;
+  color: #6b788a;
+  font-style: italic;
 }
 
 .no_task {
@@ -1434,6 +1436,8 @@
   font-size: 20px;
   font-weight: 500;
   filter: drop-shadow(2px 2px 8px #d0d0d0);
+  color: #6b788a;
+  font-style: italic;
 }
 
 /* Laporan Pages */
