@@ -188,24 +188,24 @@
 
 .delete_tanggal,
 .create_tanggal {
-    background: #ffffff;
-    padding: 24px;
-    border-radius: 16px;
-    width: 420px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
-    animation: modalFade 0.25s ease;
-  }
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 16px;
+  width: 420px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  animation: modalFade 0.25s ease;
+}
 
-  @keyframes modalFade {
-    from {
-      opacity: 0;
-      transform: translateY(8px) scale(0.97);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
+@keyframes modalFade {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
 </style>
 
 <!-- Style Background tanggal -->
@@ -493,10 +493,13 @@
 }
 </style>
 
-<script>
+<script setup>
 definePageMeta({
   layout: "dashboard",
 });
+</script>
+
+<script>
 export default {
   data() {
     return {

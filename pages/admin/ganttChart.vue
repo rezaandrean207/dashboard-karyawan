@@ -22,19 +22,21 @@
           <div class="dates-gant">
             <!-- <label for="tanggal">Tanggal</label> -->
             <div class="tanggal">
-              <VueDatePicker
-                format="dd-MM-yyyy"
-                v-model="startDate"
-                model-type="yyyy-MM-dd"
-                :time-config="{ enableTimePicker: false }"
-              />
+              <ClientOnly>
+                <VueDatePicker
+                  format="dd-MM-yyyy"
+                  v-model="startDate"
+                  model-type="yyyy-MM-dd"
+                  :time-config="{ enableTimePicker: false }"
+              /></ClientOnly>
               <span class="separator">➡️</span>
-              <VueDatePicker
-                format="dd-MM-yyyy"
-                v-model="endDate"
-                model-type="yyyy-MM-dd"
-                :time-config="{ enableTimePicker: false }"
-              />
+              <ClientOnly>
+                <VueDatePicker
+                  format="dd-MM-yyyy"
+                  v-model="endDate"
+                  model-type="yyyy-MM-dd"
+                  :time-config="{ enableTimePicker: false }"
+              /></ClientOnly>
             </div>
           </div>
         </div>
@@ -878,11 +880,13 @@
 }
 </style>
 
-<script>
+<script setup>
 definePageMeta({
   layout: "dashboard",
 });
+</script>
 
+<script>
 import { VueDatePicker } from "@vuepic/vue-datepicker";
 
 export default {

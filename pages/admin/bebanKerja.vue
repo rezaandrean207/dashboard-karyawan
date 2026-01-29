@@ -43,20 +43,23 @@
           <label for="tanggal">Tanggal</label>
           <div class="tanggal">
             <!-- <input type="date" name="start" v-model="start" /> -->
-            <VueDatePicker
-              format="dd-MM-yyyy"
-              v-model="start"
-              model-type="yyyy-MM-dd"
-              :time-config="{ enableTimePicker: false }"
-            />
+            <ClientOnly>
+              <VueDatePicker
+                format="dd-MM-yyyy"
+                v-model="start"
+                model-type="yyyy-MM-dd"
+                :time-config="{ enableTimePicker: false }"
+            /></ClientOnly>
             <span class="separator">➡️</span>
             <!-- <input type="date" name="end" v-model="end" /> -->
-            <VueDatePicker
-              format="dd-MM-yyyy"
-              v-model="end"
-              model-type="yyyy-MM-dd"
-              :time-config="{ enableTimePicker: false }"
-            />
+            <ClientOnly>
+              <VueDatePicker
+                format="dd-MM-yyyy"
+                v-model="end"
+                model-type="yyyy-MM-dd"
+                :time-config="{ enableTimePicker: false }"
+              />
+            </ClientOnly>
             <!-- <VueDatePicker v-model="date">
               <template
                 #preset-date-range-button="{ label, value, presetDate }"
@@ -2133,10 +2136,13 @@ form select {
 }
 </style>
 
-<script>
+<script setup>
 definePageMeta({
   layout: "dashboard",
 });
+</script>
+
+<script>
 import { VueDatePicker } from "@vuepic/vue-datepicker";
 
 export default {
@@ -2174,7 +2180,7 @@ export default {
   },
   mounted() {
     this.setDefaultTanggal();
-    this.ambilTask();
+    // this.ambilTask();
     // this.hariLibur();
   },
   methods: {

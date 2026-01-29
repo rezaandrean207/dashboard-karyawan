@@ -98,15 +98,6 @@
               </NuxtLink>
             </div>
           </div>
-
-          <!-- <NuxtLink to="/laporanKinerja" class="report">
-          <i class="fa-solid fa-chart-simple"></i>
-          <p>Laporan Kinerja</p>
-        </NuxtLink> -->
-          <!-- <div class="setting">
-          <i class="fa-solid fa-gear"></i>
-          <a href="">Pengaturan</a>
-        </div> -->
         </div>
 
         <div class="footer_sidebar">
@@ -213,14 +204,6 @@
           </div>
         </div>
 
-        <!-- <NuxtLink to="/laporanKinerja" class="report">
-          <i class="fa-solid fa-chart-simple"></i>
-          <p>Laporan Kinerja</p>
-        </NuxtLink> -->
-        <!-- <div class="setting">
-          <i class="fa-solid fa-gear"></i>
-          <a href="">Pengaturan</a>
-        </div> -->
       </div>
 
       <div class="footer_sidebar">
@@ -268,30 +251,6 @@
   /* padding: 10px 0;
   border-radius: 10px; */
   /* margin-bottom: 10px auto; */
-}
-
-.setting-header {
-  list-style: none;
-  padding: 10px 10px 10px 15px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  opacity: 0.75;
-  color: #fff;
-  /* width: 100%; */
-}
-
-/* details[open] summary {
-  background-color: rgb(16, 67, 185);
-} */
-
-.setting .setting-header:hover {
-  background-color: rgb(16, 67, 185);
-  opacity: 1;
-}
-
-.setting .setting-header::-webkit-details-marker {
-  display: none;
 }
 
 .submenu {

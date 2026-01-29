@@ -91,7 +91,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
 .shake {
   -webkit-animation: shake-horizontal 0.2s
     cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
@@ -171,13 +171,6 @@
     rgba(0, 64, 255, 1) 94%
   ); */
   color: #010101;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  font-family: "Poppins", Sans-Serif;
-  box-sizing: border-box;
 }
 
 .wraper {

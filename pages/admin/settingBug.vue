@@ -274,11 +274,13 @@
 }
 </style>
 
-<script>
+<script setup>
 definePageMeta({
   layout: "dashboard",
 });
+</script>
 
+<script>
 export default {
   data() {
     return {
@@ -381,11 +383,7 @@ export default {
       //   this.normal = this.penaltyBug.normal_penalty;
       //   this.high = this.penaltyBug.high_penalty;
       //   this.urgent = this.penaltyBug.urgent_penalty;
-      this.low = null;
-      this.normal = null;
-      this.high = null;
-      this.urgent = null;
-      this.noBugReward = null;
+      this.daftarPenaltyBug();
     },
     teksColour(nama) {
       return {
@@ -399,13 +397,7 @@ export default {
   },
   computed: {
     hasChange() {
-      return (
-        this.low === null &&
-        this.normal === null &&
-        this.high === null &&
-        this.urgent === null &&
-        this.noBugReward === null
-      );
+      return !this.penaltyBug || this.penaltyBug.length === 0;
     },
   },
 };

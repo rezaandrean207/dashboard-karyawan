@@ -30,27 +30,41 @@
         <!-- <h1>Ubah Password</h1>
       <p class="subtitle">Pastikan password baru Anda aman dan mudah diingat</p> -->
 
-        <div class="card">
+        <form class="card" @submit.prevent="changePassword">
           <div class="form-group">
             <label>Password Sekarang</label>
-            <input type="password" v-model="oldPassword" />
+            <input
+              type="password"
+              v-model="oldPassword"
+              autocomplete="current-password"
+              required
+            />
           </div>
 
           <div class="form-group">
             <label>Password Baru</label>
-            <input type="password" v-model="newPassword" />
+            <input
+              type="password"
+              v-model="newPassword"
+              autocomplete="new-password"
+              required
+            />
           </div>
 
           <div class="form-group">
             <label>Konfirmasi Password Baru</label>
-            <input type="password" v-model="confirmPassword" />
+            <input
+              type="password"
+              v-model="confirmPassword"
+              autocomplete="new-password"
+              required
+            />
           </div>
 
-          <button class="btn-primary" @click="changePassword()">
+          <button class="btn-primary" type="submit">
             Simpan Password Baru
           </button>
-        </div>
-
+        </form>
         <div class="tips">
           <strong>Tips:</strong>
           Gunakan kombinasi huruf besar, huruf kecil, angka, dan simbol.
@@ -196,11 +210,13 @@
 }
 </style>
 
-<script>
+<script setup>
 definePageMeta({
   layout: "dashboard-karyawan",
 });
+</script>
 
+<script>
 export default {
   data() {
     return {

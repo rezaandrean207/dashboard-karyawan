@@ -5,6 +5,13 @@
     <!-- <div class="success-animation">
       </div> -->
 
+    <div v-if="isLoading" class="loading">
+      <div class="loading_tanggal">
+        <i class="fa-solid fa-spinner"></i>
+        <p>Tunggu Sebentar</p>
+      </div>
+    </div>
+
     <div v-if="sukses" class="success-animation">
       <div class="sukses">
         <div class="berhasil">
@@ -65,8 +72,38 @@
         class="karyawan"
         @click="openDetail(k)"
         v-for="(k, index) in filteredKaryawan"
-        :key="index"
+        :key="k.clickup_id"
       >
+        <div class="header-card">
+          <div class="menu-wrapper" @click.stop>
+            <button class="menu-btn" @click.stop="toggleMenu(k.clickup_id)">
+              ⋮
+            </button>
+
+            <Transition name="dropdown">
+              <div
+                v-if="menuOpen === k.clickup_id"
+                class="menu-dropdown"
+                @click.stop
+              >
+                <button
+                  v-if="k.status === 'nonaktif'"
+                  @click.stop="ubahStatus(k, 'aktif')"
+                >
+                  Aktifkan
+                </button>
+
+                <button
+                  v-else
+                  class="danger"
+                  @click.stop="ubahStatus(k, 'nonaktif')"
+                >
+                  Nonaktifkan
+                </button>
+              </div>
+            </Transition>
+          </div>
+        </div>
         <div class="identitas">
           <!-- <img :src="k.user.profilPicture" alt="" /> -->
           <img src="/img/profil.png" alt="" />
@@ -91,7 +128,7 @@
             </div> -->
         </div>
         <div class="kinerja">
-          <div class="proyekAktif">
+          <div class="status-member">
             <p>Status:</p>
             <p>{{ k.status }}</p>
           </div>
@@ -119,9 +156,9 @@
           <i class="fa-solid fa-briefcase"></i>
           <p>{{ selected.role }}</p>
         </div>
-        <div class="bebanKerja" :class="bebanClass(selected.beban)">
+        <div class="bebanKerja" :class="bebanClass(beban)">
           <i class="fa-solid fa-clock"></i>
-          <p>Beban Kerja: {{ kategoriBeban(selected.beban) }}</p>
+          <p>Beban Kerja: {{ kategoriBeban(beban) }}</p>
         </div>
       </div>
 
@@ -224,6 +261,121 @@
   </div>
   <!-- </div> -->
 </template>
+
+<!-- Conditioning colour -->
+<style scoped>
+/* SEDANG */
+.kuning {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  color: #92400e;
+  box-shadow: 0 2px 6px rgba(250, 204, 21, 0.35);
+}
+
+/* BERAT */
+.merah {
+  background: linear-gradient(135deg, #fee2e2, #fecaca);
+  color: #991b1b;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.35);
+}
+
+/* MUDAH */
+.hijau {
+  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+  color: #166534;
+  box-shadow: 0 2px 6px rgba(34, 197, 94, 0.35);
+}
+
+/* DEFAULT / EMPTY */
+.putih {
+  background: #f8fafc;
+  color: #334155;
+  border: 1px dashed #cbd5e1;
+}
+</style>
+
+<!-- Dropdown -->
+<style scoped>
+.header-card {
+  text-align: right;
+}
+
+.menu-wrapper {
+  position: relative;
+  left: 6px;
+}
+
+.menu-btn {
+  background: transparent;
+  border: none;
+  padding: 6px 8px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.menu-btn:hover {
+  background: #f1f5f9;
+  border-radius: 6px;
+}
+
+.menu-dropdown {
+  position: absolute;
+  top: 28px;
+  right: 0;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  min-width: 140px;
+  padding: 4px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+  z-index: 20;
+  /* animation: fadeIn 0.2s ease; */
+}
+
+.dropdown-enter-from,
+.dropdown-leave-to {
+  opacity: 0;
+  transform: translateY(-6px) scale(0.98);
+}
+
+/* saat aktif animasi */
+.dropdown-enter-active,
+.dropdown-leave-active {
+  transition: all 160ms ease;
+}
+
+/* posisi akhir */
+.dropdown-enter-to,
+.dropdown-leave-from {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.menu-dropdown button {
+  width: 100%;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu-dropdown button:hover {
+  background: #f1f5f9;
+}
+
+.menu-dropdown .danger {
+  color: #b91c1c;
+}
+</style>
 
 <style scoped>
 .listKaryawan {
@@ -565,10 +717,13 @@ form input {
 }
 </style>
 
-<script>
+<script setup>
 definePageMeta({
   layout: "dashboard",
 });
+</script>
+
+<script>
 export default {
   data() {
     return {
@@ -583,12 +738,41 @@ export default {
       searchInput: "",
       loading: false,
       sukses: false,
+      menuOpen: null,
+      isLoading: false,
+      beban: 50,
     };
   },
   mounted() {
     this.ambilData();
   },
   methods: {
+    toggleMenu(id) {
+      this.menuOpen = this.menuOpen === id ? null : id;
+    },
+
+    async ubahStatus(user, status) {
+      const oldStatus = user.status;
+
+      user.status = status;
+      this.isLoading = true;
+      this.menuOpen = null;
+
+      // nanti kalau mau:
+      // call API update status di sini
+      try {
+        const change = await this.$api.put("/api/v1/clickup/members/status", {
+          clickup_id: user.clickup_id,
+          status: status,
+        });
+      } catch (err) {
+        user.status = prevStatus;
+        alert("Gagal mengubah", err);
+        console.log("Gagal mengubah status", err);
+      } finally {
+        this.isLoading = false;
+      }
+    },
     logout() {
       const token = useCookie("token");
       token.value = null;
@@ -598,15 +782,20 @@ export default {
       this.sidebar = true;
     },
     kategoriBeban(beban) {
-      if (beban < 40) {
-        return "Mudah";
-      } else if (beban >= 40 && beban <= 60) {
-        return "Sedang";
-      } else if (beban > 60) {
-        return "Berat";
-      } else {
-        return "";
-      }
+      if (beban < 40) return "Mudah";
+      if (beban <= 60) return "Sedang";
+      if (beban > 60) return "Berat";
+      return "";
+    },
+    bebanClass(beban) {
+      const kategori = this.kategoriBeban(beban);
+
+      return {
+        kuning: kategori === "Sedang",
+        merah: kategori === "Berat",
+        hijau: kategori === "Mudah",
+        putih: kategori === "",
+      };
     },
     openDetail(k) {
       this.selected = k;
@@ -675,14 +864,6 @@ export default {
         this.loading = false;
       }
     },
-    bebanClass(beban) {
-      return {
-        kuning: beban === "Sedang",
-        merah: beban === "Berat",
-        hijau: beban === "Mudah",
-        putih: beban === "",
-      };
-    },
   },
   computed: {
     filteredKaryawan() {
@@ -691,14 +872,14 @@ export default {
       // filter nama
       if (this.searchInput) {
         hasil = hasil.filter((k) =>
-          k.name.toLowerCase().includes(this.searchInput.toLowerCase())
+          k.name.toLowerCase().includes(this.searchInput.toLowerCase()),
         );
       }
 
       // filter posisi (role)
       if (this.posisi) {
         hasil = hasil.filter(
-          (k) => k.role.toLowerCase() === this.posisi.toLowerCase()
+          (k) => k.role.toLowerCase() === this.posisi.toLowerCase(),
         );
       }
 
