@@ -880,14 +880,17 @@
 }
 </style>
 
-<script setup>
+<!-- <script setup>
 definePageMeta({
   layout: "dashboard",
 });
-</script>
+</script> -->
 
 <script>
 import { VueDatePicker } from "@vuepic/vue-datepicker";
+definePageMeta({
+  layout: "dashboard",
+});
 
 export default {
   data() {

@@ -717,13 +717,16 @@ form input {
 }
 </style>
 
-<script setup>
+<!-- <script setup>
 definePageMeta({
   layout: "dashboard",
 });
-</script>
+</script> -->
 
 <script>
+definePageMeta({
+  layout: "dashboard",
+});
 export default {
   data() {
     return {
