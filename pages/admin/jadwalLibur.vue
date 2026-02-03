@@ -73,39 +73,48 @@
 
   <div class="isi" :class="{ hidden: createTanggal }">
     <h2>Jadwal Libur</h2>
+    <p class="subtitle">Kelola daftar hari libur berdasarkan tahun</p>
 
-    <div class="years">
-      <button type="button" @click="kurang()"><</button>
-      <p>{{ tahunAktif }}</p>
+    <div class="years-wraper">
+      <div class="years">
+        <button type="button" @click="kurang()">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <p>{{ tahunAktif }}</p>
 
-      <button type="button" @click="tambah()">></button>
-    </div>
-
-    <div class="bulan">
-      <div class="month" v-for="k in daftarHari.data">
-        <p class="month_name">{{ k.nama }}</p>
-        <div class="holiday">
-          <div
-            class="list_hari"
-            v-for="h in k.hari_libur"
-            v-if="k.hari_libur && k.hari_libur.length"
-          >
-            <div class="keterangan_libur">
-              <h4>{{ h.tanggal.split("-")[0] }} {{ h.nama_hari }}</h4>
-              <p>{{ h.keterangan }}</p>
-            </div>
-            <!-- <i class="fa-solid fa-xmark" @click="deleteTanggal(h.tanggal)"></i> -->
-            <i class="fa-solid fa-xmark" @click="openDelete(h)"></i>
-          </div>
-          <div class="belum_tersedia" v-else>
-            <h4>Hari Libur belum tersedia</h4>
-          </div>
-        </div>
-        <div class="set_tanggal" @click="setTanggal(k)">
-          <i class="fa-solid fa-plus"></i>
-        </div>
+        <button type="button" @click="tambah()">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
       </div>
     </div>
+
+    <Transition :name="yearDirection" mode="out-in">
+      <div class="bulan" :key="tahunAktif">
+        <div class="month" v-for="k in daftarHari.data">
+          <p class="month_name">{{ k.nama }}</p>
+          <div class="holiday">
+            <div
+              class="list_hari"
+              v-for="h in k.hari_libur"
+              v-if="k.hari_libur && k.hari_libur.length"
+            >
+              <div class="keterangan_libur">
+                <h4>{{ h.tanggal.split("-")[0] }} {{ h.nama_hari }}</h4>
+                <p>{{ h.keterangan }}</p>
+              </div>
+              <!-- <i class="fa-solid fa-xmark" @click="deleteTanggal(h.tanggal)"></i> -->
+              <i class="fa-solid fa-xmark" @click="openDelete(h)"></i>
+            </div>
+            <div class="belum_tersedia" v-else>
+              <h4>Hari Libur belum tersedia</h4>
+            </div>
+          </div>
+          <div class="set_tanggal" @click="setTanggal(k)">
+            <i class="fa-solid fa-plus"></i>
+          </div>
+        </div>
+      </div>
+    </Transition>
 
     <!-- <div class="button_save">
         <button type="submit">Simpan Semua Perubahan</button>
@@ -119,18 +128,6 @@
 
 <!-- Style Background Delete -->
 <style scoped>
-/* .background_delete {
-  position: fixed;
-  z-index: 9999;
-  background-color: rgb(0, 0, 0, 0.1);
-  width: 100vw;
-  height: 101vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-} */
-
 .background_delete,
 .background_tanggal {
   position: fixed;
@@ -170,9 +167,9 @@
 }
 
 .submit_delete .simpan button {
-  padding: 8px 10px;
-  border-radius: 6px;
-  background-color: blue;
+  background: var(--primary);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
   color: #fff;
 }
 
@@ -188,11 +185,11 @@
 
 .delete_tanggal,
 .create_tanggal {
-  background: #ffffff;
-  padding: 24px;
-  border-radius: 16px;
+  background: var(--bg-card);
+  border-radius: 20px;
+  padding: 28px;
   width: 420px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 25px 60px rgba(15, 23, 42, 0.25);
   animation: modalFade 0.25s ease;
 }
 
@@ -305,9 +302,9 @@
 }
 
 .submit_tanggal .simpan button {
-  padding: 8px 10px;
-  border-radius: 6px;
-  background-color: rgb(13, 85, 254);
+  background: var(--primary);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
   color: #fff;
 }
 
@@ -316,11 +313,52 @@
 }
 </style>
 
+<!-- Animasi Slide -->
+<style scoped>
+/* ANIMASI SLIDE BULAN */
+.slide-left-enter-active,
+.slide-left-leave-active {
+  transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide-left-enter-from {
+  opacity: 0;
+  transform: translateX(80px);
+}
+
+.slide-left-leave-to {
+  opacity: 0;
+  transform: translateX(-80px);
+}
+
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide-right-enter-from {
+  opacity: 0;
+  transform: translateX(-80px);
+}
+
+.slide-right-leave-to {
+  opacity: 0;
+  transform: translateX(80px);
+}
+</style>
+
 <style scoped>
 :global(:root) {
   --border_color: rgb(193, 222, 232);
   --font-color: rgb(16, 50, 130);
   --tema: rgb(0, 69, 230);
+}
+
+.subtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  /* text-align: center; */
 }
 
 .disabled_btn {
@@ -341,26 +379,67 @@
   background-color: rgb(16, 67, 185);
 }
 
-.years {
+.years-wraper {
   display: flex;
   width: 100%;
   justify-content: center;
   align-items: center;
-  gap: 40px;
+}
+
+.years {
+  /* display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  gap: 40px; */
+
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+
+  background: var(--bg-card);
+  padding: 10px 18px;
+  border-radius: 999px;
+
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border-soft);
+
+  margin: 10px auto 20px;
 }
 
 .years button {
-  padding: 8px 13px;
-  border-radius: 6px;
-  background-color: #fff;
-  border: 1px solid var(--border_color);
+  width: 36px;
+  height: 36px;
+
+  border-radius: 50%;
+  border: none;
+
+  background: var(--bg-muted);
+  color: var(--primary);
+
+  font-size: 18px;
+  font-weight: 600;
+
   cursor: pointer;
-  font-size: medium;
+  transition: all 0.2s ease;
+}
+
+.years button:hover {
+  background: #e0e7ff;
+  transform: scale(1.1);
+}
+
+.years button:active {
+  transform: scale(0.95);
 }
 
 .years p {
-  font-size: 30px;
-  color: var(--font-color);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: 0.5px;
+  min-width: 72px;
+  text-align: center;
 }
 
 .bulan {
@@ -378,34 +457,55 @@
   justify-content: space-between;
   gap: 20px;
   width: 49%;
-  /* height: 50vh; */
   max-height: 50vh;
-  border: 2px solid var(--border_color);
-  background-color: #fff;
-  padding: 35px 0;
-  /* margin: 20px 20px 0 0; */
-  border-radius: 10px;
+  padding: 28px 0;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border-soft);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  /* animation: fadeIn 0.3s ease; */
+}
+
+/* @keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+} */
+
+.month:hover {
+  /* transform: translateY(-2px); */
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12);
 }
 
 .month .set_tanggal {
-  background-color: var(--tema);
+  background: var(--primary);
   color: #fff;
-  padding: 7px 12px;
-  text-align: center;
-  border-radius: 12px;
-  font-size: 20px;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: 18px;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+
+  transition: transform 0.2s ease;
 }
 
-.set_tanggal:hover {
-  background-color: rgb(0, 65, 216);
-  transition: transform 0.3s ease-in-out;
-  transform: scale(1.1);
+.month .set_tanggal:hover {
+  background: var(--primary-hover);
+  transform: scale(1.05);
 }
 
 .month .month_name {
   font-size: 20px;
-  font-weight: 500;
-  color: var(--font-color);
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: 0.3px;
 }
 
 .button_save {
@@ -438,6 +538,18 @@
   overflow-y: auto;
   padding-right: 6px;
   border-radius: 10px;
+
+  scrollbar-width: thin;
+  scrollbar-color: #c7d2fe transparent;
+}
+
+.holiday::-webkit-scrollbar {
+  width: 6px;
+}
+
+.holiday::-webkit-scrollbar-thumb {
+  background: #c7d2fe;
+  border-radius: 10px;
 }
 
 .belum_tersedia {
@@ -453,20 +565,45 @@
 
 .list_hari {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  border: 1px solid #c7c7c7;
-  padding: 10px;
-  border-radius: 10px;
-  background-color: #f4f4f4;
-  /* gap: 8px; */
+  align-items: center;
+
   width: 48%;
-  /* width: 260px; */
+  padding: 14px 16px;
+
+  background: var(--bg-muted);
+  border-radius: var(--radius-md);
+  border: none;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
 .list_hari i {
+  font-size: 14px;
+  color: #94a3b8;
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.list_hari i:hover {
+  color: #ef4444;
+  transform: scale(1.15);
+}
+
+.keterangan_libur h4 {
+  font-size: 15px;
   font-weight: 600;
+  color: var(--text-main);
+}
+
+.keterangan_libur p {
   font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 2px;
 }
 </style>
 
@@ -516,6 +653,7 @@ export default {
       bulanDipilih: "",
       hapus: false,
       selectedData: null,
+      yearDirection: "slide-left",
     };
   },
   mounted() {
@@ -584,9 +722,11 @@ export default {
       this.selectedData = hari;
     },
     tambah() {
+      this.yearDirection = "slide-left";
       this.tahunAktif++;
     },
     kurang() {
+      this.yearDirection = "slide-right";
       this.tahunAktif--;
     },
     setTanggal(bulan) {

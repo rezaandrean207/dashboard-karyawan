@@ -167,7 +167,11 @@
           class="menu-item"
           :class="{ active: $route.path === '/admin/grouping' }"
         >
-          <span class="material-symbols-outlined"> group </span>
+          <span
+            class="material-symbols-outlined"
+          >
+            group
+          </span>
           <p>Grouping</p>
         </NuxtLink>
         <NuxtLink
@@ -175,7 +179,24 @@
           class="menu-item"
           :class="{ active: $route.path === '/admin/ganttChart' }"
         >
-          <span class="material-symbols-outlined"> bar_chart_4_bars </span>
+          <!-- <span class="material-symbols-outlined"> bar_chart_4_bars </span> -->
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 15 15"
+            xmlns="http://www.w3.org/2000/svg"
+            style="
+              margin: 0 12px 3px 1px;
+              /* border: 1px solid #010101; */
+            "
+          >
+            <path
+              d="M0,0H1V14H15V15H0V0ZM2,2H5V3H2V2ZM3,5H8V6H3V5ZM5,8H8V9H5V8ZM8,11H15V12H8V11Z"
+              fill="currentColor"
+              fill-rule="evenodd"
+            />
+          </svg>
+
           <p>Gantt Chart</p>
         </NuxtLink>
         <div class="setting">
@@ -203,7 +224,6 @@
             </NuxtLink>
           </div>
         </div>
-
       </div>
 
       <div class="footer_sidebar">

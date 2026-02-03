@@ -700,8 +700,24 @@
 .list_hari .hari_tanggal {
   background-color: #efefef;
   width: 24%;
-  padding: 10px;
   border-radius: 10px;
+  padding: 14px 16px;
+
+  background: var(--bg-muted);
+  border-radius: var(--radius-md);
+  border: none;
+}
+
+.hari_tanggal h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.hari_tanggal p {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 2px;
 }
 </style>
 
@@ -712,10 +728,24 @@
 }
 
 .container_bug {
-  background-color: #fff;
   padding: 10px 20px 15px 20px;
   border-radius: 10px;
   width: 80%;
+
+  background: #ffffff;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+  animation: scaleIn 0.2s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.96);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .header_containerBug {
@@ -741,13 +771,15 @@
   /* flex-direction: column; */
   flex-wrap: wrap;
   gap: 100px;
-  background: rgba(0, 0, 0, 0.6);
   z-index: 1005;
   pointer-events: all;
-  animation: fadeIn 0.18s ease-out both;
   width: 100vw;
   height: 101vh;
   overflow-y: scroll;
+
+  backdrop-filter: blur(6px);
+  background: rgba(15, 23, 42, 0.4);
+  animation: fadeIn 0.2s ease-out;
 }
 
 .header_bug {
@@ -788,6 +820,8 @@
   padding: 2px 5px;
   padding-top: 4px;
   color: var(--font-color);
+  font-size: 12px;
+  font-weight: 600;
 }
 </style>
 
@@ -1085,27 +1119,27 @@
 }
 
 .card_karyawan {
-  /* display: flex;
-  align-items: center;
-  justify-content: space-between; */
-  border: 1px solid rgb(198, 215, 253);
-  border-radius: 10px;
-  padding: 25px;
-  /* position: relative;
-  top: 20px; */
   margin: 20px 0;
-  background-color: #fff;
-  width: 100%;
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid var(--border-soft);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  transition: all 0.25s ease;
+}
+
+.card_karyawan:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
 }
 
 .card_karyawan .card_profile {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 10px;
-  justify-content: space-between;
   flex-wrap: wrap;
-  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
 .card_profile .card_left {
@@ -1116,18 +1150,22 @@
 }
 
 .card_karyawan .card_profile .card_left img {
-  width: 100px;
-  /* border: 1px solid #010101; */
+  width: 88px;
+  height: 88px;
   border-radius: 50%;
-  border: 5px solid rgb(193, 222, 232);
+  object-fit: cover;
+  border: 3px solid #e0e7ff;
 }
 
-.card_profile .card_name h3 {
-  color: rgb(16, 50, 130);
+.card_name h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0f172a;
 }
 
 .card_name p {
-  font-weight: 400;
+  font-size: 14px;
+  color: #64748b;
 }
 
 .card_profile .performa_karyawan {
@@ -1154,25 +1192,27 @@
 }
 
 .task .container_task {
-  border: 1px solid var(--border_color);
-  padding: 15px;
-  border-radius: 10px;
-  margin: 10px 0 20px 0;
-  background-color: #fff;
-  width: 100%;
+  margin: 20px 0;
+
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
 }
 
 .container_task:hover {
-  /* border: 1px solid rgb(125, 206, 233); */
-  filter: drop-shadow(2px 2px 4px rgb(125, 206, 233));
-  background-color: #f3f3f3;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
 }
 
 .header_container {
+  font-size: 16px;
+
   display: flex;
   justify-content: space-between;
-  font-size: 16px;
   align-items: center;
+  margin-bottom: 12px;
 }
 
 .header_container .name_task p {
@@ -1186,18 +1226,6 @@
   font-size: 11px;
   font-weight: 500;
 }
-
-/* .status_task .bug {
-  border: 1px solid rgb(178, 178, 255);
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background-color: rgb(178, 178, 255);
-  border-radius: 7px;
-  padding: 2px 5px;
-  padding-top: 4px;
-  color: var(--font-color);
-} */
 
 .status_task .bug {
   cursor: pointer;
@@ -1304,6 +1332,14 @@
   font-weight: 400;
   margin: 10px 0;
   flex-wrap: wrap;
+
+  font-size: 13px;
+  color: #64748b;
+}
+
+.keterangan_waktu i {
+  font-size: 16px;
+  color: #94a3b8;
 }
 
 .keterangan_waktu .jam,
@@ -1522,10 +1558,19 @@
 .kinerja_karyawan {
   border: var(--borderCard);
   margin-top: 20px;
-  width: 100%;
-  border-radius: 10px;
-  padding: 25px;
-  background-color: #fff;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  /* border: 1px solid #e5e7eb; */
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.kinerja_karyawan:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
 }
 
 .kinerja_karyawan .profil {
@@ -1582,6 +1627,16 @@
   border: 1px solid #dbdbdb;
   text-wrap: nowrap;
 }
+
+/* .available {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.working {
+  background: #fee2e2;
+  color: #991b1b;
+} */
 
 .status_karyawan .available i {
   color: rgb(0, 255, 0);
@@ -1793,10 +1848,13 @@
   margin: 10px 0;
 }
 
-.content .name_task {
+.name_task {
   display: flex;
   justify-content: space-between;
-  font-weight: 400;
+
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f172a;
 }
 
 .name_task .progres-level {

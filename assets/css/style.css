@@ -172,6 +172,20 @@ body {
   opacity: 1;
 }
 
+@media (hover: none) {
+  .menu-item:hover,
+  .menu-item:active {
+    background-color: transparent;
+    opacity: 0.75;
+  }
+
+  .setting:hover,
+  .setting:active {
+    background-color: transparent;
+    opacity: 0.75;
+  }
+}
+
 .sidebar-text i {
   font-size: 18px;
   margin-right: 10px;
@@ -421,7 +435,7 @@ form select {
   transition:
     transform 0.3s ease,
     box-shadow 0.1s ease;
-  padding: 10px 30px 20px 30px;
+  padding: 10px 20px 20px 20px;
   /* box-shadow:  2px 2px 25px #cfd6ff,
              -2px -2px 25px #fbfbff; */
 }
@@ -460,7 +474,6 @@ form select {
   justify-content: center;
   align-items: center;
   gap: 4px;
-  margin: 10px 75px;
   padding: 5px 0;
   font-size: 12px;
   border-radius: 15px;
@@ -479,6 +492,7 @@ form select {
 
 .kinerja .status-member {
   margin-top: 10px;
+  text-transform: capitalize;
 }
 
 .kinerja .status-member,
@@ -585,15 +599,24 @@ form select {
   text-transform: capitalize;
 }
 
+.profilImage .wraper-beban {
+  /* width: 100%; */
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
 .profilImage .bebanKerja {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 5px;
-  margin: 10px 160px 0 160px;
+  /* margin: 10px 160px 0 160px; */
+  margin-top: 10px;
   height: 3vh;
   font-size: 10px;
   border-radius: 15px;
+  width: 50%;
 }
 
 .infoKontak {
@@ -702,8 +725,8 @@ form select {
 }
 
 .statistik .proyek {
-  background-color: rgb(218, 234, 255);
-  border: 1px solid rgb(118, 177, 254);
+  background-color: #e8d8ff;
+  border: 1px solid #b37dff;
 }
 
 .statistik .completed {
@@ -712,8 +735,8 @@ form select {
 }
 
 .statistik .on_progress {
-  background-color: #e8d8ff;
-  border: 1px solid #b37dff;
+  background-color: rgb(218, 234, 255);
+  border: 1px solid rgb(118, 177, 254);
 }
 
 .proyek i {
@@ -750,7 +773,8 @@ form select {
   text-align: center;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  padding: 0 15px;
   /* gap: 10px; */
   border-radius: 10px;
   margin-bottom: 20px;
@@ -815,7 +839,7 @@ form select {
     width: 100%;
     position: fixed;
     top: 0;
-    height: 12%;
+    height: 10%;
     align-items: center;
     z-index: 99;
     padding-left: 35px;
@@ -840,24 +864,14 @@ form select {
 
   .karyawan {
     width: 48%;
-    /* height: 38vh; */
-    font-size: 20px;
   }
 
   .karyawan .identitas .bebanKerja {
     margin: 10px 170px;
   }
 
-  .karyawan .peran {
-    /* display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 6px; */
-    font-size: 20px;
-  }
-
   .detailKaryawan {
-    width: 50%;
+    width: 80%;
     height: 90vh;
   }
 
@@ -868,10 +882,6 @@ form select {
 
 /* Tablet */
 @media (max-width: 768px) {
-  template {
-    font-size: 62.5%;
-  }
-
   .konten .sidebar {
     display: none;
   }
@@ -948,10 +958,6 @@ form select {
   .detailKaryawan .profilImage img {
     width: 120px;
     height: 120px;
-  }
-
-  .profilImage .bebanKerja {
-    margin: 10px 80px 0 80px;
   }
 
   .statistik .proyek,

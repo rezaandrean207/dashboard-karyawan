@@ -109,24 +109,6 @@
   </div>
 </template>
 
-<!-- Responsive -->
-<style scoped>
-@media (max-width: 768px) {
-  .dates,
-  .kurang-lebih-dari,
-  .search-input {
-    width: 100%;
-  }
-}
-
-@media (max-width: 576px) {
-  .right h4 {
-    display: flex;
-    flex-direction: column;
-  }
-}
-</style>
-
 <style scoped>
 * {
   -webkit-font-smoothing: antialiased;
@@ -211,6 +193,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  text-transform: capitalize;
 }
 
 .profil-karyawan img {
@@ -260,12 +243,16 @@
 }
 
 .dates {
-  width: 35%;
+  /* width: 35%; */
+  flex: 1;
+  min-width: 300px;
 }
 
 .kurang-lebih-dari,
 .search-input {
-  width: 25%;
+  /* width: 25%; */
+  flex: 1;
+  min-width: 250px;
 }
 
 .search-input label,
@@ -290,6 +277,24 @@
   height: 100%;
   border-radius: 5px;
   padding: 10px;
+}
+</style>
+
+<!-- Responsive -->
+<style scoped>
+@media (max-width: 768px) {
+  /* .dates,
+  .kurang-lebih-dari,
+  .search-input {
+    width: 100%;
+  } */
+}
+
+@media (max-width: 576px) {
+  .right h4 {
+    display: flex;
+    flex-direction: column;
+  }
 }
 </style>
 

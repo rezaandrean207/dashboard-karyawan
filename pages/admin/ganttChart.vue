@@ -389,7 +389,7 @@
   width: 200px;
   position: relative;
   font-size: 14px;
-  z-index: 98;
+  /* z-index: 98; */
 }
 
 .select-box {
@@ -500,7 +500,7 @@
 }
 
 .kalender {
-  max-height: 75vh;
+  max-height: 100dvh;
   overflow: auto;
   margin-top: 20px;
   padding-bottom: 10px;
@@ -619,7 +619,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border-right: 1px solid #aeb0b3;
+  /* border-right: 1px solid #aeb0b3; */
+  border-right: 1px solid rgba(15, 23, 42, 0.2);
 }
 
 /* HEADER TANGGAL */
@@ -747,7 +748,7 @@
     transform 0.15s ease,
     filter 0.15s ease;
   cursor: pointer;
-  margin-top: 8px;
+  margin-top: 30px;
 
   z-index: 16;
 
@@ -888,6 +889,7 @@ definePageMeta({
 
 <script>
 import { VueDatePicker } from "@vuepic/vue-datepicker";
+
 definePageMeta({
   layout: "dashboard",
 });
@@ -917,32 +919,6 @@ export default {
     this.setDefaultTanggal();
     this.tanggalPerBulan = this.generateDateRange(this.startDate, this.endDate);
     // this.ambilTask();
-
-    this.$nextTick(() => {
-      const el = document.querySelector(".kalender");
-      if (!el) return;
-
-      // zoom dengan Ctrl+Wheel
-      el.addEventListener(
-        "wheel",
-        (e) => {
-          if (!e.ctrlKey) return;
-          e.preventDefault();
-          if (e.deltaY < 0) this.zoomIn();
-          else this.zoomOut();
-        },
-        { passive: false },
-      );
-
-      // scroll otomatis ke Today
-      if (this.todayOffset !== null) {
-        const scrollLeft = this.todayOffset - el.clientWidth / 2;
-        el.scrollTo({
-          left: Math.max(0, scrollLeft),
-          behavior: "smooth",
-        });
-      }
-    });
   },
   methods: {
     shadeColor(color, percent) {
@@ -1024,6 +1000,31 @@ export default {
           `/api/v1/gantt/tasks?start_date=${this.formatTanggal(this.startDate)}&end_date=${this.formatTanggal(this.endDate)}`,
         );
         this.daftarTask = task.data;
+        this.$nextTick(() => {
+          const el = document.querySelector(".kalender");
+          if (!el) return;
+
+          // zoom dengan Ctrl+Wheel
+          el.addEventListener(
+            "wheel",
+            (e) => {
+              if (!e.ctrlKey) return;
+              e.preventDefault();
+              if (e.deltaY < 0) this.zoomIn();
+              else this.zoomOut();
+            },
+            { passive: false },
+          );
+
+          // scroll otomatis ke Today
+          if (this.todayOffset !== null) {
+            const scrollLeft = this.todayOffset - el.clientWidth / 2;
+            el.scrollTo({
+              left: Math.max(0, scrollLeft),
+              behavior: "smooth",
+            });
+          }
+        });
         console.log("daftar task", this.daftarTask);
       } catch (err) {
         console.log("Gagal mengambil task", err);

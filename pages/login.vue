@@ -98,35 +98,6 @@
   animation: shake-horizontal 0.2s cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
   border: 1px solid red;
 }
-
-@-webkit-keyframes shake-horizontal {
-  0%,
-  100% {
-    -webkit-transform: translateX(0);
-    transform: translateX(0);
-  }
-  10%,
-  30%,
-  50%,
-  70% {
-    -webkit-transform: translateX(-10px);
-    transform: translateX(-10px);
-  }
-  20%,
-  40%,
-  60% {
-    -webkit-transform: translateX(10px);
-    transform: translateX(10px);
-  }
-  80% {
-    -webkit-transform: translateX(8px);
-    transform: translateX(8px);
-  }
-  90% {
-    -webkit-transform: translateX(-8px);
-    transform: translateX(-8px);
-  }
-}
 @keyframes shake-horizontal {
   0%,
   100% {
@@ -162,7 +133,9 @@
   align-items: center;
   width: 100%;
   height: 100vh;
-  background-color: rgb(218, 236, 248);
+  background: linear-gradient(135deg, #eef4ff, #f8fbff);
+
+  /* background-color: rgb(218, 236, 248); */
   /* background: #020024;
   background: linear-gradient(
     90deg,
@@ -174,25 +147,37 @@
 }
 
 .wraper {
-  background-color: #fff;
-  width: 440px;
-  height: 500px;
-  padding: 15px 24px;
-  /* border: 5px solid rgb(255, 255, 255, 0.1); */
-  border: 1px solid rgb(197, 197, 255);
-  border-radius: 16px;
-  /* backdrop-filter: blur(25px); */
-  box-shadow: 0px 0px 30px 20px rgba(57, 106, 255, 0.1);
   color: var(--text);
   display: flex;
-  /* flex-direction: column; */
   justify-content: center;
   align-items: center;
+
+  background: #ffffff;
+  width: 450px;
+  height: 500px;
+  padding: 32px 28px;
+
+  border-radius: 20px;
+  border: none;
+
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
 }
 
 .wraper .hero {
   text-align: center;
   width: 100%;
+}
+
+.wraper .hero h2 {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+.hero p {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 22px;
 }
 
 .hero .ikon_login {
@@ -222,27 +207,6 @@
   border-radius: 10px;
 }
 
-/* .wraper .hero img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border: 5px solid rgb(193, 222, 232);
-  border-radius: 50%;
-} */
-
-.wraper .hero h2 {
-  margin-top: px;
-  font-weight: 600;
-  font-size: 20px;
-  color: rgb(0, 170, 213);
-}
-
-.hero p {
-  font-weight: 300;
-  margin-bottom: 16px;
-  font-size: 16px;
-}
-
 .wraper form {
   width: 100%;
 }
@@ -254,6 +218,21 @@
   position: relative;
 }
 
+.input label {
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.input input:focus + label {
+  color: #2563eb;
+}
+
+.input input:focus + label,
+.input input:not(:placeholder-shown) + label {
+  color: #3b82f6;
+  font-weight: 500;
+}
+
 .input .username {
   display: flex;
 }
@@ -261,25 +240,25 @@
 .wraper .form input {
   margin: 4px 0;
   width: 100%;
-  padding: 10px 15px;
-  border-radius: 5px;
-  border: 3px solid transparent;
-  /* background-color: #eeecec; */
   outline: none;
   caret-color: var(--text);
   color: var(--text);
+  font-size: 14px;
+  transition: 0.2s;
   font-weight: 500;
-  font-size: 15px;
-  transition: 0.25s;
-  border: 1px solid rgb(197, 197, 255);
+
+  padding: 14px 16px;
+  border-radius: 12px;
+
+  border: 1px solid #e2e8f0;
+  background-color: #f8fafc;
 }
 
 .input input:focus {
-  border: 1px solid blue;
+  border-color: #3b82f6;
+  background-color: #ffffff;
+  /* box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15); */
 }
-
-/* .wraper .form input::placeholder {
-  /* color: var(--text); */
 
 .input input::-ms-reveal {
   filter: invert(100%);
@@ -290,14 +269,27 @@
   top: 47.8%;
   transform: translateY(-50%);
   left: 38%;
-  /* color: rgb(255, 255, 255, 0.75); */
   color: #010101;
   font-size: 18px;
   transition: 0.25s;
 }
 
-.input .password i {
+.input .password {
   position: relative;
+}
+
+.input .password i {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.input .password i:hover {
+  color: #3b82f6;
 }
 
 .input .username label {
@@ -354,16 +346,30 @@
 .form .button button {
   margin-top: 24px;
   width: 100%;
-  padding: 10px 0;
-  background-color: blue;
+  /* padding: 10px 0; */
+  /* background-color: blue; */
   border: none;
-  border-radius: 10px;
   color: #fff;
   font-weight: bold;
   font-size: 15px;
   cursor: pointer;
   outline: transparent 3px solid;
   transition: 0.1s;
+
+  height: 44px;
+  border-radius: 12px;
+  font-size: 15px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
+}
+
+.form .button button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.45);
+}
+
+.form .button button:active {
+  transform: translateY(0);
 }
 
 .form .button button:hover {

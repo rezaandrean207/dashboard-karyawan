@@ -156,9 +156,12 @@
           <i class="fa-solid fa-briefcase"></i>
           <p>{{ selected.role }}</p>
         </div>
-        <div class="bebanKerja" :class="bebanClass(beban)">
-          <i class="fa-solid fa-clock"></i>
-          <p>Beban Kerja: {{ kategoriBeban(beban) }}</p>
+        <div class="wraper-beban">
+          <div class="bebanKerja" :class="bebanClass(selected.workload_status)">
+            <i class="fa-solid fa-clock"></i>
+            <!-- <p>Beban Kerja: {{ kategoriBeban(beban) }}</p> -->
+            <p>Beban Kerja: {{ selected.workload_status }}</p>
+          </div>
         </div>
       </div>
 
@@ -212,7 +215,7 @@
         </div> -->
 
       <div class="statistikKinerja">
-        <p class="judul">Kinerja & Statistik</p>
+        <p class="judul">Ringkasan Kerja</p>
         <div class="statistik">
           <div class="proyek">
             <div class="judul">
@@ -220,15 +223,16 @@
               <h3>{{ selected.project_count }}</h3>
             </div>
             <div class="logo">
-              <i class="fa-solid fa-check"></i>
+              <!-- <i class="fa-solid fa-check"></i> -->
+              <span class="material-symbols-outlined"> work_history </span>
             </div>
           </div>
 
           <div class="completed">
             <div class="judul">
-              <p>Completed</p>
-              <!-- <p>Selesai</p> -->
-              <h3>{{ selected.completed_tasks }} Task</h3>
+              <!-- <p>Completed</p> -->
+              <p>Selesai</p>
+              <h3>{{ selected.completed_tasks }}</h3>
             </div>
             <div class="logo">
               <i class="fa-solid fa-check"></i>
@@ -237,12 +241,13 @@
 
           <div class="on_progress">
             <div class="judul">
-              <p>On Progress</p>
+              <p>Sedang Dikerjakan</p>
               <!-- <p>Dikerjakan</p> -->
-              <h3>{{ selected.in_progress_tasks }} Task</h3>
+              <h3>{{ selected.in_progress_tasks }}</h3>
             </div>
             <div class="logo">
-              <i class="fa-solid fa-chart-simple"></i>
+              <!-- <i class="fa-solid fa-chart-simple"></i> -->
+              <span class="material-symbols-outlined"> pending_actions </span>
             </div>
           </div>
         </div>
@@ -501,14 +506,6 @@ form input {
     object-fit: cover;
   }
 
-  .karyawan h4 {
-    font-size: 12px;
-  }
-
-  .identitas .peran {
-    font-size: 12px;
-  }
-
   .karyawan .identitas .bebanKerja {
     display: flex;
     justify-content: center;
@@ -522,10 +519,6 @@ form input {
 
   .kinerja .proyekAktif {
     font-size: 12px;
-  }
-
-  .detailKaryawan {
-    width: 60%;
   }
 }
 
@@ -611,8 +604,6 @@ form input {
     text-align: center;
     border-radius: 15px;
     transition: transform 0.3s ease;
-    /* padding: 10px 0; */
-    font-size: 12px;
   }
 
   .karyawan:hover {
@@ -633,7 +624,6 @@ form input {
   .karyawan h4 {
     color: rgb(16, 50, 130);
     margin-top: 10px;
-    font-size: 16px;
   }
 
   .karyawan .peran {
@@ -641,7 +631,6 @@ form input {
     justify-content: center;
     align-items: center;
     gap: 6px;
-    font-size: 16px;
   }
 
   .karyawan .identitas .bebanKerja {
@@ -791,13 +780,13 @@ export default {
       return "";
     },
     bebanClass(beban) {
-      const kategori = this.kategoriBeban(beban);
+      // const kategori = this.kategoriBeban(beban);
 
       return {
-        kuning: kategori === "Sedang",
-        merah: kategori === "Berat",
-        hijau: kategori === "Mudah",
-        putih: kategori === "",
+        kuning: beban === "Underload",
+        merah: beban === "Overload",
+        hijau: beban === "Normal",
+        putih: beban === "",
       };
     },
     openDetail(k) {

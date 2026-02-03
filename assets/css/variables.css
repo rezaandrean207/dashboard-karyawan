@@ -1,8 +1,31 @@
 :root {
+  /* Border */
   --border-soft: #e5e7eb;
   --border-muted: #f1f5f9;
+  --border_color: rgb(193, 222, 232);
+
+  /* Border Radius */
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+
+  /* Text */
   --text-main: #0f172a;
   --text-muted: #64748b;
-  --border_color: rgb(193, 222, 232);
   --font-color: rgb(16, 50, 130);
+
+  /* Colour */
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --success: #16a34a;
+  --warning: #f59e0b;
+  --danger: #dc2626;
+
+  /* Background Colour */
+  --bg-page: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-muted: #f1f5f9;
+
+  /* Shadow */
+  --shadow-soft: 0 8px 24px rgba(15, 23, 42, 0.08);
 }
