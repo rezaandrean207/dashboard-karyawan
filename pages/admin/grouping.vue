@@ -5,7 +5,13 @@
       <p>Tunggu Sebentar</p>
     </div>
   </div>
-  <div class="isi" :class="{ viewApp: isAppView }">
+
+  <!-- daftar karyawan -->
+  <div
+    class="isi"
+    :class="{ viewApp: isAppView }"
+    v-if="selectedKaryawan === null"
+  >
     <h2>Grouping</h2>
     <!-- <p>
       Karyawan dengan performa rendah (< {{ searchInput }}%) berdasarkan
@@ -82,6 +88,7 @@
             class="group-karyawan"
             v-for="(k, index) in kategori.data"
             :key="k.clickup_id"
+            @click="cekDetail(k.clickup_id)"
           >
             <div class="left">
               <div class="index">
@@ -106,6 +113,126 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="isi" v-else>
+    <div class="detail-page">
+      <!-- HEADER -->
+      <div class="header">
+        <button class="back" @click="$router.back()">← Kembali</button>
+
+        <div class="profile">
+          <img src="/img/profil.png" alt="profil" />
+          <div class="info">
+            <h2>{{ selectedKaryawan.name }}</h2>
+            <p>{{ selectedKaryawan.role }}</p>
+            <div class="badge">
+              <span :class="workloadClass">{{
+                selectedKaryawan.workload_status
+              }}</span>
+              <span class="available">{{
+                selectedKaryawan.availability_status
+              }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI -->
+      <div class="kpi">
+        <div class="card">
+          <p>Beban Kerja</p>
+          <h3>{{ selectedKaryawan.performance_bugs.workload_score }}%</h3>
+        </div>
+        <div class="card">
+          <p>Tepat Waktu</p>
+          <h3>{{ onTimeScore }}%</h3>
+        </div>
+        <div class="card">
+          <p>Performa Bug</p>
+          <h3>{{ selectedKaryawan.performance_bugs.bugs }}</h3>
+        </div>
+        <div class="card">
+          <p>Total Task</p>
+          <h3>{{ selectedKaryawan.total_tasks }}</h3>
+        </div>
+      </div>
+
+      <!-- JAM KERJA -->
+      <div class="section">
+        <h3>Jam Kerja</h3>
+        <ul>
+          <li>Expected : {{ selectedKaryawan.expected_hours }} jam</li>
+          <li>Spent : {{ selectedKaryawan.total_spent_hours.hours }} jam</li>
+          <li>
+            Selisih :
+            <strong
+              :class="{
+                over:
+                  selectedKaryawan.total_spent_hours.hours >
+                  selectedKaryawan.expected_hours,
+              }"
+            >
+              {{ selisihJam }} jam
+            </strong>
+          </li>
+        </ul>
+      </div>
+
+      <!-- TASK LIST -->
+      <div class="section">
+        <h3>Daftar Task</h3>
+
+        <div v-if="!selectedKaryawan.tasks.length" class="empty">
+          Tidak ada task
+        </div>
+
+        <div
+          class="task-card"
+          v-for="task in selectedKaryawan.tasks"
+          :key="task.id"
+        >
+          <div class="task-header">
+            <h4>{{ task.name }}</h4>
+            <span class="status" :class="task.status_type">
+              {{ task.status_name }}
+            </span>
+          </div>
+
+          <p class="project">{{ task.project_name }}</p>
+
+          <div class="meta">
+            <span>Est: {{ task.time_estimate_hours }}j</span>
+            <span>Spent: {{ task.time_spent_hours }}j</span>
+            <span>Selesai: {{ task.date_done }}</span>
+          </div>
+
+          <div class="tags">
+            <span v-for="tag in task.tags" :key="tag">
+              {{ tag }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- INSIGHT -->
+      <div class="section insight">
+        <h3>Insight</h3>
+        <ul>
+          <li v-if="selectedKaryawan.performance_bugs.workload_score > 100">
+            ⚠️ Beban kerja melebihi kapasitas
+          </li>
+          <li v-if="onTimeScore < 100">
+            ⚠️ Beberapa task melewati estimasi waktu
+          </li>
+          <li v-if="selectedKaryawan.total_tasks">
+            ✅ Task berhasil diselesaikan
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- <div v-else class="loading">Loading...</div> -->
   </div>
 </template>
 
@@ -314,6 +441,160 @@
 }
 </style>
 
+<!-- detail karyawan -->
+<style scoped>
+.detail-page {
+  max-width: 1100px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.header {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.profile {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.profile img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+}
+
+.info h2 {
+  font-size: 20px;
+  margin: 0;
+}
+
+.info p {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.badge span {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.available {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.overload {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.kpi {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.kpi .card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.kpi p {
+  font-size: 14px;
+  color: #64748b;
+}
+
+.kpi h3 {
+  font-size: 28px;
+  margin-top: 8px;
+  color: #0f172a;
+}
+
+.section {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.section h3 {
+  margin-bottom: 12px;
+  font-size: 18px;
+}
+
+.section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.section li {
+  margin-bottom: 6px;
+}
+
+.over {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.task-card {
+  background: #f8fafc;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.status.done {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status.progress {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.insight li {
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.insight li:nth-child(1) {
+  color: #b45309;
+}
+
+.insight li:nth-child(2) {
+  color: #b91c1c;
+}
+
+.insight li:nth-child(3) {
+  color: #15803d;
+}
+</style>
+
 <!-- <script setup>
 definePageMeta({
   layout: "dashboard",
@@ -330,7 +611,9 @@ definePageMeta({
 export default {
   data() {
     return {
-      daftarKaryawan: null,
+      daftarKaryawan: [],
+      detailKaryawan: [],
+      selectedKaryawan: null,
       sidebar: false,
       loading: false,
       sukses: false,
@@ -439,9 +722,11 @@ export default {
           )}&end_date=${this.formatTanggal(this.end)}`,
         );
         this.daftarKaryawan = task.data.grouping || [];
+        this.detailKaryawan = task.data.assignees || [];
         // this.daftarHari = task.data.jadwal_libur || [];
         // this.daftarHari = task.data.jadwal_libur
         console.log("Berhasil ambil task:", task);
+        console.log("Data detail", this.detailKaryawan);
       } catch (error) {
         console.error("Gagal ambil task:", error);
         this.daftarKaryawan = [];
@@ -488,6 +773,17 @@ export default {
         this.loading = false;
       }
     },
+    cekDetail(data) {
+      const detail = this.detailKaryawanMap[data];
+
+      if (!detail) {
+        console.warn("Data karyawan tidak ditemukan:", data);
+        return;
+      }
+
+      this.selectedKaryawan = detail;
+      console.log("Berhasil mendapat data karyawan", this.selectedKaryawan);
+    },
     menu() {
       this.sidebar = true;
     },
@@ -502,26 +798,20 @@ export default {
   },
 
   computed: {
+    detailKaryawanMap() {
+      const map = {};
+      this.detailKaryawan.forEach((a) => {
+        map[a.clickup_id] = a;
+      });
+      return map;
+    },
+
     filteredKaryawan() {
       const limit = Number(this.searchInput);
 
       if (isNaN(limit)) {
         return this.daftarKaryawan || [];
       }
-
-      // if (!["kurangDari", "lebihDari"].includes(this.kurangLebih)) {
-      //   return this.daftarKaryawan || [];
-      // }
-
-      // const operator =
-      //   this.kurangLebih === "kurangDari" ? (v) => v < limit : (v) => v > limit;
-
-      // return (this.daftarKaryawan || [])
-      //   .map((group) => ({
-      //     ...group,
-      //     data: group.data.filter((k) => operator(Number(k.value))),
-      //   }))
-      //   .filter((group) => group.data.length);
 
       if (this.kurangLebih === "kurangDari") {
         return (this.daftarKaryawan || [])
@@ -542,6 +832,25 @@ export default {
     },
     isAppView() {
       return this.$route.query.view === "app";
+    },
+    workloadClass() {
+      return {
+        overload: this.selectedKaryawan.workload_status === "Overload",
+        underload: this.selectedKaryawan.workload_status === "Underload",
+        normal: this.selectedKaryawan.workload_status === "Normal",
+      };
+    },
+    selisihJam() {
+      return (
+        this.selectedKaryawan.total_spent_hours.hours -
+        this.selectedKaryawan.expected_hours
+      );
+    },
+    onTimeScore() {
+      return (
+        this.selectedKaryawan.on_time_performance_score ??
+        this.selectedKaryawan.avg_time_efficiency.avg_percentage
+      );
     },
   },
 

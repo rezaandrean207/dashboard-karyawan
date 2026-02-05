@@ -226,7 +226,7 @@
         </div>
         <div
           class="performa_karyawan"
-          :class="performaClass(k.performance_bugs.score)"
+          :class="performaClass(k.performance_bugs.category)"
         >
           <i class="fa-solid fa-chart-line"></i>
           <div class="text">
@@ -244,7 +244,7 @@
         <div class="container_flex">
           <div
             class="ketepatan_pengerjaan"
-            :class="ketepatanClass(k.avg_time_efficiency.avg_percentage)"
+            :class="ketepatanClass(k.avg_time_efficiency.category)"
           >
             <div class="teks">
               <p>Tepat Waktu Kerja</p>
@@ -266,7 +266,7 @@
           </div>
           <div
             class="total_beban"
-            :class="totalBebanClass(k.total_spent_hours.percentage)"
+            :class="totalBebanClass(k.total_spent_hours.category)"
           >
             <div class="teks">
               <p>Total Beban Kerja (Aktif)</p>
@@ -283,7 +283,7 @@
           </div>
           <div
             class="performa_bug"
-            :class="performaClass(k.performance_bugs.bugs)"
+            :class="performaClass(k.performance_bugs.bugs_category)"
           >
             <div class="teks">
               <p>Performa Bug</p>
@@ -363,7 +363,7 @@
         </div>
         <div
           class="performa_karyawan"
-          :class="performaClass(detailKaryawan.performance_bugs.score)"
+          :class="performaClass(detailKaryawan.performance_bugs.category)"
         >
           <i class="fa-solid fa-chart-line"></i>
           <div class="text">
@@ -381,9 +381,7 @@
           <div
             class="ketepatan_pengerjaan"
             v-if="detailKaryawan.avg_time_efficiency.avg_percentage"
-            :class="
-              ketepatanClass(detailKaryawan.avg_time_efficiency.avg_percentage)
-            "
+            :class="ketepatanClass(detailKaryawan.avg_time_efficiency.category)"
           >
             <div class="teks">
               <p>Tepat Waktu Kerja</p>
@@ -404,9 +402,7 @@
           </div>
           <div
             class="total_beban"
-            :class="
-              totalBebanClass(detailKaryawan.total_spent_hours.percentage)
-            "
+            :class="totalBebanClass(detailKaryawan.total_spent_hours.category)"
           >
             <div class="teks">
               <p>Total Beban Kerja (Aktif)</p>
@@ -423,7 +419,9 @@
           </div>
           <div
             class="performa_bug"
-            :class="performaClass(detailKaryawan.performance_bugs.bugs)"
+            :class="
+              performaClass(detailKaryawan.performance_bugs.bugs_category)
+            "
           >
             <div class="teks">
               <p>Performa Bug</p>
@@ -2240,8 +2238,9 @@ export default {
   components: {
     VueDatePicker,
   },
-  mounted() {
+  async mounted() {
     this.setDefaultTanggal();
+    // this.cekSetting();
     // this.ambilTask();
     // this.hariLibur();
   },
@@ -2328,7 +2327,6 @@ export default {
         );
         this.daftarKaryawan = task.data.assignees || [];
         this.daftarHari = task.data.jadwal_libur || [];
-        // this.daftarHari = task.data.jadwal_libur
         console.log("Berhasil ambil task:", task);
       } catch (error) {
         console.error("Gagal ambil task:", error);
@@ -2376,22 +2374,6 @@ export default {
         this.loading = false;
       }
     },
-    // async hariLibur() {
-    //   console.log("Hari Libur sedang di proses");
-
-    //   try {
-    //     const holiday = await this.$api.get(
-    //       `/api/v1/workload/tasks-by-range?start_date=${this.formatTanggal(
-    //         this.start
-    //       )}&end_date=${this.formatTanggal(this.end)}`
-    //     );
-    //     this.daftarHari = holiday.data.jadwal_libur || [];
-    //     console.log("Berhasil");
-    //   } catch (error) {
-    //     console.error("Gagal ambil task:", error);
-    //     this.daftarHari = [];
-    //   }
-    // },
     menu() {
       this.sidebar = true;
     },
@@ -2456,23 +2438,28 @@ export default {
     },
     totalBebanClass(beban = 0) {
       return {
-        special: beban > 100,
-        ontime: beban >= 85 && beban <= 100,
-        late: beban < 85,
+        special: beban === "++",
+        ontime: beban === "+",
+        late: beban === "-" || !beban,
       };
     },
     ketepatanClass(ketepatan) {
       return {
-        special: ketepatan > 100,
-        ontime: ketepatan >= 85 && ketepatan <= 100,
-        late: ketepatan < 85,
+        special: ketepatan === "++",
+        ontime: ketepatan === "+",
+        late: ketepatan === "-" || !ketepatan,
       };
     },
     performaClass(performa) {
       return {
-        special: performa > 100,
-        ontime: performa >= 85 && performa <= 100,
-        late: performa < 85,
+        // special: performa > this.dataSetting.batas_atas,
+        // ontime:
+        //   performa >= this.dataSetting.batas_bawah &&
+        //   performa <= this.dataSetting.batas_atas,
+        // late: performa < this.dataSetting.batas_bawah,
+        special: performa === "++",
+        ontime: performa === "+",
+        late: performa === "-" || !performa,
       };
     },
     availableClass(available) {

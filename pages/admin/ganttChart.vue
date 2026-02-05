@@ -7,6 +7,62 @@
     </div>
   </div>
 
+  <!-- POPUP DETAIL TASK -->
+  <div
+    v-if="showDetail"
+    class="detail-overlay"
+    @click.self="showDetail = false"
+  >
+    <div class="detail-modal">
+      <!-- Header -->
+      <div
+        class="detail-header"
+        :style="{ background: gradientFromColor(detailTask.color) }"
+      >
+        <div class="name-description">
+          <h3>{{ detailTask.name }}</h3>
+          <p>{{ detailTask.description }}</p>
+        </div>
+        <button class="close-btn" @click="showDetail = false">✕</button>
+      </div>
+
+      <!-- Content -->
+      <div class="detail-body">
+        <div class="detail-item">
+          <span class="label">Assignee</span>
+          <span class="value">{{ detailTask.assignee_to }}</span>
+        </div>
+
+        <div class="detail-item">
+          <span class="label">Status</span>
+          <span class="status-badge">
+            {{ detailTask.status_name }}
+          </span>
+        </div>
+
+        <div class="detail-item">
+          <span class="label">Start Date</span>
+          <span class="value">{{ detailTask.start_date }}</span>
+        </div>
+
+        <div class="detail-item">
+          <span class="label">Due Date</span>
+          <span class="value">{{ detailTask.due_date }}</span>
+        </div>
+
+        <div class="detail-item">
+          <span class="label">Duration</span>
+          <span class="value">{{ detailTask.duration_days }}</span>
+        </div>
+
+        <div class="detail-item" v-if="detailTask.date_done">
+          <span class="label">Completed At</span>
+          <span class="value">{{ detailTask.date_done }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Isi Konten -->
   <div class="isi" :class="{ viewApp: isAppView }">
     <!-- Header -->
@@ -171,30 +227,9 @@
                 '--day-width': dayWidth + 'px',
               }"
             >
-              <!-- <div
-                class="task-assignee"
-                :style="{
-                  marginLeft:
-                    Math.max(0, dayDiff(startDate, task.start_date)) * 100 +
-                    'px',
-
-                  width:
-                    (Math.min(
-                      dayDiff(startDate, task.due_date),
-                      dayDiff(startDate, endDate),
-                    ) -
-                      Math.max(0, dayDiff(startDate, task.start_date)) +
-                      1) *
-                      100 +
-                    'px',
-
-                  // top: '8px',
-                }"
-              >
-                {{ task.assignee_to }}
-              </div> -->
               <div
                 class="task-bar"
+                @click="cekDetail(task)"
                 :style="{
                   marginLeft: taskOffset(task) * dayWidth + 'px',
                   width: taskWidth(task) * dayWidth + 'px',
@@ -205,6 +240,7 @@
               >
                 <span class="assignee">{{ task.assignee_to }}</span>
                 <span class="task-title">{{ task.name }}</span>
+                <span class="status-task">{{ task.status_name }}</span>
               </div>
             </div>
           </div>
@@ -516,27 +552,6 @@
   background: #ffffff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
-
-.header-name {
-  padding: 26px 0;
-  flex-shrink: 0;
-  width: 200px;
-  text-align: center;
-  font-weight: 600;
-  font-size: 18px;
-  position: sticky;
-  /* top: 0; */
-  left: 0;
-  z-index: 90;
-  background: #ffffff;
-  color: #111827;
-  border-right: 1px solid #e5e7eb;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.header-gant {
-}
-
 /* CANVAS PANJANG */
 .gantt-wrapper {
   position: relative;
@@ -648,9 +663,6 @@
 }
 
 .weekend {
-  /* background: #fef2f2;
-  color: #b91c1c; */
-  /* background: #f5f5f5; */
   background: #f3f4f6;
   color: grey;
   border-left: 1px solid #e5e7eb;
@@ -668,41 +680,8 @@
   background: #ffffff;
 }
 
-.task-name {
-  flex-shrink: 0;
-  width: 200px;
-  background: #ffffff;
-  color: #1f2937;
-  border-right: 1px solid #e5e7eb;
-  border-bottom: 1px solid #f1f5f9;
-  display: flex;
-  align-items: center;
-  font-size: 16px;
-  font-weight: 500;
-  padding-left: 10px;
-  position: sticky;
-  /* top: 0; */
-  left: 0;
-  z-index: 89;
-}
-
-.task-assignee {
-  font-size: 11px;
-  font-weight: 600;
-  color: #374151;
-  /* margin-bottom: 4px; */
-  padding-left: 4px;
-}
-
 .task-timeline {
   position: relative;
-  /* background: repeating-linear-gradient(
-    to right,
-    #ffffff 0px,
-    #fbfbfb 99px,
-    #dbdee1 100px
-  ); */
-
   background-image: repeating-linear-gradient(
     to right,
     transparent 0,
@@ -710,16 +689,6 @@
     rgba(15, 23, 42, 0.06) calc(var(--day-width) - 1px),
     rgba(15, 23, 42, 0.06) var(--day-width)
   );
-
-  /* background-image: repeating-linear-gradient(
-    to right,
-    rgba(15, 23, 42, 0.04) 0px,
-    #aeb0b3 1px,
-    transparent 1px,
-    transparent var(--day-width)
-  ); */
-  /* border-bottom: 1px solid #e5e7eb; */
-  /* background-size: var(--day-width) 100%; */
 }
 
 .task-bar {
@@ -728,7 +697,8 @@
   text-wrap: wrap;
   min-height: 28px;
   border-radius: 8px;
-  font-size: 10px;
+  /* font-size: 10px; */
+  /* font-size: clamp(9px, calc(var(--day-width) * 0.28), 12px); */
   font-weight: 600;
   display: flex;
   flex-direction: column;
@@ -738,7 +708,8 @@
   color: #ffffff;
   white-space: normal; /* IZINKAN TURUN BARIS */
   word-break: break-word; /* potong kata panjang */
-  line-height: 1.4;
+  /* line-height: 1.4; */
+  line-height: clamp(1.2, calc(var(--day-width) / 20), 1.4);
   box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.25);
@@ -758,7 +729,8 @@
 }
 
 .task-bar .assignee {
-  font-size: 9px;
+  /* font-size: 9px; */
+  /* font-size: clamp(9px, calc(9px + (var(--day-width) - 100px) * 0.025), 12px); */
   letter-spacing: 0.04em;
   font-weight: 600;
   opacity: 0.85;
@@ -768,10 +740,31 @@
 }
 
 .task-bar .task-title {
-  font-size: 11px;
+  /* font-size: 11px; */
+  font-size: clamp(11px, calc(11px + (var(--day-width) - 100px) * 0.08), 20px);
   font-weight: 700;
   text-align: center;
   line-height: 1.3;
+}
+
+.task-bar .status-task {
+  /* font-size: 9px; */
+  /* font-size: clamp(9px, calc(9px + (var(--day-width) - 100px) * 0.025), 12px); */
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-top: 2px;
+
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(2px);
+}
+
+.task-bar .assignee,
+.task-bar .status-task {
+  font-size: clamp(9px, calc(9px + (var(--day-width) - 100px) * 0.045), 14px);
 }
 
 .task-bar:hover {
@@ -801,6 +794,113 @@
   /* display: none; */
   height: 50px;
   color: #fff;
+}
+</style>
+
+<!-- Popup detail task -->
+<style scoped>
+.detail-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detail-modal {
+  width: 500px;
+  max-width: 90%;
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  animation: popup 0.25s ease;
+}
+
+@keyframes popup {
+  from {
+    transform: translateY(10px) scale(0.97);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.detail-header {
+  padding: 14px 16px;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detail-header .name-description h3 {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.name-description p {
+  font-size: 10px;
+  text-wrap: wrap;
+  max-width: 420px;
+  margin-top: 3px;
+  text-shadow: 0 1px 2px rgba(15, 23, 42, 0.35);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.detail-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.detail-item:last-child {
+  border-bottom: none;
+}
+
+.detail-item .label {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.detail-item .value {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.status-badge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(15, 23, 42, 0.12);
+  text-transform: capitalize;
 }
 </style>
 
@@ -901,6 +1001,8 @@ export default {
       endDate: "",
       tanggalPerBulan: {},
       daftarTask: [],
+      detailTask: null,
+      showDetail: false,
       openAssignee: false,
       openStatus: false,
       isLoading: false,
@@ -935,8 +1037,8 @@ export default {
     gradientFromColor(color) {
       return `linear-gradient(
     135deg,
-    ${this.shadeColor(color, 0.1)},
-    ${this.shadeColor(color, -0.5)}
+    ${this.shadeColor(color, -0.5)},
+    ${this.shadeColor(color, 0.1)}
   )`;
     },
     taskBarClass(role) {
@@ -949,6 +1051,15 @@ export default {
         "ui-ux": role === "UI-UX",
         pm: role === "pm",
       };
+    },
+
+    cekDetail(task) {
+      this.detailTask = task;
+      this.showDetail = true;
+
+      console.log("Data Task", task);
+
+      console.log("Data detail task", this.detailTask);
     },
 
     onDateChange() {

@@ -165,6 +165,7 @@ body {
   display: flex;
   align-items: center;
   opacity: 0.75;
+  text-wrap: nowrap;
 }
 
 .menu-item:hover {

@@ -9,7 +9,15 @@
   <div class="success-message" v-if="isSukses">
     <div class="message-content">
       <i class="fa-solid fa-check-circle"></i>
-      <p>Perubahan Berhasil Disimpan!</p>
+      <p>{{ succesMessages }}</p>
+    </div>
+  </div>
+
+  <div class="error-message" v-if="isError">
+    <div class="message-content">
+      <!-- <i class="fa-solid fa-check-circle"></i> -->
+      <i class="fa-solid fa-circle-xmark"></i>
+      <p>{{ errorMessage }}</p>
     </div>
   </div>
 
@@ -30,7 +38,7 @@
             <p :class="teksColour(b.name)">{{ b.name }}</p>
             <div class="input-group">
               <input
-                v-if="b.name === 'No Bug Reward'"
+                v-if="b.name === 'Reward Tidak Ada Bug'"
                 type="number"
                 v-model.number="b.value"
               />
@@ -88,7 +96,7 @@
 }
 </style>
 
-<!-- Style success message -->
+<!-- message -->
 <style scoped>
 .success-message {
   position: fixed;
@@ -96,6 +104,22 @@
   right: 50px;
   background-color: #e6ffed;
   border: 1px solid #34d399;
+  padding: 15px 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: slideIn 0.5s ease-out;
+}
+
+.error-message {
+  position: fixed;
+  top: 20px;
+  right: 50px;
+  background-color: rgb(255, 226, 226);
+  border: 1px solid rgb(215, 45, 45);
   padding: 15px 25px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -117,7 +141,8 @@
   }
 }
 
-.success-message .message-content {
+.success-message .message-content,
+.error-message .message-content {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -128,9 +153,19 @@
   color: #10b981;
 }
 
+.error-message .message-content i {
+  font-size: 20px;
+  color: red;
+}
+
 .success-message .message-content p {
   font-size: 16px;
   color: #065f46;
+}
+
+.error-message .message-content p {
+  font-size: 16px;
+  color: rgb(132, 8, 8);
 }
 </style>
 
@@ -296,6 +331,9 @@ export default {
       angka: null,
       isLoading: false,
       isSukses: false,
+      isError: false,
+      errorMessages: "",
+      succesMessages: "",
       // save: null,
     };
   },
@@ -307,16 +345,9 @@ export default {
       console.log("Memuat daftar Penalty");
 
       try {
-        const penalty = await this.$api.get("/api/v1/workload/settings");
+        const penalty = await this.$api.get("/api/v1/settings/bug");
         console.log("berikut daftar penalty", penalty);
-        this.penaltyBug = penalty.data.bug_setting;
-        // this.save = this.penaltyBug.map((b) => b.value);
-
-        // sync ke form
-        // this.low = null;
-        // this.normal = null;
-        // this.high = null;
-        // this.urgent = null;
+        this.penaltyBug = penalty.data.data;
       } catch (error) {
         console.error("Gagal memuat daftar penalty bug:", error);
       }
@@ -329,72 +360,44 @@ export default {
         // ambil semua id & value dari penaltyBug
         const payload = this.penaltyBug.map((b) => ({
           id: b.id,
+          name: b.name,
           value: b.value,
         }));
 
         // kirim array ke backend
-        const save = await this.$api.put("/api/v1/workload/settings", payload);
+        const save = await this.$api.put("/api/v1/settings/bug", payload);
 
-        // const save = await this.$api.put("/api/v1/workload/settings", {
-        //   payload,
-        // });
+        // ambil message dari API
+        this.succesMessages = save.data.message;
 
-        //   low_penalty:
-        //     this.low !== null && this.low !== ""
-        //       ? Number(this.low)
-        //       : this.penaltyBug.low_penalty,
-
-        //   normal_penalty:
-        //     this.normal !== null && this.normal !== ""
-        //       ? Number(this.normal)
-        //       : this.penaltyBug.normal_penalty,
-
-        //   high_penalty:
-        //     this.high !== null && this.high !== ""
-        //       ? Number(this.high)
-        //       : this.penaltyBug.high_penalty,
-
-        //   urgent_penalty:
-        //     this.urgent !== null && this.urgent !== ""
-        //       ? Number(this.urgent)
-        //       : this.penaltyBug.urgent_penalty,
-        //   no_bug_reward:
-        //     this.noBugReward !== null && this.noBugReward !== ""
-        //       ? Number(this.noBugReward)
-        //       : this.penaltyBug.no_bug_reward,
-        // });
+        // trigger sukses
+        this.isSukses = true;
 
         console.log("Settings saved:", payload, save);
         await this.daftarPenaltyBug();
-      } catch (error) {
-        console.error("Gagal menyimpan settingan bug:", error);
+      } catch (err) {
+        console.error("Gagal menyimpan settingan bug:", err);
+        this.errorMessage =
+          err?.response?.data?.error ||
+          "Terjadi kesalahan saat mengubah setting";
+        this.isError = true;
       } finally {
-        // this.low = null;
-        // this.normal = null;
-        // this.high = null;
-        // this.urgent = null;
-        // this.noBugReward = null;
         this.isLoading = false;
-        this.isSukses = true;
         setTimeout(() => {
           this.isSukses = false;
         }, 5000);
       }
     },
     resetSetting() {
-      //   this.low = this.penaltyBug.low_penalty;
-      //   this.normal = this.penaltyBug.normal_penalty;
-      //   this.high = this.penaltyBug.high_penalty;
-      //   this.urgent = this.penaltyBug.urgent_penalty;
       this.daftarPenaltyBug();
     },
     teksColour(nama) {
       return {
-        low: nama === "Low Penalty",
-        normal: nama === "Normal Penalty",
-        high: nama === "High Penalty",
-        urgent: nama === "Urgent Penalty",
-        noBug: nama === "No Bug Reward",
+        low: nama === "Penalti Bug Low",
+        normal: nama === "Penalti Bug Normal",
+        high: nama === "Penalti Bug High",
+        urgent: nama === "Penalti Bug Urgent",
+        noBug: nama === "Reward Tidak Ada Bug",
       };
     },
   },
