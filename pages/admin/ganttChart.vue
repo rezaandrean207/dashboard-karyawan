@@ -741,7 +741,7 @@
 
 .task-bar .task-title {
   /* font-size: 11px; */
-  font-size: clamp(5px, calc(11px + (var(--day-width) - 100px) * 0.08), 20px);
+  font-size: clamp(3px, calc(11px + (var(--day-width) - 100px) * 0.08), 20px);
   font-weight: 700;
   text-align: center;
   line-height: 1.3;
@@ -764,7 +764,7 @@
 
 .task-bar .assignee,
 .task-bar .status-task {
-  font-size: clamp(5px, calc(9px + (var(--day-width) - 100px) * 0.045), 14px);
+  font-size: clamp(3px, calc(9px + (var(--day-width) - 100px) * 0.045), 14px);
 }
 
 .task-bar:hover {
