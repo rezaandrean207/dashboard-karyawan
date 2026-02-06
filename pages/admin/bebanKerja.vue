@@ -1,12 +1,12 @@
 <template>
-  <div class="isi" v-if="detailKaryawan === null">
-    <div v-if="isLoading" class="loading">
-      <div class="loading_tanggal">
-        <i class="fa-solid fa-spinner"></i>
-        <p>Tunggu Sebentar</p>
-      </div>
+  <div v-if="isLoading" class="loading">
+    <div class="loading_tanggal">
+      <i class="fa-solid fa-spinner"></i>
+      <p>Tunggu Sebentar</p>
     </div>
+  </div>
 
+  <div class="isi" v-if="detailKaryawan === null">
     <h2>Manajemen Beban Kerja</h2>
     <p>
       Pantau dan kelola beban kerja karyawan berdasarkan total jam dan jumlah
@@ -297,7 +297,7 @@
       </div>
       <!-- </details> -->
 
-      <div class="detail_task" @click="detail(k)">
+      <div class="detail_task" @click="detail(k.clickup_id)">
         <i class="fa-solid fa-list-check"></i>
         <p>Informasi Detail</p>
         <i class="fa-solid fa-arrow-up-from-bracket"></i>
@@ -313,7 +313,7 @@
   <!-- Details Task -->
   <div class="isi" :class="{ hidden: detailBug }" v-else-if="detailKaryawan">
     <div class="header_task">
-      <div class="back_button" @click="kembali">
+      <div class="back_button" @click="kembali()">
         <i class="fa-solid fa-arrow-left"></i>
         <p>Kembali</p>
       </div>
@@ -1284,6 +1284,8 @@
 .description {
   margin: 10px 0;
   font-weight: 300;
+
+  white-space: pre-line;
 }
 
 .achievement {
@@ -1725,8 +1727,6 @@
 }
 
 .performa_karyawan {
-  /* border: 1px solid #dbdbdb;
-  background-color: #f5f5f5; */
   border-radius: 6px;
   padding: 10px 20px;
   display: flex;
@@ -2239,7 +2239,16 @@ export default {
     VueDatePicker,
   },
   async mounted() {
-    this.setDefaultTanggal();
+    const date = this.$route.query;
+
+    if (date.start && date.end) {
+      this.start = date.start;
+      this.end = date.end;
+    } else {
+      this.setDefaultTanggal();
+    }
+
+    // await this.ambilTask();
     // this.cekSetting();
     // this.ambilTask();
     // this.hariLibur();
@@ -2262,6 +2271,14 @@ export default {
       //   query: {
       //     startDate: format(startDate),
       //     endDate: format(endDate),
+      //   },
+      // });
+
+      // this.$router.push({
+      //   path: "/admin/bebanKerja",
+      //   query: {
+      //     start: this.start,
+      //     end: this.end,
       //   },
       // });
 
@@ -2327,6 +2344,9 @@ export default {
         );
         this.daftarKaryawan = task.data.assignees || [];
         this.daftarHari = task.data.jadwal_libur || [];
+
+        // 🔥 PENTING
+        this.resolveDetailKaryawan();
         console.log("Berhasil ambil task:", task);
       } catch (error) {
         console.error("Gagal ambil task:", error);
@@ -2385,24 +2405,50 @@ export default {
         this.isClose = false;
       }, 200);
     },
-    detail(karyawan) {
+    detail(clickupId) {
       // this.daftarKaryawan = karyawan;
-      this.detailKaryawan = karyawan;
+      // this.detailKaryawan = karyawan;
       this.sortPerform = "";
       this.sortBeban = "";
-      this.sortKetepatn = "";
+      this.sortKetepatan = "";
       this.taskBug = "";
+
+      this.$router.push({
+        path: "/admin/bebanKerja",
+        query: {
+          id: clickupId,
+          start: this.start,
+          end: this.end,
+          source: "beban kerja",
+        },
+      });
     },
-    // detailBug(bug) {
-    //   this.detailKaryawanBug = bug;
-    //   console.log("hhhhh");
-    //   console.log(bug);
-    // },
-    // kembaliBug() {
-    //   this.detailKaryawanBug = null;
-    // },
+    resolveDetailKaryawan() {
+      const id = this.$route.query.id;
+      if (!id) {
+        this.detailKaryawan = null;
+        return;
+      }
+
+      const found = this.daftarKaryawan.find(
+        (k) => String(k.clickup_id) === String(id),
+      );
+
+      this.detailKaryawan = found || null;
+    },
     kembali() {
-      this.detailKaryawan = null;
+      // this.detailKaryawan = null;
+      // this.$router.push({
+      //   path: "/admin/bebanKerja",
+      //   query: {
+      //     // karyawan: karyawan.clickup_id,
+      //     start: this.start,
+      //     end: this.end,
+      //   },
+      // });
+
+      this.$router.back();
+
       this.progres = "";
       this.sortKetepatanDetail = "";
     },
@@ -2614,6 +2660,10 @@ export default {
     },
 
     filteredKaryawanDetail() {
+      if (!this.detailKaryawan || !this.detailKaryawan.tasks) {
+        return [];
+      }
+
       let hasil = this.detailKaryawan.tasks;
       // filter berdasarkan progress task (jika dipilih)
       if (this.progres) {
@@ -2668,25 +2718,18 @@ export default {
       // return hari;
       return this.daftarHari.flatMap((bulan) => bulan.hari_libur);
     },
-
-    // detailBugKaryawan() {
-    //   // let hasil = this.detailBug.tasks;
-    //   return this.detailBug?.tasks || [];
-    // },
-
-    // filteredBugDetail() {
-    //   let hasilBug = this.detailKaryawanBug.tasks;
-
-    //   if (!hasilBug || !hasilBug) {
-    //     return [];
-    //   }
-    //   return hasilBug;
-    // },
+    isDetailMode() {
+      return !!this.$route.query.id;
+    },
   },
 
   watch: {
     start: "onDateChange",
     end: "onDateChange",
+
+    "$route.query.id"() {
+      this.resolveDetailKaryawan();
+    },
   },
 };
 </script>

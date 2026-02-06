@@ -709,7 +709,7 @@
   white-space: normal; /* IZINKAN TURUN BARIS */
   word-break: break-word; /* potong kata panjang */
   /* line-height: 1.4; */
-  line-height: clamp(1.2, calc(var(--day-width) / 20), 1.4);
+  line-height: clamp(1, calc(var(--day-width) / 20), 1.4);
   box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.25);
@@ -741,7 +741,7 @@
 
 .task-bar .task-title {
   /* font-size: 11px; */
-  font-size: clamp(11px, calc(11px + (var(--day-width) - 100px) * 0.08), 20px);
+  font-size: clamp(5px, calc(11px + (var(--day-width) - 100px) * 0.08), 20px);
   font-weight: 700;
   text-align: center;
   line-height: 1.3;
@@ -764,7 +764,7 @@
 
 .task-bar .assignee,
 .task-bar .status-task {
-  font-size: clamp(9px, calc(9px + (var(--day-width) - 100px) * 0.045), 14px);
+  font-size: clamp(5px, calc(9px + (var(--day-width) - 100px) * 0.045), 14px);
 }
 
 .task-bar:hover {
@@ -809,14 +809,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  overflow-y: auto;
 }
 
 .detail-modal {
   width: 500px;
+  max-height: 80dvh;
   max-width: 90%;
   background: #fff;
   border-radius: 14px;
-  overflow: hidden;
+  overflow: auto;
 
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
   animation: popup 0.25s ease;
@@ -853,6 +856,8 @@
   max-width: 420px;
   margin-top: 3px;
   text-shadow: 0 1px 2px rgba(15, 23, 42, 0.35);
+
+  white-space: pre-line;
 }
 
 .close-btn {
@@ -1009,8 +1014,8 @@ export default {
       selected: [], // assignee
       selectedStatus: [], // status_name
       dayWidth: 100, // px per hari (default)
-      minZoom: 40,
-      maxZoom: 160,
+      minZoom: 20,
+      maxZoom: 200,
       zoomStep: 20,
     };
   },

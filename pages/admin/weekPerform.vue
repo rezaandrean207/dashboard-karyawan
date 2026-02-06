@@ -60,8 +60,9 @@
               >
                 <span
                   v-if="week.workload_score !== 0"
+                  @click="cekDetail(emp, week)"
                   class="badge"
-                  :class="badgeClass(week.workload_score)"
+                  :class="badgeClass(week.category)"
                 >
                   {{ week.workload_score }}%
                 </span>
@@ -103,6 +104,11 @@
 }
 
 /* Header */
+.filter-header {
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 10px;
+}
+
 .filter-header h4 {
   font-size: 15px;
   font-weight: 600;
@@ -173,9 +179,17 @@
 
 <!-- Header & table -->
 <style scoped>
+h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
 .subtitle {
-  color: #6b7280;
-  margin-bottom: 16px;
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 20px;
 }
 
 .card {
@@ -183,6 +197,19 @@
   border-radius: 12px;
   /* padding: 20px; */
   margin-bottom: 24px;
+
+  background: #ffffff;
+  border-radius: 16px;
+  /* padding: 20px 24px; */
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.card:hover {
+  /* transform: translateY(-2px); */
+  box-shadow: 0 14px 36px rgba(15, 23, 42, 0.08);
 }
 
 /* Card */
@@ -216,13 +243,19 @@
 .performance-table thead th {
   position: sticky;
   top: 0;
-  background: #f8fafc;
+  /* background: #f8fafc; */
   color: #475569;
   font-weight: 600;
   padding: 14px 12px;
   border-bottom: 1px solid #e2e8f0;
   z-index: 2;
   text-align: justify;
+
+  background: linear-gradient(180deg, #f8fafc, #f1f5f9);
+  box-shadow: inset 0 -1px 0 #e2e8f0;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.04em;
 }
 
 /* Body cells */
@@ -233,9 +266,9 @@
 }
 
 /* Hover row */
-.performance-table tbody tr:hover {
+/* .performance-table tbody tr:hover {
   background: #f8fafc;
-}
+} */
 
 /* Sticky name column */
 .sticky-col {
@@ -245,9 +278,9 @@
   z-index: 1;
 }
 
-.performance-table tbody tr:hover .sticky-col {
+/* .performance-table tbody tr:hover .sticky-col {
   background: #f8fafc;
-}
+} */
 
 /* Name */
 .name-col {
@@ -263,6 +296,8 @@
 /* Week & score */
 .week-col,
 .score-col {
+  position: sticky;
+  left: 0;
   text-align: justify;
   min-width: 100px;
 }
@@ -272,15 +307,24 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 64px;
   padding: 6px 10px;
   border-radius: 999px;
   font-weight: 600;
   font-size: 13px;
+  width: 80px;
+  cursor: pointer;
+
+  position: relative;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    filter 0.12s ease;
 }
 
-/* Soft variants */
-.badge.good {
+.badge:hover {
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.18);
+  filter: brightness(1.05);
 }
 
 .good {
@@ -454,15 +498,46 @@ export default {
         this.isLoading = false;
       }
     },
+    cekDetail(emp, week) {
+      if (!emp.clickup_id) {
+        console.warn("clickup_id kosong");
+        return;
+      }
+
+      const { start_date, end_date } = week;
+
+      console.log("ID:", emp.clickup_id);
+      console.log("Start:", this.formatTanggal(start_date));
+      console.log("End:", this.formatTanggal(end_date));
+
+      this.$router.push({
+        path: "/admin/bebanKerja",
+        query: {
+          id: emp.clickup_id,
+          start: start_date,
+          end: end_date,
+          source: "Performa Mingguan",
+        },
+      });
+    },
 
     badgeClass(score) {
-      if (score > 100) return "good";
-      if (score >= 85 && score <= 100) return "normal";
-      return "bad";
+      // if (score > 100) return "good";
+      // if (score >= 85 && score <= 100) return "normal";
+      // return "bad";
+
+      if (score === "++") return "good";
+      if (score === "+") return "normal";
+      if (score === "-") return "bad";
     },
 
     formatScore(score) {
       return `${Math.round(score)}%`;
+    },
+    formatTanggal(tgl) {
+      if (!tgl) return "-";
+      const [year, month, day] = tgl.split("-");
+      return `${day}-${month}-${year}`;
     },
   },
 };

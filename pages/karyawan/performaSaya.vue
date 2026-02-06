@@ -48,30 +48,9 @@
         <p>Filter & Pencarian</p>
       </div>
       <form action="">
-        <!-- <div class="cari">
-          <label for="search">Cari Karyawan</label>
-          <input
-            type="search"
-            name="search"
-            placeholder="Cari nama karyawan"
-            v-model="searchInput"
-          />
-        </div>
-        <div class="posisi">
-          <label for="posisi">Filter Posisi</label>
-          <select v-model="posisi">
-            <option value="" selected>Semua Posisi</option>
-            <option value="analis">Data Analys</option>
-            <option value="backend">Backend</option>
-            <option value="web">Web Developer</option>
-            <option value="mobile apps">Mobile Apps</option>
-            <option value="UI-UX">UI-UX</option>
-          </select>
-        </div> -->
         <div class="dates">
           <label for="tanggal">Tanggal</label>
           <div class="tanggal">
-            <!-- <input type="date" name="start" v-model="start" /> -->
             <ClientOnly>
               <VueDatePicker
                 format="dd-MM-yyyy"
@@ -88,7 +67,6 @@
                 model-type="yyyy-MM-dd"
                 :time-config="{ enableTimePicker: false }"
             /></ClientOnly>
-            <!-- <input type="date" name="end" v-model="end" /> -->
           </div>
         </div>
       </form>
