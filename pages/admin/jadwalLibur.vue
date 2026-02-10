@@ -648,7 +648,7 @@ export default {
       createTanggal: false,
       tanggal: "",
       hari: "",
-      tahunAktif: 2026,
+      tahunAktif: new Date().getFullYear(),
       isLoading: false,
       bulanDipilih: "",
       hapus: false,
@@ -669,6 +669,13 @@ export default {
         );
         this.daftarHari = holiday.data;
         console.log("Berhasil");
+        this.$router.replace({
+          path: "/admin/jadwalLibur",
+          query: {
+            ...this.$route.query, // 🔥 PENTING
+            tahun: this.tahunAktif,
+          },
+        });
       } catch (error) {
         console.error("Gagal ambil task:", error);
         this.daftarHari = [];

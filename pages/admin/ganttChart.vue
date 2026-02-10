@@ -229,6 +229,11 @@
             >
               <div
                 class="task-bar"
+                :class="{
+                  'zoom-small': dayWidth < 45,
+                  'zoom-medium': dayWidth >= 45 && dayWidth < 80,
+                  'zoom-large': dayWidth >= 80,
+                }"
                 @click="cekDetail(task)"
                 :style="{
                   marginLeft: taskOffset(task) * dayWidth + 'px',
@@ -536,7 +541,7 @@
 }
 
 .kalender {
-  max-height: 100dvh;
+  /* max-height: 100dvh; */
   overflow: auto;
   margin-top: 20px;
   padding-bottom: 10px;
@@ -691,6 +696,48 @@
   );
 }
 
+/* DEFAULT */
+.task-bar .assignee,
+.task-bar .task-title,
+.task-bar .status-task {
+  transition:
+    opacity 0.2s ease,
+    display 0.2s ease,
+    transform 0.2s ease;
+}
+
+/* ZOOM KECIL → BAR SAJA */
+/* .zoom-small .assignee, */
+.zoom-small .task-title,
+.zoom-small .status-task {
+  /* opacity: 0; */
+  display: none;
+  height: 0;
+  overflow: hidden;
+}
+
+/* ZOOM MEDIUM → TASK NAME SAJA */
+.zoom-medium .status-task {
+  /* opacity: 0; */
+  display: none;
+  height: 0;
+  overflow: hidden;
+}
+
+.zoom-medium .task-title,
+.zoom-medium .assigne {
+  /* opacity: 1; */
+  /* font-size: 11px; */
+  display: block;
+}
+
+/* ZOOM BESAR → SEMUA */
+.zoom-large .assignee,
+.zoom-large .task-title,
+.zoom-large .status-task {
+  display: block;
+}
+
 .task-bar {
   position: relative;
   text-align: center;
@@ -722,10 +769,6 @@
   margin-top: 30px;
 
   z-index: 16;
-
-  /* transition:
-    transform 0.15s ease,
-    filter 0.15s ease; */
 }
 
 .task-bar .assignee {
@@ -841,13 +884,14 @@
   color: #fff;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .detail-header .name-description h3 {
   font-size: 15px;
   font-weight: 700;
   margin: 0;
+  max-width: 430px;
 }
 
 .name-description p {
@@ -1086,6 +1130,15 @@ export default {
         this.startDate,
         this.endDate,
       );
+
+      this.$router.replace({
+        path: "/admin/ganttChart",
+        query: {
+          ...this.$route.query, // 🔥 PENTING
+          start: this.formatTanggal(this.startDate),
+          end: this.formatTanggal(this.endDate),
+        },
+      });
 
       this.ambilTask();
     },

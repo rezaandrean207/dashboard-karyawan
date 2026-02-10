@@ -44,14 +44,14 @@
             @submit.prevent
           />
           <select v-model="posisi">
-            <option value="" selected>Semua Posisi</option>
-            <option value="pm">Project Manager</option>
-            <option value="analis">Data Analys</option>
-            <option value="backend">Backend</option>
-            <!-- <option value="backend-web">Backend-Web Developer</option> -->
-            <option value="web">Web Developer</option>
-            <option value="mobile apps">Mobile Apps</option>
-            <option value="UI-UX">UI-UX</option>
+            <option value="">Semua Posisi</option>
+            <option
+              v-for="(role, index) in roleOptions"
+              :key="index"
+              :value="role.value"
+            >
+              {{ role.label }}
+            </option>
           </select>
         </form>
         <div class="total_karyawan">
@@ -737,6 +737,12 @@ export default {
   },
   mounted() {
     this.ambilData();
+    // this.$router.replace({
+    //   path: "/admin/listKaryawan",
+    //   query: {
+    //     ...this.$route.query, // 🔥 PENTING
+    //   },
+    // });
   },
   methods: {
     toggleMenu(id) {
@@ -758,8 +764,8 @@ export default {
           status: status,
         });
       } catch (err) {
-        user.status = prevStatus;
-        alert("Gagal mengubah", err);
+        user.status = oldStatus;
+        alert("Gagal mengubah status", err);
         console.log("Gagal mengubah status", err);
       } finally {
         this.isLoading = false;
@@ -879,6 +885,17 @@ export default {
     },
     totalKaryawan() {
       return this.filteredKaryawan.length || 0;
+    },
+    roleOptions() {
+      return [
+        { value: "pm", label: "Project Manager" },
+        { value: "admin", label: "Admin" },
+        { value: "analis", label: "Data Analys" },
+        { value: "backend", label: "Backend" },
+        { value: "web", label: "Web Developer" },
+        { value: "mobile apps", label: "Mobile Apps" },
+        { value: "UI-UX", label: "UI-UX" },
+      ];
     },
   },
 };

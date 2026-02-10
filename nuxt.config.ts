@@ -20,6 +20,8 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
+      title: "Dashboard – Admin ClickUp",
+      meta: [{ name: "description", content: "Kinerja Karyawan ClickUp" }],
       link: [
         { rel: "preconnect", href: "https://fonts.googleapis.com" },
         {

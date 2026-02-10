@@ -1,534 +1,280 @@
 <template>
-  <div v-if="isLoading" class="loading">
-    <div class="loading_tanggal">
-      <i class="fa-solid fa-spinner"></i>
-      <p>Tunggu Sebentar</p>
-    </div>
-  </div>
+  <div class="page">
+    <!-- HEADER -->
+    <header class="page-header">
+      <div>
+        <h1>Product Management</h1>
+        <p>Manage your store products</p>
+      </div>
 
-  <!-- daftar karyawan -->
-  <div
-    class="isi"
-    :class="{ viewApp: isAppView }"
-    v-if="selectedKaryawan === null"
-  >
-    <h2>Grouping</h2>
-    <!-- <p>
-      Karyawan dengan performa rendah (< {{ searchInput }}%) berdasarkan
-      kategori
-    </p> -->
-    <p>Karyawan dengan performa rendah (< 85%) berdasarkan kategori</p>
-    <div class="filter">
-      <div class="title">
-        <i class="fa-solid fa-filter"></i>
-        <p>Filter & Pencarian</p>
-      </div>
-      <div class="search-tanggal">
-        <div class="dates">
-          <label for="tanggal">Tanggal</label>
-          <div class="tanggal">
-            <!-- <input type="date" name="start" v-model="start" /> -->
-            <ClientOnly>
-              <VueDatePicker
-                format="dd-MM-yyyy"
-                v-model="start"
-                model-type="yyyy-MM-dd"
-                :time-config="{ enableTimePicker: false }"
-            /></ClientOnly>
-            <span class="separator">➡️</span>
-            <!-- <input type="date" name="end" v-model="end" /> -->
-            <ClientOnly>
-              <VueDatePicker
-                format="dd-MM-yyyy"
-                v-model="end"
-                model-type="yyyy-MM-dd"
-                :time-config="{ enableTimePicker: false }"
-            /></ClientOnly>
-            <!-- <VueDatePicker v-model="date">
-              <template
-                #preset-date-range-button="{ label, value, presetDate }"
-              >
-                <span role="button" :tabindex="0" @click="presetDate(value)">
-                  {{ label }}
-                </span>
-              </template>
-            </VueDatePicker> -->
-          </div>
-        </div>
-        <div class="kurang-lebih-dari">
-          <label for="">Kurang/lebih dari</label>
-          <div class="kurang-lebih">
-            <select name="" id="" v-model="kurangLebih">
-              <option value="kurangDari">Kurang Dari</option>
-              <option value="lebihDari">Lebih Dari</option>
-            </select>
-          </div>
-        </div>
-        <div class="search-input">
-          <label for="">Set default</label>
-          <div class="search">
-            <input type="number" v-model="searchInput" />
-          </div>
-        </div>
-      </div>
-    </div>
+      <button class="btn primary">+ Add Product</button>
+    </header>
 
-    <div class="container-kategory">
-      <div
-        class="kategory"
-        v-for="(kategori, index) in filteredKaryawan"
-        :key="kategori.category"
-      >
-        <div class="header-kategory">
-          <h4>{{ kategori.category }}</h4>
-          <p>{{ kategori.data.length }} Karyawan</p>
-        </div>
-        <div class="container-karyawan">
-          <div
-            class="group-karyawan"
-            v-for="(k, index) in kategori.data"
-            :key="k.clickup_id"
-            @click="cekDetail(k.clickup_id)"
-          >
-            <div class="left">
-              <div class="index">
-                <p>{{ index + 1 }}</p>
-              </div>
-              <div class="profil-karyawan">
-                <img src="/img/profil.png" alt="" />
-                <div class="name-role">
-                  <h4>{{ k.name }}</h4>
-                  <p>{{ k.role }}</p>
-                </div>
-              </div>
-            </div>
-            <div class="right">
-              <h4 :class="teksColorClass(k.value)" v-if="k.missing_hours">
-                {{ k.value }}% <span>({{ k.missing_hours }} Jam)</span>
-              </h4>
-              <h4 :class="teksColorClass(k.value)" v-else>{{ k.value }}%</h4>
-              <p>{{ kategori.category }}</p>
-            </div>
-          </div>
-        </div>
+    <!-- FILTER BAR -->
+    <section class="filter-bar">
+      <input type="text" placeholder="Search product..." />
+
+      <select>
+        <option value="all">All Categories</option>
+        <option value="Peripheral">Peripheral</option>
+        <option value="Display">Display</option>
+      </select>
+
+      <select>
+        <option value="all">All Status</option>
+        <option value="active">Active</option>
+        <option value="out_of_stock">Out of Stock</option>
+        <option value="inactive">Inactive</option>
+      </select>
+
+      <select>
+        <option value="">Sort By</option>
+        <option value="name">Name</option>
+        <option value="price">Price</option>
+        <option value="stock">Stock</option>
+        <option value="createdAt">Created Date</option>
+      </select>
+    </section>
+
+    <!-- TABLE -->
+    <section class="card">
+      <table class="product-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th class="right">Price</th>
+            <th>Stock</th>
+            <th>Status</th>
+            <th class="center">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <!-- contoh static row (nanti ganti v-for) -->
+          <tr>
+            <td class="name">Mechanical Keyboard</td>
+            <td><span class="badge">Peripheral</span></td>
+            <td class="right">Rp 850.000</td>
+            <td>12</td>
+            <td><span class="status active">Active</span></td>
+            <td class="center">
+              <button class="icon-btn">✏️</button>
+              <button class="icon-btn danger">🗑</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="name">Wireless Mouse</td>
+            <td><span class="badge">Peripheral</span></td>
+            <td class="right">Rp 250.000</td>
+            <td>0</td>
+            <td><span class="status out">Out of Stock</span></td>
+            <td class="center">
+              <button class="icon-btn">✏️</button>
+              <button class="icon-btn danger">🗑</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="name">27 Inch Monitor</td>
+            <td><span class="badge">Display</span></td>
+            <td class="right">Rp 3.200.000</td>
+            <td>5</td>
+            <td><span class="status inactive">Inactive</span></td>
+            <td class="center">
+              <button class="icon-btn">✏️</button>
+              <button class="icon-btn danger">🗑</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- PAGINATION -->
+    <footer class="pagination">
+      <span>Showing 1–10 of 48</span>
+
+      <div class="pages">
+        <button>&lt;</button>
+        <button class="active">1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>&gt;</button>
       </div>
-    </div>
+    </footer>
   </div>
 </template>
 
+<script>
+export default {
+  name: "ProductDashboard",
+};
+</script>
+
 <style scoped>
 * {
-  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+  font-family: Inter, system-ui, sans-serif;
 }
 
-.container-kategory {
-  margin-top: 24px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+.page {
+  max-width: 1200px;
+  margin: 32px auto;
+  padding: 0 16px;
+  color: #1f2937;
 }
 
-.kategory {
-  background: #ffffff;
-  padding: 20px 24px;
-  border-radius: 16px;
-  border: none;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
-}
-
-.header-kategory {
+/* HEADER */
+.page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 24px;
 }
 
-.header-kategory h4 {
-  font-size: 18px;
-  font-weight: 600;
+.page-header h1 {
+  margin: 0;
+  font-size: 24px;
 }
 
-.header-kategory p {
-  font-size: 14px;
+.page-header p {
+  margin: 4px 0 0;
   color: #6b7280;
 }
 
-.container-karyawan {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.group-karyawan {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #f9fafb;
-  padding: 16px 18px;
-  border-radius: 14px;
+/* BUTTON */
+.btn {
+  padding: 10px 16px;
+  border-radius: 6px;
   border: none;
-  transition: all 0.2s ease;
+  cursor: pointer;
 }
 
-.group-karyawan:hover {
-  background: #ffffff;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  transform: translateY(-1px);
-}
-
-.group-karyawan .left {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.left .index {
-  background: linear-gradient(135deg, #6366f1, #4338ca);
-  width: 36px;
-  height: 36px;
+.btn.primary {
+  background: #2563eb;
   color: #fff;
+}
+
+/* FILTER BAR */
+.filter-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.filter-bar input,
+.filter-bar select {
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+}
+
+/* CARD */
+.card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+/* TABLE */
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.product-table thead {
+  background: #f9fafb;
+}
+
+.product-table th,
+.product-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.product-table th {
   font-weight: 600;
   font-size: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
 }
 
-.left .profil-karyawan {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-transform: capitalize;
-}
-
-.profil-karyawan img {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #e5e7eb;
-}
-
-.name-role h4 {
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.name-role p {
-  font-size: 13px;
-  color: #6b7280;
-}
-
-.group-karyawan .right {
+.right {
   text-align: right;
 }
 
-.right h4 {
-  font-size: 16px;
-  font-weight: 700;
+.center {
+  text-align: center;
 }
 
-.right span {
-  font-size: 13px;
-  font-weight: 400;
-  color: #6b7280;
-}
-
-.right p {
-  font-size: 13px;
-  color: #9ca3af;
-}
-
-.search-tanggal {
-  display: flex;
-  margin-top: 20px;
-  gap: 20px;
-  /* border: 1px solid #010101; */
-  flex-wrap: wrap;
-}
-
-.dates {
-  /* width: 35%; */
-  flex: 1;
-  min-width: 300px;
-}
-
-.kurang-lebih-dari,
-.search-input {
-  /* width: 25%; */
-  flex: 1;
-  min-width: 250px;
-}
-
-.search-input label,
-.kurang-lebih-dari label {
-  font-size: 14px;
+.name {
   font-weight: 600;
 }
 
-.search,
-.kurang-lebih {
-  /* background-color: #ddd; */
-  border: 1px solid #ddd;
-  /* padding: 10px; */
-  border-radius: 10px;
-  /* width: 30%; */
+/* BADGE */
+.badge {
+  background: #e5e7eb;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
 }
 
-.search input,
-.kurang-lebih select {
-  border: 1px solid #ddd;
-  width: 100%;
-  height: 100%;
-  border-radius: 5px;
-  padding: 10px;
+/* STATUS */
+.status {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status.active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status.out {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.status.inactive {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+/* ICON BUTTON */
+.icon-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  margin: 0 4px;
+}
+
+.icon-btn.danger {
+  color: #dc2626;
+}
+
+/* PAGINATION */
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.pages button {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  margin-left: 4px;
+  cursor: pointer;
+}
+
+.pages button.active {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
 }
 </style>
-
-<script>
-import { VueDatePicker } from "@vuepic/vue-datepicker";
-
-definePageMeta({
-  layout: "dashboard",
-});
-
-export default {
-  data() {
-    return {
-      daftarKaryawan: [],
-      detailKaryawan: [],
-      selectedKaryawan: null,
-      sidebar: false,
-      loading: false,
-      sukses: false,
-      start: "",
-      end: "",
-      isLoading: false,
-      isClose: false,
-      default: 85,
-      searchInput: 85,
-      kurangLebih: "kurangDari",
-    };
-  },
-  components: {
-    VueDatePicker,
-  },
-  mounted() {
-    this.setDefaultTanggal();
-    // this.ambilTask();
-    // this.hariLibur();
-  },
-  methods: {
-    teksColorClass(warna) {
-      return {
-        good: warna > 100,
-        normal: warna == 100,
-        bad: warna < 100,
-      };
-    },
-    onDateChange() {
-      if (!this.start || !this.end) return;
-      if (this.isLoading) return;
-
-      const startDate = new Date(this.start);
-      const endDate = new Date(this.end);
-
-      if (startDate > endDate) {
-        this.start = this.end;
-        return;
-      }
-      const format = (date) => date.toISOString().split("T")[0];
-
-      // this.$router.replace({
-      //   query: {
-      //     startDate: format(startDate),
-      //     endDate: format(endDate),
-      //   },
-      // });
-
-      this.ambilTask();
-    },
-
-    logout() {
-      const token = useCookie("token");
-      token.value = null;
-      this.$router.push("/login");
-    },
-    formatTanggal(tgl) {
-      const [year, month, day] = tgl.split("-");
-      return `${day}-${month}-${year}`;
-    },
-
-    setDefaultTanggal() {
-      if (this.start && this.end) return;
-      const today = new Date();
-      const firstDay = new Date();
-      // sevenDaysAgo.setDate(today.getDate() - 30);
-      firstDay.setDate(1);
-
-      // Format ke YYYY-MM-DD (format input type="date")
-      const format = (date) => date.toISOString().split("T")[0];
-      this.start = format(firstDay);
-      this.end = format(today);
-
-      // console.log("tes", this.$route.query);
-
-      // if (this.$route.query.startDate) {
-      //   this.start = this.$route.startDate;
-      // } else {
-      //   this.start = format(firstDay);
-      // }
-
-      // if (this.$route.query.endDate) {
-      //   this.end = this.$route.endDate;
-      // } else {
-      //   this.end = format(today);
-      // }
-
-      // this.$router.replace({
-      //   query: {
-      //     startDate: this.start,
-      //     endDate: this.end,
-      //   },
-      // });
-    },
-    closeSukses() {
-      this.sukses = false;
-    },
-
-    async ambilTask() {
-      this.isLoading = true;
-      console.log("Ambil task dipanggil");
-      try {
-        const task = await this.$api.get(
-          `/api/v1/workload/tasks-by-range?start_date=${this.formatTanggal(
-            this.start,
-          )}&end_date=${this.formatTanggal(this.end)}`,
-        );
-        this.daftarKaryawan = task.data.grouping || [];
-        this.detailKaryawan = task.data.assignees || [];
-        // this.daftarHari = task.data.jadwal_libur || [];
-        // this.daftarHari = task.data.jadwal_libur
-        console.log("Berhasil ambil task:", task);
-        console.log("Data detail", this.detailKaryawan);
-      } catch (error) {
-        console.error("Gagal ambil task:", error);
-        this.daftarKaryawan = [];
-      } finally {
-        this.isLoading = false;
-      }
-    },
-
-    async syncData() {
-      // Prevent Spam Klik
-      if (this.loading) return;
-
-      console.log("Sync data di proses");
-
-      this.loading = true;
-      this.sukses = false;
-
-      try {
-        const sync = await this.$api.post("/api/v1/sync/all");
-        // this.daftarKaryawan = sync.data;
-        console.log("Berhasil: ", sync);
-        // alert("Berhasil");
-        this.loading = false;
-
-        // Sukses
-        this.sukses = true;
-
-        // Hidden animasi
-        setTimeout(() => {
-          this.sukses = false;
-        }, 15000);
-      } catch (error) {
-        console.error("Sync tidak berfungsi:", error);
-        this.loading = false;
-        setTimeout(() => {
-          alert("Sync data gagal");
-        }, 500);
-
-        console.log("STATUS:", error.response?.status);
-        console.log("DATA:", error.response?.data);
-        console.log("MESSAGE:", error.message);
-      } finally {
-        this.sukses = true;
-        this.loading = false;
-      }
-    },
-    cekDetail(data) {
-      const detail = this.detailKaryawanMap[data];
-
-      if (!detail) {
-        console.warn("Data karyawan tidak ditemukan:", data);
-        return;
-      }
-
-      this.selectedKaryawan = detail;
-      console.log("Berhasil mendapat data karyawan", this.selectedKaryawan);
-    },
-    menu() {
-      this.sidebar = true;
-    },
-    close() {
-      this.isClose = true;
-
-      setTimeout(() => {
-        this.sidebar = false;
-        this.isClose = false;
-      }, 200);
-    },
-  },
-
-  computed: {
-    detailKaryawanMap() {
-      const map = {};
-      this.detailKaryawan.forEach((a) => {
-        map[a.clickup_id] = a;
-      });
-      return map;
-    },
-    filteredKaryawan() {
-      const limit = Number(this.searchInput);
-
-      if (isNaN(limit)) {
-        return this.daftarKaryawan || [];
-      }
-
-      if (this.kurangLebih === "kurangDari") {
-        return (this.daftarKaryawan || [])
-          .map((group) => ({
-            ...group,
-            data: group.data.filter((k) => Number(k.value) < limit),
-          }))
-          .filter((group) => group.data.length > 0);
-      }
-      if (this.kurangLebih === "lebihDari") {
-        return (this.daftarKaryawan || [])
-          .map((group) => ({
-            ...group,
-            data: group.data.filter((k) => Number(k.value) > limit),
-          }))
-          .filter((group) => group.data.length > 0);
-      }
-    },
-  },
-
-  watch: {
-    start: "onDateChange",
-    end: "onDateChange",
-
-    // query berubah → fetch data
-    // "$route.query": {
-    //   handler() {
-    //     if (!this.$route.query.start || !this.$route.query.end) return;
-    //     this.ambilTask();
-    //   },
-    //   immediate: true,
-    // },
-  },
-};
-</script>

@@ -39,7 +39,7 @@
         <table class="table performance-table">
           <thead>
             <tr>
-              <th class="sticky-col">Nama Karyawan</th>
+              <th class="sticky-col name-karyawan">Nama Karyawan</th>
               <th v-for="n in totalWeeks" :key="n" class="week-col">
                 Minggu {{ n }}
               </th>
@@ -59,12 +59,12 @@
                 class="score-col"
               >
                 <span
-                  v-if="week.workload_score !== 0"
+                  v-if="week.score !== 0"
                   @click="cekDetail(emp, week)"
                   class="badge"
                   :class="badgeClass(week.category)"
                 >
-                  {{ week.workload_score }}%
+                  {{ week.score }}%
                 </span>
 
                 <span v-else class="empty-score">—</span>
@@ -75,7 +75,7 @@
       </div>
 
       <!-- Legend -->
-      <div class="legend modern">
+      <!-- <div class="legend modern">
         <div class="legend-item good">
           <span class="dot"></span>
           ≥ 85% <small>Baik</small>
@@ -88,7 +88,7 @@
           <span class="dot"></span>
           &lt; 70% <small>Kurang</small>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -248,7 +248,7 @@ h2 {
   font-weight: 600;
   padding: 14px 12px;
   border-bottom: 1px solid #e2e8f0;
-  z-index: 2;
+  /* z-index: 2; */
   text-align: justify;
 
   background: linear-gradient(180deg, #f8fafc, #f1f5f9);
@@ -278,12 +278,14 @@ h2 {
   z-index: 1;
 }
 
-/* .performance-table tbody tr:hover .sticky-col {
-  background: #f8fafc;
-} */
-
-/* Name */
+/* Sticky hanya nama karyawan */
+.name-karyawan,
 .name-col {
+  position: sticky;
+  left: 0;
+  background: #fff;
+  z-index: 3;
+  box-shadow: 2px 0 6px rgba(15, 23, 42, 0.06);
   min-width: 220px;
 }
 
@@ -296,8 +298,7 @@ h2 {
 /* Week & score */
 .week-col,
 .score-col {
-  position: sticky;
-  left: 0;
+  position: static;
   text-align: justify;
   min-width: 100px;
 }
@@ -364,12 +365,13 @@ h2 {
 
 /* Empty */
 .empty-score {
+  background-color: #f5f5f5;
   color: #cbd5f5;
   font-size: 14px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 64px;
+  width: 80px;
   padding: 6px 10px;
   border-radius: 999px;
   font-weight: 600;
@@ -476,10 +478,36 @@ export default {
         year: now.getFullYear(),
       };
     },
+    formatBulan(bulan) {
+      const bulanNames = [
+        "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember",
+      ];
+      return bulanNames[bulan - 1] || "-";
+    },
 
     onDateChange() {
       if (!this.date || this.isLoading) return;
       this.dataKaryawan();
+
+      this.$router.replace({
+        path: "/admin/weekPerform",
+        query: {
+          ...this.$route.query, // 🔥 PENTING
+          bulan: this.formatBulan(this.selectedMonth),
+          tahun: this.selectedYear,
+        },
+      });
     },
 
     async dataKaryawan() {
@@ -514,8 +542,8 @@ export default {
         path: "/admin/bebanKerja",
         query: {
           id: emp.clickup_id,
-          start: start_date,
-          end: end_date,
+          start: this.formatTanggal(start_date),
+          end: this.formatTanggal(end_date),
           source: "Performa Mingguan",
         },
       });
@@ -535,9 +563,12 @@ export default {
       return `${Math.round(score)}%`;
     },
     formatTanggal(tgl) {
+      // if (!tgl) return "-";
+      // const [year, month, day] = tgl.split("-");
+      // return `${day}-${month}-${year}`;
       if (!tgl) return "-";
-      const [year, month, day] = tgl.split("-");
-      return `${day}-${month}-${year}`;
+      const [day, month, year] = tgl.split("-");
+      return `${year}-${month}-${day}`;
     },
   },
 };

@@ -104,6 +104,7 @@ body {
   color: #fff;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 }
 
 .sidebar .logo,
@@ -114,6 +115,7 @@ body {
   border-bottom: 1px solid rgb(85, 57, 223);
   padding: 20px 25px;
   /* flex: 1; */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);
 }
 
 .logo img {
@@ -188,7 +190,7 @@ body {
 }
 
 .sidebar-text i {
-  font-size: 18px;
+  font-size: 16px;
   margin-right: 10px;
 }
 
@@ -906,7 +908,7 @@ form select {
   .konten .isi {
     width: 100%;
     position: relative;
-    top: 12vh;
+    top: 10%;
     padding: 0 15px;
   }
 

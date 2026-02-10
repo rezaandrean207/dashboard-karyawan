@@ -1,5 +1,13 @@
 <template>
-  <div v-if="isLoading" class="loading">
+  <div
+    v-if="isLoading"
+    class="loading"
+    :style="{
+      background: isDetailMode
+        ? 'rgba(255, 255, 255, 0.9)'
+        : 'rgba(255, 255, 255, 0.6)',
+    }"
+  >
     <div class="loading_tanggal">
       <i class="fa-solid fa-spinner"></i>
       <p>Tunggu Sebentar</p>
@@ -328,7 +336,7 @@
             <p>{{ detailKaryawan.role }}</p>
             <div class="periode">
               <p v-if="start === '' && end === ''">Seluruh Periode</p>
-              <p v-else>Periode: {{ start }} - {{ end }}</p>
+              <p v-else>Periode: {{ zzstart }} - {{ end }}</p>
             </div>
           </div>
         </div>
@@ -378,9 +386,21 @@
       </div>
       <div class="keterangan_karyawan">
         <div class="container_flex">
-          <div
+          <!-- <div
             class="ketepatan_pengerjaan"
             v-if="detailKaryawan.avg_time_efficiency.avg_percentage"
+            :class="ketepatanClass(detailKaryawan.avg_time_efficiency.category)"
+          >
+            <div class="teks">
+              <p>Tepat Waktu Kerja</p>
+              <h4>{{ detailKaryawan.avg_time_efficiency.avg_percentage }}%</h4>
+            </div>
+            <div class="ikon">
+              <i class="fa-solid fa-list-check"></i>
+            </div>
+          </div> -->
+          <div
+            class="ketepatan_pengerjaan"
             :class="ketepatanClass(detailKaryawan.avg_time_efficiency.category)"
           >
             <div class="teks">
@@ -539,9 +559,9 @@
                 </div>
               </div>
             </div>
-            <!-- <div class="description_bug">
-              <p>Deskripsi Task</p>
-            </div> -->
+            <div class="description_bug">
+              <p>{{ detailBug.description }}</p>
+            </div>
             <div class="keterangan_waktu">
               <!-- <div class="jam">
                   <i class="fa-regular fa-clock"></i>
@@ -796,7 +816,7 @@
 }
 
 .description_bug {
-  margin: 10px 0;
+  margin: 5px 0 10px 0;
   font-weight: 300;
 }
 
@@ -1164,6 +1184,7 @@
 .card_name p {
   font-size: 14px;
   color: #64748b;
+  text-transform: capitalize;
 }
 
 .card_profile .performa_karyawan {
@@ -1589,6 +1610,10 @@
   align-items: center;
   gap: 15px;
   flex: 12;
+}
+
+.profil_karyawan .about {
+  text-transform: capitalize;
 }
 
 .profil_karyawan img {
@@ -2274,6 +2299,15 @@ export default {
       //   },
       // });
 
+      this.$router.replace({
+        path: "/admin/bebanKerja",
+        query: {
+          ...this.$route.query, // 🔥 PENTING
+          start: this.formatTanggal(this.start),
+          end: this.formatTanggal(this.end),
+        },
+      });
+
       // this.$router.push({
       //   path: "/admin/bebanKerja",
       //   query: {
@@ -2417,8 +2451,8 @@ export default {
         path: "/admin/bebanKerja",
         query: {
           id: clickupId,
-          start: this.start,
-          end: this.end,
+          start: this.formatTanggal(this.start),
+          end: this.formatTanggal(this.end),
           source: "beban kerja",
         },
       });
