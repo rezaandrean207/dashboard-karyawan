@@ -55,12 +55,12 @@
 
               <td
                 v-for="(week, i) in emp.weekly_performance"
+                @click="cekDetail(emp, week)"
                 :key="i"
                 class="score-col"
               >
                 <span
-                  v-if="week.score !== 0"
-                  @click="cekDetail(emp, week)"
+                  v-if="week.score !== 0 && week.score !== null"
                   class="badge"
                   :class="badgeClass(week.category)"
                 >
@@ -313,17 +313,17 @@ h2 {
   font-weight: 600;
   font-size: 13px;
   width: 80px;
-  cursor: pointer;
+  cursor: default;
 
   position: relative;
   transition:
-    transform 0.12s ease,
-    box-shadow 0.12s ease,
-    filter 0.12s ease;
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
 }
 
 .badge:hover {
-  transform: translateY(-1px) scale(1.03);
+  transform: translateY(-1px) scale(1.02);
   box-shadow: 0 6px 14px rgba(15, 23, 42, 0.18);
   filter: brightness(1.05);
 }
@@ -376,6 +376,17 @@ h2 {
   border-radius: 999px;
   font-weight: 600;
   font-size: 13px;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.empty-score:hover {
+  cursor: default;
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.18);
+  /* filter: brightness(1.05); */
 }
 </style>
 

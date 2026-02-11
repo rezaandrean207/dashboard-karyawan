@@ -41,6 +41,11 @@
         </div>
 
         <div class="detail-item">
+          <span class="label">Project</span>
+          <span class="value">{{ detailTask.project_name }}</span>
+        </div>
+
+        <div class="detail-item">
           <span class="label">Start Date</span>
           <span class="value">{{ detailTask.start_date }}</span>
         </div>
@@ -151,6 +156,37 @@
                 v-model="selectedStatus"
               />
               {{ status.label }}
+            </label>
+          </div>
+        </div>
+
+        <!-- Project Task -->
+        <div class="multi-select">
+          <div class="select-box" @click="openProject = !openProject">
+            <span class="selected-text" v-if="selectedProject.length">
+              {{ selectedProject.join(", ") }}
+            </span>
+            <span v-else class="placeholder">Pilih project</span>
+            <span
+              class="material-symbols-outlined arrow"
+              :class="{ open: openProject }"
+            >
+              keyboard_arrow_down
+            </span>
+          </div>
+
+          <div class="dropdown" v-if="openProject" @click.stop>
+            <label
+              v-for="project in projectOptions"
+              :key="project.value"
+              class="option"
+            >
+              <input
+                type="checkbox"
+                :value="project"
+                v-model="selectedProject"
+              />
+              {{ project }}
             </label>
           </div>
         </div>
@@ -355,7 +391,7 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 60px;
+  gap: 30px;
 
   padding: 16px 20px;
   border-radius: 14px;
@@ -1054,9 +1090,11 @@ export default {
       showDetail: false,
       openAssignee: false,
       openStatus: false,
+      openProject: false,
       isLoading: false,
       selected: [], // assignee
       selectedStatus: [], // status_name
+      selectedProject: [], // project name
       dayWidth: 100, // px per hari (default)
       minZoom: 20,
       maxZoom: 200,
@@ -1362,6 +1400,15 @@ export default {
         { label: "Cancelled", value: "cancelled" },
       ];
     },
+    projectOptions() {
+      return [
+        ...new Set(
+          this.daftarTask.tasks
+            .filter((t) => t.project_name)
+            .map((t) => t.project_name),
+        ),
+      ];
+    },
     flatDates() {
       const result = [];
 
@@ -1410,6 +1457,13 @@ export default {
 
             return taskStart <= end && taskEnd >= start;
           })
+
+          // 4️⃣ filter project
+          .filter(
+            (task) =>
+              !this.selectedProject.length ||
+              this.selectedProject.includes(task.project_name),
+          )
 
         // 3️⃣ buang assignee tanpa task
         // .filter((item) => item.tasks.length > 0)

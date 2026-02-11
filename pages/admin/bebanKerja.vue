@@ -336,7 +336,10 @@
             <p>{{ detailKaryawan.role }}</p>
             <div class="periode">
               <p v-if="start === '' && end === ''">Seluruh Periode</p>
-              <p v-else>Periode: {{ zzstart }} - {{ end }}</p>
+              <p v-else>
+                Periode: {{ this.formatTanggal(start) }} -
+                {{ this.formatTanggal(end) }}
+              </p>
             </div>
           </div>
         </div>
@@ -2303,8 +2306,10 @@ export default {
         path: "/admin/bebanKerja",
         query: {
           ...this.$route.query, // 🔥 PENTING
-          start: this.formatTanggal(this.start),
-          end: this.formatTanggal(this.end),
+          // start: this.formatTanggal(this.start),
+          // end: this.formatTanggal(this.end),
+          start: this.start,
+          end: this.end,
         },
       });
 
@@ -2451,8 +2456,10 @@ export default {
         path: "/admin/bebanKerja",
         query: {
           id: clickupId,
-          start: this.formatTanggal(this.start),
-          end: this.formatTanggal(this.end),
+          // start: this.formatTanggal(this.start),
+          // end: this.formatTanggal(this.end),
+          start: this.start,
+          end: this.end,
           source: "beban kerja",
         },
       });
