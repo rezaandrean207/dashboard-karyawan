@@ -382,12 +382,12 @@ h2 {
     box-shadow 0.2s ease;
 }
 
-.empty-score:hover {
+/* .empty-score:hover {
   cursor: default;
   transform: translateY(-1px) scale(1.02);
   box-shadow: 0 6px 14px rgba(15, 23, 42, 0.18);
   /* filter: brightness(1.05); */
-}
+
 </style>
 
 <!-- Legend -->

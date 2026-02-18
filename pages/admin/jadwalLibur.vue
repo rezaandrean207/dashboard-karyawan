@@ -223,7 +223,7 @@
   background-color: #fff;
   padding: 25px;
   border-radius: 8px;
-  width: 33%;
+  width: 500px;
 }
 
 .create_tanggal .header_tanggal {

@@ -577,7 +577,7 @@
 }
 
 .kalender {
-  /* max-height: 100dvh; */
+  max-height: 100dvh;
   overflow: auto;
   margin-top: 20px;
   padding-bottom: 10px;
