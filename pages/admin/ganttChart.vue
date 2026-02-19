@@ -55,9 +55,20 @@
           <span class="value">{{ detailTask.due_date }}</span>
         </div>
 
+        <div
+          class="detail-item"
+          v-if="
+            detailTask.time_spent_hours !== 0 &&
+            detailTask.time_spent_hours !== null
+          "
+        >
+          <span class="label">Tepat Waktu Kerja</span>
+          <span class="value">{{ detailTask.time_spent_hours }} Jam</span>
+        </div>
+
         <div class="detail-item">
-          <span class="label">Duration</span>
-          <span class="value">{{ detailTask.duration_days }}</span>
+          <span class="label">Beban Kerja</span>
+          <span class="value">{{ detailTask.time_estimate_hours }} Jam</span>
         </div>
 
         <div class="detail-item" v-if="detailTask.date_done">
@@ -279,6 +290,7 @@
                   // top: '8px',
                 }"
               >
+                <span class="project-name">{{ task.project_name }}</span>
                 <span class="assignee">{{ task.assignee_to }}</span>
                 <span class="task-title">{{ task.name }}</span>
                 <span class="status-task">{{ task.status_name }}</span>
@@ -807,6 +819,20 @@
   z-index: 16;
 }
 
+.task-bar .project-name {
+  font-size: clamp(1px, calc(8px + (var(--day-width) - 100px) * 0.03), 13px);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+  text-transform: uppercase;
+
+  background: rgba(255, 255, 255, 0.12);
+  padding: 2px 6px;
+  border-radius: 4px;
+
+  margin-bottom: 2px;
+}
+
 .task-bar .assignee {
   /* font-size: 9px; */
   /* font-size: clamp(9px, calc(9px + (var(--day-width) - 100px) * 0.025), 12px); */
@@ -814,7 +840,7 @@
   font-weight: 600;
   opacity: 0.85;
   text-transform: uppercase;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  /* border-bottom: 1px solid rgba(255, 255, 255, 0.08); */
   margin: 1px 0;
 }
 
@@ -824,6 +850,7 @@
   font-weight: 700;
   text-align: center;
   line-height: 1.3;
+  margin-bottom: 2px;
 }
 
 .task-bar .status-task {

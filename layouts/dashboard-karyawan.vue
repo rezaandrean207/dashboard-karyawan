@@ -146,6 +146,16 @@
           <span class="material-symbols-outlined"> bar_chart </span>
           <p>Performa Saya</p>
         </NuxtLink>
+
+        <NuxtLink
+          to="/karyawan/gamificationsKaryawan"
+          class="menu-item"
+          :class="{ active: $route.path === '/karyawan/gamificationsKaryawan' }"
+        >
+          <span class="material-symbols-outlined"> trophy </span>
+          <p>Gamifications</p>
+        </NuxtLink>
+
         <NuxtLink
           to="/karyawan/changePasswordKaryawan"
           class="menu-item"

@@ -443,8 +443,15 @@ export default {
           path: "/",
         });
 
+        const id = useCookie("clickup_id", {
+          maxAge: 60 * 60 * 24, // 1 hari
+          sameSite: "lax",
+          path: "/",
+        });
+
         token.value = res.data.data.token;
         role.value = res.data.data.role;
+        id.value = res.data.data.clickup_id;
 
         // ✅ REDIRECT SEKALI
         if (res.data.data.role === "admin") {

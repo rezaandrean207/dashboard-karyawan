@@ -9,7 +9,7 @@
   <div class="isi">
     <!-- Header -->
     <h2>Performa Mingguan - {{ displayPeriod }}</h2>
-    <p class="subtitle">Jumlah minggu: {{ totalWeeks }} minggu</p>
+    <p class="subtitle">Daftar 5 karyawan teratas dengan performa terbaik</p>
 
     <!-- Filter -->
     <div class="card filter-card">
@@ -57,221 +57,145 @@
       </div>
     </div>
 
-    <!-- Performa per bulan-->
-    <div
-      class="card performance-card"
-      v-if="daftarKaryawan.length && dataType === 'month'"
-    >
+    <div class="card performance-card" v-if="daftarKaryawan.length">
       <div class="table-wrapper">
         <table class="table performance-table">
           <thead>
             <tr>
-              <th class="sticky-col name-karyawan">Nama Karyawan</th>
-              <th v-for="n in totalWeeks" :key="n" class="week-col">
-                Minggu {{ n }}
-              </th>
+              <th>Rank</th>
+              <th>Nama Karyawan</th>
+              <th>Role</th>
+              <th>Task Selesai</th>
+              <th>Skor</th>
             </tr>
           </thead>
 
           <tbody>
-            <tr v-for="emp in daftarKaryawan" :key="emp.clickup_id">
-              <td class="name-col sticky-col">
-                <strong>{{ emp.name }}</strong>
-                <div class="role">{{ emp.role }}</div>
+            <tr
+              v-for="emp in daftarKaryawan"
+              :key="emp.rank"
+              :class="highlightRank(emp.rank)"
+            >
+              <td class="rank-col">
+                <span class="rank-badge" :class="highlightRank(emp.rank)">
+                  <span v-if="emp.rank === 1">🥇</span>
+                  <span v-else-if="emp.rank === 2">🥈</span>
+                  <span v-else-if="emp.rank === 3">🥉</span>
+                  <span v-else>{{ emp.rank }}</span>
+                </span>
               </td>
 
-              <td v-for="(week, i) in emp.weekly_performance" :key="i">
-                <div class="week-cell">
-                  <div class="main-cell">
-                    <span
-                      v-if="week.score.value !== 0 && week.score.value !== null"
-                      class="badge main-badge"
-                      @click="cekDetail(emp, week)"
-                      :class="badgeClass(week.score.category)"
-                    >
-                      {{ week.score.value }}%
-                    </span>
+              <td class="emp-name">
+                <strong>{{ emp.name }}</strong>
+              </td>
 
-                    <span v-else class="empty-score main-empty">—</span>
-                  </div>
+              <td>
+                <span class="role-badge">
+                  {{ emp.role }}
+                </span>
+              </td>
 
-                  <div class="submenu-cell">
-                    <!-- Tepat Waktu Kerja -->
-                    <span
-                      v-if="
-                        week.tepat_waktu_kerja.value !== 0 &&
-                        week.tepat_waktu_kerja.value !== null
-                      "
-                      class="badge submenu-badge"
-                      @click="cekDetail(emp, week)"
-                      :class="badgeClass(week.tepat_waktu_kerja.category)"
-                    >
-                      {{ week.tepat_waktu_kerja.value }}%
-                    </span>
+              <td>{{ emp.tasks_completed }}</td>
 
-                    <span v-else class="empty-score submenu-empty">—</span>
-
-                    <!-- Total Beban Kerja -->
-                    <span
-                      v-if="
-                        week.total_beban_kerja.value !== 0 &&
-                        week.total_beban_kerja.value !== null
-                      "
-                      class="badge submenu-badge"
-                      @click="cekDetail(emp, week)"
-                      :class="badgeClass(week.total_beban_kerja.category)"
-                    >
-                      {{ week.total_beban_kerja.value }}%
-                    </span>
-
-                    <span v-else class="empty-score submenu-empty">—</span>
-
-                    <!-- Performa Bug -->
-                    <span
-                      v-if="
-                        week.performa_bug?.value !== 0 &&
-                        week.performa_bug?.value !== null
-                      "
-                      class="badge submenu-badge"
-                      @click="cekDetail(emp, week)"
-                      :class="badgeClass(week.performa_bug?.category)"
-                    >
-                      {{ week.performa_bug?.value }}%
-                    </span>
-                    <span v-else class="empty-score submenu-empty">—</span>
-                  </div>
-                </div>
+              <td>
+                <span
+                  class="badge main-badge"
+                  :class="badgeClass(emp.category)"
+                >
+                  {{ Math.round(emp.performance_score) }}%
+                </span>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-
-      <!-- Legend -->
-      <!-- <div class="legend modern">
-        <div class="legend-item good">
-          <span class="dot"></span>
-          ≥ 85% <small>Baik</small>
-        </div>
-        <div class="legend-item medium">
-          <span class="dot"></span>
-          70–84% <small>Cukup</small>
-        </div>
-        <div class="legend-item bad">
-          <span class="dot"></span>
-          &lt; 70% <small>Kurang</small>
-        </div>
-      </div> -->
     </div>
 
-    <!-- Performa per tahun-->
-    <div
-      class="card performance-card"
-      v-if="daftarKaryawanYear.length && dataType === 'year'"
-    >
+    <div class="card performance-card" v-if="daftarKaryawanYear.length">
       <div class="table-wrapper">
         <table class="table performance-table">
           <thead>
             <tr>
-              <th class="sticky-col name-karyawan">Nama Karyawan</th>
-              <th v-for="n in nameBulan" :key="n" class="week-col">
-                {{ formatBulan(n) }}
-              </th>
+              <th>Rank</th>
+              <th>Nama Karyawan</th>
+              <th>Role</th>
+              <th>Task Selesai</th>
+              <th>Skor</th>
             </tr>
           </thead>
 
           <tbody>
-            <tr v-for="emp in daftarKaryawanYear" :key="emp.clickup_id">
-              <td class="name-col sticky-col">
-                <strong>{{ emp.name }}</strong>
-                <div class="role">{{ emp.role }}</div>
+            <tr
+              v-for="emp in daftarKaryawanYear"
+              :key="emp.rank"
+              :class="highlightRank(emp.rank)"
+            >
+              <td class="rank-col">
+                <span class="rank-badge" :class="highlightRank(emp.rank)">
+                  <span v-if="emp.rank === 1">🥇</span>
+                  <span v-else-if="emp.rank === 2">🥈</span>
+                  <span v-else-if="emp.rank === 3">🥉</span>
+                  <span v-else>{{ emp.rank }}</span>
+                </span>
               </td>
 
-              <td v-for="(week, i) in emp.monthly_performance" :key="i">
-                <div class="week-cell">
-                  <div class="main-cell">
-                    <span
-                      v-if="week.score.value !== 0 && week.score.value !== null"
-                      class="badge main-badge"
-                      @click="cekDetail(emp, week)"
-                      :class="badgeClass(week.score.category)"
-                    >
-                      {{ week.score.value }}%
-                    </span>
+              <td class="emp-name">
+                <strong>{{ emp.name }}</strong>
+              </td>
 
-                    <span v-else class="empty-score main-empty">—</span>
-                  </div>
+              <td>
+                <span class="role-badge">
+                  {{ emp.role }}
+                </span>
+              </td>
 
-                  <div class="submenu-cell">
-                    <!-- Tepat Waktu Kerja -->
-                    <span
-                      v-if="
-                        week.tepat_waktu_kerja.value !== 0 &&
-                        week.tepat_waktu_kerja.value !== null
-                      "
-                      class="badge submenu-badge"
-                      @click="cekDetail(emp, week)"
-                      :class="badgeClass(week.tepat_waktu_kerja.category)"
-                    >
-                      {{ week.tepat_waktu_kerja.value }}%
-                    </span>
+              <td>{{ emp.tasks_completed }}</td>
 
-                    <span v-else class="empty-score submenu-empty">—</span>
-
-                    <!-- Total Beban Kerja -->
-                    <span
-                      v-if="
-                        week.total_beban_kerja.value !== 0 &&
-                        week.total_beban_kerja.value !== null
-                      "
-                      @click="cekDetail(emp, week)"
-                      class="badge submenu-badge"
-                      :class="badgeClass(week.total_beban_kerja.category)"
-                    >
-                      {{ week.total_beban_kerja.value }}%
-                    </span>
-
-                    <span v-else class="empty-score submenu-empty">—</span>
-
-                    <!-- Performa Bug -->
-                    <span
-                      v-if="
-                        week.performa_bug?.value !== 0 &&
-                        week.performa_bug?.value !== null
-                      "
-                      @click="cekDetail(emp, week)"
-                      class="badge submenu-badge"
-                      :class="badgeClass(week.performa_bug?.category)"
-                    >
-                      {{ week.performa_bug?.value }}%
-                    </span>
-                    <span v-else class="empty-score submenu-empty">—</span>
-                  </div>
-                </div>
+              <td>
+                <span
+                  class="badge main-badge"
+                  :class="badgeClass(emp.category)"
+                >
+                  {{ Math.round(emp.performance_score) }}%
+                </span>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-
-      <!-- Legend -->
-      <!-- <div class="legend modern">
-        <div class="legend-item good">
-          <span class="dot"></span>
-          ≥ 85% <small>Baik</small>
-        </div>
-        <div class="legend-item medium">
-          <span class="dot"></span>
-          70–84% <small>Cukup</small>
-        </div>
-        <div class="legend-item bad">
-          <span class="dot"></span>
-          &lt; 70% <small>Kurang</small>
-        </div>
-      </div> -->
     </div>
   </div>
 </template>
+
+<!-- Highlight top 3 ranks -->
+<style scoped>
+/* .rank-gold {
+  background: linear-gradient(to right, rgba(255, 215, 0, 0.08), transparent);
+}
+
+.rank-silver {
+  background: rgba(148, 163, 184, 0.08);
+}
+
+.rank-bronze {
+  background: rgba(205, 127, 50, 0.08);
+} */
+
+.rank-badge {
+  /* background: #f1f5f9; */
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.role-badge {
+  background: #e2e8f0;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+</style>
 
 <!-- Filter -->
 <style scoped>
@@ -447,7 +371,7 @@ h2 {
 }
 
 .table {
-  /* width: 100%; */
+  width: 100%;
   border-collapse: collapse;
   border: 1px solid var(--border-soft);
   /* margin-top: 16px; */
@@ -463,7 +387,7 @@ h2 {
   padding: 14px 12px;
   border-bottom: 1px solid #e2e8f0;
   /* z-index: 2; */
-  /* text-align: justify; */
+  text-align: center;
 
   background: linear-gradient(180deg, #f8fafc, #f1f5f9);
   box-shadow: inset 0 -1px 0 #e2e8f0;
@@ -477,6 +401,7 @@ h2 {
   padding: 14px 12px;
   border-bottom: 1px solid #f1f5f9;
   vertical-align: middle;
+  text-align: center;
 }
 
 /* Sticky name column */
@@ -620,66 +545,16 @@ h2 {
   font-size: 9px;
 }
 
+.emp-name {
+  text-align: justify;
+  width: 280px;
+}
+
 /* .empty-score:hover {
   cursor: default;
   transform: translateY(-1px) scale(1.02);
   box-shadow: 0 6px 14px rgba(15, 23, 42, 0.18);
   /* filter: brightness(1.05); */
-</style>
-
-<!-- Legend -->
-<style scoped>
-.legend {
-  display: flex;
-  gap: 16px;
-  margin-top: 20px;
-  flex-wrap: wrap;
-}
-
-/* Item */
-/* Legend modern */
-.legend.modern {
-  display: flex;
-  gap: 14px;
-  margin-top: 16px;
-  padding-top: 12px;
-  border-top: 1px dashed #e2e8f0;
-}
-
-.legend-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  background: #f8fafc;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #334155;
-}
-
-.legend-item small {
-  color: #64748b;
-  font-weight: 400;
-}
-
-.legend-item .dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-
-.legend-item.good .dot {
-  background: #22c55e;
-}
-
-.legend-item.medium .dot {
-  background: #facc15;
-}
-
-.legend-item.bad .dot {
-  background: #ef4444;
-}
 </style>
 
 <script>
@@ -727,8 +602,12 @@ export default {
       return bulan;
     },
   },
-
   methods: {
+    highlightRank(rank) {
+      if (rank === 1) return "rank-gold";
+      if (rank === 2) return "rank-silver";
+      if (rank === 3) return "rank-bronze";
+    },
     setDefaultMonth() {
       const now = new Date();
       this.dateMonth = {
@@ -768,9 +647,9 @@ export default {
         // this.dateMonth = null;
 
         this.$router.replace({
-          path: "/admin/weekPerform",
+          path: "/admin/gamifications",
           query: {
-            ...this.$route.query,
+            // ...this.$route.query,
             tahun: this.dateYear,
           },
         });
@@ -780,7 +659,7 @@ export default {
         this.displayPeriod = `${this.formatBulan(this.selectedMonth)} ${this.selectedYear}`;
 
         this.$router.replace({
-          path: "/admin/weekPerform",
+          path: "/admin/gamifications",
           query: {
             ...this.$route.query,
             bulan: this.formatBulan(this.selectedMonth),
@@ -798,22 +677,27 @@ export default {
       try {
         if (this.dataType === "year") {
           const res = await this.$api.get(
-            `/api/v1/workload/weekly?year=${this.dateYear}`,
+            `/api/v1/workload/leaderboard?year=${this.dateYear}`,
           );
 
-          this.daftarKaryawanYear = res.data.data || [];
+          this.daftarKaryawanYear = res.data.leaderboard || [];
+
+          console.log(
+            `Data di tahun ${this.dateYear}:`,
+            this.daftarKaryawanYear,
+          );
 
           console.log("data per bulan: ", res);
 
           this.daftarKaryawan = [];
         } else {
           const res = await this.$api.get(
-            `/api/v1/workload/weekly?month=${this.selectedMonth}&year=${this.selectedYear}`,
+            `/api/v1/workload/leaderboard?month=${this.selectedMonth}&year=${this.selectedYear}`,
           );
 
-          this.daftarKaryawan = res.data.data || [];
+          this.daftarKaryawan = res.data.leaderboard || [];
           this.daftarKaryawanYear = [];
-          this.displayPeriod = res.data.display_period;
+          // this.displayPeriod = res.data.display_period;
 
           console.log("data per minggu: ", res);
         }
@@ -826,28 +710,28 @@ export default {
       }
     },
 
-    cekDetail(emp, week) {
-      if (!emp.clickup_id) {
-        console.warn("clickup_id kosong");
-        return;
-      }
+    // cekDetail(emp, week) {
+    //   if (!emp.clickup_id) {
+    //     console.warn("clickup_id kosong");
+    //     return;
+    //   }
 
-      const { start_date, end_date } = week;
+    //   const { start_date, end_date } = week;
 
-      console.log("ID:", emp.clickup_id);
-      console.log("Start:", this.formatTanggal(start_date));
-      console.log("End:", this.formatTanggal(end_date));
+    //   console.log("ID:", emp.clickup_id);
+    //   console.log("Start:", this.formatTanggal(start_date));
+    //   console.log("End:", this.formatTanggal(end_date));
 
-      this.$router.push({
-        path: "/admin/bebanKerja",
-        query: {
-          id: emp.clickup_id,
-          start: this.formatTanggal(start_date),
-          end: this.formatTanggal(end_date),
-          source: "Performa Mingguan",
-        },
-      });
-    },
+    //   this.$router.push({
+    //     path: "/admin/bebanKerja",
+    //     query: {
+    //       id: emp.clickup_id,
+    //       start: this.formatTanggal(start_date),
+    //       end: this.formatTanggal(end_date),
+    //       source: "Performa Mingguan",
+    //     },
+    //   });
+    // },
 
     badgeClass(score) {
       // if (score > 100) return "good";
@@ -863,18 +747,24 @@ export default {
       return `${Math.round(score)}%`;
     },
     formatTanggal(tgl) {
-      // if (!tgl) return "-";
-      // const [year, month, day] = tgl.split("-");
-      // return `${day}-${month}-${year}`;
       if (!tgl) return "-";
-      const [day, month, year] = tgl.split("-");
-      return `${year}-${month}-${day}`;
+      const [year, month, day] = tgl.split("-");
+      return `${day}-${month}-${year}`;
+      // if (!tgl) return "-";
+      // const [day, month, year] = tgl.split("-");
+      // return `${year}-${month}-${day}`;
     },
   },
   watch: {
+    // start() {
+    //   this.onDateChange();
+    // },
+    // end() {
+    //   this.onDateChange();
+    // },
     dataType(newVal) {
       if (newVal === "year") {
-        this.dateMonth = null;
+        // this.dateMonth = null;
       } else {
         this.setDefaultMonth();
       }

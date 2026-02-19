@@ -40,22 +40,6 @@
             <i class="fa-solid fa-users"></i>
             <p>Daftar Karyawan</p>
           </NuxtLink>
-          <NuxtLink
-            to="/admin/bebanKerja"
-            class="menu-item"
-            :class="{ active: $route.path === '/admin/bebanKerja' }"
-          >
-            <i class="fa-regular fa-clock"></i>
-            <p>Beban Kerja</p>
-          </NuxtLink>
-          <NuxtLink
-            to="/admin/jadwalLibur"
-            class="menu-item"
-            :class="{ active: $route.path === '/admin/jadwalLibur' }"
-          >
-            <i class="fa-regular fa-calendar"></i>
-            <p>Jadwal Libur</p>
-          </NuxtLink>
 
           <NuxtLink
             to="/admin/grouping"
@@ -65,6 +49,34 @@
             <span class="material-symbols-outlined"> group </span>
             <p>Grouping</p>
           </NuxtLink>
+
+          <NuxtLink
+            to="/admin/bebanKerja"
+            class="menu-item"
+            :class="{ active: $route.path === '/admin/bebanKerja' }"
+          >
+            <i class="fa-regular fa-clock"></i>
+            <p>Beban Kerja</p>
+          </NuxtLink>
+
+          <NuxtLink
+            to="/admin/weekPerform"
+            class="menu-item"
+            :class="{ active: $route.path === '/admin/weekPerform' }"
+          >
+            <span class="material-symbols-outlined"> show_chart </span>
+            <p>Performa</p>
+          </NuxtLink>
+
+          <NuxtLink
+            to="/admin/gamifications"
+            class="menu-item"
+            :class="{ active: $route.path === '/admin/gamifications' }"
+          >
+            <span class="material-symbols-outlined"> trophy </span>
+            <p>Gamifications</p>
+          </NuxtLink>
+
           <NuxtLink
             to="/admin/ganttChart"
             class="menu-item"
@@ -87,14 +99,7 @@
 
             <p>Gantt Chart</p>
           </NuxtLink>
-          <NuxtLink
-            to="/admin/weekPerform"
-            class="menu-item"
-            :class="{ active: $route.path === '/admin/weekPerform' }"
-          >
-            <span class="material-symbols-outlined"> show_chart </span>
-            <p>Performa Mingguan</p>
-          </NuxtLink>
+
           <div class="setting">
             <div
               class="menu-item"
@@ -104,6 +109,15 @@
               <span class="material-symbols-outlined"> settings </span>Setting
             </div>
             <div class="submenu" v-if="openMenu">
+              <NuxtLink
+                to="/admin/jadwalLibur"
+                class="menu-item"
+                :class="{ active: $route.path === '/admin/jadwalLibur' }"
+              >
+                <i class="fa-regular fa-calendar"></i>
+                <p>Jadwal Libur</p>
+              </NuxtLink>
+
               <NuxtLink
                 to="/admin/settingBug"
                 class="submenu-item"
@@ -174,22 +188,6 @@
           <i class="fa-solid fa-users"></i>
           <p>Daftar Karyawan</p>
         </NuxtLink>
-        <NuxtLink
-          to="/admin/bebanKerja"
-          class="menu-item"
-          :class="{ active: $route.path === '/admin/bebanKerja' }"
-        >
-          <i class="fa-regular fa-clock"></i>
-          <p>Beban Kerja</p>
-        </NuxtLink>
-        <NuxtLink
-          to="/admin/jadwalLibur"
-          class="menu-item"
-          :class="{ active: $route.path === '/admin/jadwalLibur' }"
-        >
-          <i class="fa-regular fa-calendar"></i>
-          <p>Jadwal Libur</p>
-        </NuxtLink>
 
         <NuxtLink
           to="/admin/grouping"
@@ -199,6 +197,34 @@
           <span class="material-symbols-outlined"> group </span>
           <p>Grouping</p>
         </NuxtLink>
+
+        <NuxtLink
+          to="/admin/bebanKerja"
+          class="menu-item"
+          :class="{ active: $route.path === '/admin/bebanKerja' }"
+        >
+          <i class="fa-regular fa-clock"></i>
+          <p>Beban Kerja</p>
+        </NuxtLink>
+
+        <NuxtLink
+          to="/admin/weekPerform"
+          class="menu-item"
+          :class="{ active: $route.path === '/admin/weekPerform' }"
+        >
+          <span class="material-symbols-outlined"> show_chart </span>
+          <p>Performa</p>
+        </NuxtLink>
+
+        <NuxtLink
+          to="/admin/gamifications"
+          class="menu-item"
+          :class="{ active: $route.path === '/admin/gamifications' }"
+        >
+          <span class="material-symbols-outlined"> trophy </span>
+          <p>Gamifications</p>
+        </NuxtLink>
+
         <NuxtLink
           to="/admin/ganttChart"
           class="menu-item"
@@ -221,14 +247,7 @@
 
           <p>Gantt Chart</p>
         </NuxtLink>
-        <NuxtLink
-          to="/admin/weekPerform"
-          class="menu-item"
-          :class="{ active: $route.path === '/admin/weekPerform' }"
-        >
-          <span class="material-symbols-outlined"> show_chart </span>
-          <p>Performa Mingguan</p>
-        </NuxtLink>
+
         <div class="setting">
           <div
             class="menu-item"
@@ -238,6 +257,15 @@
             <span class="material-symbols-outlined"> settings </span>Setting
           </div>
           <div class="submenu" v-if="openMenu">
+            <NuxtLink
+              to="/admin/jadwalLibur"
+              class="menu-item"
+              :class="{ active: $route.path === '/admin/jadwalLibur' }"
+            >
+              <i class="fa-regular fa-calendar"></i>
+              <p>Jadwal Libur</p>
+            </NuxtLink>
+
             <NuxtLink
               to="/admin/settingBug"
               class="submenu-item"
