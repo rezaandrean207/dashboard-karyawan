@@ -114,7 +114,7 @@
         </div>
 
         <!-- Assignee to -->
-        <div class="multi-select">
+        <!-- <div class="multi-select">
           <div class="select-box" @click="openAssignee = !openAssignee">
             <span class="selected-text" v-if="selected.length">
               {{ selected.join(", ") }}
@@ -138,7 +138,7 @@
               {{ assignee }}
             </label>
           </div>
-        </div>
+        </div> -->
 
         <!-- Status Task -->
         <div class="multi-select">
@@ -1103,7 +1103,7 @@ definePageMeta({
 import { VueDatePicker } from "@vuepic/vue-datepicker";
 
 definePageMeta({
-  layout: "dashboard",
+  layout: "dashboard-karyawan",
 });
 
 export default {
@@ -1197,7 +1197,7 @@ export default {
       );
 
       this.$router.replace({
-        path: "/admin/ganttChart",
+        path: "/karyawan/ganttChartKaryawan",
         query: {
           ...this.$route.query, // 🔥 PENTING
           start: this.formatTanggal(this.startDate),

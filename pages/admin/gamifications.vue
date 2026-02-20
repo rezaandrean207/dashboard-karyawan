@@ -8,8 +8,9 @@
 
   <div class="isi">
     <!-- Header -->
-    <h2>Performa Mingguan - {{ displayPeriod }}</h2>
-    <p class="subtitle">Daftar 5 karyawan teratas dengan performa terbaik</p>
+    <!-- <h2>Performa Mingguan - {{ displayPeriod }}</h2>
+    <p class="subtitle">Daftar 5 karyawan teratas dengan performa terbaik</p> -->
+    <h2>Gamifikasi Karyawan</h2>
 
     <!-- Filter -->
     <div class="card filter-card">
@@ -18,7 +19,7 @@
       </div>
 
       <div class="filter-row">
-        <div class="filter-item">
+        <!-- <div class="filter-item">
           <label>Tahun</label>
           <ClientOnly>
             <VueDatePicker
@@ -31,7 +32,7 @@
               class="month-picker"
             />
           </ClientOnly>
-        </div>
+        </div> -->
 
         <div class="filter-item">
           <label>Bulan</label>
@@ -47,11 +48,21 @@
             />
           </ClientOnly>
         </div>
-        <div class="filter-item">
-          <label>Filter Data</label>
+        <!-- <div class="filter-item">
+          <label>Filter Data Tahunan/Mingguan</label>
           <select name="" id="" v-model="dataType" class="data-picker">
             <option value="month">Bulanan</option>
             <option value="year">Tahunan</option>
+          </select>
+        </div> -->
+
+        <div class="filter-item">
+          <label>Filter Data </label>
+          <select name="" id="" v-model="selectedFilter" class="data-picker">
+            <option value="Performa">Performa</option>
+            <option value="Beban Kerja">Beban Kerja</option>
+            <option value="Tepat Waktu Kerja">Tepat Waktu Kerja</option>
+            <option value="Performa Bug">Performa Bug</option>
           </select>
         </div>
       </div>
@@ -63,9 +74,17 @@
           <thead>
             <tr>
               <th>Rank</th>
-              <th>Nama Karyawan</th>
-              <th>Role</th>
-              <th>Task Selesai</th>
+              <th
+                style="
+                  width: 700px;
+                  /* border: 1px solid #010101; */
+                  /* border-width: 0 1px; */
+                "
+              >
+                Nama Karyawan
+              </th>
+              <!-- <th>Role</th> -->
+              <!-- <th>Task Selesai</th> -->
               <th>Skor</th>
             </tr>
           </thead>
@@ -87,22 +106,25 @@
 
               <td class="emp-name">
                 <strong>{{ emp.name }}</strong>
-              </td>
-
-              <td>
                 <span class="role-badge">
                   {{ emp.role }}
                 </span>
               </td>
 
-              <td>{{ emp.tasks_completed }}</td>
+              <!-- <td>
+                <span class="role-badge">
+                  {{ emp.role }}
+                </span>
+              </td> -->
+
+              <!-- <td>{{ emp.tasks_completed }}</td> -->
 
               <td>
                 <span
                   class="badge main-badge"
                   :class="badgeClass(emp.category)"
                 >
-                  {{ Math.round(emp.performance_score) }}%
+                  {{ Math.round(emp.score) }}%
                 </span>
               </td>
             </tr>
@@ -111,7 +133,7 @@
       </div>
     </div>
 
-    <div class="card performance-card" v-if="daftarKaryawanYear.length">
+    <!-- <div class="card performance-card" v-if="daftarKaryawanYear.length">
       <div class="table-wrapper">
         <table class="table performance-table">
           <thead>
@@ -163,7 +185,7 @@
           </tbody>
         </table>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -188,12 +210,23 @@
   font-weight: 600;
 }
 
+.emp-name {
+  text-align: justify;
+  /* width: 280px; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  /* border: 1px solid #e2e8f0; */
+}
+
 .role-badge {
   background: #e2e8f0;
   padding: 4px 10px;
   border-radius: 8px;
   font-size: 12px;
   text-transform: capitalize;
+  width: fit-content;
 }
 </style>
 
@@ -545,11 +578,6 @@ h2 {
   font-size: 9px;
 }
 
-.emp-name {
-  text-align: justify;
-  width: 280px;
-}
-
 /* .empty-score:hover {
   cursor: default;
   transform: translateY(-1px) scale(1.02);
@@ -570,18 +598,19 @@ export default {
   data() {
     return {
       dateMonth: null,
-      dateYear: null,
+      // dateYear: null,
       daftarKaryawan: [],
-      daftarKaryawanYear: [],
+      // daftarKaryawanYear: [],
       displayPeriod: "",
       isLoading: false,
-      dataType: "month",
+      // dataType: "month",
+      selectedFilter: "Performa",
     };
   },
 
   mounted() {
     this.setDefaultMonth();
-    this.setDefaultYear();
+    // this.setDefaultYear();
     this.onDateChange(); // auto load pertama
   },
 
@@ -590,7 +619,7 @@ export default {
       return this.dateMonth?.month + 1;
     },
     selectedYear() {
-      return this.dataType === "year" ? this.dateYear : this.dateMonth?.year;
+      return this.dateMonth?.year;
     },
     totalWeeks() {
       return this.daftarKaryawan[0]?.weekly_performance.length || 0;
@@ -601,6 +630,25 @@ export default {
 
       return bulan;
     },
+    // filteredData() {
+    //   // return [...this.daftarKaryawan]
+    //   //   .sort((a, b) => b[this.selectedFilter] - a[this.selectedFilter])
+    //   //   .map((item, index) => ({
+    //   //     ...item,
+    //   //     rank: index + 1,
+    //   //   }));
+
+    //   let data = this.daftarKaryawan;
+
+    //   data = data.sort((a, b) => {
+    //     return b[this.selectedFilter] - a[this.selectedFilter];
+    //   });
+
+    //   return data.map((item, index) => ({
+    //     ...item,
+    //     rank: index + 1,
+    //   }));
+    // },
   },
   methods: {
     highlightRank(rank) {
@@ -640,33 +688,43 @@ export default {
     onDateChange() {
       if (this.isLoading) return;
 
-      if (this.dataType === "year") {
-        if (!this.dateYear) return;
+      // if (this.dataType === "year") {
+      //   if (!this.dateYear) return;
 
-        this.displayPeriod = `Tahun ${this.dateYear}`;
-        // this.dateMonth = null;
+      //   this.displayPeriod = `Tahun ${this.dateYear}`;
+      //   // this.dateMonth = null;
 
-        this.$router.replace({
-          path: "/admin/gamifications",
-          query: {
-            // ...this.$route.query,
-            tahun: this.dateYear,
-          },
-        });
-      } else {
-        if (!this.dateMonth) return;
+      //   this.$router.replace({
+      //     path: "/admin/gamifications",
+      //     query: {
+      //       // ...this.$route.query,
+      //       tahun: this.dateYear,
+      //     },
+      //   });
+      // } else {
+      //   if (!this.dateMonth) return;
 
-        this.displayPeriod = `${this.formatBulan(this.selectedMonth)} ${this.selectedYear}`;
+      //   this.displayPeriod = `${this.formatBulan(this.selectedMonth)} ${this.selectedYear}`;
 
-        this.$router.replace({
-          path: "/admin/gamifications",
-          query: {
-            ...this.$route.query,
-            bulan: this.formatBulan(this.selectedMonth),
-            tahun: this.selectedYear,
-          },
-        });
-      }
+      //   this.$router.replace({
+      //     path: "/admin/gamifications",
+      //     query: {
+      //       ...this.$route.query,
+      //       bulan: this.formatBulan(this.selectedMonth),
+      //       tahun: this.selectedYear,
+      //     },
+      //   });
+      // }
+
+      this.$router.replace({
+        path: "/admin/gamifications",
+        query: {
+          ...this.$route.query,
+          bulan: this.formatBulan(this.selectedMonth),
+          tahun: this.selectedYear,
+          by: this.selectedFilter,
+        },
+      });
 
       this.dataKaryawan();
     },
@@ -675,36 +733,45 @@ export default {
       this.isLoading = true;
 
       try {
-        if (this.dataType === "year") {
-          const res = await this.$api.get(
-            `/api/v1/workload/leaderboard?year=${this.dateYear}`,
-          );
+        // if (this.dataType === "year") {
+        //   const res = await this.$api.get(
+        //     `/api/v1/workload/leaderboard?year=${this.dateYear}`,
+        //   );
 
-          this.daftarKaryawanYear = res.data.leaderboard || [];
+        //   this.daftarKaryawanYear = res.data.leaderboard || [];
 
-          console.log(
-            `Data di tahun ${this.dateYear}:`,
-            this.daftarKaryawanYear,
-          );
+        //   console.log(
+        //     `Data di tahun ${this.dateYear}:`,
+        //     this.daftarKaryawanYear,
+        //   );
 
-          console.log("data per bulan: ", res);
+        //   console.log("data per bulan: ", res);
 
-          this.daftarKaryawan = [];
-        } else {
-          const res = await this.$api.get(
-            `/api/v1/workload/leaderboard?month=${this.selectedMonth}&year=${this.selectedYear}`,
-          );
+        //   this.daftarKaryawan = [];
+        // } else {
+        //   const res = await this.$api.get(
+        //     `/api/v1/workload/leaderboard?month=${this.selectedMonth}&year=${this.selectedYear}`,
+        //   );
 
-          this.daftarKaryawan = res.data.leaderboard || [];
-          this.daftarKaryawanYear = [];
-          // this.displayPeriod = res.data.display_period;
+        //   this.daftarKaryawan = res.data.leaderboard || [];
+        //   this.daftarKaryawanYear = [];
+        //   // this.displayPeriod = res.data.display_period;
 
-          console.log("data per minggu: ", res);
-        }
+        //   console.log("data per minggu: ", res);
+        // }
+        const res = await this.$api.get(
+          `/api/v1/workload/leaderboard?month=${this.selectedMonth}&year=${this.selectedYear}&by=${this.selectedFilter}`,
+        );
+
+        this.daftarKaryawan = res.data.leaderboard || [];
+        // this.daftarKaryawanYear = [];
+        // this.displayPeriod = res.data.display_period;
+
+        console.log("data per minggu: ", res);
       } catch (err) {
         console.error(err);
         this.daftarKaryawan = [];
-        this.daftarKaryawanYear = [];
+        // this.daftarKaryawanYear = [];
       } finally {
         this.isLoading = false;
       }
@@ -762,13 +829,16 @@ export default {
     // end() {
     //   this.onDateChange();
     // },
-    dataType(newVal) {
-      if (newVal === "year") {
-        // this.dateMonth = null;
-      } else {
-        this.setDefaultMonth();
-      }
+    // dataType(newVal) {
+    //   if (newVal === "year") {
+    //     // this.dateMonth = null;
+    //   } else {
+    //     this.setDefaultMonth();
+    //   }
 
+    //   this.onDateChange();
+    // },
+    selectedFilter() {
       this.onDateChange();
     },
   },

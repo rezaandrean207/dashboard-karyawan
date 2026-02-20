@@ -8,8 +8,9 @@
 
   <div class="isi">
     <!-- Header -->
-    <h2>Performa Mingguan -</h2>
-    <p class="subtitle">Jumlah minggu: minggu</p>
+    <!-- <h2>Performa Mingguan - {{ displayPeriod }}</h2>
+    <p class="subtitle">Daftar 5 karyawan teratas dengan performa terbaik</p> -->
+    <h2>Gamifikasi Karyawan</h2>
 
     <!-- Filter -->
     <div class="card filter-card">
@@ -18,32 +19,121 @@
       </div>
 
       <div class="filter-row">
+        <!-- <div class="filter-item">
+          <label>Tahun</label>
+          <ClientOnly>
+            <VueDatePicker
+              v-model="dateYear"
+              year-picker
+              :formats="{ year: 'yo' }"
+              :disabled="dataType === 'month'"
+              :class="{ disabled_date: dataType === 'month' }"
+              @update:model-value="onDateChange"
+              class="month-picker"
+            />
+          </ClientOnly>
+        </div> -->
+
         <div class="filter-item">
           <label>Bulan</label>
-          <div class="dates-wrapper">
-            <ClientOnly>
-              <VueDatePicker
-                format="dd-MM-yyyy"
-                v-model="start"
-                model-type="yyyy-MM-dd"
-                :time-config="{ enableTimePicker: false }"
-                class="data-picker"
-            /></ClientOnly>
-            <span class="separator">➡️</span>
-            <ClientOnly>
-              <VueDatePicker
-                format="dd-MM-yyyy"
-                v-model="end"
-                model-type="yyyy-MM-dd"
-                :time-config="{ enableTimePicker: false }"
-                class="data-picker"
-            /></ClientOnly>
-          </div>
+          <ClientOnly>
+            <VueDatePicker
+              v-model="dateMonth"
+              month-picker
+              :formats="{ month: 'LLLL' }"
+              :disabled="dataType === 'year'"
+              :class="{ disabled_date: dataType === 'year' }"
+              @update:model-value="onDateChange"
+              class="month-picker"
+            />
+          </ClientOnly>
+        </div>
+        <!-- <div class="filter-item">
+          <label>Filter Data Tahunan/Mingguan</label>
+          <select name="" id="" v-model="dataType" class="data-picker">
+            <option value="month">Bulanan</option>
+            <option value="year">Tahunan</option>
+          </select>
+        </div> -->
+
+        <div class="filter-item">
+          <label>Filter Data </label>
+          <select name="" id="" v-model="selectedFilter" class="data-picker">
+            <option value="Performa">Performa</option>
+            <option value="Beban Kerja">Beban Kerja</option>
+            <option value="Tepat Waktu Kerja">Tepat Waktu Kerja</option>
+            <option value="Performa Bug">Performa Bug</option>
+          </select>
         </div>
       </div>
     </div>
 
     <div class="card performance-card" v-if="daftarKaryawan.length">
+      <div class="table-wrapper">
+        <table class="table performance-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th
+                style="
+                  width: 700px;
+                  /* border: 1px solid #010101; */
+                  /* border-width: 0 1px; */
+                "
+              >
+                Nama Karyawan
+              </th>
+              <!-- <th>Role</th> -->
+              <!-- <th>Task Selesai</th> -->
+              <th>Skor</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr
+              v-for="emp in daftarKaryawan"
+              :key="emp.rank"
+              :class="{ isUser: emp.clickup_id === userId }"
+            >
+              <td class="rank-col">
+                <span class="rank-badge" :class="highlightRank(emp.rank)">
+                  <span v-if="emp.rank === 1">🥇</span>
+                  <span v-else-if="emp.rank === 2">🥈</span>
+                  <span v-else-if="emp.rank === 3">🥉</span>
+                  <span v-else>{{ emp.rank }}</span>
+                </span>
+              </td>
+
+              <td class="emp-name">
+                <strong>{{ emp.name }}</strong>
+                <span class="role-badge">
+                  {{ emp.role }}
+                </span>
+              </td>
+
+              <!-- <td>
+                <span class="role-badge">
+                  {{ emp.role }}
+                </span>
+              </td> -->
+
+              <!-- <td>{{ emp.tasks_completed }}</td> -->
+
+              <td>
+                <span
+                  class="badge main-badge"
+                  :class="badgeClass(emp.category)"
+                >
+                  {{ Math.round(emp.score) }}%
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- <div class="card performance-card" v-if="daftarKaryawanYear.length">
       <div class="table-wrapper">
         <table class="table performance-table">
           <thead>
@@ -58,9 +148,9 @@
 
           <tbody>
             <tr
-              v-for="emp in daftarKaryawan"
+              v-for="emp in daftarKaryawanYear"
               :key="emp.rank"
-              :class="{ isUser: emp.clickup_id === userId }"
+              :class="highlightRank(emp.rank)"
             >
               <td class="rank-col">
                 <span class="rank-badge" :class="highlightRank(emp.rank)">
@@ -88,14 +178,14 @@
                   class="badge main-badge"
                   :class="badgeClass(emp.category)"
                 >
-                  {{ Math.round(emp.performance_score) }}
+                  {{ Math.round(emp.performance_score) }}%
                 </span>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -113,16 +203,21 @@
   background: rgba(205, 127, 50, 0.08);
 } */
 
-.isUser {
-  background: rgba(37, 99, 235, 0.08);
-  border-left: 2px solid #2563eb;
-}
-
 .rank-badge {
   /* background: #f1f5f9; */
   padding: 6px 10px;
   border-radius: 8px;
   font-weight: 600;
+}
+
+.emp-name {
+  text-align: justify;
+  /* width: 280px; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  /* border: 1px solid #e2e8f0; */
 }
 
 .role-badge {
@@ -131,6 +226,12 @@
   border-radius: 8px;
   font-size: 12px;
   text-transform: capitalize;
+  width: fit-content;
+}
+
+.isUser {
+  background: rgba(37, 99, 235, 0.08);
+  border-left: 2px solid #2563eb;
 }
 </style>
 
@@ -167,12 +268,6 @@
 .filter-item {
   max-width: 360px;
   width: 100%;
-}
-
-.dates-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 12px;
 }
 
 /* Label */
@@ -226,6 +321,16 @@
 .month-picker input,
 .data-picker input {
   padding-left: 36px !important;
+}
+
+.data-picker {
+  border: 1px solid var(--dp-border-color);
+  padding: 7px 12px;
+  border-radius: 10px;
+  background-color: var(--dp-background-color);
+  color: var(--dp-text-color);
+  font-size: var(--dp-font-size);
+  font-family: var(--dp-font-family);
 }
 
 .disabled_date {
@@ -478,11 +583,6 @@ h2 {
   font-size: 9px;
 }
 
-.emp-name {
-  text-align: justify;
-  width: 280px;
-}
-
 /* .empty-score:hover {
   cursor: default;
   transform: translateY(-1px) scale(1.02);
@@ -502,42 +602,76 @@ export default {
 
   data() {
     return {
-      start: "",
-      end: "",
+      dateMonth: null,
+      // dateYear: null,
       daftarKaryawan: [],
+      // daftarKaryawanYear: [],
+      displayPeriod: "",
       isLoading: false,
+      // dataType: "month",
+      selectedFilter: "Performa",
       userId: null,
     };
   },
 
   mounted() {
-    this.setDefaultDate();
-    this.dataKaryawan();
-
-    // function aksesCookie() {
-    //   const id = useCookie("clickup_id").value;
-
-    //   console.log("clickup_id:", id);
-    // }
-    // aksesCookie();
+    this.setDefaultMonth();
+    // this.setDefaultYear();
+    this.onDateChange(); // auto load pertama
   },
 
-  computed: {},
+  computed: {
+    selectedMonth() {
+      return this.dateMonth?.month + 1;
+    },
+    selectedYear() {
+      return this.dateMonth?.year;
+    },
+    totalWeeks() {
+      return this.daftarKaryawan[0]?.weekly_performance.length || 0;
+    },
+    nameBulan() {
+      let bulan = this.daftarKaryawanYear[0]?.monthly_performance.length || 0;
+      console.log("Bulan: ", bulan);
+
+      return bulan;
+    },
+    // filteredData() {
+    //   // return [...this.daftarKaryawan]
+    //   //   .sort((a, b) => b[this.selectedFilter] - a[this.selectedFilter])
+    //   //   .map((item, index) => ({
+    //   //     ...item,
+    //   //     rank: index + 1,
+    //   //   }));
+
+    //   let data = this.daftarKaryawan;
+
+    //   data = data.sort((a, b) => {
+    //     return b[this.selectedFilter] - a[this.selectedFilter];
+    //   });
+
+    //   return data.map((item, index) => ({
+    //     ...item,
+    //     rank: index + 1,
+    //   }));
+    // },
+  },
   methods: {
-    setDefaultDate() {
-      if (this.start && this.end) return;
-      const today = new Date();
-      const firstDay = new Date();
-      // sevenDaysAgo.setDate(today.getDate() - 30);
-      firstDay.setDate(1);
-
-      // Format ke YYYY-MM-DD (format input type="date")
-      const format = (date) => date.toISOString().split("T")[0];
-
-      this.start = format(firstDay);
-      this.end = format(today);
-
-      this.onDateChange();
+    highlightRank(rank) {
+      if (rank === 1) return "rank-gold";
+      if (rank === 2) return "rank-silver";
+      if (rank === 3) return "rank-bronze";
+    },
+    setDefaultMonth() {
+      const now = new Date();
+      this.dateMonth = {
+        month: now.getMonth(),
+        year: now.getFullYear(),
+      };
+    },
+    setDefaultYear() {
+      const now = new Date();
+      this.dateYear = now.getFullYear();
     },
     formatBulan(bulan) {
       const bulanNames = [
@@ -557,23 +691,46 @@ export default {
       return bulanNames[bulan - 1] || "-";
     },
 
-    highlightRank(rank) {
-      if (rank === 1) return "rank-gold";
-      if (rank === 2) return "rank-silver";
-      if (rank === 3) return "rank-bronze";
-    },
     onDateChange() {
-      if (!this.start || !this.end) return;
       if (this.isLoading) return;
 
-      // this.$router.replace({
-      //   path: "/admin/gamifications",
-      //   query: {
-      //     ...this.$route.query,
-      //     start: this.start,
-      //     end: this.end,
-      //   },
-      // });
+      // if (this.dataType === "year") {
+      //   if (!this.dateYear) return;
+
+      //   this.displayPeriod = `Tahun ${this.dateYear}`;
+      //   // this.dateMonth = null;
+
+      //   this.$router.replace({
+      //     path: "/admin/gamifications",
+      //     query: {
+      //       // ...this.$route.query,
+      //       tahun: this.dateYear,
+      //     },
+      //   });
+      // } else {
+      //   if (!this.dateMonth) return;
+
+      //   this.displayPeriod = `${this.formatBulan(this.selectedMonth)} ${this.selectedYear}`;
+
+      //   this.$router.replace({
+      //     path: "/admin/gamifications",
+      //     query: {
+      //       ...this.$route.query,
+      //       bulan: this.formatBulan(this.selectedMonth),
+      //       tahun: this.selectedYear,
+      //     },
+      //   });
+      // }
+
+      this.$router.replace({
+        path: "/karyawan/gamificationsKaryawan",
+        query: {
+          ...this.$route.query,
+          bulan: this.formatBulan(this.selectedMonth),
+          tahun: this.selectedYear,
+          by: this.selectedFilter,
+        },
+      });
 
       this.dataKaryawan();
     },
@@ -582,19 +739,49 @@ export default {
       this.isLoading = true;
 
       try {
+        // if (this.dataType === "year") {
+        //   const res = await this.$api.get(
+        //     `/api/v1/workload/leaderboard?year=${this.dateYear}`,
+        //   );
+
+        //   this.daftarKaryawanYear = res.data.leaderboard || [];
+
+        //   console.log(
+        //     `Data di tahun ${this.dateYear}:`,
+        //     this.daftarKaryawanYear,
+        //   );
+
+        //   console.log("data per bulan: ", res);
+
+        //   this.daftarKaryawan = [];
+        // } else {
+        //   const res = await this.$api.get(
+        //     `/api/v1/workload/leaderboard?month=${this.selectedMonth}&year=${this.selectedYear}`,
+        //   );
+
+        //   this.daftarKaryawan = res.data.leaderboard || [];
+        //   this.daftarKaryawanYear = [];
+        //   // this.displayPeriod = res.data.display_period;
+
+        //   console.log("data per minggu: ", res);
+        // }
         const res = await this.$api.get(
-          `/api/v1/workload/leaderboard?start_date=${this.formatTanggal(this.start)}&end_date=${this.formatTanggal(this.end)}`,
+          `/api/v1/workload/leaderboard?month=${this.selectedMonth}&year=${this.selectedYear}&by=${this.selectedFilter}`,
         );
 
         this.daftarKaryawan = res.data.leaderboard || [];
+        // this.daftarKaryawanYear = [];
+        // this.displayPeriod = res.data.display_period;
+
         this.userId = useCookie("clickup_id").value;
 
         console.log("Clickup Id kamu: ", this.userId);
 
-        console.log("Data karyawan berhasil diambil:", this.daftarKaryawan);
+        console.log("data per minggu: ", res);
       } catch (err) {
         console.error(err);
         this.daftarKaryawan = [];
+        // this.daftarKaryawanYear = [];
       } finally {
         this.isLoading = false;
       }
@@ -652,8 +839,18 @@ export default {
     // end() {
     //   this.onDateChange();
     // },
-    start: "onDateChange",
-    end: "onDateChange",
+    // dataType(newVal) {
+    //   if (newVal === "year") {
+    //     // this.dateMonth = null;
+    //   } else {
+    //     this.setDefaultMonth();
+    //   }
+
+    //   this.onDateChange();
+    // },
+    selectedFilter() {
+      this.onDateChange();
+    },
   },
 };
 </script>

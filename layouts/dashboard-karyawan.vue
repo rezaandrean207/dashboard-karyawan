@@ -33,29 +33,29 @@
 
         <div class="sidebar-text">
           <!-- <NuxtLink
-            to="/listKaryawan"
-            class="listKaryawan"
-            :class="{ active: $route.path === '/listKaryawan' }"
-          >
-            <i class="fa-solid fa-users"></i>
-            <p>Daftar Karyawan</p>
-          </NuxtLink>
-          <NuxtLink
-            to="/bebanKerja"
-            class="performance"
-            :class="{ active: $route.path === '/bebanKerja' }"
-          >
-            <i class="fa-regular fa-clock"></i>
-            <p>Beban Kerja</p>
-          </NuxtLink>
-          <NuxtLink
-            to="/jadwalLibur"
-            class="menu-item"
-            :class="{ active: $route.path === '/jadwalLibur' }"
-          >
-            <i class="fa-regular fa-calendar"></i>
-            <p>Jadwal Libur</p>
-          </NuxtLink> -->
+          to="/admin/listKaryawan"
+          class="listKaryawan"
+          :class="{ active: $route.path === '/admin/listKaryawan' }"
+        >
+          <i class="fa-solid fa-users"></i>
+          <p>Daftar Karyawan</p>
+        </NuxtLink>
+        <NuxtLink
+          to="/admin/bebanKerja"
+          class="performance"
+          :class="{ active: $route.path === '/admin/bebanKerja' }"
+        >
+          <i class="fa-regular fa-clock"></i>
+          <p>Beban Kerja</p>
+        </NuxtLink>
+        <NuxtLink
+          to="/admin/jadwalLibur"
+          class="menu-item"
+          :class="{ active: $route.path === '/admin/jadwalLibur' }"
+        >
+          <i class="fa-regular fa-calendar"></i>
+          <p>Jadwal Libur</p>
+        </NuxtLink> -->
           <NuxtLink
             to="/karyawan/performaSaya"
             class="menu-item"
@@ -64,6 +64,27 @@
             <span class="material-symbols-outlined"> bar_chart </span>
             <p>Performa Saya</p>
           </NuxtLink>
+
+          <NuxtLink
+            to="/karyawan/gamificationsKaryawan"
+            class="menu-item"
+            :class="{
+              active: $route.path === '/karyawan/gamificationsKaryawan',
+            }"
+          >
+            <span class="material-symbols-outlined"> trophy </span>
+            <p>Gamifications</p>
+          </NuxtLink>
+
+          <NuxtLink
+            to="/karyawan/ganttChartKaryawan"
+            class="menu-item"
+            :class="{ active: $route.path === '/karyawan/ganttChartKaryawan' }"
+          >
+            <span class="material-symbols-outlined"> timeline </span>
+            <p>Gantt Chart</p>
+          </NuxtLink>
+
           <NuxtLink
             to="/karyawan/changePasswordKaryawan"
             class="menu-item"
@@ -154,6 +175,15 @@
         >
           <span class="material-symbols-outlined"> trophy </span>
           <p>Gamifications</p>
+        </NuxtLink>
+
+        <NuxtLink
+          to="/karyawan/ganttChartKaryawan"
+          class="menu-item"
+          :class="{ active: $route.path === '/karyawan/ganttChartKaryawan' }"
+        >
+          <span class="material-symbols-outlined"> timeline </span>
+          <p>Gantt Chart</p>
         </NuxtLink>
 
         <NuxtLink
