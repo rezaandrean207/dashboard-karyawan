@@ -47,12 +47,19 @@
 
         <div class="detail-item">
           <span class="label">Start Date</span>
-          <span class="value">{{ detailTask.start_date }}</span>
+          <span class="value">{{ detailTask.start_date_ui }}</span>
         </div>
 
         <div class="detail-item">
           <span class="label">Due Date</span>
-          <span class="value">{{ detailTask.due_date }}</span>
+          <span class="value">{{ detailTask.due_date_ui }}</span>
+        </div>
+
+        <div class="detail-item">
+          <span class="label">Tepat Waktu Kerja</span>
+          <span class="value"
+            >{{ detailTask.time_efficiency_percentage }}%</span
+          >
         </div>
 
         <div
@@ -62,7 +69,7 @@
             detailTask.time_spent_hours !== null
           "
         >
-          <span class="label">Tepat Waktu Kerja</span>
+          <span class="label">Durasi Penyelesaian</span>
           <span class="value">{{ detailTask.time_spent_hours }} Jam</span>
         </div>
 
@@ -114,7 +121,7 @@
         </div>
 
         <!-- Assignee to -->
-        <!-- <div class="multi-select">
+        <div class="multi-select">
           <div class="select-box" @click="openAssignee = !openAssignee">
             <span class="selected-text" v-if="selected.length">
               {{ selected.join(", ") }}
@@ -138,7 +145,7 @@
               {{ assignee }}
             </label>
           </div>
-        </div> -->
+        </div>
 
         <!-- Status Task -->
         <div class="multi-select">
@@ -290,10 +297,30 @@
                   // top: '8px',
                 }"
               >
-                <span class="project-name">{{ task.project_name }}</span>
+                <div
+                  class="avatar-corner"
+                  :style="{
+                    border: '2px solid ' + task.color,
+                    boxShadow: '0 3px 8px ' + task.color + '80',
+                  }"
+                >
+                  <!-- <img :src="task.avatar" alt="avatar" /> -->
+                  <!-- <img src="/img/profil.png" alt="avatar" /> -->
+                  <img
+                    :src="
+                      getProfileImage(task.profile_picture_url) ||
+                      '/img/profil.png'
+                    "
+                    alt="Profile Picture"
+                    @error="handleImgError"
+                  />
+                </div>
                 <span class="assignee">{{ task.assignee_to }}</span>
                 <span class="task-title">{{ task.name }}</span>
-                <span class="status-task">{{ task.status_name }}</span>
+                <div class="footer-task">
+                  <span class="project-name">{{ task.project_name }}</span>
+                  <span class="status-task">{{ task.status_name }}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -589,7 +616,7 @@
 }
 
 .kalender {
-  /* max-height: 100dvh; */
+  max-height: 100dvh;
   overflow: auto;
   margin-top: 20px;
   padding-bottom: 10px;
@@ -819,7 +846,7 @@
   z-index: 16;
 }
 
-.task-bar .project-name {
+/* .task-bar .project-name {
   font-size: clamp(1px, calc(8px + (var(--day-width) - 100px) * 0.03), 13px);
   font-weight: 600;
   letter-spacing: 0.05em;
@@ -831,7 +858,7 @@
   border-radius: 4px;
 
   margin-bottom: 2px;
-}
+} */
 
 .task-bar .assignee {
   /* font-size: 9px; */
@@ -853,12 +880,13 @@
   margin-bottom: 2px;
 }
 
-.task-bar .status-task {
+.task-bar .status-task,
+.project-name {
   /* font-size: 9px; */
   /* font-size: clamp(9px, calc(9px + (var(--day-width) - 100px) * 0.025), 12px); */
   font-weight: 700;
   padding: 2px 8px;
-  border-radius: 999px;
+  /* border-radius: 999px; */
   letter-spacing: 0.04em;
   text-transform: uppercase;
   margin-top: 2px;
@@ -866,6 +894,18 @@
   background: rgba(255, 255, 255, 0.18);
   border: 1px solid rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(2px);
+
+  font-size: clamp(1px, calc(8px + (var(--day-width) - 100px) * 0.03), 13px);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  /* opacity: 0.7; */
+  text-transform: uppercase;
+
+  /* background: rgba(255, 255, 255, 0.12); */
+  padding: 2px 6px;
+  border-radius: 4px;
+
+  margin-bottom: 2px;
 }
 
 .task-bar .assignee,
@@ -878,6 +918,12 @@
   filter: brightness(1.08);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
   z-index: 20;
+}
+
+.footer-task {
+  display: flex;
+  gap: 6px;
+  margin-top: auto;
 }
 
 .no-task {
@@ -900,6 +946,32 @@
   /* display: none; */
   height: 50px;
   color: #fff;
+}
+</style>
+
+<!-- Profil -->
+<style scoped>
+.avatar-corner {
+  position: absolute;
+  top: -15px;
+  left: -15px;
+
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+
+  /* border: 2px solid #ffffff; */
+  background: #ffffff;
+
+  /* box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25); */
+  z-index: 30;
+}
+
+.avatar-corner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 </style>
 
@@ -1019,9 +1091,13 @@
 <!-- Zoom -->
 <style scoped>
 .zoom-wrapper {
-  width: 99%;
+  /* width: 99%; */
   text-align: right;
   margin-top: 5px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 99;
 }
 
 .zoom-panel {
@@ -1044,10 +1120,8 @@
   background: rgba(239, 246, 255, 0.85);
 
   box-shadow:
-    0 8px 24px rgba(59, 130, 246, 0.25),
+    0 8px 24px rgba(45, 126, 255, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.6);
-
-  z-index: 99;
 }
 
 /* tombol */
@@ -1123,6 +1197,7 @@ export default {
       selectedStatus: [], // status_name
       selectedProject: [], // project name
       dayWidth: 100, // px per hari (default)
+      dayWidthImage: 50, // px per hari untuk gambar avatar
       minZoom: 20,
       maxZoom: 200,
       zoomStep: 20,
@@ -1137,6 +1212,16 @@ export default {
     // this.ambilTask();
   },
   methods: {
+    getProfileImage(url) {
+      const baseURL = "https://api.clickup.devlmu.com";
+
+      if (!url) return "/img/profil.png";
+
+      return baseURL + url;
+    },
+    handleImgError(event) {
+      event.target.src = "/img/profil.png";
+    },
     shadeColor(color, percent) {
       let r = parseInt(color.slice(1, 3), 16);
       let g = parseInt(color.slice(3, 5), 16);
@@ -1356,23 +1441,39 @@ export default {
 
       if (end < start) return 0;
 
+      console.log({
+        task: task.name,
+        start: this.dayDiff(this.startDate, task.start_date),
+        end: this.dayDiff(this.startDate, task.due_date),
+      });
+
       return end - start + 1;
     },
 
     dayDiff(start, end) {
-      const normalize = (d) => {
-        if (!d) return null;
-        if (d.includes(" ")) {
-          const [date] = d.split(" ");
-          const [day, month, year] = date.split("-");
-          return `${year}-${month}-${day}`;
-        }
-        return d; // sudah yyyy-mm-dd
-      };
+      const s = this.parseDate(start);
+      const e = this.parseDate(end);
 
-      const s = new Date(normalize(start));
-      const e = new Date(normalize(end));
+      if (!s || !e) return 0;
+
       return Math.floor((e - s) / (1000 * 60 * 60 * 24));
+    },
+    parseDate(d) {
+      if (!d) return null;
+
+      // format YYYY-MM-DD
+      if (/^\d{4}-\d{2}-\d{2}$/.test(d)) {
+        const [year, month, day] = d.split("-");
+        return new Date(year, month - 1, day);
+      }
+
+      // format DD-MM-YYYY
+      if (/^\d{2}-\d{2}-\d{4}$/.test(d)) {
+        const [day, month, year] = d.split("-");
+        return new Date(year, month - 1, day);
+      }
+
+      return null;
     },
 
     zoomIn() {

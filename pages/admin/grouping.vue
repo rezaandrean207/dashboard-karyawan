@@ -91,7 +91,14 @@
                 <p>{{ index + 1 }}</p>
               </div>
               <div class="profil-karyawan">
-                <img src="/img/profil.png" alt="" />
+                <img
+                  :src="
+                    getProfileImage(k.profile_picture_url) ||
+                    '/img/profil.png'
+                  "
+                  alt="Profile Picture"
+                  @error="handleImgError"
+                />
                 <div class="name-role">
                   <h4>{{ k.name }}</h4>
                   <p>{{ k.role }}</p>
@@ -1021,6 +1028,16 @@ export default {
     // this.hariLibur();
   },
   methods: {
+    getProfileImage(url) {
+      const baseURL = "https://api.clickup.devlmu.com";
+
+      if (!url) return "/img/profil.png";
+
+      return baseURL + url;
+    },
+    handleImgError(event) {
+      event.target.src = "/img/profil.png";
+    },
     teksColorClass(warna) {
       return {
         good: warna > 100,

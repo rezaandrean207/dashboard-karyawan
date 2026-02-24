@@ -14,7 +14,13 @@
     </div>
   </div>
   <div class="konten">
-    <div class="navbar">
+    <div class="download">
+      <button @click="downloadAPK()" class="download-btn">
+        <span class="material-symbols-outlined"> download </span>Unduh aplikasi
+      </button>
+    </div>
+
+    <div class="navbar" v-if="!isAppView">
       <div class="menu">
         <i class="fa-solid fa-bars" @click="menu"></i>
       </div>
@@ -85,16 +91,28 @@
             <p>Gantt Chart</p>
           </NuxtLink>
 
-          <NuxtLink
-            to="/karyawan/changePasswordKaryawan"
-            class="menu-item"
-            :class="{
-              active: $route.path === '/karyawan/changePasswordKaryawan',
-            }"
-          >
-            <span class="material-symbols-outlined"> password_2 </span>
-            <p>Ganti Password</p>
-          </NuxtLink>
+          <div class="setting">
+            <div
+              class="menu-item"
+              @click="openMenu = !openMenu"
+              :class="{ active: openMenu }"
+            >
+              <span class="material-symbols-outlined"> settings </span
+              >Pengaturan
+            </div>
+            <div class="submenu" v-if="openMenu">
+              <NuxtLink
+                to="/karyawan/changePasswordKaryawan"
+                class="submenu-item"
+                :class="{
+                  active: $route.path === '/karyawan/changePasswordKaryawan',
+                }"
+              >
+                <!-- <span class="material-symbols-outlined"> password_2 </span> -->
+                <p>Ubah Password</p>
+              </NuxtLink>
+            </div>
+          </div>
         </div>
 
         <div class="footer_sidebar">
@@ -120,6 +138,9 @@
             </button>
           </div> -->
           <button @click="logout" class="logout">Logout</button>
+
+          <!-- VERSION -->
+          <div class="app-version">Versi {{ appVersion }}</div>
         </div>
       </div>
     </div>
@@ -186,22 +207,34 @@
           <p>Gantt Chart</p>
         </NuxtLink>
 
-        <NuxtLink
-          to="/karyawan/changePasswordKaryawan"
-          class="menu-item"
-          :class="{
-            active: $route.path === '/karyawan/changePasswordKaryawan',
-          }"
-        >
-          <span class="material-symbols-outlined"> password_2 </span>
-          <p>Ganti Password</p>
-        </NuxtLink>
+        <div class="setting">
+          <div
+            class="menu-item"
+            @click="openMenu = !openMenu"
+            :class="{ active: openMenu }"
+          >
+            <span class="material-symbols-outlined"> settings </span>Pengaturan
+          </div>
+          <div class="submenu" v-if="openMenu">
+            <NuxtLink
+              to="/karyawan/changePasswordKaryawan"
+              class="submenu-item"
+              :class="{
+                active: $route.path === '/karyawan/changePasswordKaryawan',
+              }"
+            >
+              <!-- <span class="material-symbols-outlined"> password_2 </span> -->
+              <p>Ubah Password</p>
+            </NuxtLink>
+          </div>
+        </div>
       </div>
 
       <div class="footer_sidebar">
         <div class="user">
-          <p>Logged in sebagai</p>
-          <h4>Karyawan</h4>
+          <p>Masuk sebagai</p>
+          <h4>{{ userId?.name }}</h4>
+          <p>Karyawan</p>
           <!-- <h4>Reza Andrean</h4> -->
           <!-- <p>Karyawan</p> -->
         </div>
@@ -223,7 +256,10 @@
           </button>
         </div> -->
 
-        <button @click="logout" class="logout">Logout</button>
+        <button @click="logout" class="logout">Keluar</button>
+
+        <!-- VERSION -->
+        <div class="app-version">Versi {{ appVersion }}</div>
       </div>
     </div>
     <NuxtPage />
@@ -291,6 +327,90 @@
 .user {
   margin-bottom: 15px;
 }
+
+.setting {
+  height: auto;
+  cursor: pointer;
+  /* margin-top: 12px; */
+  /* padding: 10px 0;
+  border-radius: 10px; */
+  /* margin-bottom: 10px auto; */
+}
+
+.submenu {
+  margin-top: 8px;
+  height: fit-content;
+  margin-left: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: fadeSlide 0.3s ease;
+  border-left: 1px solid rgb(16, 67, 185);
+}
+
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.submenu-item {
+  padding: 8px 15px;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #cfd8ff;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.submenu-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.download {
+  position: absolute;
+  top: 20px;
+  right: 50px;
+  z-index: 1000;
+}
+
+.download-btn {
+  background-color: #2563eb;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease;
+}
+
+.download-btn:hover {
+  background-color: #1e40af;
+}
+
+.app-version {
+  margin-top: 10px;
+  font-size: 12px;
+  opacity: 0.6;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+/* .app-version {
+    color: #cfd8ff;
+  } */
 </style>
 
 <script>
@@ -302,9 +422,28 @@ export default {
       loading: false,
       sukses: false,
       notif: false,
+      openMenu: false,
+      daftar: [],
+      userId: null,
+      appVersion: "1.1",
+      // userId: useCookie("userId"),
     };
   },
+  mounted() {
+    this.dataKaryawan();
+  },
   methods: {
+    downloadAPK() {
+      const apkUrl = new URL("@/assets/DNA Monitoring.apk", import.meta.url)
+        .href;
+
+      const link = document.createElement("a");
+      link.href = apkUrl;
+      link.download = "DNA Monitoring.apk";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    },
     menu() {
       this.sidebar = true;
     },
@@ -349,6 +488,23 @@ export default {
         this.loading = false;
       }
     },
+    async dataKaryawan() {
+      try {
+        const response = await this.$api.get("/api/v1/clickup/members");
+
+        this.daftar = response.data.users;
+
+        const user = Number(useCookie("clickup_id").value);
+        console.log("Data Karyawan:", response.data);
+
+        this.userId = this.daftar.find((k) => k.clickup_id === user);
+
+        console.log("nama karyawan: ", this.userId.name);
+      } catch (error) {
+        console.error("Gagal mengambil data karyawan:", error);
+      }
+    },
+    pilihData(data) {},
     logout() {
       const token = useCookie("token");
       token.value = null;
@@ -359,6 +515,11 @@ export default {
     },
     openNotif() {
       this.notif = true;
+    },
+  },
+  computed: {
+    isAppView() {
+      return this.$route.query.view === "app";
     },
   },
 };

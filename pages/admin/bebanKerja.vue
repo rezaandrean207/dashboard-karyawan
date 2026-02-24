@@ -197,7 +197,11 @@
     >
       <div class="profil">
         <div class="profil_karyawan">
-          <img src="/img/profil.png" alt="" />
+          <img
+            :src="getProfileImage(k.profile_picture_url) || '/img/profil.png'"
+            alt="Profile Picture"
+            @error="handleImgError"
+          />
           <div class="about">
             <h4>{{ k.username }}</h4>
             <p>{{ k.role }}</p>
@@ -330,15 +334,22 @@
     <div class="card_karyawan">
       <div class="card_profile">
         <div class="card_left">
-          <img src="/img/profil.png" alt="" />
+          <img
+            :src="
+              getProfileImage(detailKaryawan.profile_picture_url) ||
+              '/img/profil.png'
+            "
+            alt="Profile Picture"
+            @error="handleImgError"
+          />
           <div class="card_name">
             <h3>{{ detailKaryawan.username }}</h3>
             <p>{{ detailKaryawan.role }}</p>
             <div class="periode">
               <p v-if="start === '' && end === ''">Seluruh Periode</p>
               <p v-else>
-                Periode: {{ this.formatTanggal(start) }} -
-                {{ this.formatTanggal(end) }}
+                Periode: {{ formatTanggalUI(start) }} -
+                {{ formatTanggalUI(end) }}
               </p>
             </div>
           </div>
@@ -573,15 +584,15 @@
                 </div> -->
               <div class="start_date">
                 <i class="fa-regular fa-calendar"></i>
-                <p>Mulai: {{ detailBug.start_date }}</p>
+                <p>Mulai: {{ detailBug.start_date_ui }}</p>
               </div>
               <div class="deadline">
                 <i class="fa-regular fa-calendar"></i>
-                <p>Target: {{ detailBug.due_date }}</p>
+                <p>Target: {{ detailBug.due_date_ui }}</p>
               </div>
               <div class="done_date">
                 <i class="fa-regular fa-calendar"></i>
-                <p>Selesai: {{ detailBug.date_done }}</p>
+                <p>Selesai: {{ detailBug.date_done_ui }}</p>
               </div>
               <div class="created_by">
                 <i class="fa-regular fa-user"></i>
@@ -677,12 +688,12 @@
           </div>
           <div class="start_date">
             <i class="fa-regular fa-calendar"></i>
-            <p v-if="k.start_date">Mulai: {{ k.start_date }}</p>
+            <p v-if="k.start_date">Mulai: {{ k.start_date_ui }}</p>
             <p v-if="!k.start_date">Mulai: <i>Tidak Valid</i></p>
           </div>
           <div class="deadline">
             <i class="fa-regular fa-calendar"></i>
-            <p v-if="k.due_date">Target: {{ k.due_date }}</p>
+            <p v-if="k.due_date">Target: {{ k.due_date_ui }}</p>
             <p v-if="!k.due_date">Target: <i>Tidak Valid</i></p>
           </div>
           <div
@@ -690,7 +701,7 @@
             v-if="k.status_name === 'done dev' || k.status_name === 'completed'"
           >
             <i class="fa-regular fa-calendar"></i>
-            <p>Selesai: {{ k.date_done }}</p>
+            <p>Selesai: {{ k.date_done_ui }}</p>
           </div>
           <div class="created_by">
             <i class="fa-regular fa-user"></i>
@@ -2282,6 +2293,16 @@ export default {
     // this.hariLibur();
   },
   methods: {
+    getProfileImage(url) {
+      const baseURL = "https://api.clickup.devlmu.com";
+
+      if (!url) return "/img/profil.png";
+
+      return baseURL + url;
+    },
+    handleImgError(event) {
+      event.target.src = "/img/profil.png";
+    },
     onDateChange() {
       if (!this.start || !this.end) return;
       if (this.isLoading) return;
@@ -2332,6 +2353,14 @@ export default {
     formatTanggal(tgl) {
       const [year, month, day] = tgl.split("-");
       return `${day}-${month}-${year}`;
+    },
+    formatTanggalUI(tgl) {
+      return new Date(tgl).toLocaleDateString("id-ID", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
     },
 
     setDefaultTanggal() {

@@ -77,7 +77,7 @@
           <!-- <label for="retypePassword" class="error">Password tidak valid</label> -->
 
           <div class="button">
-            <button type="submit">Login</button>
+            <button type="submit">Masuk</button>
           </div>
 
           <!-- <div class="register">

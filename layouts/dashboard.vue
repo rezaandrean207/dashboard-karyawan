@@ -14,6 +14,12 @@
     </div>
   </div>
   <div class="konten">
+    <div class="download">
+      <button @click="downloadAPK()" class="download-btn">
+        <span class="material-symbols-outlined"> download </span>Unduh aplikasi
+      </button>
+    </div>
+
     <div class="navbar" v-if="!isAppView">
       <div class="menu">
         <i class="fa-solid fa-bars" @click="menu"></i>
@@ -74,7 +80,7 @@
             :class="{ active: $route.path === '/admin/gamifications' }"
           >
             <span class="material-symbols-outlined"> trophy </span>
-            <p>Gamifications</p>
+            <p>Gamifikasi</p>
           </NuxtLink>
 
           <NuxtLink
@@ -106,15 +112,16 @@
               @click="openMenu = !openMenu"
               :class="{ active: openMenu }"
             >
-              <span class="material-symbols-outlined"> settings </span>Setting
+              <span class="material-symbols-outlined"> settings </span
+              >Pengaturan
             </div>
             <div class="submenu" v-if="openMenu">
               <NuxtLink
                 to="/admin/jadwalLibur"
-                class="menu-item"
+                class="submenu-item"
                 :class="{ active: $route.path === '/admin/jadwalLibur' }"
               >
-                <i class="fa-regular fa-calendar"></i>
+                <!-- <i class="fa-regular fa-calendar"></i> -->
                 <p>Jadwal Libur</p>
               </NuxtLink>
 
@@ -123,14 +130,14 @@
                 class="submenu-item"
                 :class="{ active: $route.path === '/admin/settingBug' }"
               >
-                <p>Bug Setting</p>
+                <p>Pengaturan Bug</p>
               </NuxtLink>
               <NuxtLink
                 to="/admin/performanceSetting"
                 class="submenu-item"
                 :class="{ active: $route.path === '/admin/performanceSetting' }"
               >
-                <p>Performance Setting</p>
+                <p>Performa</p>
               </NuxtLink>
               <NuxtLink
                 to="/admin/changePassword"
@@ -165,6 +172,10 @@
             </button>
           </div>
           <button @click="logout" class="logout">Logout</button>
+
+          <!-- VERSION -->
+          <div class="app-version">Versi {{ appVersion }}</div>
+
         </div>
       </div>
     </div>
@@ -222,7 +233,7 @@
           :class="{ active: $route.path === '/admin/gamifications' }"
         >
           <span class="material-symbols-outlined"> trophy </span>
-          <p>Gamifications</p>
+          <p>Gamifikasi</p>
         </NuxtLink>
 
         <NuxtLink
@@ -254,15 +265,15 @@
             @click="openMenu = !openMenu"
             :class="{ active: openMenu }"
           >
-            <span class="material-symbols-outlined"> settings </span>Setting
+            <span class="material-symbols-outlined"> settings </span>Pengaturan
           </div>
           <div class="submenu" v-if="openMenu">
             <NuxtLink
               to="/admin/jadwalLibur"
-              class="menu-item"
+              class="submenu-item"
               :class="{ active: $route.path === '/admin/jadwalLibur' }"
             >
-              <i class="fa-regular fa-calendar"></i>
+              <!-- <i class="fa-regular fa-calendar"></i> -->
               <p>Jadwal Libur</p>
             </NuxtLink>
 
@@ -271,14 +282,14 @@
               class="submenu-item"
               :class="{ active: $route.path === '/admin/settingBug' }"
             >
-              <p>Bug Setting</p>
+              <p>Pengaturan Bug</p>
             </NuxtLink>
             <NuxtLink
               to="/admin/performanceSetting"
               class="submenu-item"
               :class="{ active: $route.path === '/admin/performanceSetting' }"
             >
-              <p>Performance Setting</p>
+              <p>Performa</p>
             </NuxtLink>
             <NuxtLink
               to="/admin/changePassword"
@@ -293,7 +304,7 @@
 
       <div class="footer_sidebar">
         <div class="user">
-          <p>Logged in sebagai</p>
+          <p>Masuk sebagai</p>
           <h4>Admin</h4>
           <!-- <p>Admin</p> -->
         </div>
@@ -311,12 +322,15 @@
             <!-- <i v-else class="fa-solid fa-rotate-right"></i> -->
             <i v-else class="fa-solid fa-rotate-right"></i>
 
-            {{ loading ? "Menyinkronkan..." : "Sync" }}
+            {{ loading ? "Menyinkronkan..." : "Sinkronisasi" }}
             <!-- <i v-else class="fa-solid fa-circle-check"></i>     -->
           </button>
         </div>
 
-        <button @click="logout" class="logout">Logout</button>
+        <button @click="logout" class="logout">Keluar</button>
+
+        <!-- VERSION -->
+        <div class="app-version">Versi {{ appVersion }}</div>
       </div>
     </div>
     <NuxtPage />
@@ -374,6 +388,44 @@
 .submenu-item:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
+
+.download {
+  position: absolute;
+  top: 20px;
+  right: 50px;
+  z-index: 1000;
+}
+
+.download-btn {
+  background-color: #2563eb;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease;
+}
+
+.download-btn:hover {
+  background-color: #1e40af;
+}
+
+.app-version {
+  margin-top: 10px;
+  font-size: 12px;
+  opacity: 0.6;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+/* .app-version {
+    color: #cfd8ff;
+  } */
 </style>
 
 <script>
@@ -385,9 +437,21 @@ export default {
       loading: false,
       sukses: false,
       openMenu: false,
+      appVersion: "1.1",
     };
   },
   methods: {
+    downloadAPK() {
+      const apkUrl = new URL("@/assets/DNA Monitoring.apk", import.meta.url)
+        .href;
+
+      const link = document.createElement("a");
+      link.href = apkUrl;
+      link.download = "DNA Monitoring.apk";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    },
     menu() {
       this.sidebar = true;
     },

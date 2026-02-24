@@ -1,4 +1,26 @@
 <template>
+  <div v-if="isLoading" class="loading">
+    <div class="loading_tanggal">
+      <i class="fa-solid fa-spinner"></i>
+      <p>Tunggu Sebentar</p>
+    </div>
+  </div>
+
+  <div class="success-message" v-if="isSukses">
+    <div class="message-content">
+      <i class="fa-solid fa-check-circle"></i>
+      <p>{{ succesMessages }}</p>
+    </div>
+  </div>
+
+  <div class="error-message" v-if="isError">
+    <div class="message-content">
+      <!-- <i class="fa-solid fa-check-circle"></i> -->
+      <i class="fa-solid fa-circle-xmark"></i>
+      <p>{{ errorMessage }}</p>
+    </div>
+  </div>
+
   <!-- Isi Konten -->
   <div class="isi">
     <!-- Animasi sukses -->
@@ -46,7 +68,7 @@
           <select v-model="posisi">
             <option value="">Semua Posisi</option>
             <option
-              v-for="(role, index) in roleOptions"
+              v-for="(role, index) in selectedRoles"
               :key="index"
               :value="role.value"
             >
@@ -84,29 +106,143 @@
               <div
                 v-if="menuOpen === k.clickup_id"
                 class="menu-dropdown"
+                :class="{ 'open-left': isLastCard(index) }"
                 @click.stop
               >
-                <button
-                  v-if="k.status === 'nonaktif'"
-                  @click.stop="ubahStatus(k, 'aktif')"
-                >
-                  Aktifkan
-                </button>
+                <div class="button-wraper">
+                  <button
+                    v-if="k.status === 'nonaktif'"
+                    @click.stop="ubahStatus(k, 'aktif')"
+                  >
+                    Aktifkan
+                  </button>
 
-                <button
-                  v-else
-                  class="danger"
-                  @click.stop="ubahStatus(k, 'nonaktif')"
+                  <button
+                    v-else
+                    class="danger"
+                    @click.stop="ubahStatus(k, 'nonaktif')"
+                  >
+                    Nonaktifkan
+                  </button>
+
+                  <button
+                    class="role-setting submenu-trigger"
+                    @click.stop="toggleRoleMenu(k)"
+                  >
+                    Atur Role
+                  </button>
+                </div>
+
+                <!-- <button @click.stop="toggleRoleMenu(k.id)">Atur Role ▶</button> -->
+
+                <div
+                  v-if="roleMenuOpen === k.clickup_id"
+                  class="role-submenu"
+                  :class="{ 'open-left': isLastCard(index) }"
                 >
-                  Nonaktifkan
-                </button>
+                  <!-- <label v-for="role in daftarRole" :key="role.value">
+                    <input
+                      type="checkbox"
+                      :value="role.name"
+                      v-model="selectedRoles"
+                    />
+                    {{ role.name }}
+                  </label> -->
+
+                  <label
+                    v-for="role in daftarRole"
+                    :key="role.id"
+                    class="role-item"
+                  >
+                    <div class="role-left">
+                      <input
+                        type="checkbox"
+                        :value="role.name"
+                        v-model="selectedRoles"
+                      />
+                      <span>{{ role.name }}</span>
+                    </div>
+
+                    <button class="delete-role" @click.stop="openDelete(role)">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+
+                    <div
+                      class="delete-overlay"
+                      v-if="deleteRoleId === role.id"
+                      @click.stop="cancelDeleteRole"
+                    >
+                      <div class="delete-wraper">
+                        <p>Apakah Anda yakin ingin menghapus?</p>
+                        <div class="confirm-buttons">
+                          <button
+                            class="confirm"
+                            @click.stop="confirmDeleteRole(role)"
+                          >
+                            Ya
+                          </button>
+                          <button class="cancel" @click.stop="cancelDeleteRole">
+                            Tidak
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </label>
+
+                  <!-- BUTTON ROLE BARU -->
+                  <button
+                    v-if="showNewRoleInput !== k.clickup_id"
+                    @click.stop="showNewRoleInput = k.clickup_id"
+                    class="create-role"
+                  >
+                    + Role Baru
+                  </button>
+
+                  <!-- INPUT ROLE BARU -->
+                  <div v-else class="new-role-input" @click.stop>
+                    <input
+                      type="text"
+                      v-model="newRoleName"
+                      placeholder="Masukkan nama role"
+                      @keyup.enter="addRole(k)"
+                      autofocus
+                    />
+                    <button @click="addRole(k)">
+                      <span class="material-symbols-outlined"> add </span>
+                    </button>
+                    <button class="cancel" @click="cancelRoleInput">✕</button>
+                  </div>
+
+                  <button @click="saveRole(k)" class="save-role">Simpan</button>
+                </div>
               </div>
             </Transition>
           </div>
         </div>
         <div class="identitas">
           <!-- <img :src="k.user.profilPicture" alt="" /> -->
-          <img src="/img/profil.png" alt="" />
+          <div class="photo-wrapper" @click.stop>
+            <img
+              :src="getProfileImage(k.profile_picture_url) || '/img/profil.png'"
+              alt="Profile Picture"
+              @error="handleImgError"
+            />
+
+            <div class="camera-overlay" @click.stop="triggerFileInput(k)">
+              <i class="fa-solid fa-camera"></i>
+            </div>
+
+            <input
+              type="file"
+              accept="image/*"
+              :ref="'fileInput-' + k.clickup_id"
+              class="hidden-file"
+              @change="handlePhotoChange($event, k)"
+            />
+          </div>
+          <!-- <div class="edit-image">
+            <span class="material-symbols-outlined"> add_a_photo </span>
+          </div> -->
           <h4>{{ k.name }}</h4>
           <div class="peran">
             <i class="fa-solid fa-briefcase"></i>
@@ -150,7 +286,11 @@
       </div>
 
       <div class="profilImage">
-        <img src="/img/profil.png" alt="" />
+        <img
+          :src="getProfileImage(selected.profile_picture_url) || '/img/profil.png'"
+          alt="Profile Picture"
+          @error="handleImgError"
+        />
         <p>{{ selected.name }}</p>
         <div class="peran">
           <i class="fa-solid fa-briefcase"></i>
@@ -364,13 +504,18 @@
   }
 }
 
-.menu-dropdown button {
+.menu-dropdown .button-wraper button {
   width: 100%;
   padding: 10px 12px;
   background: none;
-  border: none;
+  /* border: none; */
+  border-bottom: 1px solid #e5e7eb;
   text-align: left;
   cursor: pointer;
+}
+
+.menu-dropdown button:last-child {
+  border-bottom: none;
 }
 
 .menu-dropdown button:hover {
@@ -379,6 +524,331 @@
 
 .menu-dropdown .danger {
   color: #b91c1c;
+}
+
+/* Trigger Button */
+.submenu-trigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #e5e7eb;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.submenu-trigger:hover {
+  background: #f8fafc;
+}
+
+/* Arrow */
+.submenu-trigger .arrow {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+/* Submenu Container */
+.role-submenu {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  margin-left: 8px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  /* min-width: 180px; */
+  width: 260px;
+  padding: 8px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.role-submenu.open-left {
+  right: auto;
+  left: -200%;
+}
+
+.role-submenu label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  width: 100%;
+}
+
+.role-submenu label:hover {
+  background: #f1f5f9;
+}
+
+.menu-dropdown .role-submenu .save-role {
+  width: 100%;
+  /* margin-top: 8px; */
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  background-color: #1d4ed8;
+  /* border: 1px solid #1d4ed8; */
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.create-role {
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  background-color: #e5e7eb;
+  border: 1px solid #1d4ed8;
+  border: 1px solid var(--border-soft);
+  color: black;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+/* Checkbox Item */
+.role-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+.role-item:hover {
+  background: #f1f5f9;
+}
+
+.role-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.delete-role {
+  background: transparent;
+  border: none;
+  /* color: #ef4444; */
+  color: var(--text-main);
+  font-size: 14px;
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.role-item:hover .delete-role {
+  opacity: 1;
+}
+
+.delete-role:hover {
+  color: #66676a;
+}
+
+/* Checkbox styling */
+.role-item input {
+  accent-color: #1d4ed8;
+  width: 16px;
+  height: 16px;
+}
+
+/* Save Button */
+.save-btn {
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  background: #1d4ed8;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.save-btn:hover {
+  background: #1e40af;
+}
+
+.new-role-input {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+  margin-top: 6px;
+}
+
+.new-role-input input {
+  flex: 1;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  font-size: 13px;
+  outline: none;
+}
+
+.new-role-input input:focus {
+  border-color: #1d4ed8;
+  box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.1);
+}
+
+.new-role-input button {
+  /* padding: 6px 10px; */
+  width: 28px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  background: #1d4ed8;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s ease;
+  font-size: 14px;
+}
+
+.new-role-input button .material-symbols-outlined {
+  font-size: 14px;
+}
+
+.new-role-input button:hover {
+  background: #1e40af;
+}
+
+.new-role-input .cancel {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.new-role-input .cancel:hover {
+  background: #f1f5f9;
+}
+</style>
+
+<!-- Edit image -->
+<style scoped>
+.photo-wrapper {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+}
+
+.photo-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid rgb(193, 222, 232);
+  transition: 0.2s ease;
+}
+
+/* Overlay */
+.camera-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  z-index: 10;
+}
+
+.photo-wrapper:hover .camera-overlay {
+  opacity: 1;
+}
+
+/* Hidden file input */
+.hidden-file {
+  display: none;
+}
+</style>
+
+<!-- Delete overlay -->
+<style scoped>
+.delete-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border-radius: 6px;
+}
+
+.delete-overlay .delete-wraper {
+  background: white;
+  padding: 20px 30px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.delete-overlay p {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.confirm-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.confirm {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: #ef4444;
+  color: white;
+  cursor: pointer;
+}
+
+.confirm:hover {
+  background-color: #b91c1c;
+}
+
+.cancel {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: #e5e7eb;
+  color: #374151;
+  cursor: pointer;
+}
+
+.cancel:hover {
+  background-color: #f1f5f9;
 }
 </style>
 
@@ -726,13 +1196,24 @@ export default {
       posisi: "",
       kerja: "",
       selected: {},
+      selectedUser: null,
       daftarKaryawan: [],
       searchInput: "",
       loading: false,
       sukses: false,
       menuOpen: null,
+      roleMenuOpen: null,
+      selectedRoles: [],
+      currentRoles: [],
+      daftarRole: [],
       isLoading: false,
-      beban: 50,
+      isSukses: false,
+      isError: false,
+      errorMessage: "",
+      succesMessages: "",
+      showNewRoleInput: null,
+      newRoleName: "",
+      deleteRoleId: null,
     };
   },
   mounted() {
@@ -745,6 +1226,214 @@ export default {
     // });
   },
   methods: {
+    isLastCard(index) {
+      return (index + 1) % 4 === 0;
+    },
+    openDelete(k) {
+      this.deleteRoleId = k.id;
+    },
+    cancelDeleteRole() {
+      this.deleteRoleId = null;
+    },
+    async confirmDeleteRole(role) {
+      console.log("Delete diklik");
+      this.isLoading = true;
+      this.deleteRoleId = null;
+      // Panggil API untuk menghapus role dengan this.deleteRoleId
+      try {
+        // Contoh API call (sesuaikan dengan endpoint yang benar)
+        const hapus = await this.$api.delete("/api/v1/roles", {
+          data: {
+            name: role.name,
+          },
+        });
+
+        this.succesMessages = hapus.data.message;
+        this.isSukses = true;
+
+        // Setelah berhasil, refresh daftar role
+        this.ambilData();
+      } catch (error) {
+        this.errorMessage =
+          error?.response?.data?.error || "Gagal menghapus role";
+        this.isError = true;
+        console.error("Gagal menghapus role:", error);
+      } finally {
+        setTimeout(() => {
+          this.isSukses = false;
+          this.isError = false;
+        }, 5000);
+      }
+    },
+    triggerFileInput(k) {
+      this.selectedUser = k;
+      this.$refs["fileInput-" + k.clickup_id][0].click();
+    },
+    async handlePhotoChange(event, k) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      if (file.size > 2 * 1024 * 1024) {
+        alert("Maksimal 2MB");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("profile_picture", file);
+
+      this.isLoading = true;
+
+      try {
+        const response = await this.$api.post(
+          `/api/v1/users/${k.clickup_id}/profile-picture`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          },
+        );
+
+        // update foto langsung
+        k.profile_picture_url = response.data.profile_picture_url;
+
+        this.succesMessages = "Foto profil berhasil diubah";
+        this.isSukses = true;
+      } catch (error) {
+        console.error("Upload gagal:", error);
+        alert("Gagal upload foto");
+      } finally {
+        this.isLoading = false;
+        setTimeout(() => {
+          this.isSukses = false;
+        }, 5000);
+      }
+    },
+    getProfileImage(url) {
+      const baseURL = "https://api.clickup.devlmu.com";
+
+      if (!url) return "/img/profil.png";
+
+      return baseURL + url;
+    },
+    handleImgError(event) {
+      event.target.src = "/img/profil.png";
+    },
+    async addRole() {
+      if (this.isLoading) return;
+
+      const roleName = this.newRoleName.trim().toLowerCase();
+      if (!roleName) return;
+
+      const exists = this.daftarRole.some(
+        (r) => r.name.toLowerCase() === roleName,
+      );
+
+      if (exists) {
+        this.errorMessage = "Role sudah ada";
+        this.isError = true;
+        return;
+      }
+
+      try {
+        this.isLoading = true;
+
+        const response = await this.$api.post("/api/v1/roles", {
+          name: roleName,
+        });
+
+        const newRole = response.data.data;
+
+        this.daftarRole.push(newRole);
+        // this.selectedRoles.push(newRole.name);
+
+        this.newRoleName = "";
+        this.showNewRoleInput = null;
+        this.errorMessage = "";
+
+        this.succesMessages = "Role berhasil ditambahkan";
+        this.isSukses = true;
+      } catch (error) {
+        console.error("Gagal menambahkan role:", error);
+        this.errorMessage = "Gagal menambahkan role";
+      } finally {
+        this.isLoading = false;
+        setTimeout(() => {
+          this.isSukses = false;
+        }, 5000);
+        setTimeout(() => {
+          this.isError = false;
+        }, 5000);
+      }
+    },
+    cancelRoleInput() {
+      this.showNewRoleInput = null;
+      this.newRoleName = "";
+    },
+
+    toggleRoleMenu(karyawan) {
+      if (this.roleMenuOpen === karyawan.clickup_id) {
+        this.roleMenuOpen = null;
+        return;
+      }
+
+      this.roleMenuOpen = karyawan.clickup_id;
+
+      console.log("Karyawan di pilih: ", karyawan);
+
+      if (karyawan.role) {
+        this.selectedRoles = karyawan.role
+          .split(",") // pisah berdasarkan koma
+          .map((r) => r.trim()); // hilangkan spasi
+      } else {
+        this.selectedRoles = [];
+      }
+
+      console.log("Role yang di pilih: ", this.selectedRoles);
+    },
+    async saveRole(karyawan) {
+      // const roleString = this.selectedRoles.join(",");
+      const roleString = this.selectedRoles;
+      try {
+        const response = await this.$api.put(
+          `/api/v1/clickup/users/${karyawan.clickup_id}/roles?id=${karyawan.clickup_id}`,
+          {
+            // clickup_id: karyawan.clickup_id,
+            roles: roleString,
+          },
+        );
+
+        // ambil message dari API
+        this.succesMessages = response.data.message;
+
+        // trigger sukses
+        this.isSukses = true;
+
+        console.log("Role updated:", response);
+        this.roleMenuOpen = null;
+        this.menuOpen = null;
+
+        this.ambilData();
+      } catch (error) {
+        console.error("Failed to update role:", error);
+
+        this.errorMessage =
+          error?.response?.data?.error ||
+          "Terjadi kesalahan saat mengubah setting";
+        this.isError = true;
+      } finally {
+        // Sukses
+        setTimeout(() => {
+          this.isSukses = false;
+        }, 5000);
+
+        // Error
+        setTimeout(() => {
+          this.isError = false;
+        }, 5000);
+      }
+    },
+
     toggleMenu(id) {
       this.menuOpen = this.menuOpen === id ? null : id;
     },
@@ -815,12 +1504,20 @@ export default {
     },
 
     async ambilData() {
+      this.isLoading = true;
       try {
         const member = await this.$api.get("/api/v1/clickup/members");
+        const role = await this.$api.get("/api/v1/roles");
+
         this.daftarKaryawan = member.data.users;
+        this.daftarRole = role.data.data;
+
         console.log("Struktur API:", member.data);
+        console.log("Roles API:", this.daftarRole);
       } catch (error) {
         console.error("API Error:", error);
+      } finally {
+        this.isLoading = false;
       }
     },
 
@@ -896,6 +1593,17 @@ export default {
         { value: "mobile apps", label: "Mobile Apps" },
         { value: "UI-UX", label: "UI-UX" },
       ];
+    },
+  },
+  watch: {
+    posisi() {
+      // Reset search input saat filter posisi berubah
+      this.searchInput = "";
+    },
+    roleMenuOpen(val) {
+      if (!val) {
+        this.selectedRoles = [];
+      }
     },
   },
 };

@@ -48,6 +48,19 @@
             />
           </ClientOnly>
         </div>
+
+        <div class="filter-item">
+          <label>Minggu </label>
+          <select name="" id="" v-model="selectedWeeks" class="data-picker">
+            <option
+              :value="index + 1"
+              v-for="(opt, index) in daftarMinggu"
+              :key="opt"
+            >
+              {{ opt.label }}
+            </option>
+          </select>
+        </div>
         <!-- <div class="filter-item">
           <label>Filter Data Tahunan/Mingguan</label>
           <select name="" id="" v-model="dataType" class="data-picker">
@@ -60,7 +73,7 @@
           <label>Filter Data </label>
           <select name="" id="" v-model="selectedFilter" class="data-picker">
             <option value="Performa">Performa</option>
-            <option value="Beban Kerja">Beban Kerja</option>
+            <option value="Total Beban Kerja">Beban Kerja</option>
             <option value="Tepat Waktu Kerja">Tepat Waktu Kerja</option>
             <option value="Performa Bug">Performa Bug</option>
           </select>
@@ -600,11 +613,13 @@ export default {
       dateMonth: null,
       // dateYear: null,
       daftarKaryawan: [],
+      daftarMinggu: [],
       // daftarKaryawanYear: [],
       displayPeriod: "",
       isLoading: false,
       // dataType: "month",
       selectedFilter: "Performa",
+      selectedWeeks: 1,
     };
   },
 
@@ -722,6 +737,7 @@ export default {
           ...this.$route.query,
           bulan: this.formatBulan(this.selectedMonth),
           tahun: this.selectedYear,
+          "minggu ke-": this.selectedWeeks,
           by: this.selectedFilter,
         },
       });
@@ -760,10 +776,11 @@ export default {
         //   console.log("data per minggu: ", res);
         // }
         const res = await this.$api.get(
-          `/api/v1/workload/leaderboard?month=${this.selectedMonth}&year=${this.selectedYear}&by=${this.selectedFilter}`,
+          `/api/v1/workload/leaderboard?month=${this.selectedMonth}&year=${this.selectedYear}&by=${this.selectedFilter}&week=${this.selectedWeeks}`,
         );
 
         this.daftarKaryawan = res.data.leaderboard || [];
+        this.daftarMinggu = res.data.weeks || [];
         // this.daftarKaryawanYear = [];
         // this.displayPeriod = res.data.display_period;
 
@@ -839,6 +856,9 @@ export default {
     //   this.onDateChange();
     // },
     selectedFilter() {
+      this.onDateChange();
+    },
+    selectedWeeks() {
       this.onDateChange();
     },
   },

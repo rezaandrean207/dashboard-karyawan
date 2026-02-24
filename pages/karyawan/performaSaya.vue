@@ -107,7 +107,14 @@
     <div class="card_karyawan" v-if="detailKaryawan">
       <div class="card_profile">
         <div class="card_left">
-          <img src="/img/profil.png" alt="" />
+          <img
+            :src="
+              getProfileImage(detailKaryawan.profile_picture_url) ||
+              '/img/profil.png'
+            "
+            alt="Profile Picture"
+            @error="handleImgError"
+          />
           <div class="card_name">
             <h3>{{ detailKaryawan?.username }}</h3>
             <p>{{ detailKaryawan?.role }}</p>
@@ -1046,6 +1053,8 @@ details[open] .sidebar-notif {
 
 .card_karyawan .card_profile .card_left img {
   width: 100px;
+  height: 100px;
+  object-fit: cover;
   /* border: 1px solid #010101; */
   border-radius: 50%;
   border: 5px solid rgb(193, 222, 232);
@@ -2102,6 +2111,16 @@ export default {
     // this.hariLibur();
   },
   methods: {
+    getProfileImage(url) {
+      const baseURL = "https://api.clickup.devlmu.com";
+
+      if (!url) return "/img/profil.png";
+
+      return baseURL + url;
+    },
+    handleImgError(event) {
+      event.target.src = "/img/profil.png";
+    },
     onDateChange() {
       if (!this.start || !this.end) return;
 

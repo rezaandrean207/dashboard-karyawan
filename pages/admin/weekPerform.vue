@@ -50,8 +50,8 @@
         <div class="filter-item">
           <label>Filter Data</label>
           <select name="" id="" v-model="dataType" class="data-picker">
-            <option value="month">Bulanan</option>
-            <option value="year">Tahunan</option>
+            <option value="month">Mingguan</option>
+            <option value="year">Bulanan</option>
           </select>
         </div>
       </div>
@@ -83,6 +83,8 @@
               <td v-for="(week, i) in emp.weekly_performance" :key="i">
                 <div class="week-cell">
                   <div class="main-cell">
+                    <small class="label-title">Performa</small>
+                    <!-- Performa -->
                     <span
                       v-if="week.score.value !== 0 && week.score.value !== null"
                       class="badge main-badge"
@@ -96,49 +98,58 @@
                   </div>
 
                   <div class="submenu-cell">
-                    <!-- Tepat Waktu Kerja -->
-                    <span
-                      v-if="
-                        week.tepat_waktu_kerja.value !== 0 &&
-                        week.tepat_waktu_kerja.value !== null
-                      "
-                      class="badge submenu-badge"
-                      @click="cekDetail(emp, week)"
-                      :class="badgeClass(week.tepat_waktu_kerja.category)"
-                    >
-                      {{ week.tepat_waktu_kerja.value }}%
-                    </span>
+                    <div class="submenu-item">
+                      <small class="label-sub">Tepat Waktu</small>
+                      <!-- Tepat Waktu Kerja -->
+                      <span
+                        v-if="
+                          week.tepat_waktu_kerja.value !== 0 &&
+                          week.tepat_waktu_kerja.value !== null
+                        "
+                        class="badge submenu-badge"
+                        @click="cekDetail(emp, week)"
+                        :class="badgeClass(week.tepat_waktu_kerja.category)"
+                      >
+                        {{ week.tepat_waktu_kerja.value }}%
+                      </span>
 
-                    <span v-else class="empty-score submenu-empty">—</span>
+                      <span v-else class="empty-score submenu-empty">—</span>
+                    </div>
 
-                    <!-- Total Beban Kerja -->
-                    <span
-                      v-if="
-                        week.total_beban_kerja.value !== 0 &&
-                        week.total_beban_kerja.value !== null
-                      "
-                      class="badge submenu-badge"
-                      @click="cekDetail(emp, week)"
-                      :class="badgeClass(week.total_beban_kerja.category)"
-                    >
-                      {{ week.total_beban_kerja.value }}%
-                    </span>
+                    <div class="submenu-item">
+                      <small class="label-sub">Beban Kerja</small>
+                      <!-- Total Beban Kerja -->
+                      <span
+                        v-if="
+                          week.total_beban_kerja.value !== 0 &&
+                          week.total_beban_kerja.value !== null
+                        "
+                        class="badge submenu-badge"
+                        @click="cekDetail(emp, week)"
+                        :class="badgeClass(week.total_beban_kerja.category)"
+                      >
+                        {{ week.total_beban_kerja.value }}%
+                      </span>
 
-                    <span v-else class="empty-score submenu-empty">—</span>
+                      <span v-else class="empty-score submenu-empty">—</span>
+                    </div>
 
-                    <!-- Performa Bug -->
-                    <span
-                      v-if="
-                        week.performa_bug?.value !== 0 &&
-                        week.performa_bug?.value !== null
-                      "
-                      class="badge submenu-badge"
-                      @click="cekDetail(emp, week)"
-                      :class="badgeClass(week.performa_bug?.category)"
-                    >
-                      {{ week.performa_bug?.value }}%
-                    </span>
-                    <span v-else class="empty-score submenu-empty">—</span>
+                    <div class="submenu-item">
+                      <small class="label-sub">Performa Bug</small>
+                      <!-- Performa Bug -->
+                      <span
+                        v-if="
+                          week.performa_bug?.value !== 0 &&
+                          week.performa_bug?.value !== null
+                        "
+                        class="badge submenu-badge"
+                        @click="cekDetail(emp, week)"
+                        :class="badgeClass(week.performa_bug?.category)"
+                      >
+                        {{ week.performa_bug?.value }}%
+                      </span>
+                      <span v-else class="empty-score submenu-empty">—</span>
+                    </div>
                   </div>
                 </div>
               </td>
@@ -190,6 +201,8 @@
               <td v-for="(week, i) in emp.monthly_performance" :key="i">
                 <div class="week-cell">
                   <div class="main-cell">
+                    <small class="label-title">Performa</small>
+                    <!-- Performa -->
                     <span
                       v-if="week.score.value !== 0 && week.score.value !== null"
                       class="badge main-badge"
@@ -203,49 +216,58 @@
                   </div>
 
                   <div class="submenu-cell">
-                    <!-- Tepat Waktu Kerja -->
-                    <span
-                      v-if="
-                        week.tepat_waktu_kerja.value !== 0 &&
-                        week.tepat_waktu_kerja.value !== null
-                      "
-                      class="badge submenu-badge"
-                      @click="cekDetail(emp, week)"
-                      :class="badgeClass(week.tepat_waktu_kerja.category)"
-                    >
-                      {{ week.tepat_waktu_kerja.value }}%
-                    </span>
+                    <div class="submenu-item">
+                      <small class="label-sub">Tepat Waktu</small>
+                      <!-- Tepat Waktu Kerja -->
+                      <span
+                        v-if="
+                          week.tepat_waktu_kerja.value !== 0 &&
+                          week.tepat_waktu_kerja.value !== null
+                        "
+                        class="badge submenu-badge"
+                        @click="cekDetail(emp, week)"
+                        :class="badgeClass(week.tepat_waktu_kerja.category)"
+                      >
+                        {{ week.tepat_waktu_kerja.value }}%
+                      </span>
 
-                    <span v-else class="empty-score submenu-empty">—</span>
+                      <span v-else class="empty-score submenu-empty">—</span>
+                    </div>
 
-                    <!-- Total Beban Kerja -->
-                    <span
-                      v-if="
-                        week.total_beban_kerja.value !== 0 &&
-                        week.total_beban_kerja.value !== null
-                      "
-                      @click="cekDetail(emp, week)"
-                      class="badge submenu-badge"
-                      :class="badgeClass(week.total_beban_kerja.category)"
-                    >
-                      {{ week.total_beban_kerja.value }}%
-                    </span>
+                    <div class="submenu-item">
+                      <small class="label-sub">Beban Kerja</small>
+                      <!-- Total Beban Kerja -->
+                      <span
+                        v-if="
+                          week.total_beban_kerja.value !== 0 &&
+                          week.total_beban_kerja.value !== null
+                        "
+                        class="badge submenu-badge"
+                        @click="cekDetail(emp, week)"
+                        :class="badgeClass(week.total_beban_kerja.category)"
+                      >
+                        {{ week.total_beban_kerja.value }}%
+                      </span>
 
-                    <span v-else class="empty-score submenu-empty">—</span>
+                      <span v-else class="empty-score submenu-empty">—</span>
+                    </div>
 
-                    <!-- Performa Bug -->
-                    <span
-                      v-if="
-                        week.performa_bug?.value !== 0 &&
-                        week.performa_bug?.value !== null
-                      "
-                      @click="cekDetail(emp, week)"
-                      class="badge submenu-badge"
-                      :class="badgeClass(week.performa_bug?.category)"
-                    >
-                      {{ week.performa_bug?.value }}%
-                    </span>
-                    <span v-else class="empty-score submenu-empty">—</span>
+                    <div class="submenu-item">
+                      <small class="label-sub">Performa Bug</small>
+                      <!-- Performa Bug -->
+                      <span
+                        v-if="
+                          week.performa_bug?.value !== 0 &&
+                          week.performa_bug?.value !== null
+                        "
+                        class="badge submenu-badge"
+                        @click="cekDetail(emp, week)"
+                        :class="badgeClass(week.performa_bug?.category)"
+                      >
+                        {{ week.performa_bug?.value }}%
+                      </span>
+                      <span v-else class="empty-score submenu-empty">—</span>
+                    </div>
                   </div>
                 </div>
               </td>
@@ -526,6 +548,7 @@ h2 {
 
 .week-cell .submenu-cell {
   display: flex;
+  gap: 6px;
 }
 
 /* Badge modern (soft color) */
@@ -551,6 +574,7 @@ h2 {
   /* margin-top: 6px; */
   padding: 2px 10px;
   width: 60px;
+  height: 25px;
   font-size: 9px;
 }
 
@@ -615,9 +639,11 @@ h2 {
 }
 
 .submenu-empty {
-  width: 60px;
+  /* width: 60px; */
   padding: 2px 10px;
   font-size: 9px;
+  width: 60px;
+  height: 25px;
 }
 
 /* .empty-score:hover {
@@ -625,6 +651,27 @@ h2 {
   transform: translateY(-1px) scale(1.02);
   box-shadow: 0 6px 14px rgba(15, 23, 42, 0.18);
   /* filter: brightness(1.05); */
+
+.label-title {
+  font-size: 11px;
+  color: #000000;
+  display: block;
+  padding-left: 3px;
+  /* margin-bottom: 4px; */
+}
+
+.label-sub {
+  font-size: 8px;
+  color: #000000;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.submenu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 </style>
 
 <!-- Legend -->

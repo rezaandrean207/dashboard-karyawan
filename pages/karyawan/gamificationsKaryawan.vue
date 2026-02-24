@@ -60,7 +60,7 @@
           <label>Filter Data </label>
           <select name="" id="" v-model="selectedFilter" class="data-picker">
             <option value="Performa">Performa</option>
-            <option value="Beban Kerja">Beban Kerja</option>
+            <option value="Total Beban Kerja">Beban Kerja</option>
             <option value="Tepat Waktu Kerja">Tepat Waktu Kerja</option>
             <option value="Performa Bug">Performa Bug</option>
           </select>
@@ -133,59 +133,12 @@
       </div>
     </div>
 
-    <!-- <div class="card performance-card" v-if="daftarKaryawanYear.length">
-      <div class="table-wrapper">
-        <table class="table performance-table">
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Nama Karyawan</th>
-              <th>Role</th>
-              <th>Task Selesai</th>
-              <th>Skor</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr
-              v-for="emp in daftarKaryawanYear"
-              :key="emp.rank"
-              :class="highlightRank(emp.rank)"
-            >
-              <td class="rank-col">
-                <span class="rank-badge" :class="highlightRank(emp.rank)">
-                  <span v-if="emp.rank === 1">🥇</span>
-                  <span v-else-if="emp.rank === 2">🥈</span>
-                  <span v-else-if="emp.rank === 3">🥉</span>
-                  <span v-else>{{ emp.rank }}</span>
-                </span>
-              </td>
-
-              <td class="emp-name">
-                <strong>{{ emp.name }}</strong>
-              </td>
-
-              <td>
-                <span class="role-badge">
-                  {{ emp.role }}
-                </span>
-              </td>
-
-              <td>{{ emp.tasks_completed }}</td>
-
-              <td>
-                <span
-                  class="badge main-badge"
-                  :class="badgeClass(emp.category)"
-                >
-                  {{ Math.round(emp.performance_score) }}%
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div> -->
+    <div class="not-list" v-if="isNotUser">
+      <p>
+        Kamu tidak termasuk dalam daftar karyawan yang memiliki performa
+        terbaik.
+      </p>
+    </div>
   </div>
 </template>
 
@@ -230,8 +183,36 @@
 }
 
 .isUser {
-  background: rgba(37, 99, 235, 0.08);
-  border-left: 2px solid #2563eb;
+  background: rgba(59, 121, 255, 0.1);
+  border: 4px solid rgba(0, 71, 223, 0.3);
+  border-radius: 12px;
+  /* animation: bgPulse 3s ease-in-out infinite; */
+  animation: borderPulse 3s ease-in-out infinite;
+}
+
+
+@keyframes borderPulse {
+  0% {
+    border-color: rgba(0, 71, 223, 0.3);
+  }
+  50% {
+    border-color: rgba(0, 71, 223, 0.6);
+  }
+  100% {
+    border-color: rgba(0, 71, 223, 0.3);
+  }
+}
+
+@keyframes bgPulse {
+  0% {
+    background-color: rgba(37, 99, 235, 0.08);
+  }
+  50% {
+    background-color: rgba(37, 99, 235, 0.18);
+  }
+  100% {
+    background-color: rgba(37, 99, 235, 0.08);
+  }
 }
 </style>
 
@@ -583,6 +564,15 @@ h2 {
   font-size: 9px;
 }
 
+.not-list {
+  text-align: center;
+  padding: 40px 20px;
+  background: #f8fafc;
+  border-radius: 12px;
+  color: #64748b;
+  font-size: 14px;
+}
+
 /* .empty-score:hover {
   cursor: default;
   transform: translateY(-1px) scale(1.02);
@@ -635,6 +625,9 @@ export default {
       console.log("Bulan: ", bulan);
 
       return bulan;
+    },
+    isNotUser() {
+      return !this.daftarKaryawan.some((emp) => emp.clickup_id === this.userId);
     },
     // filteredData() {
     //   // return [...this.daftarKaryawan]
