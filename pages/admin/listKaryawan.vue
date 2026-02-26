@@ -68,7 +68,7 @@
           <select v-model="posisi">
             <option value="">Semua Posisi</option>
             <option
-              v-for="(role, index) in selectedRoles"
+              v-for="(role, index) in roleOptions"
               :key="index"
               :value="role.value"
             >

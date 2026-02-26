@@ -286,12 +286,12 @@
 .filter-row {
   display: flex;
   gap: 24px;
+  flex-wrap: wrap;
 }
 
 /* Item */
 .filter-item {
-  max-width: 360px;
-  width: 100%;
+  flex: 1 225px;
 }
 
 /* Label */
@@ -836,6 +836,9 @@ export default {
 
       this.onDateChange();
     },
+    selectedFilter() {
+      this.dataKaryawan();
+    },
     //   this.onDateChange();
     // },
     // selectedFilter() {
@@ -844,9 +847,6 @@ export default {
     // selectedWeeks() {
     //   this.onDateChange();
     // },
-    selectedFilter() {
-      this.dataKaryawan();
-    },
   },
 };
 </script>

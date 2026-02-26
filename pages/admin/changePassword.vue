@@ -157,7 +157,7 @@
 
 .change-password {
   /* max-width: 520px; */
-  width: 90%;
+  width: 100%;
 }
 
 .subtitle {

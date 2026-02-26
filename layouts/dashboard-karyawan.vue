@@ -79,7 +79,7 @@
             }"
           >
             <span class="material-symbols-outlined"> trophy </span>
-            <p>Gamifications</p>
+            <p>Gamifikasi</p>
           </NuxtLink>
 
           <NuxtLink
@@ -117,8 +117,9 @@
 
         <div class="footer_sidebar">
           <div class="user">
-            <p>Logged in sebagai</p>
-            <h4>Karyawan</h4>
+            <p>Masuk sebagai</p>
+            <h4>{{ name }}</h4>
+            <p>Karyawan</p>
             <!-- <h4>Reza Andrean</h4> -->
             <!-- <p>Karyawan</p> -->
           </div>
@@ -195,7 +196,7 @@
           :class="{ active: $route.path === '/karyawan/gamificationsKaryawan' }"
         >
           <span class="material-symbols-outlined"> trophy </span>
-          <p>Gamifications</p>
+          <p>Gamifikasi</p>
         </NuxtLink>
 
         <NuxtLink
@@ -233,7 +234,7 @@
       <div class="footer_sidebar">
         <div class="user">
           <p>Masuk sebagai</p>
-          <h4>{{ userId?.name }}</h4>
+          <h4>{{ name }}</h4>
           <p>Karyawan</p>
           <!-- <h4>Reza Andrean</h4> -->
           <!-- <p>Karyawan</p> -->
@@ -426,13 +427,22 @@ export default {
       daftar: [],
       userId: null,
       appVersion: "1.1",
+      name: useCookie("name").value,
       // userId: useCookie("userId"),
     };
   },
   mounted() {
-    this.dataKaryawan();
+    // this.dataKaryawan();
+    this.nameKaryawan();
   },
   methods: {
+    nameKaryawan() {
+      const name = useCookie("name").value;
+
+      console.log("Nama karyawan: ", name);
+
+      return name;
+    },
     downloadAPK() {
       const apkUrl = new URL("@/assets/DNA Monitoring.apk", import.meta.url)
         .href;
@@ -488,22 +498,22 @@ export default {
         this.loading = false;
       }
     },
-    async dataKaryawan() {
-      try {
-        const response = await this.$api.get("/api/v1/clickup/members");
+    // async dataKaryawan() {
+    //   try {
+    //     const response = await this.$api.get("/api/v1/clickup/members");
 
-        this.daftar = response.data.users;
+    //     this.daftar = response.data.users;
 
-        const user = Number(useCookie("clickup_id").value);
-        console.log("Data Karyawan:", response.data);
+    //     const user = Number(useCookie("clickup_id").value);
+    //     console.log("Data Karyawan:", response.data);
 
-        this.userId = this.daftar.find((k) => k.clickup_id === user);
+    //     this.userId = this.daftar.find((k) => k.clickup_id === user);
 
-        console.log("nama karyawan: ", this.userId.name);
-      } catch (error) {
-        console.error("Gagal mengambil data karyawan:", error);
-      }
-    },
+    //     console.log("nama karyawan: ", this.userId.name);
+    //   } catch (error) {
+    //     console.error("Gagal mengambil data karyawan:", error);
+    //   }
+    // },
     pilihData(data) {},
     logout() {
       const token = useCookie("token");

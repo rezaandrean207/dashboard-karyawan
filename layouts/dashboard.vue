@@ -152,9 +152,9 @@
 
         <div class="footer_sidebar">
           <div class="user">
-            <p>Logged in sebagai</p>
-            <h4>Admin</h4>
-            <!-- <p>Admin</p> -->
+            <p>Masuk sebagai</p>
+            <h4>{{ name }}</h4>
+            <p>Admin</p>
           </div>
           <div class="sync">
             <button
@@ -175,7 +175,6 @@
 
           <!-- VERSION -->
           <div class="app-version">Versi {{ appVersion }}</div>
-
         </div>
       </div>
     </div>
@@ -305,8 +304,8 @@
       <div class="footer_sidebar">
         <div class="user">
           <p>Masuk sebagai</p>
-          <h4>Admin</h4>
-          <!-- <p>Admin</p> -->
+          <h4>{{ name }}</h4>
+          <p>Admin</p>
         </div>
         <div class="sync">
           <button
@@ -438,6 +437,7 @@ export default {
       sukses: false,
       openMenu: false,
       appVersion: "1.1",
+      name: useCookie("name").value,
     };
   },
   methods: {

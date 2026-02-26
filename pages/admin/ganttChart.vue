@@ -505,7 +505,7 @@
 
 .dates-gant {
   width: 100%;
-  margin-right: 10px;
+  /* margin-right: 10px; */
 }
 
 .dates-gant .tanggal {
