@@ -78,17 +78,32 @@
 
         <!-- <span class="notif-dot" v-if="hasNotifikasi"></span> -->
         <span class="notif-dot"></span>
-        <h4>{{ listNotifikasi.length }} Peringatan</h4>
+        <h4>{{ listNotifikasi.length }} Notifikasi</h4>
       </div>
       <!-- <div class="header_notif">
         <h4 class="judul-notif">Notifikasi Sistem</h4>
       </div> -->
       <div class="container-notif">
-        <div class="isi_notif" v-for="notif in listNotifikasi" :key="notif.id">
-          <span class="material-symbols-outlined"> error </span>
-          <!-- <h4 v-if="notif.workload">Beban Kerja</h4>
-          <h4 v-else-if="notif.on_time">Tepat Waktu Kerja</h4>
-          <h4 v-else-if="notif.performance">Performa Karyawan</h4> -->
+        <div
+          class="isi_notif"
+          :class="notifClass(notif.category)"
+          v-for="notif in listNotifikasi"
+          :key="notif.id"
+        >
+          <span
+            class="material-symbols-outlined"
+            style="color: rgb(214, 16, 16)"
+            v-if="notif.category === '-'"
+          >
+            error
+          </span>
+          <span
+            class="material-symbols-outlined"
+            style="color: rgb(0, 255, 0)"
+            v-else
+          >
+            thumb_up
+          </span>
           <div class="teks-notif">
             <h4>{{ notif.name }}</h4>
             <p>{{ notif.message }}</p>
@@ -107,14 +122,22 @@
     <div class="card_karyawan" v-if="detailKaryawan">
       <div class="card_profile">
         <div class="card_left">
-          <img
-            :src="
-              getProfileImage(detailKaryawan.profile_picture_url) ||
-              '/img/profil.png'
-            "
-            alt="Profile Picture"
-            @error="handleImgError"
-          />
+          <div class="photo-wrapper" @click.stop>
+            <img
+              v-if="!detailKaryawan.imageError"
+              :src="getProfileImage(detailKaryawan.profile_picture_url)"
+              alt="Profile Picture"
+              @error="detailKaryawan.imageError = true"
+            />
+
+            <div
+              class="photo-option"
+              :style="{ backgroundColor: detailKaryawan.color }"
+              v-else
+            >
+              <p>{{ setInitial(detailKaryawan.name) }}</p>
+            </div>
+          </div>
           <div class="card_name">
             <h3>{{ detailKaryawan?.username }}</h3>
             <p>{{ detailKaryawan?.role }}</p>
@@ -155,14 +178,14 @@
         </div>
         <div
           class="performa_karyawan"
-          :class="performaClass(detailKaryawan?.performance_bugs.score)"
+          :class="performaClass(detailKaryawan?.performance_bugs?.score)"
         >
           <i class="fa-solid fa-chart-line"></i>
           <div class="text">
             <p>Performa</p>
             <span
               ><strong
-                >{{ detailKaryawan?.performance_bugs.score }}%</strong
+                >{{ detailKaryawan?.performance_bugs?.score }}%</strong
               ></span
             >
           </div>
@@ -172,14 +195,18 @@
         <div class="container_flex">
           <div
             class="ketepatan_pengerjaan"
-            v-if="detailKaryawan?.avg_time_efficiency.avg_percentage"
+            v-if="detailKaryawan?.avg_time_efficiency?.avg_percentage"
             :class="
-              ketepatanClass(detailKaryawan?.avg_time_efficiency.avg_percentage)
+              ketepatanClass(
+                detailKaryawan?.avg_time_efficiency?.avg_percentage,
+              )
             "
           >
             <div class="teks">
               <p>Tepat Waktu Kerja</p>
-              <h4>{{ detailKaryawan?.avg_time_efficiency.avg_percentage }}%</h4>
+              <h4>
+                {{ detailKaryawan?.avg_time_efficiency?.avg_percentage }}%
+              </h4>
             </div>
             <div class="ikon">
               <i class="fa-solid fa-list-check"></i>
@@ -197,14 +224,14 @@
           <div
             class="total_beban"
             :class="
-              totalBebanClass(detailKaryawan?.total_spent_hours.percentage)
+              totalBebanClass(detailKaryawan?.total_spent_hours?.percentage)
             "
           >
             <div class="teks">
               <p>Total Beban Kerja (Aktif)</p>
               <h4>
-                {{ detailKaryawan?.total_spent_hours.percentage }}% ({{
-                  detailKaryawan?.total_spent_hours.hours
+                {{ detailKaryawan?.total_spent_hours?.percentage }}% ({{
+                  detailKaryawan?.total_spent_hours?.hours
                 }}
                 Jam)
               </h4>
@@ -485,11 +512,26 @@
   </div> -->
 </template>
 
+<!-- Conditioning color -->
+<style scoped>
+.positive {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.negative {
+  background: #fef2f2;
+  color: #7f1d1d;
+  border: 1px solid #fecaca;
+}
+</style>
+
 <!-- Style detail -->
 <style scoped>
 .notifikasi-detail {
   width: 100%;
-  border: 1px solid rgb(255, 189, 189);
+  border: 1px solid rgb(192, 192, 192);
   margin-top: 20px;
   border-radius: 5px;
 }
@@ -498,14 +540,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgb(255, 217, 217);
+  background-color: rgb(236, 236, 236);
   /* color: #fff; */
-  color: rgb(214, 16, 16);
+  color: var(--text-main);
   padding: 10px 0;
   /* border-radius: 8px; */
   /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
   box-shadow: -2px 0 8px rgba(134, 0, 0, 0.1);
-  border-bottom: 1px solid rgb(255, 208, 208);
+  border-bottom: 1px solid var(--border-soft);
   cursor: pointer;
 }
 
@@ -515,12 +557,11 @@
   height: 100%;
   background-color: rgb(255, 217, 217);
   border-radius: 8px;
-  /* background-color: #fff; */
-  /* background-color: #f4f4f4; */
   box-shadow: -2px 0 8px rgba(134, 0, 0, 0.1);
   padding: 20px;
   margin-top: 10px;
-  border: 1px solid rgb(255, 208, 208);
+
+  /* border: 1px solid rgb(255, 208, 208); */
 }
 
 details[open] .sidebar-notif {
@@ -559,19 +600,14 @@ details[open] .sidebar-notif {
 }
 
 .isi_notif {
-  /* background-color: #e7e7e7; */
-  /* border: 1px solid #ccc; */
-  /* border: 1px solid rgb(214, 16, 16); */
   padding: 15px 10px;
-  /* border-radius: 8px; */
   display: flex;
-  /* align-items: center; */
   gap: 10px;
-  border-top: 1px solid rgb(255, 208, 208);
+  border-top: 1px solid var(--border-soft);
 }
 
 .isi_notif span {
-  color: rgb(214, 16, 16);
+  /* color: rgb(214, 16, 16); */
   padding-top: 4px;
 }
 
@@ -596,7 +632,7 @@ details[open] .sidebar-notif {
   right: 22px;
   width: 8px;
   height: 8px;
-  background-color: #ea3323;
+  background-color: #1e1e1e;
   border-radius: 50%;
 }
 
@@ -606,16 +642,15 @@ details[open] .sidebar-notif {
 
 .notifikasi i {
   font-size: 20px;
-  color: rgb(214, 16, 16);
 }
 
-.notifikasi:hover {
+/* .notifikasi:hover {
   background-color: rgb(252, 198, 198);
 }
 
 .notifikasi:active {
   background-color: rgb(252, 198, 198);
-}
+} */
 
 .background-notif {
   position: fixed;
@@ -2068,13 +2103,81 @@ form select {
 }
 </style>
 
-<script setup>
+<!-- Edit image -->
+<style scoped>
+.photo-wrapper {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  /* margin: 0 auto; */
+}
+
+.photo-wrapper img,
+.photo-option {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid rgb(193, 222, 232);
+  transition: 0.2s ease;
+}
+
+.photo-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 600;
+  /* background: linear-gradient(135deg, #3b82f6, #6366f1); */
+  color: white;
+  border: none;
+}
+
+/* .photo-option {
+  background-color: red;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+} */
+
+/* Overlay */
+.camera-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  z-index: 10;
+}
+
+.photo-wrapper:hover .camera-overlay {
+  opacity: 1;
+}
+
+/* Hidden file input */
+.hidden-file {
+  display: none;
+}
+</style>
+
+<!-- <script setup>
 definePageMeta({
   layout: "dashboard-karyawan",
 });
-</script>
+</script> -->
 
 <script>
+definePageMeta({
+  layout: "dashboard-karyawan",
+});
 import { VueDatePicker } from "@vuepic/vue-datepicker";
 
 export default {
@@ -2111,15 +2214,33 @@ export default {
     // this.hariLibur();
   },
   methods: {
+    notifClass(data) {
+      return {
+        positive: data === "+",
+        negative: data === "-",
+      };
+    },
     getProfileImage(url) {
       const baseURL = "https://api.clickup.devlmu.com";
 
-      if (!url) return "/img/profil.png";
+      if (!url) return "";
 
       return baseURL + url;
     },
     handleImgError(event) {
       event.target.src = "/img/profil.png";
+    },
+    setInitial(data) {
+      if (!data) return "";
+
+      const parts = data.trim().split(" ");
+      const [firstName] = parts[0];
+      const lastName = parts.length > 1 ? parts[1][0] : "";
+
+      console.log("Nama pertama adalah:", firstName);
+      console.log("Nama terakhir adalah:", lastName);
+
+      return firstName + lastName;
     },
     onDateChange() {
       if (!this.start || !this.end) return;
@@ -2171,7 +2292,11 @@ export default {
         );
         // this.daftarKaryawan = task.data.assignees || [];
         console.log("TASK DATA:", task.data);
-        this.detailKaryawan = task.data.assignees[0] || [];
+        const assignee = task.data.assignees?.[0] || null;
+
+        this.detailKaryawan = assignee
+          ? { ...assignee, imageError: false }
+          : null;
         this.listNotifikasi = task.data.notifications || [];
         console.log("Berhasil ambil task:", task);
       } catch (error) {

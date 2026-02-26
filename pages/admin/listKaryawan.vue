@@ -223,10 +223,19 @@
           <!-- <img :src="k.user.profilPicture" alt="" /> -->
           <div class="photo-wrapper" @click.stop>
             <img
-              :src="getProfileImage(k.profile_picture_url) || '/img/profil.png'"
+              v-if="!k.imageError"
+              :src="getProfileImage(k.profile_picture_url)"
               alt="Profile Picture"
-              @error="handleImgError"
+              @error="k.imageError = true"
             />
+
+            <div
+              class="photo-option"
+              :style="{ backgroundColor: k.color }"
+              v-else
+            >
+              <p>{{ setInitial(k.name) }}</p>
+            </div>
 
             <div class="camera-overlay" @click.stop="triggerFileInput(k)">
               <i class="fa-solid fa-camera"></i>
@@ -286,11 +295,23 @@
       </div>
 
       <div class="profilImage">
-        <img
-          :src="getProfileImage(selected.profile_picture_url) || '/img/profil.png'"
-          alt="Profile Picture"
-          @error="handleImgError"
-        />
+        <div class="photo-wrapper">
+          <img
+            v-if="!selected.imageError"
+            :src="getProfileImage(selected.profile_picture_url)"
+            alt="Profile Picture"
+            @error="selected.imageError = true"
+          />
+
+          <div
+            class="photo-option"
+            style="margin-bottom: 22px"
+            :style="{ backgroundColor: selected.color }"
+            v-else
+          >
+            <p>{{ setInitial(selected.name) }}</p>
+          </div>
+        </div>
         <p>{{ selected.name }}</p>
         <div class="peran">
           <i class="fa-solid fa-briefcase"></i>
@@ -751,7 +772,8 @@
   margin: 0 auto;
 }
 
-.photo-wrapper img {
+.photo-wrapper img,
+.photo-option {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -759,6 +781,24 @@
   border: 4px solid rgb(193, 222, 232);
   transition: 0.2s ease;
 }
+
+.photo-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 600;
+  /* background: linear-gradient(135deg, #3b82f6, #6366f1); */
+  color: white;
+  border: none;
+}
+
+/* .photo-option {
+  background-color: red;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+} */
 
 /* Overlay */
 .camera-overlay {
@@ -1214,6 +1254,7 @@ export default {
       showNewRoleInput: null,
       newRoleName: "",
       deleteRoleId: null,
+      assigneeColors: {},
     };
   },
   mounted() {
@@ -1226,6 +1267,70 @@ export default {
     // });
   },
   methods: {
+    getUserColor(name) {
+      if (this.assigneeColors[name]) {
+        return this.assigneeColors[name];
+      }
+
+      // --- FNV-1a hash implementation ---
+      let hash = 2166136261;
+      for (let i = 0; i < name.length; i++) {
+        hash ^= name.charCodeAt(i);
+        hash +=
+          (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
+      }
+
+      // Convert hash to RGB
+      const red = (hash >> 16) & 255;
+      const green = (hash >> 8) & 255;
+      const blue = hash & 255;
+
+      const color = `#${this.toHex(red)}${this.toHex(green)}${this.toHex(blue)}`;
+
+      this.assigneeColors[name] = color;
+      return color;
+    },
+
+    toHex(value) {
+      return value.toString(16).padStart(2, "0");
+    },
+    setInitial(data) {
+      if (!data) return "";
+
+      const parts = data.trim().split(" ");
+      const [firstName] = parts[0];
+      const lastName = parts.length > 1 ? parts[1][0] : "";
+
+      console.log("Nama pertama adalah:", firstName);
+      console.log("Nama terakhir adalah:", lastName);
+
+      return firstName + lastName;
+    },
+    getProfileImage(url) {
+      const baseURL = "https://api.clickup.devlmu.com";
+
+      if (!url) return "";
+
+      return baseURL + url;
+    },
+    // setFirstName(data) {
+    //   if (!data) return "";
+
+    //   const parts = data.trim().split(" ");
+    //   const [firstName] = parts;
+
+    //   console.log("Nama pertama adalah:", firstName);
+    //   return firstName;
+    // },
+    // setLastName(data) {
+    //   if (!data) return "";
+
+    //   const parts = data.trim().split(" ");
+    //   const lastName = parts[parts.length - 1];
+
+    //   console.log("Nama terakhir adalah:", lastName);
+    //   return lastName;
+    // },
     isLastCard(index) {
       return (index + 1) % 4 === 0;
     },
@@ -1309,16 +1414,10 @@ export default {
         }, 5000);
       }
     },
-    getProfileImage(url) {
-      const baseURL = "https://api.clickup.devlmu.com";
 
-      if (!url) return "/img/profil.png";
-
-      return baseURL + url;
-    },
-    handleImgError(event) {
-      event.target.src = "/img/profil.png";
-    },
+    // handleImgError(event) {
+    //   event.target.src = "/img/profil.png";
+    // },
     async addRole() {
       if (this.isLoading) return;
 
@@ -1510,6 +1609,11 @@ export default {
         const role = await this.$api.get("/api/v1/roles");
 
         this.daftarKaryawan = member.data.users;
+        this.daftarKaryawan = member.data.users.map((k) => ({
+          ...k,
+          imageError: false,
+        }));
+
         this.daftarRole = role.data.data;
 
         console.log("Struktur API:", member.data);

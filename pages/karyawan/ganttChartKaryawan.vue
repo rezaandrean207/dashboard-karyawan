@@ -307,13 +307,26 @@
                   <!-- <img :src="task.avatar" alt="avatar" /> -->
                   <!-- <img src="/img/profil.png" alt="avatar" /> -->
                   <img
-                    :src="
-                      getProfileImage(task.profile_picture_url) ||
-                      '/img/profil.png'
-                    "
+                    v-if="!task.imageError"
+                    :src="getProfileImage(task.profile_picture_url)"
                     alt="Profile Picture"
-                    @error="handleImgError"
+                    @error="task.imageError = true"
                   />
+
+                  <div
+                    class="photo-option"
+                    style="
+                      width: 100%;
+                      height: 100%;
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                    "
+                    :style="{ backgroundColor: task.color }"
+                    v-else
+                  >
+                    <p>{{ setInitial(task.assignee_to) }}</p>
+                  </div>
                 </div>
                 <span class="assignee">{{ task.assignee_to }}</span>
                 <span class="task-title">{{ task.name }}</span>
@@ -1212,15 +1225,24 @@ export default {
     // this.ambilTask();
   },
   methods: {
+    setInitial(data) {
+      if (!data) return "";
+
+      const parts = data.trim().split(" ");
+      const [firstName] = parts[0];
+      const lastName = parts.length > 1 ? parts[1][0] : "";
+
+      console.log("Nama pertama adalah:", firstName);
+      console.log("Nama terakhir adalah:", lastName);
+
+      return firstName + lastName;
+    },
     getProfileImage(url) {
       const baseURL = "https://api.clickup.devlmu.com";
 
-      if (!url) return "/img/profil.png";
+      if (!url) return "";
 
       return baseURL + url;
-    },
-    handleImgError(event) {
-      event.target.src = "/img/profil.png";
     },
     shadeColor(color, percent) {
       let r = parseInt(color.slice(1, 3), 16);
@@ -1319,6 +1341,10 @@ export default {
           `/api/v1/gantt/tasks?start_date=${this.formatTanggal(this.startDate)}&end_date=${this.formatTanggal(this.endDate)}`,
         );
         this.daftarTask = task.data;
+        this.daftarTask = task.data.map((k) => ({
+          ...k,
+          imageError: false,
+        }));
         this.$nextTick(() => {
           const el = document.querySelector(".kalender");
           if (!el) return;

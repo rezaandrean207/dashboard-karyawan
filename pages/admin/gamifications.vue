@@ -11,6 +11,7 @@
     <!-- <h2>Performa Mingguan - {{ displayPeriod }}</h2>
     <p class="subtitle">Daftar 5 karyawan teratas dengan performa terbaik</p> -->
     <h2>Gamifikasi Karyawan</h2>
+    <p class="subtitle">{{ periode }}</p>
 
     <!-- Filter -->
     <div class="card filter-card">
@@ -50,6 +51,21 @@
         </div>
 
         <div class="filter-item">
+          <label>Tahun </label>
+          <ClientOnly>
+            <VueDatePicker
+              v-model="dateYear"
+              year-picker
+              :formats="{ year: 'yo' }"
+              :disabled="dataType === 'month'"
+              :class="{ disabled_date: dataType === 'month' }"
+              @update:model-value="onDateChange"
+              class="month-picker"
+            />
+          </ClientOnly>
+        </div>
+
+        <!-- <div class="filter-item">
           <label>Minggu </label>
           <select name="" id="" v-model="selectedWeeks" class="data-picker">
             <option
@@ -60,14 +76,14 @@
               {{ opt.label }}
             </option>
           </select>
-        </div>
-        <!-- <div class="filter-item">
+        </div> -->
+        <div class="filter-item">
           <label>Filter Data Tahunan/Mingguan</label>
           <select name="" id="" v-model="dataType" class="data-picker">
-            <option value="month">Bulanan</option>
-            <option value="year">Tahunan</option>
+            <option value="month">Mingguan</option>
+            <option value="year">Bulanan</option>
           </select>
-        </div> -->
+        </div>
 
         <div class="filter-item">
           <label>Filter Data </label>
@@ -137,7 +153,7 @@
                   class="badge main-badge"
                   :class="badgeClass(emp.category)"
                 >
-                  {{ Math.round(emp.score) }}%
+                  {{ emp.score }}%
                 </span>
               </td>
             </tr>
@@ -611,22 +627,23 @@ export default {
   data() {
     return {
       dateMonth: null,
-      // dateYear: null,
+      dateYear: null,
       daftarKaryawan: [],
       daftarMinggu: [],
       // daftarKaryawanYear: [],
       displayPeriod: "",
       isLoading: false,
-      // dataType: "month",
+      dataType: "month",
       selectedFilter: "Performa",
       selectedWeeks: 1,
+      periode: "",
     };
   },
 
   mounted() {
     this.setDefaultMonth();
-    // this.setDefaultYear();
-    this.onDateChange(); // auto load pertama
+    this.setDefaultYear();
+    this.dataKaryawan();
   },
 
   computed: {
@@ -634,7 +651,7 @@ export default {
       return this.dateMonth?.month + 1;
     },
     selectedYear() {
-      return this.dateMonth?.year;
+      return this.dataType === "year" ? this.dateYear : this.dateMonth?.year;
     },
     totalWeeks() {
       return this.daftarKaryawan[0]?.weekly_performance.length || 0;
@@ -703,88 +720,51 @@ export default {
     onDateChange() {
       if (this.isLoading) return;
 
-      // if (this.dataType === "year") {
-      //   if (!this.dateYear) return;
-
-      //   this.displayPeriod = `Tahun ${this.dateYear}`;
-      //   // this.dateMonth = null;
-
-      //   this.$router.replace({
-      //     path: "/admin/gamifications",
-      //     query: {
-      //       // ...this.$route.query,
-      //       tahun: this.dateYear,
-      //     },
-      //   });
-      // } else {
-      //   if (!this.dateMonth) return;
-
-      //   this.displayPeriod = `${this.formatBulan(this.selectedMonth)} ${this.selectedYear}`;
-
-      //   this.$router.replace({
-      //     path: "/admin/gamifications",
-      //     query: {
-      //       ...this.$route.query,
-      //       bulan: this.formatBulan(this.selectedMonth),
-      //       tahun: this.selectedYear,
-      //     },
-      //   });
-      // }
-
-      this.$router.replace({
-        path: "/admin/gamifications",
-        query: {
-          ...this.$route.query,
+      if (this.dataType === "year") {
+        if (!this.dateYear) return;
+        this.displayPeriod = `Tahun ${this.dateYear}`;
+        this.updateRoute({ tahun: this.dateYear });
+      } else {
+        if (!this.dateMonth) return;
+        this.displayPeriod = `${this.formatBulan(this.selectedMonth)} ${this.selectedYear}`;
+        this.updateRoute({
           bulan: this.formatBulan(this.selectedMonth),
           tahun: this.selectedYear,
-          "minggu ke-": this.selectedWeeks,
-          by: this.selectedFilter,
-        },
-      });
+        });
+      }
 
       this.dataKaryawan();
+    },
+    updateRoute(query) {
+      this.$router.replace({
+        path: "/admin/gamifications",
+        query,
+      });
     },
 
     async dataKaryawan() {
       this.isLoading = true;
 
       try {
-        // if (this.dataType === "year") {
-        //   const res = await this.$api.get(
-        //     `/api/v1/workload/leaderboard?year=${this.dateYear}`,
-        //   );
+        if (this.dataType === "year") {
+          const res = await this.$api.get(
+            `/api/v1/workload/leaderboard?year=${this.dateYear}&by=${this.selectedFilter}`,
+          );
+          this.daftarKaryawan = res.data.leaderboard || [];
+          this.periode = res.data.periode_ui;
+        } else if (this.dataType === "month") {
+          const res = await this.$api.get(
+            `/api/v1/workload/leaderboard?month=${this.selectedMonth}&year=${this.selectedYear}&by=${this.selectedFilter}`,
+          );
+          this.daftarKaryawan = res.data.leaderboard || [];
+          this.periode = res.data.periode_ui;
+        }
 
-        //   this.daftarKaryawanYear = res.data.leaderboard || [];
-
-        //   console.log(
-        //     `Data di tahun ${this.dateYear}:`,
-        //     this.daftarKaryawanYear,
-        //   );
-
-        //   console.log("data per bulan: ", res);
-
-        //   this.daftarKaryawan = [];
-        // } else {
-        //   const res = await this.$api.get(
-        //     `/api/v1/workload/leaderboard?month=${this.selectedMonth}&year=${this.selectedYear}`,
-        //   );
-
-        //   this.daftarKaryawan = res.data.leaderboard || [];
-        //   this.daftarKaryawanYear = [];
-        //   // this.displayPeriod = res.data.display_period;
-
-        //   console.log("data per minggu: ", res);
-        // }
-        const res = await this.$api.get(
-          `/api/v1/workload/leaderboard?month=${this.selectedMonth}&year=${this.selectedYear}&by=${this.selectedFilter}&week=${this.selectedWeeks}`,
-        );
-
-        this.daftarKaryawan = res.data.leaderboard || [];
-        this.daftarMinggu = res.data.weeks || [];
+        // this.daftarMinggu = res.data.weeks || [];
         // this.daftarKaryawanYear = [];
         // this.displayPeriod = res.data.display_period;
 
-        console.log("data per minggu: ", res);
+        console.log("data per minggu: ", this.daftarKaryawan);
       } catch (err) {
         console.error(err);
         this.daftarKaryawan = [];
@@ -846,20 +826,26 @@ export default {
     // end() {
     //   this.onDateChange();
     // },
-    // dataType(newVal) {
-    //   if (newVal === "year") {
-    //     // this.dateMonth = null;
-    //   } else {
-    //     this.setDefaultMonth();
-    //   }
+    dataType(newVal) {
+      if (newVal === "year") {
+        // this.dateMonth = null;
+        this.setDefaultYear();
+      } else {
+        this.setDefaultMonth();
+      }
 
+      this.onDateChange();
+    },
+    //   this.onDateChange();
+    // },
+    // selectedFilter() {
+    //   this.onDateChange();
+    // },
+    // selectedWeeks() {
     //   this.onDateChange();
     // },
     selectedFilter() {
-      this.onDateChange();
-    },
-    selectedWeeks() {
-      this.onDateChange();
+      this.dataKaryawan();
     },
   },
 };

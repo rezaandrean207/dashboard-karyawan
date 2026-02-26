@@ -91,14 +91,34 @@
                 <p>{{ index + 1 }}</p>
               </div>
               <div class="profil-karyawan">
-                <img
-                  :src="
-                    getProfileImage(k.profile_picture_url) ||
-                    '/img/profil.png'
-                  "
-                  alt="Profile Picture"
-                  @error="handleImgError"
-                />
+                <div class="photo-wrapper" @click.stop>
+                  <img
+                    v-if="!k.imageError"
+                    :src="getProfileImage(k.profile_picture_url)"
+                    alt="Profile Picture"
+                    @error="k.imageError = true"
+                  />
+
+                  <div
+                    class="photo-option"
+                    :style="{ backgroundColor: k.color}"
+                    v-else
+                  >
+                    <p>{{ setInitial(k.name) }}</p>
+                  </div>
+
+                  <!-- <div class="camera-overlay" @click.stop="triggerFileInput(k)">
+                    <i class="fa-solid fa-camera"></i>
+                  </div>
+
+                  <input
+                    type="file"
+                    accept="image/*"
+                    :ref="'fileInput-' + k.clickup_id"
+                    class="hidden-file"
+                    @change="handlePhotoChange($event, k)"
+                  /> -->
+                </div>
                 <div class="name-role">
                   <h4>{{ k.name }}</h4>
                   <p>{{ k.role }}</p>
@@ -989,6 +1009,71 @@
 }
 </style>
 
+<!-- Edit image -->
+<style scoped>
+.photo-wrapper {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  /* margin: 0 auto; */
+}
+
+.photo-wrapper img,
+.photo-option {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid rgb(193, 222, 232);
+  transition: 0.2s ease;
+}
+
+.photo-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  /* background: linear-gradient(135deg, #3b82f6, #6366f1); */
+  color: white;
+  border: none;
+}
+
+/* .photo-option {
+  background-color: red;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+} */
+
+/* Overlay */
+.camera-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  z-index: 10;
+}
+
+.photo-wrapper:hover .camera-overlay {
+  opacity: 1;
+}
+
+/* Hidden file input */
+.hidden-file {
+  display: none;
+}
+</style>
+
 <!-- <script setup>
 definePageMeta({
   layout: "dashboard",
@@ -1016,6 +1101,7 @@ export default {
       default: 85,
       searchInput: 85,
       kurangLebih: "kurangDari",
+      assigneeColors: {},
     };
   },
 
@@ -1031,12 +1117,51 @@ export default {
     getProfileImage(url) {
       const baseURL = "https://api.clickup.devlmu.com";
 
-      if (!url) return "/img/profil.png";
+      if (!url) return "";
 
       return baseURL + url;
     },
-    handleImgError(event) {
-      event.target.src = "/img/profil.png";
+    // handleImgError(event) {
+    //   event.target.src = "/img/profil.png";
+    // },
+    getUserColor(name) {
+      if (this.assigneeColors[name]) {
+        return this.assigneeColors[name];
+      }
+
+      // --- FNV-1a hash implementation ---
+      let hash = 2166136261;
+      for (let i = 0; i < name.length; i++) {
+        hash ^= name.charCodeAt(i);
+        hash +=
+          (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
+      }
+
+      // Convert hash to RGB
+      const red = (hash >> 16) & 255;
+      const green = (hash >> 8) & 255;
+      const blue = hash & 255;
+
+      const color = `#${this.toHex(red)}${this.toHex(green)}${this.toHex(blue)}`;
+
+      this.assigneeColors[name] = color;
+      return color;
+    },
+
+    toHex(value) {
+      return value.toString(16).padStart(2, "0");
+    },
+    setInitial(data) {
+      if (!data) return "";
+
+      const parts = data.trim().split(" ");
+      const [firstName] = parts[0];
+      const lastName = parts.length > 1 ? parts[1][0] : "";
+
+      console.log("Nama pertama adalah:", firstName);
+      console.log("Nama terakhir adalah:", lastName);
+
+      return firstName + lastName;
     },
     teksColorClass(warna) {
       return {
@@ -1134,6 +1259,10 @@ export default {
         );
 
         this.daftarKaryawan = task.data.grouping || [];
+        this.daftarKaryawan = task.data.grouping.map((k) => ({
+          ...k,
+          imageError: false,
+        }));
 
         console.log("Berhasil ambil task:", task);
       } catch (error) {

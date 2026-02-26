@@ -1,7 +1,7 @@
 export default defineNuxtRouteMiddleware(async (to) => {
   const token = useCookie("token");
   const role = useCookie("role");
-  const id = useCookie("clickup_id");
+  // const id = useCookie("clickup_id");
 
   const isLoginPage = to.path === "/login";
   const isWebView = to.query.view === "app";

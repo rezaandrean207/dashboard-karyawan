@@ -55,7 +55,10 @@
           <span class="value">{{ detailTask.due_date_ui }}</span>
         </div>
 
-        <div class="detail-item" v-if="detailTask.time_efficiency_percentage !== null">
+        <div
+          class="detail-item"
+          v-if="detailTask.time_efficiency_percentage !== null"
+        >
           <span class="label">Tepat Waktu Kerja</span>
           <span class="value"
             >{{ detailTask.time_efficiency_percentage }}%</span
@@ -307,13 +310,26 @@
                   <!-- <img :src="task.avatar" alt="avatar" /> -->
                   <!-- <img src="/img/profil.png" alt="avatar" /> -->
                   <img
-                    :src="
-                      getProfileImage(task.profile_picture_url) ||
-                      '/img/profil.png'
-                    "
+                    v-if="!task.imageError"
+                    :src="getProfileImage(task.profile_picture_url)"
                     alt="Profile Picture"
-                    @error="handleImgError"
+                    @error="task.imageError = true"
                   />
+
+                  <div
+                    class="photo-option"
+                    style="
+                      width: 100%;
+                      height: 100%;
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                    "
+                    :style="{ backgroundColor: task.color }"
+                    v-else
+                  >
+                    <p>{{ setInitial(task.assignee_to) }}</p>
+                  </div>
                 </div>
                 <span class="assignee">{{ task.assignee_to }}</span>
                 <span class="task-title">{{ task.name }}</span>
@@ -953,25 +969,107 @@
 <style scoped>
 .avatar-corner {
   position: absolute;
-  top: -15px;
-  left: -15px;
+  top: calc(var(--day-width) * -0.18);
+  left: calc(var(--day-width) * -0.18);
 
-  width: 50px;
-  height: 50px;
+  width: clamp(22px, calc(var(--day-width) * 0.4), 50px);
+  height: clamp(22px, calc(var(--day-width) * 0.4), 50px);
+
   border-radius: 50%;
   overflow: hidden;
-
-  /* border: 2px solid #ffffff; */
   background: #ffffff;
 
-  /* box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25); */
   z-index: 30;
+  transition:
+    width 0.2s ease,
+    height 0.2s ease,
+    top 0.2s ease,
+    left 0.2s ease;
 }
 
 .avatar-corner img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+</style>
+
+<!-- Zoom -->
+<style scoped>
+.zoom-wrapper {
+  /* width: 99%; */
+  text-align: right;
+  margin-top: 5px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 99;
+}
+
+.zoom-panel {
+  /* position: absolute;
+  top: 10px;
+  right: 16px; */
+
+  display: inline-flex;
+  align-items: center;
+  /* justify-content: right; */
+  gap: 6px;
+
+  padding: 6px 10px;
+  border-radius: 12px;
+
+  /* background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 1px solid #bfdbfe; */
+
+  backdrop-filter: blur(10px);
+  background: rgba(239, 246, 255, 0.85);
+
+  box-shadow:
+    0 8px 24px rgba(45, 126, 255, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* tombol */
+.zoom-btn {
+  width: 32px;
+  height: 32px;
+
+  border-radius: 8px;
+  border: none;
+
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: all 0.15s ease;
+}
+
+.zoom-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.4);
+}
+
+.zoom-btn:active {
+  transform: scale(0.95);
+}
+
+/* level text */
+.zoom-level {
+  min-width: 48px;
+  text-align: center;
+
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e3a8a;
 }
 </style>
 
@@ -1088,85 +1186,6 @@
 }
 </style>
 
-<!-- Zoom -->
-<style scoped>
-.zoom-wrapper {
-  /* width: 99%; */
-  text-align: right;
-  margin-top: 5px;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 99;
-}
-
-.zoom-panel {
-  /* position: absolute;
-  top: 10px;
-  right: 16px; */
-
-  display: inline-flex;
-  align-items: center;
-  /* justify-content: right; */
-  gap: 6px;
-
-  padding: 6px 10px;
-  border-radius: 12px;
-
-  /* background: linear-gradient(135deg, #eff6ff, #dbeafe);
-  border: 1px solid #bfdbfe; */
-
-  backdrop-filter: blur(10px);
-  background: rgba(239, 246, 255, 0.85);
-
-  box-shadow:
-    0 8px 24px rgba(45, 126, 255, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-}
-
-/* tombol */
-.zoom-btn {
-  width: 32px;
-  height: 32px;
-
-  border-radius: 8px;
-  border: none;
-
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-
-  color: #ffffff;
-  font-size: 18px;
-  font-weight: 700;
-
-  cursor: pointer;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  transition: all 0.15s ease;
-}
-
-.zoom-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.4);
-}
-
-.zoom-btn:active {
-  transform: scale(0.95);
-}
-
-/* level text */
-.zoom-level {
-  min-width: 48px;
-  text-align: center;
-
-  font-size: 12px;
-  font-weight: 600;
-  color: #1e3a8a;
-}
-</style>
-
 <!-- <script setup>
 definePageMeta({
   layout: "dashboard",
@@ -1211,15 +1230,24 @@ export default {
     // this.ambilTask();
   },
   methods: {
+    setInitial(data) {
+      if (!data) return "";
+
+      const parts = data.trim().split(" ");
+      const [firstName] = parts[0];
+      const lastName = parts.length > 1 ? parts[1][0] : "";
+
+      console.log("Nama pertama adalah:", firstName);
+      console.log("Nama terakhir adalah:", lastName);
+
+      return firstName + lastName;
+    },
     getProfileImage(url) {
       const baseURL = "https://api.clickup.devlmu.com";
 
-      if (!url) return "/img/profil.png";
+      if (!url) return "";
 
       return baseURL + url;
-    },
-    handleImgError(event) {
-      event.target.src = "/img/profil.png";
     },
     shadeColor(color, percent) {
       let r = parseInt(color.slice(1, 3), 16);
@@ -1318,6 +1346,10 @@ export default {
           `/api/v1/gantt/tasks?start_date=${this.formatTanggal(this.startDate)}&end_date=${this.formatTanggal(this.endDate)}`,
         );
         this.daftarTask = task.data;
+        this.daftarTask = task.data.map((k) => ({
+          ...k,
+          imageError: false,
+        }));
         this.$nextTick(() => {
           const el = document.querySelector(".kalender");
           if (!el) return;

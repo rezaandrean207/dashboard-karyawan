@@ -384,11 +384,11 @@
 .download-btn {
   background-color: #2563eb;
   color: white;
-  padding: 10px 20px;
+  padding: 6px 16px;
   border-radius: 6px;
   border: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 12px;
   display: flex;
   align-items: center;
   gap: 8px;

@@ -197,11 +197,22 @@
     >
       <div class="profil">
         <div class="profil_karyawan">
-          <img
-            :src="getProfileImage(k.profile_picture_url) || '/img/profil.png'"
-            alt="Profile Picture"
-            @error="handleImgError"
-          />
+          <div class="photo-wrapper" @click.stop>
+            <img
+              v-if="!k.imageError"
+              :src="getProfileImage(k.profile_picture_url)"
+              alt="Profile Picture"
+              @error="k.imageError = true"
+            />
+
+            <div
+              class="photo-option"
+              :style="{ backgroundColor: k.color }"
+              v-else
+            >
+              <p>{{ setInitial(k.name) }}</p>
+            </div>
+          </div>
           <div class="about">
             <h4>{{ k.username }}</h4>
             <p>{{ k.role }}</p>
@@ -335,13 +346,19 @@
       <div class="card_profile">
         <div class="card_left">
           <img
-            :src="
-              getProfileImage(detailKaryawan.profile_picture_url) ||
-              '/img/profil.png'
-            "
+            v-if="!detailKaryawan.imageError"
+            :src="getProfileImage(detailKaryawan.profile_picture_url)"
             alt="Profile Picture"
-            @error="handleImgError"
+            @error="detailKaryawan.imageError = true"
           />
+          <div class="photo-wrapper" @click.stop v-else>
+            <div
+              class="photo-option"
+              :style="{ backgroundColor: detailKaryawan.color }"
+            >
+              <p>{{ setInitial(detailKaryawan.name) }}</p>
+            </div>
+          </div>
           <div class="card_name">
             <h3>{{ detailKaryawan.username }}</h3>
             <p>{{ detailKaryawan.role }}</p>
@@ -2231,6 +2248,71 @@ form select {
 }
 </style>
 
+<!-- Edit image -->
+<style scoped>
+.photo-wrapper {
+  /* position: relative; */
+  width: 70px;
+  height: 70px;
+  /* margin: 0 auto; */
+}
+
+.photo-wrapper img,
+.photo-option {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid rgb(193, 222, 232);
+  transition: 0.2s ease;
+}
+
+.photo-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 600;
+  /* background: linear-gradient(135deg, #3b82f6, #6366f1); */
+  color: white;
+  border: none;
+}
+
+/* .photo-option {
+  background-color: red;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+} */
+
+/* Overlay */
+.camera-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  z-index: 10;
+}
+
+.photo-wrapper:hover .camera-overlay {
+  opacity: 1;
+}
+
+/* Hidden file input */
+.hidden-file {
+  display: none;
+}
+</style>
+
 <!-- <script setup>
 definePageMeta({
   layout: "dashboard",
@@ -2293,10 +2375,22 @@ export default {
     // this.hariLibur();
   },
   methods: {
+    setInitial(data) {
+      if (!data) return "";
+
+      const parts = data.trim().split(" ");
+      const [firstName] = parts[0];
+      const lastName = parts.length > 1 ? parts[1][0] : "";
+
+      console.log("Nama pertama adalah:", firstName);
+      console.log("Nama terakhir adalah:", lastName);
+
+      return firstName + lastName;
+    },
     getProfileImage(url) {
       const baseURL = "https://api.clickup.devlmu.com";
 
-      if (!url) return "/img/profil.png";
+      if (!url) return "";
 
       return baseURL + url;
     },

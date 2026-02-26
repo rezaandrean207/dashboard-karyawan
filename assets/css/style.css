@@ -858,7 +858,7 @@ form select {
   /* Mode Android */
   .konten .isi.viewApp {
     /* width: 100%; */
-    top: 0;
+    top: 5vh;
   }
 
   /* .konten .background .sidebar_responsive {
