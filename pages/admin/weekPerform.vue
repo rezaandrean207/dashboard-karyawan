@@ -458,6 +458,7 @@ h2 {
 
 .table-wrapper {
   overflow-x: auto;
+  max-height: 55vh;
 }
 
 /* Table */
@@ -509,8 +510,11 @@ h2 {
   z-index: 1;
 }
 
+.name-karyawan {
+  z-index: 4;
+}
+
 /* Sticky hanya nama karyawan */
-.name-karyawan,
 .name-col {
   position: sticky;
   left: 0;
@@ -520,6 +524,8 @@ h2 {
   min-width: 220px;
   text-align: justify;
 }
+
+
 
 .role {
   font-size: 12px;
@@ -537,6 +543,7 @@ h2 {
 
 .week-col {
   min-width: 300px;
+  z-index: 2;
 }
 
 .week-cell {

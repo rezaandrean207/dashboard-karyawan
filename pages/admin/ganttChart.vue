@@ -355,9 +355,9 @@
       </div>
     </div>
 
-    <div class="kosong">
+    <!-- <div class="kosong">
       <p>tes</p>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -634,7 +634,7 @@
 .kalender {
   max-height: 100dvh;
   overflow: auto;
-  margin-top: 20px;
+  margin: 20px 0 30px 0;
   padding-bottom: 10px;
   background-color: #ffffff;
   border: 1px solid #e5e7eb;
@@ -759,8 +759,8 @@
 }
 
 .weekend {
-  background: #f3f4f6;
-  color: grey;
+  background: linear-gradient(135deg, #fff1f2, #ffe4e6);
+  /* color: grey; */
   border-left: 1px solid #e5e7eb;
 }
 
