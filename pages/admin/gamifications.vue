@@ -78,10 +78,10 @@
           </select>
         </div> -->
         <div class="filter-item">
-          <label>Filter Data Tahunan/Mingguan</label>
+          <label>Filter Data Tahunan/Bulanan</label>
           <select name="" id="" v-model="dataType" class="data-picker">
-            <option value="month">Mingguan</option>
-            <option value="year">Bulanan</option>
+            <option value="month">Bulanan</option>
+            <option value="year">Tahunan</option>
           </select>
         </div>
 

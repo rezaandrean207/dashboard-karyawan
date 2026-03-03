@@ -293,8 +293,8 @@
                 }"
                 @click="cekDetail(task)"
                 :style="{
-                  marginLeft: taskOffset(task) * dayWidth + 'px',
-                  width: taskWidth(task) * dayWidth + 'px',
+                  marginLeft: taskOffset(task) * dayWidth + 18 + 'px',
+                  width: taskWidth(task) * dayWidth - 38 + 'px',
                   background: gradientFromColor(task.color),
 
                   // top: '8px',
