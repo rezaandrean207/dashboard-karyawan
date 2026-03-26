@@ -83,7 +83,7 @@
 
         <div class="detail-item" v-if="detailTask.date_done">
           <span class="label">Completed At</span>
-          <span class="value">{{ detailTask.date_done }}</span>
+          <span class="value">{{ detailTask.date_done_ui }}</span>
         </div>
       </div>
     </div>
@@ -222,7 +222,7 @@
           class="today-line"
           :style="{ left: todayOffset + 'px' }"
         >
-          <span class="today-label">Today</span>
+          <span class="today-label" :style="{ minWidth: dayWidth + 'px' }">Today</span>
         </div>
 
         <div class="header-container" :style="{ minWidth: totalWidth + 'px' }">
@@ -1186,18 +1186,8 @@
 }
 </style>
 
-<!-- <script setup>
-definePageMeta({
-  layout: "dashboard",
-});
-</script> -->
-
 <script>
 import { VueDatePicker } from "@vuepic/vue-datepicker";
-
-definePageMeta({
-  layout: "dashboard",
-});
 
 export default {
   data() {

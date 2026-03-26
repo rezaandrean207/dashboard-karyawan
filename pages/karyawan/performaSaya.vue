@@ -2168,16 +2168,7 @@ form select {
 }
 </style>
 
-<!-- <script setup>
-definePageMeta({
-  layout: "dashboard-karyawan",
-});
-</script> -->
-
 <script>
-definePageMeta({
-  layout: "dashboard-karyawan",
-});
 import { VueDatePicker } from "@vuepic/vue-datepicker";
 
 export default {

@@ -398,9 +398,9 @@ a {
 </style>
 
 <script setup>
-// definePageMeta({
-//   layout: "auth",
-// });
+definePageMeta({
+  layout: "auth",
+});
 </script>
 
 <script>

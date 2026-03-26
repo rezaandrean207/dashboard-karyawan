@@ -296,10 +296,6 @@
 </style>
 
 <script>
-definePageMeta({
-  layout: "dashboard",
-});
-
 export default {
   data() {
     return {

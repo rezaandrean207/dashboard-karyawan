@@ -616,11 +616,6 @@ h2 {
 
 <script>
 import { VueDatePicker } from "@vuepic/vue-datepicker";
-
-definePageMeta({
-  layout: "dashboard",
-});
-
 export default {
   components: { VueDatePicker },
 

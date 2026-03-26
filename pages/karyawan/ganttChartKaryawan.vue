@@ -80,7 +80,7 @@
 
         <div class="detail-item" v-if="detailTask.date_done">
           <span class="label">Completed At</span>
-          <span class="value">{{ detailTask.date_done }}</span>
+          <span class="value">{{ detailTask.date_done_ui }}</span>
         </div>
       </div>
     </div>
@@ -290,8 +290,8 @@
                 }"
                 @click="cekDetail(task)"
                 :style="{
-                  marginLeft: taskOffset(task) * dayWidth + 'px',
-                  width: taskWidth(task) * dayWidth + 'px',
+                  marginLeft: taskOffset(task) * dayWidth + 18 + 'px',
+                  width: taskWidth(task) * dayWidth - 38 + 'px',
                   background: gradientFromColor(task.color),
 
                   // top: '8px',
@@ -1181,18 +1181,8 @@
 }
 </style>
 
-<!-- <script setup>
-definePageMeta({
-  layout: "dashboard",
-});
-</script> -->
-
 <script>
 import { VueDatePicker } from "@vuepic/vue-datepicker";
-
-definePageMeta({
-  layout: "dashboard-karyawan",
-});
 
 export default {
   data() {

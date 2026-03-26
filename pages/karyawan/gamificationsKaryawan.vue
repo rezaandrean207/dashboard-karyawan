@@ -121,7 +121,7 @@
             <tr
               v-for="emp in daftarKaryawan"
               :key="emp.rank"
-              :class="{ isUser: emp.clickup_id === userId }"
+              :class="{ isUser: emp.name === name }"
             >
               <td class="rank-col">
                 <span class="rank-badge" :class="highlightRank(emp.rank)">
@@ -161,10 +161,16 @@
       </div>
     </div>
 
-    <div class="not-list" v-if="isNotUser">
+    <div class="not-list warning" v-if="isNotUser">
       <p>
         Kamu tidak termasuk dalam daftar karyawan yang memiliki performa
         terbaik.
+      </p>
+    </div>
+
+    <div class="not-list success" v-else>
+      <p>
+        Selamat, kamu termasuk dalam daftar 5 karyawan terbaik, pertahankan!
       </p>
     </div>
   </div>
@@ -600,6 +606,39 @@ h2 {
   font-size: 14px;
 }
 
+.not-list {
+  text-align: center;
+  padding: 28px 20px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 500;
+  /* max-width: 500px; */
+  /* margin: 20px auto; */
+  transition: all 0.3s ease;
+
+  /* efek modern */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* SUCCESS (HIJAU) */
+.not-list.success {
+  background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+/* WARNING (MERAH HALUS) */
+/* .not-list.warning {
+  background: linear-gradient(135deg, #fef2f2, #fee2e2);
+  color: #7f1d1d;
+  border: 1px solid #fecaca;
+} */
+
+/* OPTIONAL HOVER (biar ada feel interaktif) */
+.not-list:hover {
+  transform: translateY(-2px);
+}
+
 /* .empty-score:hover {
   cursor: default;
   transform: translateY(-1px) scale(1.02);
@@ -610,16 +649,13 @@ h2 {
 <script>
 import { VueDatePicker } from "@vuepic/vue-datepicker";
 
-definePageMeta({
-  layout: "dashboard-karyawan",
-});
-
 export default {
   components: { VueDatePicker },
 
   data() {
     return {
       userId: null,
+      name: useCookie("name").value,
       dateMonth: null,
       dateYear: null,
       daftarKaryawan: [],
@@ -657,7 +693,7 @@ export default {
       return bulan;
     },
     isNotUser() {
-      return !this.daftarKaryawan.some((emp) => emp.clickup_id === this.userId);
+      return !this.daftarKaryawan.some((emp) => emp.name === this.name);
     },
     // filteredData() {
     //   // return [...this.daftarKaryawan]

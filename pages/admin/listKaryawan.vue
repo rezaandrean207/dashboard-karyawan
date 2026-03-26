@@ -1216,16 +1216,7 @@ form input {
 }
 </style>
 
-<!-- <script setup>
-definePageMeta({
-  layout: "dashboard",
-});
-</script> -->
-
 <script>
-definePageMeta({
-  layout: "dashboard",
-});
 export default {
   data() {
     return {

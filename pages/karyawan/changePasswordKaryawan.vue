@@ -210,12 +210,6 @@
 }
 </style>
 
-<script setup>
-definePageMeta({
-  layout: "dashboard-karyawan",
-});
-</script>
-
 <script>
 export default {
   data() {
