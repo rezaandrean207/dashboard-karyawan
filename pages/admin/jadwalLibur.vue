@@ -715,10 +715,7 @@ export default {
         this.isLoading = false;
       }
     },
-    openDelete(hari) {
-      this.hapus = true;
-      this.selectedData = hari;
-    },
+
     tambah() {
       this.yearDirection = "slide-left";
       this.tahunAktif++;
@@ -756,6 +753,10 @@ export default {
       this.hapus = false;
       this.tanggal = "";
       this.hari = "";
+    },
+    openDelete(hari) {
+      this.hapus = true;
+      this.selectedData = hari;
     },
   },
   computed: {

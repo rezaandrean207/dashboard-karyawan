@@ -36,6 +36,26 @@
         </div> -->
 
         <div class="filter-item">
+          <label>Minggu </label>
+          <select
+            name=""
+            id=""
+            v-model="selectedWeeks"
+            class="data-picker"
+            :disabled="dataType !== 'week'"
+            :class="{ disabled_date: dataType !== 'week' }"
+          >
+            <option
+              :value="index + 1"
+              v-for="(opt, index) in daftarMinggu"
+              :key="opt"
+            >
+              {{ opt.label }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-item">
           <label>Bulan</label>
           <ClientOnly>
             <VueDatePicker
@@ -57,29 +77,18 @@
               v-model="dateYear"
               year-picker
               :formats="{ year: 'yo' }"
-              :disabled="dataType === 'month'"
-              :class="{ disabled_date: dataType === 'month' }"
+              :disabled="dataType !== 'year'"
+              :class="{ disabled_date: dataType !== 'year' }"
               @update:model-value="onDateChange"
               class="month-picker"
             />
           </ClientOnly>
         </div>
 
-        <!-- <div class="filter-item">
-          <label>Minggu </label>
-          <select name="" id="" v-model="selectedWeeks" class="data-picker">
-            <option
-              :value="index + 1"
-              v-for="(opt, index) in daftarMinggu"
-              :key="opt"
-            >
-              {{ opt.label }}
-            </option>
-          </select>
-        </div> -->
         <div class="filter-item">
           <label>Filter Data Tahunan/Bulanan</label>
           <select name="" id="" v-model="dataType" class="data-picker">
+            <option value="week">Mingguan</option>
             <option value="month">Bulanan</option>
             <option value="year">Tahunan</option>
           </select>
@@ -291,7 +300,7 @@
 
 /* Item */
 .filter-item {
-  flex: 1 225px;
+  flex: 1 300px;
 }
 
 /* Label */
@@ -741,29 +750,42 @@ export default {
       this.isLoading = true;
 
       try {
+        let url = "/api/v1/workload/leaderboard";
+
+        const params = new URLSearchParams();
+
         if (this.dataType === "year") {
-          const res = await this.$api.get(
-            `/api/v1/workload/leaderboard?year=${this.dateYear}&by=${this.selectedFilter}`,
-          );
-          this.daftarKaryawan = res.data.leaderboard || [];
-          this.periode = res.data.periode_ui;
-        } else if (this.dataType === "month") {
-          const res = await this.$api.get(
-            `/api/v1/workload/leaderboard?month=${this.selectedMonth}&year=${this.selectedYear}&by=${this.selectedFilter}`,
-          );
-          this.daftarKaryawan = res.data.leaderboard || [];
-          this.periode = res.data.periode_ui;
+          params.append("year", this.dateYear);
         }
 
-        // this.daftarMinggu = res.data.weeks || [];
-        // this.daftarKaryawanYear = [];
-        // this.displayPeriod = res.data.display_period;
+        if (this.dataType === "month") {
+          params.append("month", this.selectedMonth);
+          params.append("year", this.selectedYear);
+        }
 
-        console.log("data per minggu: ", this.daftarKaryawan);
+        if (this.dataType === "week") {
+          params.append("month", this.selectedMonth);
+          params.append("week", this.selectedWeeks);
+        }
+
+        if (this.selectedFilter) {
+          params.append("by", this.selectedFilter);
+        }
+
+        // 🔥 1 request utama
+        const res = await this.$api.get(`${url}?${params.toString()}`);
+
+        this.daftarKaryawan = res.data.leaderboard || [];
+        this.periode = res.data.periode_ui;
+
+        // 🔥 ambil weeks kalau ada
+        this.daftarMinggu = res.data.weeks || [];
+
+        console.log("Leaderboard:", this.daftarKaryawan);
+        console.log("Weeks:", this.daftarMinggu);
       } catch (err) {
         console.error(err);
         this.daftarKaryawan = [];
-        // this.daftarKaryawanYear = [];
       } finally {
         this.isLoading = false;
       }
@@ -839,9 +861,9 @@ export default {
     // selectedFilter() {
     //   this.onDateChange();
     // },
-    // selectedWeeks() {
-    //   this.onDateChange();
-    // },
+    selectedWeeks() {
+      this.onDateChange();
+    },
   },
 };
 </script>

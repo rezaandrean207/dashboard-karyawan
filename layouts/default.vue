@@ -372,6 +372,7 @@ const menuConfig = {
       type: "material",
       children: [
         { name: "Jadwal Libur", path: "/admin/jadwalLibur" },
+        { name: "Jadwal Cuti", path: "/admin/jadwalCuti" },
         { name: "Pengaturan Bug", path: "/admin/settingBug" },
         { name: "Performa", path: "/admin/performanceSetting" },
         { name: "Ubah Password", path: "/admin/changePassword" },
