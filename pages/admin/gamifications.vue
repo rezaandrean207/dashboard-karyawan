@@ -86,7 +86,7 @@
         </div>
 
         <div class="filter-item">
-          <label>Filter Data Tahunan/Bulanan</label>
+          <label>Mingguan/Bulanan/Tahunan</label>
           <select name="" id="" v-model="dataType" class="data-picker">
             <option value="week">Mingguan</option>
             <option value="month">Bulanan</option>
@@ -95,7 +95,7 @@
         </div>
 
         <div class="filter-item">
-          <label>Filter Data </label>
+          <label>Filter Data</label>
           <select name="" id="" v-model="selectedFilter" class="data-picker">
             <option value="Performa">Performa</option>
             <option value="Total Beban Kerja">Beban Kerja</option>
@@ -367,9 +367,13 @@
 }
 
 .disabled_date {
-  pointer-events: none;
+  opacity: 0.5;
   cursor: not-allowed;
-  opacity: 0.6;
+}
+
+.disabled_date,
+.disabled_date * {
+  cursor: not-allowed !important;
 }
 
 .disabled_date .dp__input {
