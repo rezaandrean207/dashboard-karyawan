@@ -59,22 +59,26 @@
       </div>
       <div class="filter_detail">
         <form action="">
-          <input
-            type="search"
-            placeholder="Cari nama karyawan"
-            v-model="searchInput"
-            @submit.prevent
-          />
-          <select v-model="posisi">
-            <option value="">Semua Posisi</option>
-            <option
-              v-for="(role, index) in roleOptions"
-              :key="index"
-              :value="role.value"
-            >
-              {{ role.label }}
-            </option>
-          </select>
+          <div class="filter-item">
+            <input
+              type="search"
+              placeholder="Cari nama karyawan"
+              v-model="searchInput"
+              @submit.prevent
+            />
+          </div>
+          <div class="filter-item">
+            <select v-model="posisi">
+              <option value="">Semua Posisi</option>
+              <option
+                v-for="(role, index) in roleOptions"
+                :key="index"
+                :value="role.value"
+              >
+                {{ role.label }}
+              </option>
+            </select>
+          </div>
         </form>
         <div class="total_karyawan">
           <i class="fa-solid fa-users"></i>
@@ -946,16 +950,76 @@
   color: darkblue;
 }
 
-form input,
+.filter-detail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.filter-item {
+  display: flex;
+  align-items: center;
+
+  flex: 1 250px;
+
+  padding: 6px;
+  border-radius: 10px;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+
+  transition: all 0.15s ease;
+}
+
+.filter-item:focus-within {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.filter-item input {
+  width: 100%;
+  border: none;
+  outline: none;
+
+  padding: 10px 12px;
+  border-radius: 8px;
+
+  background: transparent;
+  font-size: 14px;
+
+  color: #0f172a;
+}
+
+.filter-item input::placeholder {
+  color: #9ca3af;
+}
+
+.filter-item select {
+  width: 100%;
+  border: none;
+  outline: none;
+
+  padding: 10px 12px;
+  border-radius: 8px;
+
+  background: transparent;
+  font-size: 14px;
+
+  color: #0f172a;
+  cursor: pointer;
+}
+
+/* form input,
 form select {
   background-color: #ddd;
   width: 50%;
   border-radius: 10px;
   padding: 0 15px;
   margin: 0 10px;
-  /* border: var(--borderCard); */
+  border: var(--borderCard);
   border: 1px solid rgb(164, 199, 255);
-}
+} */
 
 form select {
   background: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20448%20512'%3E%3Cpath%20d='M224%20248a120%20120%200%201%201%200-240%20120%20120%200%201%201%200%20240zm-30.5%2056l61%200c9.7%200%2017.5%207.8%2017.5%2017.5%200%204.2-1.5%208.2-4.2%2011.4l-27.4%2032%2031%20115.1%20.6%200%2034.6-138.5c2.2-8.7%2011.1-14%2019.5-10.8%2061.9%2023.6%20105.9%2083.6%20105.9%20153.8%200%2015.1-12.3%2027.4-27.4%2027.4L43.4%20512c-15.1%200-27.4-12.3-27.4-27.4%200-70.2%2044-130.2%20105.9-153.8%208.4-3.2%2017.3%202.1%2019.5%2010.8l34.6%20138.5%20.6%200%2031-115.1-27.4-32c-2.7-3.2-4.2-7.2-4.2-11.4%200-9.7%207.8-17.5%2017.5-17.5z'/%3E%3C/svg%3E")

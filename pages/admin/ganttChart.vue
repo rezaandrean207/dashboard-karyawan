@@ -29,7 +29,7 @@
       <!-- Content -->
       <div class="detail-body">
         <div class="detail-item">
-          <span class="label">Assignee</span>
+          <span class="label">Penanggung Jawab</span>
           <span class="value">{{ detailTask.assignee_to }}</span>
         </div>
 
@@ -41,28 +41,28 @@
         </div>
 
         <div class="detail-item">
-          <span class="label">Project</span>
+          <span class="label">Proyek</span>
           <span class="value">{{ detailTask.project_name }}</span>
         </div>
 
         <div class="detail-item">
-          <span class="label">Start Date</span>
+          <span class="label">Tanggal Mulai</span>
           <span class="value">{{ detailTask.start_date_ui }}</span>
         </div>
 
         <div class="detail-item">
-          <span class="label">Due Date</span>
+          <span class="label">Target</span>
           <span class="value">{{ detailTask.due_date_ui }}</span>
         </div>
 
-        <div
-          class="detail-item"
-          v-if="detailTask.time_efficiency_percentage !== null"
-        >
-          <span class="label">Tepat Waktu Kerja</span>
-          <span class="value"
-            >{{ detailTask.time_efficiency_percentage }}%</span
-          >
+        <div class="detail-item" v-if="detailTask.date_done">
+          <span class="label">Tanggal Selesai</span>
+          <span class="value">{{ detailTask.date_done_ui }}</span>
+        </div>
+
+        <div class="detail-item">
+          <span class="label">Beban Kerja</span>
+          <span class="value">{{ detailTask.time_estimate_hours }} Jam</span>
         </div>
 
         <div
@@ -76,14 +76,14 @@
           <span class="value">{{ detailTask.time_spent_hours }} Jam</span>
         </div>
 
-        <div class="detail-item">
-          <span class="label">Beban Kerja</span>
-          <span class="value">{{ detailTask.time_estimate_hours }} Jam</span>
-        </div>
-
-        <div class="detail-item" v-if="detailTask.date_done">
-          <span class="label">Completed At</span>
-          <span class="value">{{ detailTask.date_done_ui }}</span>
+        <div
+          class="detail-item"
+          v-if="detailTask.time_efficiency_percentage !== null"
+        >
+          <span class="label">Tepat Waktu Kerja</span>
+          <span class="value"
+            >{{ detailTask.time_efficiency_percentage }}%</span
+          >
         </div>
       </div>
     </div>
@@ -215,14 +215,16 @@
     </div>
 
     <!-- Kalender -->
-    <div class="kalender">
+    <div class="kalender" ref="kalender">
       <div class="gantt-wrapper">
         <div
           v-if="todayOffset !== null"
           class="today-line"
           :style="{ left: todayOffset + 'px' }"
         >
-          <span class="today-label" :style="{ minWidth: dayWidth + 'px' }">Today</span>
+          <span class="today-label" :style="{ minWidth: dayWidth + 'px' }"
+            >Today</span
+          >
         </div>
 
         <div class="header-container" :style="{ minWidth: totalWidth + 'px' }">
@@ -324,6 +326,7 @@
                       display: flex;
                       justify-content: center;
                       align-items: center;
+                      font-size: clamp(4px, calc(14px + (var(--day-width) - 100px) * 0.050), 19px);
                     "
                     :style="{ backgroundColor: task.color }"
                     v-else
@@ -603,10 +606,11 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 10px;
+  padding: 8px;
   border-radius: 12px;
   cursor: pointer;
   transition: background 0.15s ease;
+  font-size: 11px;
 }
 
 .option:hover {

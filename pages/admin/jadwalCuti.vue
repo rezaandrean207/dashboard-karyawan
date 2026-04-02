@@ -61,7 +61,7 @@
           </div>
           <div class="kategori">
             <label for="hari">Kategori</label>
-            <select name="" id="" v-model="kategori">
+            <select name="" id="" v-model="kategori" required>
               <option value="">Pilih Kategori</option>
               <option v-for="c in category" :key="c.id" :value="c">
                 {{ c }}
@@ -328,35 +328,105 @@
 </template>
 
 <style scoped>
-.filter-detail {
-  /* border: 1px solid #e5e7eb; */
-  border-radius: 10px;
+.filter {
+  padding: 16px 18px;
+  border-radius: 14px;
+
+  background: linear-gradient(180deg, #ffffff, #f8fafc);
+  border: 1px solid #e5e7eb;
+
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 8px 24px rgba(0, 0, 0, 0.06);
+
+  transition: all 0.2s ease;
+}
+
+.filter:hover {
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.06),
+    0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.title {
   display: flex;
-  margin-top: 12px;
+  align-items: center;
+  gap: 10px;
+
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.title i {
+  font-size: 18px;
+  color: #3b82f6;
+
+  background: rgba(59, 130, 246, 0.1);
+  padding: 8px 16px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+}
+
+.filter-detail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
 }
 
 .filter-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  width: 300px;
+
+  flex: 1 250px;
+
+  /* padding: 6px; */
+  border-radius: 10px;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+
+  transition: all 0.15s ease;
+}
+
+.filter-item:focus-within {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
 
 .filter-item input {
-  background: var(--bg-muted);
-  padding: 8px 12px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-soft);
   width: 100%;
+  border: none;
+  outline: none;
+
+  padding: 10px 12px;
+  border-radius: 8px;
+
+  background: transparent;
+  font-size: 14px;
+
+  color: #0f172a;
+}
+
+.filter-item input::placeholder {
+  color: #9ca3af;
 }
 
 .filter-item select {
-  background: var(--bg-muted);
-  padding: 8px 12px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-soft);
   width: 100%;
+  border: none;
+  outline: none;
+
+  padding: 10px 12px;
+  border-radius: 8px;
+
+  background: transparent;
+  font-size: 14px;
+
+  color: #0f172a;
+  cursor: pointer;
 }
 </style>
 
@@ -1111,7 +1181,8 @@ export default {
         this.createTanggal = false;
 
         this.isSukses = true;
-        this.successMessage = save.data.message;
+        // this.successMessage = save.data.message;
+        this.successMessage = "Berhasil menambahkan cuti"
       } catch (err) {
         this.errorMessage =
           err?.response?.data?.error ||
@@ -1162,7 +1233,8 @@ export default {
         this.hapus = false;
 
         this.isSukses = true;
-        this.successMessage = deleteTanggal.data.message;
+        // this.successMessage = deleteTanggal.data.message;
+        this.successMessage = "Berhasil dihapus"
       } catch (err) {
         this.errorMessage =
           err?.response?.data?.error ||

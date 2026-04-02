@@ -331,23 +331,46 @@ body {
 }
 
 .isi .filter {
-  background-color: #fff;
-  width: 100%;
-  /* height: 20vh; */
-  margin-top: 35px;
-  padding: 16px;
-  border: var(--borderCard);
+  padding: 16px 18px;
+  border-radius: 14px;
+
+  background: linear-gradient(180deg, #ffffff, #f8fafc);
+  border: 1px solid #e5e7eb;
+
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 8px 24px rgba(0, 0, 0, 0.06);
+
+  transition: all 0.2s ease;
+
+  margin-top: 25px;
 }
 
-.filter .title {
+.filter:hover {
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.06),
+    0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.title {
   display: flex;
   align-items: center;
-  gap: 5px;
-  margin-left: 10px;
+  gap: 10px;
+
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
 }
 
 .title i {
   font-size: 18px;
+  color: #3b82f6;
+
+  background: rgba(59, 130, 246, 0.1);
+  padding: 8px 16px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
 }
 
 .filter form {
@@ -435,8 +458,9 @@ form select {
   margin-top: 20px;
   border: var(--borderCard);
   background-color: #fff;
-  width: 23.7%;
+  /* width: 23.7%; */
   /* height: 35vh; */
+  flex: 1 250px;
   text-align: center;
   border-radius: 15px;
   transition:
@@ -869,10 +893,6 @@ form select {
     width: 40%;
   } */
 
-  .karyawan {
-    width: 48%;
-  }
-
   .karyawan .identitas .bebanKerja {
     margin: 10px 170px;
   }
@@ -944,11 +964,7 @@ form select {
     justify-content: center;
   }
 
-  .isi .karyawan {
-    width: 50%;
-    /* height: auto; */
-    padding-bottom: 15px;
-  }
+  
 
   .karyawan .identitas img {
     width: 75px;

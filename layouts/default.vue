@@ -418,7 +418,7 @@ export default {
       loading: false,
       sukses: false,
       openMenu: false,
-      appVersion: "1.1",
+      appVersion: "1.2",
       name: useCookie("name").value,
       role: useCookie("role").value,
     };
