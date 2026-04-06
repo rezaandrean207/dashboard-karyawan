@@ -905,15 +905,18 @@
   display: flex;
   justify-content: space-between;
   gap: 20px;
+  flex-wrap: wrap;
 }
 
 .filter_detail form {
-  width: 70%;
+  /* width: 68%; */
+  flex: 2 1 400px;
   /* border: 1px solid #010101; */
   margin-top: 25px;
   display: flex;
-  height: 5vh;
+  /* height: 5vh; */
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .filter_detail .total_karyawan {
@@ -924,8 +927,10 @@
   /* text-align: justify; */
   border: 1px solid rgb(164, 199, 255);
   border-radius: 10px;
-  width: 30%;
-  height: 12vh;
+  /* width: 30%; */
+  flex: 1 0 200px;
+  /* height: 12vh; */
+  padding: 10px 20px;
   background-color: rgb(234, 241, 252);
 }
 
@@ -961,7 +966,8 @@
   display: flex;
   align-items: center;
 
-  flex: 1 250px;
+  /* flex: 1 250px; */
+  flex: 1;
 
   padding: 6px;
   border-radius: 10px;
@@ -1036,247 +1042,6 @@ form input {
     no-repeat 10px center;
   background-size: 14px;
   padding-left: 35px;
-}
-
-/* ============================== */
-/*   RESPONSIVE LAYOUT CSS        */
-/* ============================== */
-
-/* Tablet */
-@media (max-width: 768px) {
-  /* .filter .filter_detail {
-    flex-direction: column;
-    gap: 20px;
-  } */
-
-  .filter_detail form {
-    width: 100%;
-    height: auto;
-    flex-direction: column;
-  }
-
-  form input,
-  form select {
-    width: 100%;
-    margin: 0;
-    height: 5.5vh;
-  }
-
-  .filter_detail .total_karyawan {
-    width: 100%;
-    height: auto;
-    padding: 12px 0;
-    font-size: 14px;
-  }
-
-  /* .karyawan {
-    width: 30%;
-    font-size: 14px;
-  } */
-
-  .karyawan .identitas img {
-    width: 60px;
-    height: 60px;
-    object-fit: cover;
-  }
-
-  .karyawan .identitas .bebanKerja {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 4px;
-    margin: 10px 65px;
-    padding: 3px 0;
-    font-size: 12px;
-    border-radius: 15px;
-  }
-
-  .kinerja .proyekAktif {
-    font-size: 12px;
-  }
-}
-
-/* Handphone */
-@media (max-width: 576px) {
-  .konten {
-    overflow-x: hidden;
-  }
-
-  .konten .background .sidebar_responsive {
-    width: 59%;
-  }
-
-  .konten .isi {
-    width: 100%;
-    position: relative;
-    left: 0;
-  }
-
-  .filter .filter_detail {
-    flex-direction: column;
-    width: 100%;
-    display: flex;
-    gap: 15px;
-  }
-
-  .filter_detail form {
-    flex-direction: column;
-    width: 100%;
-    height: auto;
-    gap: 12px;
-  }
-
-  form input,
-  form select {
-    width: 100%;
-    margin: 0;
-    height: 45px;
-    padding-left: 38px;
-  }
-
-  form select {
-    background-size: 14px;
-    padding-left: 32px;
-  }
-
-  form input {
-    background-size: 14px;
-    padding-left: 35px;
-  }
-
-  .filter_detail .total_karyawan {
-    width: 100%;
-    padding: 15px;
-    justify-content: flex-start;
-  }
-
-  .total_karyawan i {
-    padding: 10px 18px;
-    font-size: 16px;
-  }
-
-  .total_karyawan p {
-    font-size: 13px;
-  }
-
-  /* .karyawan { */
-  /* height: 70vh; */
-  /* padding: 60px 0; */
-  /* } */
-
-  .daftarKaryawan {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-
-  .karyawan {
-    margin-top: 20px;
-    border: var(--borderCard);
-    width: 95%;
-    /* height: 50vh; */
-    text-align: center;
-    border-radius: 15px;
-    transition: transform 0.3s ease;
-  }
-
-  .karyawan:hover {
-    border: 1px solid rgb(68, 41, 203);
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    transform: scale(1.05);
-  }
-
-  .karyawan .identitas img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 5px solid rgb(193, 222, 232);
-    /* margin-top: 20px; */
-  }
-
-  .karyawan h4 {
-    color: rgb(16, 50, 130);
-    margin-top: 10px;
-  }
-
-  .karyawan .peran {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .karyawan .identitas .bebanKerja {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 4px;
-    margin: 10px 180px;
-    padding: 5px 0;
-    font-size: 13px;
-    border-radius: 15px;
-  }
-
-  .karyawan .kinerja {
-    margin: 0 30px;
-    margin-top: 20px;
-    border-top: 2px solid rgb(222, 221, 226);
-  }
-
-  .kinerja .proyekAktif {
-    margin-top: 10px;
-  }
-
-  .kinerja .proyekAktif,
-  .performa {
-    display: flex;
-    justify-content: space-between;
-    font-size: 16px;
-  }
-
-  .detailKaryawan {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    font-size: 15px;
-  }
-
-  .detailKaryawan .profilImage {
-    margin: 0 70px;
-  }
-}
-
-/* Handphone Kecil / Compact Layout */
-@media (max-width: 430px) {
-  .konten .background .sidebar_responsive {
-    width: 60%;
-  }
-
-  .filter_detail {
-    gap: 10px;
-  }
-
-  .filter_detail form {
-    gap: 10px;
-  }
-
-  form input,
-  form select {
-    height: 42px;
-    font-size: 13px;
-  }
-
-  .total_karyawan {
-    flex-direction: column;
-    text-align: center;
-    padding: 15px 10px;
-  }
-
-  .total_karyawan p {
-    text-align: center;
-  }
 }
 </style>
 
