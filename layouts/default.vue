@@ -30,7 +30,7 @@
     <div class="background" v-if="sidebar" @click="close">
       <div class="sidebar_responsive" @click.stop>
         <div class="logo">
-          <img src="/img/logo dna.png" alt="" />
+          <img src="/img/logo-dna.png" alt="" />
           <div class="keterangan">
             <h5>Digital Nayaka Abhinaya</h5>
             <p>Kinerja Karyawan</p>
@@ -129,7 +129,7 @@
     <!-- Sidebar -->
     <div class="sidebar">
       <div class="logo">
-        <img src="/img/logo dna.png" alt="" />
+        <img src="/img/logo-dna.png" alt="" />
         <div class="keterangan">
           <h5>Digital Nayaka Abhinaya</h5>
           <p>Kinerja Karyawan</p>
