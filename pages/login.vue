@@ -11,7 +11,7 @@
       <div class="hero">
         <div class="ikon_login">
           <!-- <i class="fa-solid fa-users"></i> -->
-          <img src="/img/logo dna.png" alt="" />
+          <img src="/img/logo-dna.png" alt="" />
         </div>
         <h2>DNA Monitoring</h2>
         <p>Silahkan login untuk melanjutkan</p>
