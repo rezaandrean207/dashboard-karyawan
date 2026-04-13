@@ -57,7 +57,12 @@
         <form action="" class="form_tanggal" @submit.prevent="saveTanggal">
           <div class="tanggal">
             <label for="tanggal">Tanggal</label>
-            <input type="date" v-model="tanggal" />
+            <input
+              type="date"
+              v-model="tanggal"
+              :min="year ? `${year}-01-01` : null"
+              :max="year ? `${year}-12-31` : null"
+            />
           </div>
           <div class="kategori">
             <label for="hari">Kategori</label>
@@ -118,6 +123,16 @@
               {{ c }}
             </option>
           </select>
+        </div>
+        <div class="filter-item">
+          <ClientOnly>
+            <VueDatePicker
+              v-model="year"
+              year-picker
+              :formats="{ year: 'yo' }"
+              class="month-picker"
+            />
+          </ClientOnly>
         </div>
         <!-- <div class="total_karyawan">
           <i class="fa-solid fa-users"></i>
@@ -286,10 +301,10 @@
             <span class="material-symbols-outlined"> add_a_photo </span>
           </div> -->
           <h4>{{ k.name }}</h4>
-          <div class="peran">
+          <!-- <div class="peran">
             <i class="fa-solid fa-briefcase"></i>
             <p>Web</p>
-          </div>
+          </div> -->
         </div>
         <!-- <div class="kinerja">
           <div class="status-member">
@@ -298,23 +313,37 @@
           </div>
         </div> -->
 
-        <div class="holiday">
-          <div class="list_hari" v-for="h in k.cuti">
-            <div class="keterangan_libur">
-              <div class="header-list">
-                <h5>{{ h.tanggal_ui }}</h5>
-                <div class="category-label">
-                  <p>{{ h.kategori }}</p>
-                </div>
-              </div>
-              <p>{{ h.keterangan }}</p>
-            </div>
-            <!-- <i class="fa-solid fa-xmark" @click="deleteTanggal(h.tanggal)"></i> -->
-            <i class="fa-solid fa-xmark" @click="openDelete(h)"></i>
+        <div class="dropdown-cuti" v-if="k.total !== 0">
+          <!-- Trigger -->
+          <div class="summary" @click="toggleCuti(k)">
+            <p>{{ k.total }} Cuti tersedia</p>
+            <i
+              class="fa-solid fa-chevron-down"
+              :class="{ rotate: openCutiId === k.clickup_id }"
+            ></i>
           </div>
-          <!-- <div class="belum_tersedia">
+
+          <!-- Dropdown -->
+          <div class="holiday" v-if="openCutiId === k.clickup_id">
+            <div class="list_hari" v-for="h in k.cuti" :key="h.id">
+              <div class="keterangan_libur">
+                <div class="header-list">
+                  <h5>{{ h.tanggal_ui }}</h5>
+                  <div class="category-label">
+                    <p>{{ h.kategori }}</p>
+                  </div>
+                </div>
+                <p>{{ h.keterangan }}</p>
+              </div>
+
+              <i class="fa-solid fa-xmark" @click.stop="openDelete(h)"></i>
+            </div>
+
+            <!-- Optional empty state -->
+            <div v-if="!k.cuti.length" class="belum_tersedia">
               <h4>Hari Libur belum tersedia</h4>
-            </div> -->
+            </div>
+          </div>
         </div>
 
         <div class="create-cuti">
@@ -383,7 +412,7 @@
   flex: 1 250px;
 
   /* padding: 6px; */
-  border-radius: 10px;
+  border-radius: 5px;
 
   background: #ffffff;
   border: 1px solid #e5e7eb;
@@ -647,6 +676,40 @@
   transform: scale(1.05);
 }
 
+.dropdown-cuti {
+  position: relative;
+  margin: 10px 0;
+  
+  /* width: 260px; */
+}
+
+.summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 10px 14px;
+  border-radius: 12px;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Hover effect */
+.summary:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+/* Active (saat dropdown buka) */
+.summary:has(.rotate) {
+  border-color: #6366f1;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+}
+
 .holiday {
   margin-top: 12px;
   display: flex;
@@ -662,6 +725,19 @@
 
   scrollbar-width: thin;
   scrollbar-color: #c7d2fe transparent;
+
+  animation: fadeSlide 0.3s ease;
+}
+
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .holiday::-webkit-scrollbar {
@@ -742,7 +818,7 @@
 }
 
 .keterangan_libur h5 {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--text-main);
 }
@@ -1125,7 +1201,9 @@
 </style>
 
 <script>
+import { VueDatePicker } from "@vuepic/vue-datepicker";
 export default {
+  components: { VueDatePicker },
   data() {
     return {
       name: "",
@@ -1133,6 +1211,7 @@ export default {
       searchInput: "",
       category: [],
       selectedCategory: "",
+      year: new Date().getFullYear(),
       isLoading: false,
       isSukses: false,
       isError: false,
@@ -1146,6 +1225,7 @@ export default {
       kategori: "",
       tanggal: "",
       keterangan: "",
+      openCutiId: null,
     };
   },
   mounted() {
@@ -1155,6 +1235,9 @@ export default {
     this.debouncedAmbilData = this.debounce(this.ambilData, 500);
   },
   methods: {
+    toggleCuti(k) {
+      this.openCutiId = this.openCutiId === k.clickup_id ? null : k.clickup_id;
+    },
     debounce(func, delay) {
       let timeout;
       return (...args) => {
@@ -1182,7 +1265,7 @@ export default {
 
         this.isSukses = true;
         // this.successMessage = save.data.message;
-        this.successMessage = "Berhasil menambahkan cuti"
+        this.successMessage = "Berhasil menambahkan cuti";
       } catch (err) {
         this.errorMessage =
           err?.response?.data?.error ||
@@ -1201,6 +1284,17 @@ export default {
     setTanggal(k) {
       this.selectedKaryawan = k;
       this.createTanggal = true;
+
+      const today = new Date();
+
+      const day = String(today.getDate()).padStart(2, "0");
+      const month = String(today.getMonth() + 1).padStart(2, "0");
+
+      if (this.year) {
+        this.tanggal = `${this.year}-${month}-${day}`;
+      } else {
+        this.tanggal = new Date().toISOString().split("T")[0];
+      }
     },
     closeSetTanggal() {
       this.createTanggal = false;
@@ -1234,7 +1328,7 @@ export default {
 
         this.isSukses = true;
         // this.successMessage = deleteTanggal.data.message;
-        this.successMessage = "Berhasil dihapus"
+        this.successMessage = "Berhasil dihapus";
       } catch (err) {
         this.errorMessage =
           err?.response?.data?.error ||
@@ -1333,6 +1427,7 @@ export default {
         if (this.searchInput) params.append("name", this.searchInput);
         if (this.selectedCategory)
           params.append("kategori", this.selectedCategory);
+        if (this.year) params.append("year", this.year);
 
         const [memberRes, fotoRes, roleRes, categoryRes] = await Promise.all([
           this.$api.get(`/api/v1/cuti/users?${params.toString()}`),
@@ -1459,10 +1554,13 @@ export default {
     },
     searchInput: {
       handler() {
-      this.debouncedAmbilData();
-    },
+        this.debouncedAmbilData();
+      },
     },
     selectedCategory() {
+      this.ambilData();
+    },
+    year() {
       this.ambilData();
     },
   },

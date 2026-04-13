@@ -107,10 +107,10 @@
             </button>
 
             <Transition name="dropdown">
+              <!-- SESUDAH -->
               <div
                 v-if="menuOpen === k.clickup_id"
                 class="menu-dropdown"
-                :class="{ 'open-left': isLastCard(index) }"
                 @click.stop
               >
                 <div class="button-wraper">
@@ -139,11 +139,7 @@
 
                 <!-- <button @click.stop="toggleRoleMenu(k.id)">Atur Role ▶</button> -->
 
-                <div
-                  v-if="roleMenuOpen === k.clickup_id"
-                  class="role-submenu"
-                  :class="{ 'open-left': isLastCard(index) }"
-                >
+                <div v-if="roleMenuOpen === k.clickup_id" class="role-submenu">
                   <!-- <label v-for="role in daftarRole" :key="role.value">
                     <input
                       type="checkbox"
@@ -585,15 +581,18 @@
   border: 1px solid #e5e7eb;
   border-radius: 10px;
   /* min-width: 180px; */
-  width: 260px;
+  width: 200px;
   padding: 8px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
   z-index: 30;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  justify-content: center;
-  align-items: flex-start;
+  /* justify-content: center;
+  align-items: flex-start; */
+
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .role-submenu.open-left {
@@ -608,8 +607,10 @@
   padding: 6px 10px;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 12px;
   width: 100%;
+  
+  text-transform: uppercase;
 }
 
 .role-submenu label:hover {
@@ -969,7 +970,7 @@
   /* flex: 1 250px; */
   flex: 1;
 
-  padding: 6px;
+  /* padding: 6px; */
   border-radius: 10px;
 
   background: #ffffff;
@@ -1152,8 +1153,24 @@ export default {
     //   return lastName;
     // },
     isLastCard(index) {
-      return (index + 1) % 4 === 0;
+      const dekstop = window.innerWidth > 1366;
+      const laptop = window.innerWidth === 1025 && window.innerWidth === 1366;
+      const tablet = window.innerWidth >= 768 && window.innerWidth <= 1024;
+      const mobile = window.innerWidth < 768;
+
+      if (dekstop) {
+        return (index + 1) % 4 === 0;
+      } else if (laptop) {
+        return (index + 1) % 3 === 0;
+      } else if (tablet) {
+        return (index + 1) % 2 === 0;
+      } else if (mobile) {
+        return (index + 1) % 1 === 0;
+      }
+
+      // return (index + 1) % 4 === 0;
     },
+
     openDelete(k) {
       this.deleteRoleId = k.id;
     },
@@ -1298,17 +1315,46 @@ export default {
 
       this.roleMenuOpen = karyawan.clickup_id;
 
-      console.log("Karyawan di pilih: ", karyawan);
-
       if (karyawan.role) {
-        this.selectedRoles = karyawan.role
-          .split(",") // pisah berdasarkan koma
-          .map((r) => r.trim()); // hilangkan spasi
+        this.selectedRoles = karyawan.role.split(",").map((r) => r.trim());
       } else {
         this.selectedRoles = [];
       }
 
-      console.log("Role yang di pilih: ", this.selectedRoles);
+      this.$nextTick(() => {
+        const submenu = document.querySelector(".role-submenu");
+        if (!submenu) return;
+
+        const rect = submenu.getBoundingClientRect();
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+
+        console.log("rect.bottom:", rect.bottom);
+        console.log("viewportHeight:", window.innerHeight);
+        console.log("selisih:", rect.bottom - window.innerHeight);
+
+        // Reset posisi
+        submenu.style.left = "100%";
+        submenu.style.right = "auto";
+        submenu.style.top = "0";
+        submenu.style.bottom = "auto";
+        submenu.style.marginLeft = "8px";
+        submenu.style.marginRight = "0";
+
+        // Flip ke kiri jika terpotong kanan
+        if (rect.right > viewportWidth) {
+          submenu.style.left = "auto";
+          submenu.style.right = "100%";
+          submenu.style.marginLeft = "0";
+          submenu.style.marginRight = "8px";
+        }
+
+        // Flip ke atas jika terpotong bawah
+        if (rect.bottom > viewportHeight) {
+          submenu.style.top = "auto";
+          submenu.style.bottom = "0";
+        }
+      });
     },
     async saveRole(karyawan) {
       // const roleString = this.selectedRoles.join(",");
@@ -1353,8 +1399,37 @@ export default {
       }
     },
 
-    toggleMenu(id) {
+    toggleMenu(id, event) {
       this.menuOpen = this.menuOpen === id ? null : id;
+
+      if (this.menuOpen) {
+        this.$nextTick(() => {
+          const dropdown = document.querySelector(".menu-dropdown");
+          if (!dropdown) return;
+
+          const rect = dropdown.getBoundingClientRect();
+          const viewportWidth = window.innerWidth;
+          const viewportHeight = window.innerHeight;
+
+          // Reset dulu
+          dropdown.style.right = "0";
+          dropdown.style.left = "auto";
+          dropdown.style.top = "28px";
+          dropdown.style.bottom = "auto";
+
+          // Flip horizontal (kiri) jika terpotong kanan
+          if (rect.right > viewportWidth) {
+            dropdown.style.right = "auto";
+            dropdown.style.left = "0";
+          }
+
+          // Flip vertikal (atas) jika terpotong bawah
+          if (rect.bottom > viewportHeight) {
+            dropdown.style.top = "auto";
+            dropdown.style.bottom = "28px";
+          }
+        });
+      }
     },
 
     async ubahStatus(user, status) {

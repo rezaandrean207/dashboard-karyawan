@@ -120,7 +120,10 @@
           :key="index"
           v-if="daftarHari && daftarHari.length"
         >
-          <h4>{{ h.hari }}, {{ h.tanggal.split("-")[0] }} {{ h.bulan }}</h4>
+          <h4>
+            {{ h.hari }}, {{ h.tanggal.split("-")[0] }} {{ h.bulan }}
+            {{ h.tanggal.split("-")[2] }}
+          </h4>
           <p>{{ h.keterangan }}</p>
 
           <!-- <h4>01 Kamis</h4>
@@ -216,6 +219,76 @@
           <div class="about">
             <h4>{{ k.username }}</h4>
             <p>{{ k.role }}</p>
+          </div>
+          <div class="cuti-wraper" v-if="k.total_cuti !== 0">
+            <div class="total-cuti" @click="toggleCuti(k.clickup_id)">
+              <!-- <i class="fa-solid fa-calendar-xmark"></i> -->
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                fill="currentColor"
+              >
+                <path
+                  d="M17 10H7V12H17V10ZM19 3H18V1H16V3H8V1H6V3H5C3.89 3 3 3.9 3 5V19C3 20.1 3.89 21 5 21H11V19H5V8H19V9H21V5C21 3.9 20.1 3 19 3Z"
+                />
+
+                <path
+                  d="M18 12C16.34 12 15 13.34 15 15C15 16.66 16.34 18 18 18C19.66 18 21 16.66 21 15C21 13.34 19.66 12 18 12Z"
+                />
+
+                <path
+                  d="M18 19C15.34 19 13 20.34 13 22V23H23V22C23 20.34 20.66 19 18 19Z"
+                />
+
+                <path d="M7 14H12V16H7V14Z" />
+              </svg>
+              <p>Total cuti: {{ k.total_cuti }} hari</p>
+              <span
+                class="material-symbols-outlined"
+                :class="{ opened: openCuti === k.clickup_id }"
+              >
+                arrow_drop_down
+              </span>
+            </div>
+
+            <div
+              class="dropdown_cuti"
+              v-if="openCuti === k.clickup_id && k.cuti_summary"
+            >
+              <!-- Summary -->
+              <div class="cuti-summary">
+                <p class="title">Ringkasan</p>
+                <div
+                  class="jenis-cuti"
+                  v-for="item in k.cuti_summary"
+                  :key="item.kategori"
+                >
+                  <span>{{ item.kategori }}</span>
+                  <strong>{{ item.jumlah }} hari</strong>
+                </div>
+
+                <div class="disclaimer">
+                  <p><i>*WFH tidak termasuk daftar cuti</i></p>
+                </div>
+              </div>
+
+              <!-- Divider -->
+              <hr />
+
+              <!-- Detail -->
+              <!-- <div class="cuti-detail">
+              <p class="title">Detail Cuti</p>
+              <div class="cuti-item" v-for="c in k.cuti" :key="c.id">
+                <div class="row">
+                  <span class="kategori">{{ c.kategori }}</span>
+                  <span class="tanggal">{{ c.tanggal }}</span>
+                </div>
+                <p class="keterangan">{{ c.keterangan }}</p>
+              </div>
+            </div> -->
+            </div>
           </div>
         </div>
 
@@ -895,10 +968,11 @@
 .style_progres label,
 .sortir_style label,
 .filter_task label {
-  padding-left: 2px;
-  text-wrap: nowrap;
-  font-size: 14px;
+  display: block;
+  font-size: 12px;
   font-weight: 500;
+  color: #64748b;
+  margin: 0 0 4px 2px;
 }
 
 .sortir_performa {
@@ -1639,12 +1713,111 @@
   display: flex;
   /* border: 1px solid #010101; */
   align-items: center;
-  gap: 15px;
+  gap: 12px;
   flex: 12;
+  position: relative;
 }
 
 .profil_karyawan .about {
   text-transform: capitalize;
+}
+
+.profil_karyawan .cuti-wraper {
+  position: relative;
+  /* border: 1px solid #dbdbdb; */
+}
+
+.profil_karyawan .cuti-wraper .total-cuti {
+  font-size: 12px;
+  color: #64748b;
+  /* margin-top: 4px; */
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 0px;
+  /* border: 1px solid #dbdbdb; */
+  position: relative;
+  top: -11px;
+
+  cursor: pointer;
+
+  border: 1px solid var(--border-soft);
+  padding: 2px 5px;
+  border-radius: 7px;
+
+  text-wrap: nowrap;
+}
+
+.total-cuti svg {
+  fill: #64748b;
+  font-size: 10px;
+  width: 14px;
+  height: 14px;
+}
+
+.total-cuti span {
+  transition: transform 0.2s ease;
+}
+
+.opened {
+  transform: rotate(180deg);
+}
+
+.dropdown_cuti {
+  font-size: 13px;
+
+  position: absolute;
+  top: 50%; /* tepat di bawah tombol */
+  left: 0; /* atau left: 0 kalau mau rata kiri */
+
+  width: 260px;
+  margin-top: 8px;
+
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px;
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+
+  animation: fadeIn 0.2s ease;
+}
+
+.dropdown_cuti .title {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.jenis-cuti {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.disclaimer {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 8px;
+}
+
+.cuti-item {
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.cuti-item:last-child {
+  border-bottom: none;
+}
+
+.cuti-item .row {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 500;
+}
+
+.keterangan {
+  font-size: 12px;
+  color: #666;
 }
 
 .profil_karyawan img {
@@ -2031,6 +2204,7 @@ form select {
     no-repeat 10px center;
   background-size: 14px;
   padding-left: 35px;
+  background-color: #fff;
 }
 
 .cari input {
@@ -2038,6 +2212,7 @@ form select {
     no-repeat 10px center;
   background-size: 14px;
   padding-left: 35px;
+  background-color: #fff;
 }
 
 .detail_task,
@@ -2259,8 +2434,8 @@ form select {
 
 .photo-wrapper img,
 .photo-option {
-  width: 100%;
-  height: 100%;
+  width: 70px;
+  height: 70px;
   object-fit: cover;
   border-radius: 50%;
   border: 4px solid rgb(193, 222, 232);
@@ -2344,6 +2519,7 @@ export default {
       taskBug: "",
       detailBug: null,
       daftarHari: [],
+      openCuti: null,
     };
   },
   components: {
@@ -2365,6 +2541,34 @@ export default {
     // this.hariLibur();
   },
   methods: {
+    toggleCuti(id) {
+      this.openCuti = this.openCuti === id ? null : id;
+
+      this.$nextTick(() => {
+        const dropdown = document.querySelector(".dropdown_cuti");
+        if (!dropdown) return;
+
+        const rect = dropdown.getBoundingClientRect();
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+
+        console.log("rect.bottom:", rect.bottom);
+        console.log("viewportHeight:", window.innerHeight);
+        console.log("selisih:", rect.bottom - window.innerHeight);
+
+        if (rect.right > viewportWidth) {
+          dropdown.style.left = 'auto';
+          dropdown.style.right = '0';
+        }
+
+        // if (rect.bottom > viewportHeight) {
+        //   dropdown.style.top = 'auto';
+        //   dropdown.style.bottom = '100%';
+        //   dropdown.style.marginTop = '0';
+        //   dropdown.style.marginBottom = '8px';
+        // }
+      });
+    },
     setInitial(data) {
       if (!data) return "";
 

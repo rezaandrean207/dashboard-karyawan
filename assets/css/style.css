@@ -1,5 +1,5 @@
 :root {
-  --borderCard: 1px solid rgb(219, 214, 246);
+  --borderCard: 1px solid var(--border-soft);
   --bebanSedang: rgb(255, 240, 178);
 }
 
@@ -310,13 +310,15 @@ body {
   width: 96%;
   /* position: absolute; */
   max-height: 100vh;
-  overflow-y: auto;
+ overflow: auto;
   right: 0;
   /* Firefox */
   scrollbar-width: none;
 
   /* Internet Explorer / Edge lama */
   -ms-overflow-style: none;
+
+  padding-bottom: 20px;
 }
 
 /* Chrome, Edge, Safari */
@@ -413,9 +415,11 @@ body {
 .dates label,
 .posisi label,
 .cari label {
-  margin-left: 5px;
-  font-size: 14px;
-  font-weight: 600;
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748b;
+  margin: 0 0 4px 2px
 }
 
 .tanggal_mulai input,
@@ -467,6 +471,7 @@ form select {
     transform 0.3s ease,
     box-shadow 0.1s ease;
   padding: 10px 20px 20px 20px;
+  overflow: visible;
   /* box-shadow:  2px 2px 25px #cfd6ff,
              -2px -2px 25px #fbfbff; */
 }
@@ -591,7 +596,8 @@ form select {
   padding: 15px 0;
   position: sticky;
   top: 0;
-  background-color: #ffffffd8;
+  background-color: #fff;
+  z-index: 99;
   /* height: fit-content; */
 }
 
