@@ -1,21 +1,16 @@
 export default defineNuxtRouteMiddleware(async (to) => {
   const token = useCookie("token");
   const role = useCookie("role");
-  // const id = useCookie("clickup_id");
 
   const isLoginPage = to.path === "/login";
+  const isRoot = to.path === "/";
+
   const isWebView = to.query.view === "app";
   const webViewToken = to.query.token;
 
-  // Root → login
-  if (to.path === "/") {
-    return navigateTo("/login");
-  }
-
-  // 🔐 MODE WEBVIEW
+  // 🔐 WEBVIEW LOGIN
   if (isWebView && webViewToken && !token.value) {
     try {
-      // validasi token android ke backend
       const data = await $fetch("/api/v1/auth/login", {
         method: "POST",
         body: { token: webViewToken },
@@ -28,29 +23,36 @@ export default defineNuxtRouteMiddleware(async (to) => {
     }
   }
 
-  // Belum login
+  // ❌ BELUM LOGIN
   if (!token.value) {
     if (!isLoginPage) {
       return navigateTo("/login");
     }
-    return;
+    return; // biarin di login
   }
 
-  // Role invalid
+  // ✅ SUDAH LOGIN → HANDLE ROOT
+  if (isRoot) {
+    return role.value === "admin"
+      ? navigateTo("/admin/listKaryawan")
+      : navigateTo("/karyawan/performaSaya");
+  }
+
+  // ❌ ROLE INVALID (hanya kalau sudah login)
   if (!["admin", "member"].includes(role.value)) {
     token.value = null;
     role.value = null;
     return navigateTo("/login");
   }
 
-  // Sudah login tapi buka login
+  // ❌ SUDAH LOGIN tapi buka login
   if (isLoginPage) {
     return role.value === "admin"
       ? navigateTo("/admin/listKaryawan")
       : navigateTo("/karyawan/performaSaya");
   }
 
-  // Role-based access
+  // 🔒 ROLE-BASED ACCESS
   if (to.path.startsWith("/admin") && role.value !== "admin") {
     return navigateTo("/karyawan/performaSaya");
   }

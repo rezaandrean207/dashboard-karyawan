@@ -437,7 +437,7 @@ export default {
 
         // 🔥 centralize cookie config
         const cookieOptions = {
-          maxAge: 10,
+          maxAge: 60 * 60 * 24,
           sameSite: "lax",
           path: "/",
         };
