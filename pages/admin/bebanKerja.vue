@@ -2557,8 +2557,8 @@ export default {
         console.log("selisih:", rect.bottom - window.innerHeight);
 
         if (rect.right > viewportWidth) {
-          dropdown.style.left = 'auto';
-          dropdown.style.right = '0';
+          dropdown.style.left = "auto";
+          dropdown.style.right = "0";
         }
 
         // if (rect.bottom > viewportHeight) {
@@ -2805,7 +2805,14 @@ export default {
       //   },
       // });
 
-      this.$router.back();
+      // this.$router.back();
+      const from = this.$route.query.from;
+
+      if (from) {
+        this.$router.push(from);
+      } else {
+        this.$router.back(); // fallback
+      }
 
       this.progres = "";
       this.sortKetepatanDetail = "";

@@ -1313,6 +1313,7 @@ export default {
           start: this.start,
           end: this.end,
           source: "grouping",
+          from: this.$route.fullPath // ⬅️ ini kunci
         },
       });
     },

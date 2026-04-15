@@ -421,59 +421,54 @@ export default {
   },
   methods: {
     async login() {
+      if (this.isLoading) return;
+
       this.isLoading = true;
-      // const { $api } = useNuxtApp();
-      const router = useRouter();
+      this.isError = false;
+
       try {
         const res = await this.$api.post("/api/v1/auth/login", {
           username: this.form.username,
           password: this.form.password,
         });
-        console.log("Login sukses:", res.data.data.token);
 
-        const token = useCookie("token", {
-          maxAge: 60 * 60 * 24, // 1 hari
+        // 🔥 destructuring biar clean
+        const { token, role, clickup_id, name } = res.data.data;
+
+        // 🔥 centralize cookie config
+        const cookieOptions = {
+          maxAge: 10,
           sameSite: "lax",
           path: "/",
-        });
+        };
 
-        const role = useCookie("role", {
-          maxAge: 60 * 60 * 24, // 1 hari
-          sameSite: "lax",
-          path: "/",
-        });
+        useCookie("token", cookieOptions).value = token;
+        useCookie("role", cookieOptions).value = role;
+        useCookie("clickup_id", cookieOptions).value = clickup_id;
+        useCookie("name", cookieOptions).value = name;
 
-        const id = useCookie("clickup_id", {
-          maxAge: 60 * 60 * 24, // 1 hari
-          sameSite: "lax",
-          path: "/",
-        });
+        // 🔥 redirect clean
+        const redirectPath =
+          role === "admin" ? "/admin/listKaryawan" : "/karyawan/performaSaya";
 
-        const name = useCookie("name", {
-          maxAge: 60 * 60 * 24, // 1 hari
-          sameSite: "lax",
-          path: "/",
-        });
-
-        token.value = res.data.data.token;
-        role.value = res.data.data.role;
-        id.value = res.data.data.clickup_id;
-        name.value = res.data.data.name;
-
-        // ✅ REDIRECT SEKALI
-        if (res.data.data.role === "admin") {
-          router.replace("/admin/listKaryawan");
-        } else {
-          router.replace("/karyawan/performaSaya");
-        }
+        this.$router.replace(redirectPath);
       } catch (error) {
-        console.error("API Error:", error);
+        console.error("Login Error:", error);
+
         this.isError = true;
+
+        // 🔥 kasih message lebih jelas
+        const status = error?.response?.status;
+
+        // if (status === 401) {
+        //   alert("Username atau password salah");
+        // } else {
+        //   alert("Terjadi kesalahan, coba lagi");
+        // }
+
         setTimeout(() => {
           this.isError = false;
-          // alert("Input tidak cocok");
-        }, 500);
-        // alert("Input tidak cocok");
+        }, 2000);
       } finally {
         this.isLoading = false;
       }
