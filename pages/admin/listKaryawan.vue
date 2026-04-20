@@ -57,18 +57,36 @@
         <i class="fa-solid fa-filter"></i>
         <p>Filter & Pencarian</p>
       </div>
-      <div class="filter_detail">
-        <form action="">
-          <div class="filter-item">
-            <input
+      <div class="filter-detail">
+        <div class="filter-item">
+          <!-- <input
               type="search"
               placeholder="Cari nama karyawan"
               v-model="searchInput"
               @submit.prevent
-            />
-          </div>
-          <div class="filter-item">
-            <select v-model="posisi">
+            /> -->
+          <ClientOnly>
+            <n-input
+              v-model:value="searchInput"
+              placeholder="Cari nama karyawan"
+              type="search"
+            ></n-input>
+          </ClientOnly>
+        </div>
+        <div class="filter-item">
+          <ClientOnly>
+            <n-select
+              v-model:value="posisi"
+              :options="[
+                { label: 'Semua Posisi', value: '' },
+                ...roleOptions.map((role) => ({
+                  label: role.label,
+                  value: role.value,
+                })),
+              ]"
+            ></n-select>
+          </ClientOnly>
+          <!-- <select v-model="posisi">
               <option value="">Semua Posisi</option>
               <option
                 v-for="(role, index) in roleOptions"
@@ -77,10 +95,9 @@
               >
                 {{ role.label }}
               </option>
-            </select>
-          </div>
-        </form>
-        <div class="total_karyawan">
+            </select> -->
+        </div>
+        <div class="filter-item total_karyawan">
           <i class="fa-solid fa-users"></i>
           <div class="jumlah_karyawan">
             <p>Total Karyawan</p>
@@ -609,7 +626,7 @@
   cursor: pointer;
   font-size: 12px;
   width: 100%;
-  
+
   text-transform: uppercase;
 }
 
@@ -902,25 +919,7 @@
   background-color: rgb(16, 67, 185);
 }
 
-.filter .filter_detail {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.filter_detail form {
-  /* width: 68%; */
-  flex: 2 1 400px;
-  /* border: 1px solid #010101; */
-  margin-top: 25px;
-  display: flex;
-  /* height: 5vh; */
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.filter_detail .total_karyawan {
+.total_karyawan {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -954,67 +953,6 @@
 
 .total_karyawan .jumlah {
   color: darkblue;
-}
-
-.filter-detail {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 14px;
-}
-
-.filter-item {
-  display: flex;
-  align-items: center;
-
-  /* flex: 1 250px; */
-  flex: 1;
-
-  /* padding: 6px; */
-  border-radius: 10px;
-
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-
-  transition: all 0.15s ease;
-}
-
-.filter-item:focus-within {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-}
-
-.filter-item input {
-  width: 100%;
-  border: none;
-  outline: none;
-
-  padding: 10px 12px;
-  border-radius: 8px;
-
-  background: transparent;
-  font-size: 14px;
-
-  color: #0f172a;
-}
-
-.filter-item input::placeholder {
-  color: #9ca3af;
-}
-
-.filter-item select {
-  width: 100%;
-  border: none;
-  outline: none;
-
-  padding: 10px 12px;
-  border-radius: 8px;
-
-  background: transparent;
-  font-size: 14px;
-
-  color: #0f172a;
-  cursor: pointer;
 }
 
 /* form input,

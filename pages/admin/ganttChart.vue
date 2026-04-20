@@ -1193,8 +1193,6 @@
 </style>
 
 <script>
-import { VueDatePicker } from "@vuepic/vue-datepicker";
-
 export default {
   data() {
     return {
@@ -1216,9 +1214,6 @@ export default {
       maxZoom: 200,
       zoomStep: 20,
     };
-  },
-  components: {
-    VueDatePicker,
   },
   mounted() {
     this.setDefaultTanggal();

@@ -19,10 +19,10 @@
         <i class="fa-solid fa-filter"></i>
         <p>Filter & Pencarian</p>
       </div>
-      <div class="search-tanggal">
-        <div class="dates">
+      <div class="filter-detail">
+        <div class="filter-item">
           <label for="tanggal">Tanggal</label>
-          <div class="tanggal">
+          <div class="dates">
             <!-- <input type="date" name="start" v-model="start" /> -->
             <ClientOnly>
               <VueDatePicker
@@ -41,30 +41,46 @@
                 :time-config="{ enableTimePicker: false }"
             /></ClientOnly>
             <!-- <VueDatePicker v-model="date">
-              <template
-                #preset-date-range-button="{ label, value, presetDate }"
-              >
-                <span role="button" :tabindex="0" @click="presetDate(value)">
-                  {{ label }}
-                </span>
-              </template>
-            </VueDatePicker> -->
+                <template
+                  #preset-date-range-button="{ label, value, presetDate }"
+                >
+                  <span role="button" :tabindex="0" @click="presetDate(value)">
+                    {{ label }}
+                  </span>
+                </template>
+              </VueDatePicker> -->
           </div>
         </div>
-        <div class="kurang-lebih-dari">
+        <div class="filter-item">
           <label for="">Kurang/lebih dari</label>
-          <div class="kurang-lebih">
+          <ClientOnly>
+            <n-select
+              v-model:value="kurangLebih"
+              :options="[
+                { label: 'Kurang Dari', value: 'kurangDari' },
+                { label: 'Lebih Dari', value: 'lebihDari' },
+              ]"
+            ></n-select>
+          </ClientOnly>
+          <!-- <div class="kurang-lebih">
             <select name="" id="" v-model="kurangLebih">
               <option value="kurangDari">Kurang Dari</option>
               <option value="lebihDari">Lebih Dari</option>
             </select>
-          </div>
+          </div> -->
         </div>
-        <div class="search-input">
+        <div class="filter-item">
           <label for="">Set default</label>
-          <div class="search">
+          <ClientOnly>
+            <n-input
+              v-model:value="searchInput"
+              type="number"
+              placeholder="Masukkan nilai default"
+            ></n-input>
+          </ClientOnly>
+          <!-- <div class="search">
             <input type="number" v-model="searchInput" />
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -101,7 +117,7 @@
 
                   <div
                     class="photo-option"
-                    :style="{ backgroundColor: k.color}"
+                    :style="{ backgroundColor: k.color }"
                     v-else
                   >
                     <p>{{ setInitial(k.name) }}</p>
@@ -1075,7 +1091,6 @@
 </style>
 
 <script>
-import { VueDatePicker } from "@vuepic/vue-datepicker";
 export default {
   data() {
     return {
@@ -1092,10 +1107,6 @@ export default {
       kurangLebih: "kurangDari",
       assigneeColors: {},
     };
-  },
-
-  components: {
-    VueDatePicker,
   },
   mounted() {
     this.setDefaultTanggal();
@@ -1313,7 +1324,7 @@ export default {
           start: this.start,
           end: this.end,
           source: "grouping",
-          from: this.$route.fullPath // ⬅️ ini kunci
+          from: this.$route.fullPath, // ⬅️ ini kunci
         },
       });
     },

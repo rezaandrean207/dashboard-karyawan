@@ -26,18 +26,40 @@
         <i class="fa-solid fa-filter"></i>
         <p>Filter & Pencarian</p>
       </div>
-      <form action="">
-        <div class="cari">
+      <div class="filter-detail">
+        <div class="filter-item">
           <label for="search">Cari Karyawan</label>
-          <input
+          <ClientOnly>
+            <n-input
+              placeholder="Cari nama karyawan"
+              type="search"
+              v-model:value="searchInput"
+            ></n-input>
+          </ClientOnly>
+          <!-- <input
             type="search"
             name="search"
             placeholder="Cari nama karyawan"
             v-model="searchInput"
-          />
+          /> -->
         </div>
-        <div class="posisi">
+        <div class="filter-item">
           <label for="posisi">Filter Posisi</label>
+          <ClientOnly>
+            <n-select
+              placeholder="Cari nama karyawan"
+              v-model:value="posisi"
+              :options="[
+                { label: 'Semua Posisi', value: '' },
+                { label: 'Data Analyst', value: 'analis' },
+                { label: 'Backend Developer', value: 'backend' },
+                { label: 'Web Developer', value: 'web' },
+                { label: 'Mobile Apps Developer', value: 'mobile apps' },
+                { label: 'UI-UX Designer', value: 'UI-UX' },
+              ]"
+            ></n-select>
+          </ClientOnly>
+          <!-- <label for="posisi">Filter Posisi</label>
           <select v-model="posisi">
             <option value="" selected>Semua Posisi</option>
             <option value="analis">Data Analys</option>
@@ -45,11 +67,11 @@
             <option value="web">Web Developer</option>
             <option value="mobile apps">Mobile Apps</option>
             <option value="UI-UX">UI-UX</option>
-          </select>
+          </select> -->
         </div>
-        <div class="dates">
-          <label for="tanggal">Tanggal</label>
-          <div class="tanggal">
+        <div class="filter-item">
+          <label for="start">Tanggal Mulai</label>
+          <div class="dates">
             <!-- <input type="date" name="start" v-model="start" /> -->
             <ClientOnly>
               <VueDatePicker
@@ -79,35 +101,8 @@
             </VueDatePicker> -->
           </div>
         </div>
-      </form>
+      </div>
     </div>
-    <!-- <div class="keterangan_kerja">
-        <div class="total_karyawan">
-          <p>Total Karyawan</p>
-          <p class="font_color">1</p>
-        </div>
-        <div class="overload">
-          <p>Overload</p>
-          <p class="font_color">0</p>
-        </div>
-        <div class="normal">
-          <p>Normal</p>
-          <p class="font_color">1</p>
-        </div>
-        <div class="underload">
-          <p>Underload</p>
-          <p class="font_color">0</p>
-        </div>
-        <div class="average">
-          <p>Rata-rata Jam</p>
-          <p class="font_color">0</p>
-        </div>
-        <div class="upcoming">
-          <p>Total Upcoming</p>
-          <p class="font_color">0</p>
-        </div>
-      </div> -->
-
     <div class="holiday">
       <div class="header_holiday">
         <p>📅 Hari Libur</p>
@@ -140,32 +135,28 @@
         <i class="fa-solid fa-filter"></i>
         <p>Sortir Kinerja Karyawan</p>
       </div>
-      <div class="filter_sortir">
-        <div class="style_sortir">
+      <div class="filter-detail">
+        <div class="filter-item">
           <label for="">Performa</label>
-          <select name="" id="" class="sortir_performa" v-model="sortPerform">
+          <ClientOnly>
+            <n-select
+              placeholder="Cari nama karyawan"
+              v-model:value="sortPerform"
+              :options="[
+                { label: 'Semua Performa', value: '' },
+                { label: 'Tertinggi', value: 'highest' },
+                { label: 'Terendah', value: 'lowest' },
+              ]"
+            ></n-select>
+          </ClientOnly>
+          <!-- <select name="" id="" class="sortir_performa" v-model="sortPerform">
             <option value="">Semua Performa</option>
             <option value="highest">Tertinggi</option>
             <option value="lowest">Terendah</option>
-          </select>
+          </select> -->
         </div>
-
-        <!-- <div class="style_sortir">
-            <label for="">Performa Bug</label>
-            <select
-              name=""
-              id=""
-              class="sortir_performa"
-              v-model="sortPerformBug"
-            >
-              <option value="">Semua Performa</option>
-              <option value="highest">Tertinggi</option>
-              <option value="lowest">Terendah</option>
-            </select>
-          </div> -->
-
-        <div class="style_sortir">
-          <label for="">Ketepatan Tugas</label>
+        <div class="filter-item">
+          <!-- <label for="">Ketepatan Tugas</label>
           <select
             name=""
             id=""
@@ -175,16 +166,38 @@
             <option value="">Semua Ketepatan</option>
             <option value="highest">Tertinggi</option>
             <option value="lowest">Terendah</option>
-          </select>
+          </select> -->
+
+          <label for="">Ketepatan Tugas</label>
+          <ClientOnly>
+            <n-select
+              v-model:value="sortKetepatan"
+              :options="[
+                { label: 'Semua Ketepatan', value: '' },
+                { label: 'Tertinggi', value: 'highest' },
+                { label: 'Terendah', value: 'lowest' },
+              ]"
+            ></n-select>
+          </ClientOnly>
         </div>
 
-        <div class="style_sortir">
+        <div class="filter-item">
           <label for="">Beban Kerja</label>
-          <select name="" id="" class="sortir_beban" v-model="sortBeban">
+          <ClientOnly>
+            <n-select
+              v-model:value="sortBeban"
+              :options="[
+                { label: 'Semua Beban Kerja', value: '' },
+                { label: 'Tertinggi', value: 'highest' },
+                { label: 'Terendah', value: 'lowest' },
+              ]"
+            ></n-select>
+          </ClientOnly>
+          <!-- <select name="" id="" class="sortir_beban" v-model="sortBeban">
             <option value="">Semua Beban Kerja</option>
             <option value="highest">Tertinggi</option>
             <option value="lowest">Terendah</option>
-          </select>
+          </select> -->
         </div>
       </div>
     </div>
@@ -944,81 +957,6 @@
   color: var(--font-color);
   font-size: 12px;
   font-weight: 600;
-}
-</style>
-
-<!-- Style Filter Sortir -->
-<style scoped>
-.filter_sortir {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  /* margin-top: 20px; */
-  width: 100%;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 15px;
-}
-
-.style_sortir {
-  width: 32%;
-}
-
-.style_sortir label,
-.style_progres label,
-.sortir_style label,
-.filter_task label {
-  display: block;
-  font-size: 12px;
-  font-weight: 500;
-  color: #64748b;
-  margin: 0 0 4px 2px;
-}
-
-.sortir_performa {
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='currentColor' stroke-width='32' viewBox='0 0 512 512'%3E%3Cpath d='M64 448V224M192 448V128M320 448V256M448 448V64'/%3E%3C/svg%3E")
-    no-repeat 10px center;
-  background-size: 14px;
-}
-
-.sortir_ketepatan {
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='currentColor' stroke-width='32' viewBox='0 0 512 512'%3E%3Ccircle cx='256' cy='256' r='200'/%3E%3Cpath d='M160 270l56 56 136-136'/%3E%3C/svg%3E")
-    no-repeat 10px center;
-  background-size: 14px;
-}
-
-.sortir_beban {
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='currentColor' stroke-width='32' viewBox='0 0 512 512'%3E%3Crect x='32' y='128' width='448' height='288' rx='32'/%3E%3Cpath d='M176 128V96a80 80 0 0 1 160 0v32'/%3E%3C/svg%3E")
-    no-repeat 10px center;
-  background-size: 14px;
-}
-
-.sortir_performa,
-.sortir_beban,
-.sortir_ketepatan,
-.select_task,
-.task_style {
-  border: var(--borderCard);
-  font-size: 14px;
-  padding: 8px 8px 8px 35px;
-  border-radius: 6px;
-  /* margin-top: 20px; */
-  display: block;
-  width: 100%;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.filter_task {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.sortir_style,
-.style_progres,
-.filter_bug {
-  width: 300px;
 }
 </style>
 
@@ -2096,13 +2034,13 @@
   gap: 16px;
 }
 
-.time .jam,
+/* .time .jam,
 .tanggal,
 .project {
   display: flex;
   align-items: center;
   gap: 4px;
-}
+} */
 
 .tanggal input {
   background-color: #fff;
@@ -2489,8 +2427,6 @@ form select {
 </style>
 
 <script>
-import { VueDatePicker } from "@vuepic/vue-datepicker";
-
 export default {
   data() {
     return {
@@ -2521,9 +2457,6 @@ export default {
       daftarHari: [],
       openCuti: null,
     };
-  },
-  components: {
-    VueDatePicker,
   },
   async mounted() {
     const date = this.$route.query;

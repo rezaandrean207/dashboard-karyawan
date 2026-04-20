@@ -7,52 +7,30 @@
   </div>
 
   <div class="isi">
-    <!-- Header -->
-    <!-- <h2>Performa Mingguan - {{ displayPeriod }}</h2>
-    <p class="subtitle">Daftar 5 karyawan teratas dengan performa terbaik</p> -->
     <h2>Gamifikasi Karyawan</h2>
     <p class="subtitle">{{ periode }}</p>
 
     <!-- Filter -->
-    <div class="card filter-card">
-      <div class="filter-header">
-        <h4>Filter Periode</h4>
+    <div class="filter">
+      <div class="title">
+        <i class="fa-solid fa-filter"></i>
+        <p>Filter Periode</p>
       </div>
 
-      <div class="filter-row">
-        <!-- <div class="filter-item">
-          <label>Tahun</label>
-          <ClientOnly>
-            <VueDatePicker
-              v-model="dateYear"
-              year-picker
-              :formats="{ year: 'yo' }"
-              :disabled="dataType === 'month'"
-              :class="{ disabled_date: dataType === 'month' }"
-              @update:model-value="onDateChange"
-              class="month-picker"
-            />
-          </ClientOnly>
-        </div> -->
-
+      <div class="filter-detail">
         <div class="filter-item">
           <label>Minggu </label>
-          <select
-            name=""
-            id=""
-            v-model="selectedWeeks"
-            class="data-picker"
-            :disabled="dataType !== 'week'"
-            :class="{ disabled_date: dataType !== 'week' }"
-          >
-            <option
-              :value="index + 1"
-              v-for="(opt, index) in daftarMinggu"
-              :key="opt"
-            >
-              {{ opt.label }}
-            </option>
-          </select>
+          <ClientOnly>
+            <n-select
+              v-model:value="selectedWeeks"
+              :options="[
+                ...daftarMinggu.map((opt, index) => ({
+                  label: opt.label,
+                  value: index + 1,
+                })),
+              ]"
+            ></n-select>
+          </ClientOnly>
         </div>
 
         <div class="filter-item">
@@ -65,7 +43,6 @@
               :disabled="dataType === 'year'"
               :class="{ disabled_date: dataType === 'year' }"
               @update:model-value="onDateChange"
-              class="month-picker"
             />
           </ClientOnly>
         </div>
@@ -80,28 +57,37 @@
               :disabled="dataType !== 'year'"
               :class="{ disabled_date: dataType !== 'year' }"
               @update:model-value="onDateChange"
-              class="month-picker"
             />
           </ClientOnly>
         </div>
 
         <div class="filter-item">
           <label>Mingguan/Bulanan/Tahunan</label>
-          <select name="" id="" v-model="dataType" class="data-picker">
-            <option value="week">Mingguan</option>
-            <option value="month">Bulanan</option>
-            <option value="year">Tahunan</option>
-          </select>
+          <ClientOnly>
+            <n-select
+              v-model:value="dataType"
+              :options="[
+                { label: 'Mingguan', value: 'week' },
+                { label: 'Bulanan', value: 'month' },
+                { label: 'Tahunan', value: 'year' },
+              ]"
+            ></n-select>
+          </ClientOnly>
         </div>
 
         <div class="filter-item">
           <label>Filter Data</label>
-          <select name="" id="" v-model="selectedFilter" class="data-picker">
-            <option value="Performa">Performa</option>
-            <option value="Total Beban Kerja">Beban Kerja</option>
-            <option value="Tepat Waktu Kerja">Tepat Waktu Kerja</option>
-            <option value="Performa Bug">Performa Bug</option>
-          </select>
+          <ClientOnly>
+            <n-select
+              v-model:value="selectedFilter"
+              :options="[
+                { label: 'Performa', value: 'Performa' },
+                { label: 'Beban Kerja', value: 'Total Beban Kerja' },
+                { label: 'Tepat Waktu Kerja', value: 'Tepat Waktu Kerja' },
+                { label: 'Performa Bug', value: 'Performa Bug' },
+              ]"
+            ></n-select>
+          </ClientOnly>
         </div>
       </div>
     </div>
@@ -265,128 +251,6 @@
   font-size: 12px;
   text-transform: capitalize;
   width: fit-content;
-}
-</style>
-
-<!-- Filter -->
-<style scoped>
-/* Card filter */
-.filter-card {
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 20px 24px;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-}
-
-/* Header */
-.filter-header {
-  border-bottom: 1px solid #e2e8f0;
-  margin-bottom: 10px;
-}
-
-.filter-header h4 {
-  font-size: 15px;
-  font-weight: 600;
-  color: #0f172a;
-  margin-bottom: 16px;
-}
-
-/* Row */
-.filter-row {
-  display: flex;
-  gap: 24px;
-  flex-wrap: wrap;
-}
-
-/* Item */
-.filter-item {
-  flex: 1 300px;
-}
-
-/* Label */
-.filter-item label {
-  display: block;
-  font-size: 12px;
-  font-weight: 500;
-  color: #64748b;
-  margin-bottom: 6px;
-}
-
-/* Date picker wrapper */
-.month-picker,
-.data-picker {
-  --dp-border-radius: 10px;
-  --dp-font-family: inherit;
-  --dp-font-size: 14px;
-
-  --dp-background-color: #f8fafc;
-  --dp-text-color: #0f172a;
-  --dp-border-color: #e2e8f0;
-  --dp-border-color-hover: #94a3b8;
-  --dp-primary-color: #2563eb;
-
-  width: 100%;
-}
-
-.month-picker,
-.data-picker {
-  transition: all 0.2s ease;
-}
-
-/* Focus state */
-.month-picker:focus-within,
-.data-picker:focus-within {
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-  border-radius: 10px;
-}
-
-.month-picker .dp__input_wrap::before,
-.data-picker .dp__input_wrap::before {
-  content: "📅";
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 14px;
-  opacity: 0.6;
-}
-
-.month-picker input,
-.data-picker input {
-  padding-left: 36px !important;
-}
-
-.data-picker {
-  border: 1px solid var(--dp-border-color);
-  padding: 7px 12px;
-  border-radius: 10px;
-  background-color: var(--dp-background-color);
-  color: var(--dp-text-color);
-  font-size: var(--dp-font-size);
-  font-family: var(--dp-font-family);
-}
-
-.disabled_date {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.disabled_date,
-.disabled_date * {
-  cursor: not-allowed !important;
-}
-
-.disabled_date .dp__input {
-  background-color: #e2e8f0 !important;
-  color: #94a3b8 !important;
-}
-
-.disabled_date .dp__input_wrap {
-  background-color: #e2e8f0 !important;
-}
-
-.disabled_date input {
-  cursor: not-allowed !important;
 }
 </style>
 
@@ -628,10 +492,7 @@ h2 {
 </style>
 
 <script>
-import { VueDatePicker } from "@vuepic/vue-datepicker";
 export default {
-  components: { VueDatePicker },
-
   data() {
     return {
       dateMonth: null,

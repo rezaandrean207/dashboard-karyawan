@@ -47,8 +47,8 @@
         <i class="fa-solid fa-filter"></i>
         <p>Filter & Pencarian</p>
       </div>
-      <form action="">
-        <div class="dates">
+      <div class="filter-detail dates-picker">
+        <div class="filter-item">
           <label for="tanggal">Tanggal</label>
           <div class="tanggal">
             <ClientOnly>
@@ -69,7 +69,7 @@
             /></ClientOnly>
           </div>
         </div>
-      </form>
+      </div>
     </div>
 
     <div class="notifikasi-detail" v-if="hasNotifikasi">
@@ -2101,6 +2101,10 @@ form select {
     width: 60%;
   }
 }
+
+.dates-picker {
+  width: 500px;
+}
 </style>
 
 <!-- Edit image -->
@@ -2169,8 +2173,6 @@ form select {
 </style>
 
 <script>
-import { VueDatePicker } from "@vuepic/vue-datepicker";
-
 export default {
   data() {
     return {
@@ -2196,13 +2198,8 @@ export default {
       listNotifikasi: null,
     };
   },
-  components: {
-    VueDatePicker,
-  },
   mounted() {
     this.setDefaultTanggal();
-    // this.ambilTask();
-    // this.hariLibur();
   },
   methods: {
     notifClass(data) {

@@ -109,20 +109,24 @@
       </div>
       <div class="filter-detail">
         <div class="filter-item">
-          <input
-            type="search"
-            placeholder="Cari nama karyawan"
-            v-model="searchInput"
-            @submit.prevent
-          />
+          <ClientOnly>
+            <n-input
+              v-model:value="searchInput"
+              placeholder="Cari nama karyawan"
+              type="search"
+            ></n-input>
+          </ClientOnly>
         </div>
         <div class="filter-item">
-          <select v-model="selectedCategory">
-            <option value="">Semua Kategori</option>
-            <option v-for="(c, index) in category" :key="index" :value="c">
-              {{ c }}
-            </option>
-          </select>
+          <ClientOnly>
+            <n-select
+              v-model:value="selectedCategory"
+              :options="[
+                { label: 'Semua Kategori', value: '' },
+                ...category.map((c) => ({ label: c, value: c })),
+              ]"
+            ></n-select>
+          </ClientOnly>
         </div>
         <div class="filter-item">
           <ClientOnly>
@@ -356,109 +360,6 @@
   </div>
 </template>
 
-<style scoped>
-.filter {
-  padding: 16px 18px;
-  border-radius: 14px;
-
-  background: linear-gradient(180deg, #ffffff, #f8fafc);
-  border: 1px solid #e5e7eb;
-
-  box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.04),
-    0 8px 24px rgba(0, 0, 0, 0.06);
-
-  transition: all 0.2s ease;
-}
-
-.filter:hover {
-  box-shadow:
-    0 4px 10px rgba(0, 0, 0, 0.06),
-    0 12px 30px rgba(0, 0, 0, 0.08);
-}
-
-.title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-
-  font-size: 16px;
-  font-weight: 700;
-  color: #0f172a;
-}
-
-.title i {
-  font-size: 18px;
-  color: #3b82f6;
-
-  background: rgba(59, 130, 246, 0.1);
-  padding: 8px 16px;
-  border-radius: 8px;
-  display: flex;
-  justify-content: center;
-}
-
-.filter-detail {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 14px;
-}
-
-.filter-item {
-  display: flex;
-  align-items: center;
-
-  flex: 1 250px;
-
-  /* padding: 6px; */
-  border-radius: 5px;
-
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-
-  transition: all 0.15s ease;
-}
-
-.filter-item:focus-within {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-}
-
-.filter-item input {
-  width: 100%;
-  border: none;
-  outline: none;
-
-  padding: 10px 12px;
-  border-radius: 8px;
-
-  background: transparent;
-  font-size: 14px;
-
-  color: #0f172a;
-}
-
-.filter-item input::placeholder {
-  color: #9ca3af;
-}
-
-.filter-item select {
-  width: 100%;
-  border: none;
-  outline: none;
-
-  padding: 10px 12px;
-  border-radius: 8px;
-
-  background: transparent;
-  font-size: 14px;
-
-  color: #0f172a;
-  cursor: pointer;
-}
-</style>
-
 <!-- Style Background Delete -->
 <style scoped>
 .background_delete,
@@ -679,7 +580,7 @@
 .dropdown-cuti {
   position: relative;
   margin: 10px 0;
-  
+
   /* width: 260px; */
 }
 
@@ -1201,9 +1102,7 @@
 </style>
 
 <script>
-import { VueDatePicker } from "@vuepic/vue-datepicker";
 export default {
-  components: { VueDatePicker },
   data() {
     return {
       name: "",
