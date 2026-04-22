@@ -92,124 +92,109 @@
   <!-- Isi Konten -->
   <div class="isi" :class="{ viewApp: isAppView }">
     <!-- Header -->
-    <div class="header-gant-chart">
+    <div class="header-gant-chart filter">
       <div class="icon-header">
         <span class="material-symbols-outlined"> deployed_code </span>
         <p>Gantt Chart</p>
       </div>
 
       <!-- Filter Tanggal Gantt dan Assignee -->
-      <div class="filter-gant">
-        <div class="search-tanggal">
-          <div class="dates-gant">
-            <!-- <label for="tanggal">Tanggal</label> -->
-            <div class="tanggal">
-              <ClientOnly>
-                <VueDatePicker
-                  format="dd-MM-yyyy"
-                  v-model="startDate"
-                  model-type="yyyy-MM-dd"
-                  :time-config="{ enableTimePicker: false }"
-              /></ClientOnly>
-              <span class="separator">➡️</span>
-              <ClientOnly>
-                <VueDatePicker
-                  format="dd-MM-yyyy"
-                  v-model="endDate"
-                  model-type="yyyy-MM-dd"
-                  :time-config="{ enableTimePicker: false }"
-              /></ClientOnly>
-            </div>
+      <div class="filter-detail">
+        <div class="filter-item">
+          <label for="">Tanggal</label>
+          <div class="dates date-gantt">
+            <ClientOnly>
+              <VueDatePicker
+                ref="startPicker"
+                v-model="startDate"
+                format="dd-MM-yyyy"
+                model-type="yyyy-MM-dd"
+                :time-config="{ enableTimePicker: false }"
+                :max-date="endDate"
+                @update:model-value="onStartDateSelected"
+            /></ClientOnly>
+            <span class="separator">
+              <span class="material-symbols-outlined"> arrow_range </span>
+            </span>
+            <ClientOnly>
+              <VueDatePicker
+                ref="endPicker"
+                v-model="endDate"
+                format="dd-MM-yyyy"
+                model-type="yyyy-MM-dd"
+                :time-config="{ enableTimePicker: false }"
+                :min-date="startDate"
+            /></ClientOnly>
           </div>
         </div>
 
         <!-- Assignee to -->
-        <div class="multi-select">
-          <div class="select-box" @click="openAssignee = !openAssignee">
-            <span class="selected-text" v-if="selected.length">
-              {{ selected.join(", ") }}
-            </span>
-            <span v-else class="placeholder">Pilih assignee</span>
-            <span
-              class="material-symbols-outlined arrow"
-              :class="{ open: openAssignee }"
-            >
-              keyboard_arrow_down
-            </span>
-          </div>
-
-          <div class="dropdown" v-if="openAssignee" @click.stop>
-            <label
-              v-for="assignee in assigneeOptions"
-              :key="assignee"
-              class="option"
-            >
-              <input type="checkbox" :value="assignee" v-model="selected" />
-              {{ assignee }}
-            </label>
-          </div>
+        <div class="filter-item">
+          <label for="">Assignee</label>
+          <ClientOnly>
+            <n-select
+              v-model:value="selected"
+              :options="[
+                ...assigneeOptions.map((assignee) => ({
+                  label: assignee,
+                  value: assignee,
+                })),
+              ]"
+              multiple
+              placeholder="Pilih Assignee"
+            ></n-select>
+          </ClientOnly>
         </div>
 
         <!-- Status Task -->
-        <div class="multi-select">
-          <div class="select-box" @click="openStatus = !openStatus">
-            <span class="selected-text" v-if="selectedStatus.length">
-              {{ selectedStatus.join(", ") }}
-            </span>
-            <span v-else class="placeholder">Pilih status</span>
-            <span
-              class="material-symbols-outlined arrow"
-              :class="{ open: openStatus }"
-            >
-              keyboard_arrow_down
-            </span>
-          </div>
-
-          <div class="dropdown" v-if="openStatus" @click.stop>
-            <label
-              v-for="status in statusOptions"
-              :key="status.value"
-              class="option"
-            >
-              <input
-                type="checkbox"
-                :value="status.value"
-                v-model="selectedStatus"
-              />
-              {{ status.label }}
-            </label>
-          </div>
+        <div class="filter-item">
+          <label for="">Status</label>
+          <ClientOnly>
+            <n-select
+              v-model:value="selectedStatus"
+              :options="[
+                ...statusOptions.map((status) => ({
+                  label: status.label,
+                  value: status.value,
+                })),
+              ]"
+              multiple
+              placeholder="Pilih Status"
+            ></n-select>
+          </ClientOnly>
         </div>
 
         <!-- Project Task -->
-        <div class="multi-select">
-          <div class="select-box" @click="openProject = !openProject">
-            <span class="selected-text" v-if="selectedProject.length">
-              {{ selectedProject.join(", ") }}
-            </span>
-            <span v-else class="placeholder">Pilih project</span>
-            <span
-              class="material-symbols-outlined arrow"
-              :class="{ open: openProject }"
-            >
-              keyboard_arrow_down
-            </span>
-          </div>
+        <div class="filter-item">
+          <label for="">Project</label>
+          <ClientOnly>
+            <n-select
+              v-model:value="selectedProject"
+              :options="[
+                ...projectOptions.map((project) => ({
+                  label: project,
+                  value: project,
+                })),
+              ]"
+              multiple
+              placeholder="Pilih Project"
+            ></n-select>
+          </ClientOnly>
+        </div>
 
-          <div class="dropdown" v-if="openProject" @click.stop>
-            <label
-              v-for="project in projectOptions"
-              :key="project.value"
-              class="option"
-            >
-              <input
-                type="checkbox"
-                :value="project"
-                v-model="selectedProject"
-              />
-              {{ project }}
-            </label>
-          </div>
+        <!-- Project Task -->
+        <div class="filter-item">
+          <label for="">Sortir data</label>
+          <ClientOnly>
+            <n-select
+              v-model:value="selectedSort"
+              :options="[
+                { label: 'Alphabet', value: 'alphabet' },
+                { label: 'Tanggal', value: 'date' },
+              ]"
+              placeholder="Urutkan Berdasarkan"
+            ></n-select>
+          </ClientOnly>
         </div>
       </div>
     </div>
@@ -228,9 +213,6 @@
         </div>
 
         <div class="header-container" :style="{ minWidth: totalWidth + 'px' }">
-          <!-- <div class="header-name">
-            <p>Name</p>
-          </div> -->
           <div class="header-gant">
             <div class="dates-range" :style="{ minWidth: totalWidth + 'px' }">
               <div class="bulan-header" style="display: flex; width: 100%">
@@ -326,7 +308,11 @@
                       display: flex;
                       justify-content: center;
                       align-items: center;
-                      font-size: clamp(4px, calc(14px + (var(--day-width) - 100px) * 0.050), 19px);
+                      font-size: clamp(
+                        4px,
+                        calc(14px + (var(--day-width) - 100px) * 0.05),
+                        19px
+                      );
                     "
                     :style="{ backgroundColor: task.color }"
                     v-else
@@ -357,10 +343,6 @@
         <button class="zoom-btn" @click="zoomIn">+</button>
       </div>
     </div>
-
-    <!-- <div class="kosong">
-      <p>tes</p>
-    </div> -->
   </div>
 </template>
 
@@ -446,7 +428,7 @@
 <style scoped>
 .header-gant-chart {
   margin-top: 20px;
-  display: flex;
+  /* display: flex; */
   align-items: center;
   flex-wrap: wrap;
   gap: 30px;
@@ -494,140 +476,8 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
-.filter-gant {
-  flex-wrap: wrap;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.search-tanggal {
-  display: flex;
-  gap: 20px;
-}
-
-.dates-gant {
-  width: 100%;
-  /* margin-right: 10px; */
-}
-
-.dates-gant .tanggal {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;
-  gap: 5px;
-}
-
-/* Gaya Utama (Desktop) */
-.multi-select {
-  width: 200px;
-  position: relative;
-  font-size: 14px;
-  /* z-index: 98; */
-}
-
-.select-box {
-  height: 40px;
-  border-radius: 4px;
-  padding: 6px 12px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  transition: all 0.2s ease;
-
-  border: 1px solid var(--border-soft);
-  background: linear-gradient(180deg, #ffffff, #f8fafc);
-}
-
-.select-box:hover {
-  border-color: #93c5fd;
-  background: #ffffff;
-}
-
-.select-box:focus-within {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-}
-
-/* TEXT */
-.selected-text {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* ARROW */
-.arrow {
-  font-size: 20px;
-  color: #6b7280;
-  transition: transform 0.2s ease;
-}
-
-.arrow.open {
-  transform: rotate(180deg);
-}
-
-.placeholder {
-  color: #9ca3af;
-}
-
-/* DROPDOWN */
-.dropdown {
-  position: absolute;
-  top: calc(100% + 8px);
-  width: 100%;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(8px);
-  border-radius: 16px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
-  padding: 6px;
-  max-height: 220px;
-  overflow-y: auto;
-  animation: dropdownIn 0.15s ease;
-  z-index: 99;
-}
-
-@keyframes dropdownIn {
-  from {
-    opacity: 0;
-    transform: translateY(-6px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-
-
-/* OPTION */
-.option {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: background 0.15s ease;
-  font-size: 11px;
-}
-
-.option:hover {
-  background: #f1f5f9;
-}
-
-.option input {
-  accent-color: #2563eb;
-}
-
-/* MOBILE */
-@media (max-width: 768px) {
-  .multi-select {
-    width: 100%;
-  }
+.filter-detail .date-gantt {
+  flex: 1 500px;
 }
 </style>
 
@@ -638,7 +488,7 @@
 }
 
 .kalender {
-  max-height: 100dvh;
+  max-height: 90dvh;
   overflow: auto;
   margin: 20px 0 30px 0;
   padding-bottom: 10px;
@@ -1193,13 +1043,18 @@
 </style>
 
 <script>
+import { formatTanggal, setDefaultTanggal } from "@/utils/helpers";
+
 export default {
   data() {
     return {
       startDate: "",
       endDate: "",
       tanggalPerBulan: {},
-      daftarTask: [],
+      daftarTask: {
+        holidays: [],
+        tasks: [],
+      },
       detailTask: null,
       showDetail: false,
       openAssignee: false,
@@ -1209,6 +1064,7 @@ export default {
       selected: [], // assignee
       selectedStatus: [], // status_name
       selectedProject: [], // project name
+      selectedSort: null, // sort by
       dayWidth: 100, // px per hari (default)
       minZoom: 20,
       maxZoom: 200,
@@ -1216,11 +1072,19 @@ export default {
     };
   },
   mounted() {
-    this.setDefaultTanggal();
+    const result = setDefaultTanggal();
+    this.startDate = result.mulai;
+    this.endDate = result.akhir;
+
     this.tanggalPerBulan = this.generateDateRange(this.startDate, this.endDate);
     // this.ambilTask();
   },
   methods: {
+    onStartDateSelected() {
+      this.$nextTick(() => {
+        this.$refs.endPicker.openMenu();
+      });
+    },
     setInitial(data) {
       if (!data) return "";
 
@@ -1303,30 +1167,12 @@ export default {
         path: "/admin/ganttChart",
         query: {
           ...this.$route.query, // 🔥 PENTING
-          start: this.formatTanggal(this.startDate),
-          end: this.formatTanggal(this.endDate),
+          start: formatTanggal(this.startDate),
+          end: formatTanggal(this.endDate),
         },
       });
 
       this.ambilTask();
-    },
-    formatTanggal(tgl) {
-      const [year, month, day] = tgl.split("-");
-      return `${day}-${month}-${year}`;
-    },
-
-    setDefaultTanggal() {
-      if (this.startDate && this.endDate) return;
-      const today = new Date();
-      const firstDay = new Date();
-      // sevenDaysAgo.setDate(today.getDate() - 30);
-      firstDay.setDate(1);
-
-      // Format ke YYYY-MM-DD (format input type="date")
-      const format = (date) => date.toISOString().split("T")[0];
-
-      this.startDate = format(firstDay);
-      this.endDate = format(today);
     },
     async ambilTask() {
       console.log("Task sedang di proses");
@@ -1334,13 +1180,20 @@ export default {
 
       try {
         const task = await this.$api.get(
-          `/api/v1/gantt/tasks?start_date=${this.formatTanggal(this.startDate)}&end_date=${this.formatTanggal(this.endDate)}`,
+          `/api/v1/gantt/tasks?start_date=${formatTanggal(this.startDate)}&end_date=${formatTanggal(this.endDate)}&sort_by=${this.selectedSort}`,
         );
-        this.daftarTask = task.data;
-        this.daftarTask = task.data.map((k) => ({
-          ...k,
-          imageError: false,
-        }));
+        // this.daftarTask = task.data;
+        // this.daftarTask = task.data.map((k) => ({
+        //   ...k,
+        //   imageError: false,
+        // }));
+        this.daftarTask = {
+          holidays: task.data.holidays || [],
+          tasks: (task.data.tasks || []).map((t) => ({
+            ...t,
+            imageError: false,
+          })),
+        };
         this.$nextTick(() => {
           const el = document.querySelector(".kalender");
           if (!el) return;
@@ -1627,12 +1480,15 @@ export default {
     startDate: "onDateChange",
     endDate: "onDateChange",
 
-    selectedStatus(val) {
-      console.log("STATUS AKTIF:", val);
-    },
+    // selectedStatus(val) {
+    //   console.log("STATUS AKTIF:", val);
+    // },
     // selected() {
     //   this.filterAssignee();
     // },
+    selectedSort() {
+      this.ambilTask();
+    },
   },
 };
 </script>

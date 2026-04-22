@@ -59,12 +59,7 @@
       </div>
       <div class="filter-detail">
         <div class="filter-item">
-          <!-- <input
-              type="search"
-              placeholder="Cari nama karyawan"
-              v-model="searchInput"
-              @submit.prevent
-            /> -->
+          <label for="">Nama Karyawan</label>
           <ClientOnly>
             <n-input
               v-model:value="searchInput"
@@ -74,6 +69,7 @@
           </ClientOnly>
         </div>
         <div class="filter-item">
+          <label for="">Posisi</label>
           <ClientOnly>
             <n-select
               v-model:value="posisi"
@@ -97,7 +93,7 @@
               </option>
             </select> -->
         </div>
-        <div class="filter-item total_karyawan">
+        <div class="filter-item total-karyawan">
           <i class="fa-solid fa-users"></i>
           <div class="jumlah_karyawan">
             <p>Total Karyawan</p>
@@ -117,7 +113,7 @@
         v-for="(k, index) in filteredKaryawan"
         :key="k.clickup_id"
       >
-        <div class="header-card">
+        <div class="card-section header-card">
           <div class="menu-wrapper" @click.stop>
             <button class="menu-btn" @click.stop="toggleMenu(k.clickup_id)">
               ⋮
@@ -236,7 +232,7 @@
             </Transition>
           </div>
         </div>
-        <div class="identitas">
+        <div class="card-section identitas">
           <!-- <img :src="k.user.profilPicture" alt="" /> -->
           <div class="photo-wrapper" @click.stop>
             <img
@@ -266,30 +262,13 @@
               @change="handlePhotoChange($event, k)"
             />
           </div>
-          <!-- <div class="edit-image">
-            <span class="material-symbols-outlined"> add_a_photo </span>
-          </div> -->
           <h4>{{ k.name }}</h4>
           <div class="peran">
             <i class="fa-solid fa-briefcase"></i>
             <p>{{ k.role }}</p>
           </div>
-          <!-- <div
-              class="bebanKerja"
-              :class="{
-                kuning: kategoriBeban(k.beban) === 'Sedang',
-                merah: kategoriBeban(k.beban) === 'Berat',
-                hijau: kategoriBeban(k.beban) === 'Mudah',
-                putih: kategoriBeban(k.beban) === '',
-              }"
-            >
-              <i class="fa-solid fa-clock"></i>
-              <p>
-                {{ kategoriBeban(k.beban) }}
-              </p>
-            </div> -->
         </div>
-        <div class="kinerja">
+        <div class="card-section kinerja">
           <div class="status-member">
             <p>Status:</p>
             <p>{{ k.status }}</p>
@@ -311,7 +290,7 @@
         <i class="fa-solid fa-xmark" @click="close"></i>
       </div>
 
-      <div class="profilImage">
+      <div class="profil-detail identity-detail">
         <div class="photo-wrapper">
           <img
             v-if="!selected.imageError"
@@ -322,15 +301,14 @@
 
           <div
             class="photo-option"
-            style="margin-bottom: 22px"
             :style="{ backgroundColor: selected.color }"
             v-else
           >
             <p>{{ setInitial(selected.name) }}</p>
           </div>
         </div>
-        <p>{{ selected.name }}</p>
-        <div class="peran">
+        <p class="name">{{ selected.name }}</p>
+        <div class="role">
           <i class="fa-solid fa-briefcase"></i>
           <p>{{ selected.role }}</p>
         </div>
@@ -343,59 +321,23 @@
         </div>
       </div>
 
-      <div class="infoKontak">
+      <div class="profil-detail contact">
         <p class="judul">Informasi Kontak</p>
         <div class="emailTelepon">
           <div class="email">
             <i class="fa-solid fa-envelope"></i>
             <div class="isiEmail">
-              <p class="keterangan">Email</p>
-              <p>{{ selected.email }}</p>
+              <p class="label">Email</p>
+              <p class="keterangan">{{ selected.email }}</p>
             </div>
           </div>
-          <!-- <div class="telepon">
-              <i class="fa-solid fa-phone"></i>
-              <div class="isiTelepon">
-                <p class="keterangan">Telepon</p>
-                <p>{{ selected.gaji }}</p>
-              </div>
-            </div> -->
         </div>
-        <!--
-            <div class="alamat">
-              <i class="fa-solid fa-location-dot"></i>
-              <div class="detailAlamat">
-                <p class="keterangan">Alamat</p>
-                <p>Jl Indonesia, Bekasi, JawaBarat</p>
-              </div>
-            </div>
-            -->
       </div>
 
-      <!-- <div class="infoKerja">
-          <p class="judul">Informasi Pekerjaan</p>
-          <div class="kerja">
-            <div class="join">
-              <i class="fa-solid fa-calendar"></i>
-              <div class="detail">
-                <p class="keterangan">Tanggal Bergabung</p>
-                <p>{{ selected.created_at }}</p>
-              </div>
-            </div>
-            <div class="status">
-              <i class="fa-solid fa-briefcase"></i>
-              <div class="detail">
-                <p class="keterangan">Update at</p>
-                <p>{{ selected.updated_at }}</p>
-              </div>
-            </div>
-          </div>
-        </div> -->
-
-      <div class="statistikKinerja">
+      <div class="profil-detail workload">
         <p class="judul">Ringkasan Kerja</p>
         <div class="statistik">
-          <div class="proyek">
+          <div class="stat-card project">
             <div class="judul">
               <p>Proyek</p>
               <h3>{{ selected.project_count }}</h3>
@@ -406,7 +348,7 @@
             </div>
           </div>
 
-          <div class="completed">
+          <div class="stat-card completed">
             <div class="judul">
               <!-- <p>Completed</p> -->
               <p>Selesai</p>
@@ -417,7 +359,7 @@
             </div>
           </div>
 
-          <div class="on_progress">
+          <div class="stat-card on-progres">
             <div class="judul">
               <p>Sedang Dikerjakan</p>
               <!-- <p>Dikerjakan</p> -->
@@ -430,19 +372,8 @@
           </div>
         </div>
       </div>
-
-      <!-- <div class="keahlian">
-          <p class="judul">Keahlian</p>
-          <div class="daftarSkil">
-            <div class="skil">
-              <p>{{ selected.keahlian }}Frontend</p>
-            </div> -->
-      <!-- <div class="skil"><p>Backend</p></div> -->
-      <!-- </div>
-        </div> -->
     </div>
   </div>
-  <!-- </div> -->
 </template>
 
 <!-- Conditioning colour -->
@@ -789,64 +720,15 @@
 <style scoped>
 .photo-wrapper {
   position: relative;
+  margin: 0 auto;
+
   width: 100px;
   height: 100px;
-  margin: 0 auto;
-}
-
-.photo-wrapper img,
-.photo-option {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 4px solid rgb(193, 222, 232);
-  transition: 0.2s ease;
 }
 
 .photo-option {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  font-weight: 600;
-  /* background: linear-gradient(135deg, #3b82f6, #6366f1); */
-  color: white;
-  border: none;
-}
-
-/* .photo-option {
-  background-color: red;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-} */
-
-/* Overlay */
-.camera-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 18px;
-  opacity: 0;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-
-  z-index: 10;
-}
-
-.photo-wrapper:hover .camera-overlay {
-  opacity: 1;
-}
-
-/* Hidden file input */
-.hidden-file {
-  display: none;
+   font-size: 28px;
+  font-weight: 700;
 }
 </style>
 
@@ -914,27 +796,355 @@
 }
 </style>
 
+<!-- Container Karyawan -->
 <style scoped>
-.listKaryawan {
-  background-color: rgb(16, 67, 185);
+.daftarKaryawan {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
-.total_karyawan {
+.karyawan {
+  border: var(--borderCard);
+  background-color: #fff;
+  flex: 1 250px;
+  text-align: center;
+  border-radius: 15px;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.1s ease;
+  padding: 10px 20px 20px 20px;
+  overflow: visible;
+}
+
+.karyawan:hover {
+  border: 1px solid rgb(68, 41, 203);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  /* transform: scale(1.02); */
+}
+
+.karyawan h4 {
+  color: rgb(16, 50, 130);
+  margin-top: 10px;
+}
+
+.karyawan .peran {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  text-transform: capitalize;
+}
+
+.karyawan .identitas .bebanKerja {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 0;
+  font-size: 12px;
+  border-radius: 15px;
+}
+
+.bebanKerja:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+.karyawan .kinerja {
+  /* margin: 0 30px; */
+  margin-top: 15px;
+  border-top: 1px solid rgb(222, 221, 226);
+}
+
+.kinerja .status-member {
+  margin-top: 10px;
+  text-transform: capitalize;
+}
+
+.kinerja .status-member,
+.performa {
+  display: flex;
+  justify-content: space-between;
+}
+</style>
+
+<!-- Detail Karyawan  -->
+<style scoped>
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.detailKaryawan {
+  width: 500px;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #fff;
+  border-radius: 15px;
+  border: var(--borderCard);
+  overflow-y: auto;
+  padding: 0 25px 15px 25px;
+  -webkit-animation: scale-up-center 0.2s cubic-bezier(0.39, 0.575, 0.565, 1)
+    both;
+  animation: scale-up-center 0.3s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+}
+@-webkit-keyframes scale-up-center {
+  0% {
+    -webkit-transform: scale(0.5);
+    transform: scale(0.5);
+  }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+@keyframes scale-up-center {
+  0% {
+    -webkit-transform: scale(0.9);
+    transform: scale(0.9);
+  }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+/* Header */
+.detailKaryawan .header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  color: rgb(40, 40, 40);
+  padding: 15px 0;
+  font-weight: 600;
+  z-index: 99;
+}
+.header i {
+  padding: 8px 16px;
+  display: flex;
+  justify-content: center;
+  border-radius: 50%;
+}
+.header i:hover {
+  background-color: #f1f0f0;
+}
+
+/* Profil Detail */
+.detailKaryawan .profil-detail {
+  border-bottom: 1px solid rgba(118, 177, 254, 0.25);
+  padding-bottom: 15px;
+}
+
+/* Identity (Profile Picture) */
+/* .identity-detail img {
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border: 5px solid rgb(193, 222, 232);
+} */
+.identity-detail .name {
+  text-align: center;
+  margin: 5px 0;
+  color: var(--font-color);
+  font-weight: 600;
+  font-size: medium;
+}
+.identity-detail .role {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+.identity-detail .role p {
+  text-transform: capitalize;
+  font-weight: 500;
+}
+.identity-detail .wraper-beban {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+.identity-detail .bebanKerja {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  /* margin: 10px 160px 0 160px; */
+  margin-top: 10px;
+  height: 3vh;
+  font-size: 10px;
+  border-radius: 15px;
+  width: 50%;
+}
+
+/* Contact Information */
+.contact .judul {
+  text-align: justify;
+  margin-bottom: 5px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+}
+.contact .emailTelepon .email {
+  background: linear-gradient(135deg, #edf4ff, #dbeafe);
+  box-shadow: 0 4px 12px rgba(118, 177, 254, 0.15);
+  width: 100%;
+  padding: 7px 0 7px 12px;
+  border-radius: 10px;
+  text-align: justify;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.contact .emailTelepon i {
+  font-size: 20px;
+  opacity: 0.7;
+}
+.contact .label {
+  font-size: 12.5px;
+  font-weight: 250;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+}
+.contact .keterangan {
+  font-size: 14px;
+  font-weight: 500;
+  /* margin-top: 2px; */
+  color: #111;
+}
+
+/* Workload Summary */
+.workload .judul {
+  text-align: justify;
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+}
+.workload .statistik {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.statistik .stat-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 15px;
+  border-radius: 10px;
+  flex: 1;
+  font-size: 14px;
+}
+
+.statistik .stat-card .judul p {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.statistik .stat-card .judul h3 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-top: 2px;
+  color: #111;
+}
+
+.statistik .stat-card .logo {
+  font-size: 20px;
+  opacity: 0.7;
+}
+
+.statistik .project {
+  background: linear-gradient(135deg, #f3eaff, #e8d8ff);
+  box-shadow: 0 4px 12px rgba(179, 125, 255, 0.15);
+}
+
+.statistik .completed {
+  background: linear-gradient(135deg, #ecfdf3, #d1fae5);
+  box-shadow: 0 4px 12px rgba(64, 254, 111, 0.15);
+}
+
+.statistik .on-progres {
+  background: linear-gradient(135deg, #edf4ff, #dbeafe);
+  box-shadow: 0 4px 12px rgba(118, 177, 254, 0.15);
+}
+
+.proyek i {
+  font-size: 15px;
+  color: blue;
+  padding: 6px 13px;
+  display: flex;
+  justify-content: center;
+  border: 3px solid blue;
+  border-radius: 50%;
+}
+
+.completed i {
+  font-size: 15px;
+  color: rgb(10, 230, 65);
+  padding: 3px 11px;
+  display: flex;
+  justify-content: center;
+  border: 3px solid rgb(10, 230, 65);
+  border-radius: 50%;
+}
+
+/* Responsive tipis-tipis */
+/* Popup di tablet */
+@media (max-width: 768px) {
+  .detailKaryawan {
+    height: 650px;
+  }
+  .statistik .stat-card {
+    flex: 1 150px;
+  }
+}
+/* Popup di handphone */
+@media (max-width: 576px) {
+  .detailKaryawan {
+    height: 750px;
+  }
+  .statistik .stat-card {
+    flex: 1 250px;
+  }
+}
+</style>
+
+<style scoped>
+.total-karyawan {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  /* text-align: justify; */
-  border: 1px solid rgb(164, 199, 255);
-  border-radius: 10px;
-  /* width: 30%; */
-  flex: 1 0 200px;
-  /* height: 12vh; */
-  padding: 10px 20px;
   background-color: rgb(234, 241, 252);
+  border: 1px solid rgb(202, 223, 255);
+   background: linear-gradient(135deg, #edf4ff, #dbeafe);
+  box-shadow: 0 4px 12px rgba(118, 177, 254, 0.15);
+  border-radius: 10px;
+  padding: 10px 20px;
 }
 
-.total_karyawan i {
+.total-karyawan i {
   font-size: 16px;
   background-color: darkblue;
   padding: 11.5px 20px;
@@ -945,42 +1155,14 @@
   color: #fff;
 }
 
-.total_karyawan p {
+.total-karyawan p {
   font-size: 14px;
   text-align: justify;
   font-weight: 300;
 }
 
-.total_karyawan .jumlah {
+.total-karyawan .jumlah {
   color: darkblue;
-}
-
-/* form input,
-form select {
-  background-color: #ddd;
-  width: 50%;
-  border-radius: 10px;
-  padding: 0 15px;
-  margin: 0 10px;
-  border: var(--borderCard);
-  border: 1px solid rgb(164, 199, 255);
-} */
-
-form select {
-  background: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20448%20512'%3E%3Cpath%20d='M224%20248a120%20120%200%201%201%200-240%20120%20120%200%201%201%200%20240zm-30.5%2056l61%200c9.7%200%2017.5%207.8%2017.5%2017.5%200%204.2-1.5%208.2-4.2%2011.4l-27.4%2032%2031%20115.1%20.6%200%2034.6-138.5c2.2-8.7%2011.1-14%2019.5-10.8%2061.9%2023.6%20105.9%2083.6%20105.9%20153.8%200%2015.1-12.3%2027.4-27.4%2027.4L43.4%20512c-15.1%200-27.4-12.3-27.4-27.4%200-70.2%2044-130.2%20105.9-153.8%208.4-3.2%2017.3%202.1%2019.5%2010.8l34.6%20138.5%20.6%200%2031-115.1-27.4-32c-2.7-3.2-4.2-7.2-4.2-11.4%200-9.7%207.8-17.5%2017.5-17.5z'/%3E%3C/svg%3E")
-    no-repeat 10px center;
-  background-size: 14px;
-  padding-left: 35px;
-}
-
-form input {
-  /* font-family: "Font Awesome 7 Free";
-  font-weight: 900;
-  content: "\f002"; */
-  background: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20512%20512'%3E%3Cpath%20d='M416%20208c0%2045.9-14.9%2088.3-40%20122.7L502.6%20457.4c12.5%2012.5%2012.5%2032.8%200%2045.3s-32.8%2012.5-45.3%200L330.7%20376C296.3%20401.1%20253.9%20416%20208%20416%2093.1%20416%200%20322.9%200%20208S93.1%200%20208%200%20416%2093.1%20416%20208zM208%20352a144%20144%200%201%200%200-288%20144%20144%200%201%200%200%20288z'/%3E%3C/svg%3E")
-    no-repeat 10px center;
-  background-size: 14px;
-  padding-left: 35px;
 }
 </style>
 

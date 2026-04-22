@@ -50,22 +50,28 @@
       <div class="filter-detail dates-picker">
         <div class="filter-item">
           <label for="tanggal">Tanggal</label>
-          <div class="tanggal">
+          <div class="dates">
             <ClientOnly>
               <VueDatePicker
-                format="dd-MM-yyyy"
+                ref="startPicker"
                 v-model="start"
+                format="dd-MM-yyyy"
                 model-type="yyyy-MM-dd"
                 :time-config="{ enableTimePicker: false }"
+                :max-date="end"
+                @update:model-value="onStartDateSelected"
             /></ClientOnly>
-
-            <span class="separator">➡️</span>
+            <span class="separator">
+              <span class="material-symbols-outlined"> arrow_range </span>
+            </span>
             <ClientOnly>
               <VueDatePicker
-                format="dd-MM-yyyy"
+                ref="endPicker"
                 v-model="end"
+                format="dd-MM-yyyy"
                 model-type="yyyy-MM-dd"
                 :time-config="{ enableTimePicker: false }"
+                :min-date="start"
             /></ClientOnly>
           </div>
         </div>
@@ -2116,63 +2122,15 @@ form select {
   /* margin: 0 auto; */
 }
 
-.photo-wrapper img,
 .photo-option {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 4px solid rgb(193, 222, 232);
-  transition: 0.2s ease;
-}
-
-.photo-option {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  font-weight: 600;
-  /* background: linear-gradient(135deg, #3b82f6, #6366f1); */
-  color: white;
-  border: none;
-}
-
-/* .photo-option {
-  background-color: red;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-} */
-
-/* Overlay */
-.camera-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 18px;
-  opacity: 0;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-
-  z-index: 10;
-}
-
-.photo-wrapper:hover .camera-overlay {
-  opacity: 1;
-}
-
-/* Hidden file input */
-.hidden-file {
-  display: none;
+  font-size: 36px;
+  font-weight: 700;
 }
 </style>
 
 <script>
+import { formatTanggal, setDefaultTanggal } from "@/utils/helpers";
+
 export default {
   data() {
     return {
@@ -2199,9 +2157,17 @@ export default {
     };
   },
   mounted() {
-    this.setDefaultTanggal();
+    const result = setDefaultTanggal();
+
+    this.start = result.mulai;
+    this.end = result.akhir;
   },
   methods: {
+    onStartDateSelected() {
+      this.$nextTick(() => {
+        this.$refs.endPicker.openMenu();
+      });
+    },
     notifClass(data) {
       return {
         positive: data === "+",
@@ -2244,27 +2210,6 @@ export default {
       this.ambilTask();
       // this.hariLibur();
     },
-    logout() {
-      const token = useCookie("token");
-      token.value = null;
-      this.$router.push("/login");
-    },
-    formatTanggal(tgl) {
-      const [year, month, day] = tgl.split("-");
-      return `${day}-${month}-${year}`;
-    },
-
-    setDefaultTanggal() {
-      if (this.start && this.end) return;
-      const today = new Date();
-      const firstDay = new Date();
-      firstDay.setDate(1);
-
-      // Format ke YYYY-MM-DD (format input type="date")
-      const format = (date) => date.toISOString().split("T")[0];
-      this.start = format(firstDay);
-      this.end = format(today);
-    },
     closeSukses() {
       this.sukses = false;
     },
@@ -2274,9 +2219,9 @@ export default {
       console.log("Ambil task dipanggil");
       try {
         const task = await this.$api.get(
-          `/api/v1/workload/tasks-by-range?start_date=${this.formatTanggal(
+          `/api/v1/workload/tasks-by-range?start_date=${formatTanggal(
             this.start,
-          )}&end_date=${this.formatTanggal(this.end)}`,
+          )}&end_date=${formatTanggal(this.end)}`,
         );
         // this.daftarKaryawan = task.data.assignees || [];
         console.log("TASK DATA:", task.data);
@@ -2293,85 +2238,6 @@ export default {
       } finally {
         this.isLoading = false;
       }
-    },
-
-    async syncData() {
-      // Prevent Spam Klik
-      if (this.loading) return;
-
-      console.log("Sync data di proses");
-
-      this.loading = true;
-      this.sukses = false;
-
-      try {
-        const sync = await this.$api.post("/api/v1/sync/all");
-        // this.daftarKaryawan = sync.data;
-        console.log("Berhasil: ", sync);
-        // alert("Berhasil");
-        this.loading = false;
-
-        // Sukses
-        this.sukses = true;
-
-        // Hidden animasi
-        setTimeout(() => {
-          this.sukses = false;
-        }, 15000);
-      } catch (error) {
-        console.error("Sync tidak berfungsi:", error);
-        this.loading = false;
-        setTimeout(() => {
-          alert("Sync data gagal");
-        }, 500);
-
-        console.log("STATUS:", error.response?.status);
-        console.log("DATA:", error.response?.data);
-        console.log("MESSAGE:", error.message);
-      } finally {
-        this.sukses = true;
-        this.loading = false;
-      }
-    },
-    // async hariLibur() {
-    //   console.log("Hari Libur sedang di proses");
-
-    //   try {
-    //     const holiday = await this.$api.get(
-    //       `/api/v1/workload/tasks-by-range?start_date=${this.formatTanggal(
-    //         this.start
-    //       )}&end_date=${this.formatTanggal(this.end)}`
-    //     );
-    //     this.daftarHari = holiday.data.jadwal_libur || [];
-    //     console.log("Berhasil");
-    //   } catch (error) {
-    //     console.error("Gagal ambil task:", error);
-    //     this.daftarHari = [];
-    //   }
-    // },
-    menu() {
-      this.sidebar = true;
-    },
-    close() {
-      this.isClose = true;
-
-      setTimeout(() => {
-        this.sidebar = false;
-        this.isClose = false;
-      }, 200);
-    },
-    detail(karyawan) {
-      // this.daftarKaryawan = karyawan;
-      this.detailKaryawan = karyawan;
-      this.sortPerform = "";
-      this.sortBeban = "";
-      this.sortKetepatn = "";
-      this.taskBug = "";
-    },
-    kembali() {
-      this.detailKaryawan = null;
-      this.progres = "";
-      this.sortKetepatanDetail = "";
     },
     openTask() {
       this.openTaskList = !this.openTaskList;

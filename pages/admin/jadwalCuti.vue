@@ -158,119 +158,6 @@
         v-for="(k, index) in daftarKaryawan"
         :key="k.clickup_id"
       >
-        <!-- <div class="header-card">
-          <div class="menu-wrapper" @click.stop>
-            <button class="menu-btn" @click.stop="toggleMenu(k.clickup_id)">
-              ⋮
-            </button>
-
-            <Transition name="dropdown">
-              <div
-                v-if="menuOpen === k.clickup_id"
-                class="menu-dropdown"
-                :class="{ 'open-left': isLastCard(index) }"
-                @click.stop
-              >
-                <div class="button-wraper">
-                  <button
-                    v-if="k.status === 'nonaktif'"
-                    @click.stop="ubahStatus(k, 'aktif')"
-                  >
-                    Aktifkan
-                  </button>
-
-                  <button
-                    v-else
-                    class="danger"
-                    @click.stop="ubahStatus(k, 'nonaktif')"
-                  >
-                    Nonaktifkan
-                  </button>
-
-                  <button
-                    class="role-setting submenu-trigger"
-                    @click.stop="toggleRoleMenu(k)"
-                  >
-                    Atur Role
-                  </button>
-                </div>
-
-                <div
-                  v-if="roleMenuOpen === k.clickup_id"
-                  class="role-submenu"
-                  :class="{ 'open-left': isLastCard(index) }"
-                >
-
-                  <label
-                    v-for="role in daftarRole"
-                    :key="role.id"
-                    class="role-item"
-                  >
-                    <div class="role-left">
-                      <input
-                        type="checkbox"
-                        :value="role.name"
-                        v-model="selectedRoles"
-                      />
-                      <span>{{ role.name }}</span>
-                    </div>
-
-                    <button class="delete-role" @click.stop="openDelete(role)">
-                      <i class="fa-solid fa-trash"></i>
-                    </button>
-
-                    <div
-                      class="delete-overlay"
-                      v-if="deleteRoleId === role.id"
-                      @click.stop="cancelDeleteRole"
-                    >
-                      <div class="delete-wraper">
-                        <p>Apakah Anda yakin ingin menghapus?</p>
-                        <div class="confirm-buttons">
-                          <button
-                            class="confirm"
-                            @click.stop="confirmDeleteRole(role)"
-                          >
-                            Ya
-                          </button>
-                          <button class="cancel" @click.stop="cancelDeleteRole">
-                            Tidak
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </label>
-
-                  
-                  <button
-                    v-if="showNewRoleInput !== k.clickup_id"
-                    @click.stop="showNewRoleInput = k.clickup_id"
-                    class="create-role"
-                  >
-                    + Role Baru
-                  </button>
-
-                
-                  <div v-else class="new-role-input" @click.stop>
-                    <input
-                      type="text"
-                      v-model="newRoleName"
-                      placeholder="Masukkan nama role"
-                      @keyup.enter="addRole(k)"
-                      autofocus
-                    />
-                    <button @click="addRole(k)">
-                      <span class="material-symbols-outlined"> add </span>
-                    </button>
-                    <button class="cancel" @click="cancelRoleInput">✕</button>
-                  </div>
-
-                  <button @click="saveRole(k)" class="save-role">Simpan</button>
-                </div>
-              </div>
-            </Transition>
-          </div>
-        </div> -->
         <div class="identitas">
           <div class="photo-wrapper" @click.stop>
             <!-- <img src="/img/profil.png" alt="" /> -->
@@ -360,194 +247,78 @@
   </div>
 </template>
 
-<!-- Style Background Delete -->
+<!-- Container Karyawan -->
 <style scoped>
-.background_delete,
-.background_tanggal {
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.35);
-  backdrop-filter: blur(4px);
+.daftarKaryawan {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
+  gap: 20px;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
-.delete_tanggal p {
+.karyawan {
+  border: var(--borderCard);
+  background-color: #fff;
+  flex: 1 250px;
   text-align: center;
+  border-radius: 15px;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.1s ease;
+  padding: 10px 20px 20px 20px;
+  overflow: visible;
 }
 
-.delete_tanggal .header_delete {
-  text-align: right;
+.karyawan:hover {
+  border: 1px solid rgb(68, 41, 203);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  /* transform: scale(1.02); */
 }
 
-.delete_tanggal .submit_delete {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  /* margin-top: 30px; */
+.karyawan h4 {
+  color: rgb(16, 50, 130);
+  margin-top: 10px;
 }
 
-.submit_delete .batal button {
-  padding: 8px 10px;
-  border-radius: 6px;
-  background-color: #fff;
-  border: 1px solid #dedede;
-}
-
-.submit_delete .batal button:hover {
-  background-color: #f7f7f7;
-}
-
-.submit_delete .simpan button {
-  background: var(--primary);
-  border-radius: var(--radius-sm);
-  padding: 10px 14px;
-  color: #fff;
-}
-
-.submit_delete .simpan button:hover {
-  background-color: rgb(0, 0, 180);
-}
-
-.delete_tanggal {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.delete_tanggal,
-.create_tanggal {
-  background: var(--bg-card);
-  border-radius: 20px;
-  padding: 28px;
-  width: 420px;
-  box-shadow: 0 25px 60px rgba(15, 23, 42, 0.25);
-  animation: modalFade 0.25s ease;
-}
-
-@keyframes modalFade {
-  from {
-    opacity: 0;
-    transform: translateY(8px) scale(0.97);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-</style>
-
-<!-- Style Background tanggal -->
-<style scoped>
-.background_tanggal {
-  position: fixed;
-  z-index: 9999;
-  background-color: rgb(0, 0, 0, 0.2);
-  width: 100vw;
-  height: 101vh;
+.karyawan .peran {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  gap: 6px;
+  font-size: 15px;
+  text-transform: capitalize;
 }
 
-.background_tanggal .create_tanggal {
-  background-color: #fff;
-  padding: 25px;
-  border-radius: 8px;
-  width: 500px;
+.karyawan .identitas .bebanKerja {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 0;
+  font-size: 12px;
+  border-radius: 15px;
 }
 
-.create_tanggal .header_tanggal {
+.bebanKerja:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+.karyawan .kinerja {
+  /* margin: 0 30px; */
+  margin-top: 15px;
+  border-top: 1px solid rgb(222, 221, 226);
+}
+
+.kinerja .status-member {
+  margin-top: 10px;
+  text-transform: capitalize;
+}
+
+.kinerja .status-member,
+.performa {
   display: flex;
   justify-content: space-between;
-}
-
-.header_tanggal h3 {
-  font-weight: 600;
-  margin-bottom: 5px;
-}
-
-.create_tanggal p {
-  font-size: 13px;
-  font-weight: 300;
-}
-
-.create_tanggal .form_tanggal {
-  margin-top: 20px;
-}
-
-.form_tanggal .tanggal,
-.form_tanggal .hari,
-.form_tanggal .kategori {
-  display: flex;
-  flex-direction: column;
-  margin: 15px 0;
-}
-
-.form_tanggal .tanggal label,
-.form_tanggal .hari label,
-.form_tanggal .kategori label {
-  font-size: 13px;
-  font-weight: 600;
-  padding: 0 0 3px 3px;
-}
-
-.form_tanggal .tanggal input,
-.form_tanggal .hari input,
-.form_tanggal .kategori select {
-  background-color: #f1f1f1;
-  padding: 10px;
-  border-radius: 8px;
-  width: 100%;
-  border: 4px solid #f1f1f1;
-}
-
-.form_tanggal .tanggal input:focus,
-.form_tanggal .hari input:focus,
-.form_tanggal .kategori select:focus {
-  border: 4px solid #cfcfcf;
-  animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0.2;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.submit_tanggal {
-  display: flex;
-  justify-content: end;
-  gap: 8px;
-  margin-top: 30px;
-}
-
-.submit_tanggal .batal button {
-  padding: 8px 10px;
-  border-radius: 6px;
-  background-color: #fff;
-  border: 1px solid #dedede;
-}
-
-.submit_tanggal .batal button:hover {
-  background-color: #f7f7f7;
-}
-
-.submit_tanggal .simpan button {
-  background: var(--primary);
-  border-radius: var(--radius-sm);
-  padding: 10px 14px;
-  color: #fff;
-}
-
-.submit_tanggal .simpan button:hover {
-  background-color: rgb(0, 63, 210);
 }
 </style>
 
@@ -732,311 +503,7 @@
 }
 </style>
 
-<!-- Dropdown -->
-<style scoped>
-.header-card {
-  text-align: right;
-}
-
-.menu-wrapper {
-  position: relative;
-  left: 6px;
-}
-
-.menu-btn {
-  background: transparent;
-  border: none;
-  padding: 6px 8px;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.menu-btn:hover {
-  background: #f1f5f9;
-  border-radius: 6px;
-}
-
-.menu-dropdown {
-  position: absolute;
-  top: 28px;
-  right: 0;
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  min-width: 140px;
-  padding: 4px;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
-  z-index: 20;
-  /* animation: fadeIn 0.2s ease; */
-}
-
-.dropdown-enter-from,
-.dropdown-leave-to {
-  opacity: 0;
-  transform: translateY(-6px) scale(0.98);
-}
-
-/* saat aktif animasi */
-.dropdown-enter-active,
-.dropdown-leave-active {
-  transition: all 160ms ease;
-}
-
-/* posisi akhir */
-.dropdown-enter-to,
-.dropdown-leave-from {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.menu-dropdown .button-wraper button {
-  width: 100%;
-  padding: 10px 12px;
-  background: none;
-  /* border: none; */
-  border-bottom: 1px solid #e5e7eb;
-  text-align: left;
-  cursor: pointer;
-}
-
-.menu-dropdown button:last-child {
-  border-bottom: none;
-}
-
-.menu-dropdown button:hover {
-  background: #f1f5f9;
-}
-
-.menu-dropdown .danger {
-  color: #b91c1c;
-}
-
-/* Trigger Button */
-.submenu-trigger {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding: 10px 12px;
-  background: none;
-  border: none;
-  border-bottom: 1px solid #e5e7eb;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.submenu-trigger:hover {
-  background: #f8fafc;
-}
-
-/* Arrow */
-.submenu-trigger .arrow {
-  font-size: 12px;
-  opacity: 0.6;
-}
-
-/* Submenu Container */
-.role-submenu {
-  position: absolute;
-  top: 0;
-  left: 100%;
-  margin-left: 8px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  /* min-width: 180px; */
-  width: 260px;
-  padding: 8px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-  z-index: 30;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  justify-content: center;
-  align-items: flex-start;
-}
-
-.role-submenu.open-left {
-  right: auto;
-  left: -200%;
-}
-
-.role-submenu label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  width: 100%;
-}
-
-.role-submenu label:hover {
-  background: #f1f5f9;
-}
-
-.menu-dropdown .role-submenu .save-role {
-  width: 100%;
-  /* margin-top: 8px; */
-  padding: 8px;
-  border: none;
-  border-radius: 6px;
-  background-color: #1d4ed8;
-  /* border: 1px solid #1d4ed8; */
-  color: white;
-  font-size: 14px;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.create-role {
-  width: 100%;
-  margin-top: 8px;
-  padding: 8px;
-  border: none;
-  border-radius: 6px;
-  background-color: #e5e7eb;
-  border: 1px solid #1d4ed8;
-  border: 1px solid var(--border-soft);
-  color: black;
-  font-size: 14px;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-/* Checkbox Item */
-.role-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background 0.2s ease;
-}
-
-.role-item:hover {
-  background: #f1f5f9;
-}
-
-.role-left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.delete-role {
-  background: transparent;
-  border: none;
-  /* color: #ef4444; */
-  color: var(--text-main);
-  font-size: 14px;
-  opacity: 0;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-}
-
-.role-item:hover .delete-role {
-  opacity: 1;
-}
-
-.delete-role:hover {
-  color: #66676a;
-}
-
-/* Checkbox styling */
-.role-item input {
-  accent-color: #1d4ed8;
-  width: 16px;
-  height: 16px;
-}
-
-/* Save Button */
-.save-btn {
-  width: 100%;
-  margin-top: 8px;
-  padding: 8px;
-  border: none;
-  border-radius: 6px;
-  background: #1d4ed8;
-  color: white;
-  font-size: 14px;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.save-btn:hover {
-  background: #1e40af;
-}
-
-.new-role-input {
-  display: flex;
-  gap: 6px;
-  width: 100%;
-  margin-top: 6px;
-}
-
-.new-role-input input {
-  flex: 1;
-  padding: 6px 8px;
-  border-radius: 6px;
-  border: 1px solid #e5e7eb;
-  font-size: 13px;
-  outline: none;
-}
-
-.new-role-input input:focus {
-  border-color: #1d4ed8;
-  box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.1);
-}
-
-.new-role-input button {
-  /* padding: 6px 10px; */
-  width: 28px;
-  height: 28px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 6px;
-  background: #1d4ed8;
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: 0.2s ease;
-  font-size: 14px;
-}
-
-.new-role-input button .material-symbols-outlined {
-  font-size: 14px;
-}
-
-.new-role-input button:hover {
-  background: #1e40af;
-}
-
-.new-role-input .cancel {
-  background: #e5e7eb;
-  color: #374151;
-}
-
-.new-role-input .cancel:hover {
-  background: #f1f5f9;
-}
-</style>
-
-<!-- Edit image -->
+<!-- Foto Profil -->
 <style scoped>
 .photo-wrapper {
   position: relative;
@@ -1045,59 +512,9 @@
   margin: 0 auto;
 }
 
-.photo-wrapper img,
 .photo-option {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 4px solid rgb(193, 222, 232);
-  transition: 0.2s ease;
-}
-
-.photo-option {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  font-weight: 600;
-  /* background: linear-gradient(135deg, #3b82f6, #6366f1); */
-  color: white;
-  border: none;
-}
-
-/* .photo-option {
-  background-color: red;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-} */
-
-/* Overlay */
-.camera-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 18px;
-  opacity: 0;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-
-  z-index: 10;
-}
-
-.photo-wrapper:hover .camera-overlay {
-  opacity: 1;
-}
-
-/* Hidden file input */
-.hidden-file {
-  display: none;
+  font-size: 28px;
+  font-weight: 700;
 }
 </style>
 

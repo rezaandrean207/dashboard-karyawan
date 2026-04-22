@@ -609,8 +609,8 @@ h2 {
 </style>
 
 <script>
+import { formatTanggal } from "@/utils/helpers";
 export default {
-
   data() {
     return {
       dateMonth: null,
@@ -754,25 +754,20 @@ export default {
       const { start_date, end_date } = week;
 
       console.log("ID:", emp.clickup_id);
-      console.log("Start:", this.formatTanggal(start_date));
-      console.log("End:", this.formatTanggal(end_date));
-
+      console.log("Start:", formatTanggal(start_date));
+      console.log("End:", formatTanggal(end_date));
       this.$router.push({
         path: "/admin/bebanKerja",
         query: {
           id: emp.clickup_id,
-          start: this.formatTanggal(start_date),
-          end: this.formatTanggal(end_date),
+          start: formatTanggal(start_date),
+          end: formatTanggal(end_date),
           source: "Performa Mingguan",
         },
       });
     },
 
     badgeClass(score) {
-      // if (score > 100) return "good";
-      // if (score >= 85 && score <= 100) return "normal";
-      // return "bad";
-
       if (score === "++") return "good";
       if (score === "+") return "normal";
       if (score === "-") return "bad";
@@ -780,14 +775,6 @@ export default {
 
     formatScore(score) {
       return `${Math.round(score)}%`;
-    },
-    formatTanggal(tgl) {
-      // if (!tgl) return "-";
-      // const [year, month, day] = tgl.split("-");
-      // return `${day}-${month}-${year}`;
-      if (!tgl) return "-";
-      const [day, month, year] = tgl.split("-");
-      return `${year}-${month}-${day}`;
     },
   },
   watch: {

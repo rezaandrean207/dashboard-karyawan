@@ -135,14 +135,6 @@
                 </span>
               </td>
 
-              <!-- <td>
-                <span class="role-badge">
-                  {{ emp.role }}
-                </span>
-              </td> -->
-
-              <!-- <td>{{ emp.tasks_completed }}</td> -->
-
               <td>
                 <span
                   class="badge main-badge"
@@ -156,92 +148,23 @@
         </table>
       </div>
     </div>
-
-    <!-- <div class="card performance-card" v-if="daftarKaryawanYear.length">
-      <div class="table-wrapper">
-        <table class="table performance-table">
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Nama Karyawan</th>
-              <th>Role</th>
-              <th>Task Selesai</th>
-              <th>Skor</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr
-              v-for="emp in daftarKaryawanYear"
-              :key="emp.rank"
-              :class="highlightRank(emp.rank)"
-            >
-              <td class="rank-col">
-                <span class="rank-badge" :class="highlightRank(emp.rank)">
-                  <span v-if="emp.rank === 1">🥇</span>
-                  <span v-else-if="emp.rank === 2">🥈</span>
-                  <span v-else-if="emp.rank === 3">🥉</span>
-                  <span v-else>{{ emp.rank }}</span>
-                </span>
-              </td>
-
-              <td class="emp-name">
-                <strong>{{ emp.name }}</strong>
-              </td>
-
-              <td>
-                <span class="role-badge">
-                  {{ emp.role }}
-                </span>
-              </td>
-
-              <td>{{ emp.tasks_completed }}</td>
-
-              <td>
-                <span
-                  class="badge main-badge"
-                  :class="badgeClass(emp.category)"
-                >
-                  {{ Math.round(emp.performance_score) }}%
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div> -->
   </div>
 </template>
 
 <!-- Highlight top 3 ranks -->
 <style scoped>
-/* .rank-gold {
-  background: linear-gradient(to right, rgba(255, 215, 0, 0.08), transparent);
-}
-
-.rank-silver {
-  background: rgba(148, 163, 184, 0.08);
-}
-
-.rank-bronze {
-  background: rgba(205, 127, 50, 0.08);
-} */
-
 .rank-badge {
-  /* background: #f1f5f9; */
   padding: 6px 10px;
   border-radius: 8px;
   font-weight: 600;
 }
-
 .emp-name {
   text-align: justify;
-  /* width: 280px; */
+
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  /* border: 1px solid #e2e8f0; */
 }
 
 .role-badge {
@@ -272,12 +195,10 @@ h2 {
 .card {
   background: #fff;
   border-radius: 12px;
-  /* padding: 20px; */
   margin-bottom: 24px;
 
   background: #ffffff;
   border-radius: 16px;
-  /* padding: 20px 24px; */
   box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
   transition:
     transform 0.2s ease,
@@ -285,7 +206,6 @@ h2 {
 }
 
 .card:hover {
-  /* transform: translateY(-2px); */
   box-shadow: 0 14px 36px rgba(15, 23, 42, 0.08);
 }
 
@@ -294,7 +214,6 @@ h2 {
   background: #ffffff;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
-  /* padding: 16px 20px 20px; */
 }
 
 .table-wrapper {
@@ -303,7 +222,6 @@ h2 {
 
 /* Table */
 .performance-table {
-  /* width: 100%; */
   border-collapse: separate;
   border-spacing: 0;
   font-size: 14px;
@@ -313,19 +231,16 @@ h2 {
   width: 100%;
   border-collapse: collapse;
   border: 1px solid var(--border-soft);
-  /* margin-top: 16px; */
 }
 
 /* Header */
 .performance-table thead th {
   position: sticky;
   top: 0;
-  /* background: #f8fafc; */
   color: #475569;
   font-weight: 600;
   padding: 14px 12px;
   border-bottom: 1px solid #e2e8f0;
-  /* z-index: 2; */
   text-align: center;
 
   background: linear-gradient(180deg, #f8fafc, #f1f5f9);
@@ -373,7 +288,6 @@ h2 {
 .week-col,
 .score-col {
   position: static;
-  /* text-align: justify; */
   text-align: center;
 }
 
@@ -412,7 +326,6 @@ h2 {
 }
 
 .submenu-badge {
-  /* margin-top: 6px; */
   padding: 2px 10px;
   width: 60px;
   font-size: 9px;
@@ -483,12 +396,6 @@ h2 {
   padding: 2px 10px;
   font-size: 9px;
 }
-
-/* .empty-score:hover {
-  cursor: default;
-  transform: translateY(-1px) scale(1.02);
-  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.18);
-  /* filter: brightness(1.05); */
 </style>
 
 <script>

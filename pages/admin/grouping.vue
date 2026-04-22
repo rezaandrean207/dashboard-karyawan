@@ -23,32 +23,28 @@
         <div class="filter-item">
           <label for="tanggal">Tanggal</label>
           <div class="dates">
-            <!-- <input type="date" name="start" v-model="start" /> -->
             <ClientOnly>
               <VueDatePicker
-                format="dd-MM-yyyy"
+                ref="startPicker"
                 v-model="start"
+                format="dd-MM-yyyy"
                 model-type="yyyy-MM-dd"
                 :time-config="{ enableTimePicker: false }"
+                :max-date="end"
+                @update:model-value="onStartDateSelected"
             /></ClientOnly>
-            <span class="separator">➡️</span>
-            <!-- <input type="date" name="end" v-model="end" /> -->
+            <span class="separator">
+              <span class="material-symbols-outlined"> arrow_range </span>
+            </span>
             <ClientOnly>
               <VueDatePicker
-                format="dd-MM-yyyy"
+                ref="endPicker"
                 v-model="end"
+                format="dd-MM-yyyy"
                 model-type="yyyy-MM-dd"
                 :time-config="{ enableTimePicker: false }"
+                :min-date="start"
             /></ClientOnly>
-            <!-- <VueDatePicker v-model="date">
-                <template
-                  #preset-date-range-button="{ label, value, presetDate }"
-                >
-                  <span role="button" :tabindex="0" @click="presetDate(value)">
-                    {{ label }}
-                  </span>
-                </template>
-              </VueDatePicker> -->
           </div>
         </div>
         <div class="filter-item">
@@ -153,119 +149,6 @@
       </div>
     </div>
   </div>
-
-  <!-- <div class="isi" v-else-if="selectedKaryawan">
-    <div class="detail-page">
-      <div class="header">
-        <button class="back" @click="$router.back()">← Kembali</button>
-
-        <div class="profile">
-          <img src="/img/profil.png" alt="profil" />
-          <div class="info">
-            <h2>{{ selectedKaryawan.name }}</h2>
-            <p>{{ selectedKaryawan.role }}</p>
-            <div class="badge">
-              <span :class="workloadClass">{{
-                selectedKaryawan.workload_status
-              }}</span>
-              <span class="available">{{
-                selectedKaryawan.availability_status
-              }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="kpi">
-        <div class="card">
-          <p>Beban Kerja</p>
-          <h3>{{ selectedKaryawan.performance_bugs.workload_score }}%</h3>
-        </div>
-        <div class="card">
-          <p>Tepat Waktu</p>
-          <h3>{{ onTimeScore }}%</h3>
-        </div>
-        <div class="card">
-          <p>Performa Bug</p>
-          <h3>{{ selectedKaryawan.performance_bugs.bugs }}</h3>
-        </div>
-        <div class="card">
-          <p>Total Task</p>
-          <h3>{{ selectedKaryawan.total_tasks }}</h3>
-        </div>
-      </div>
-
-      <div class="section">
-        <h3>Jam Kerja</h3>
-        <ul>
-          <li>Expected : {{ selectedKaryawan.expected_hours }} jam</li>
-          <li>Spent : {{ selectedKaryawan.total_spent_hours.hours }} jam</li>
-          <li>
-            Selisih :
-            <strong
-              :class="{
-                over:
-                  selectedKaryawan.total_spent_hours.hours >
-                  selectedKaryawan.expected_hours,
-              }"
-            >
-              {{ selisihJam }} jam
-            </strong>
-          </li>
-        </ul>
-      </div>
-
-      <div class="section">
-        <h3>Daftar Task</h3>
-
-        <div v-if="!selectedKaryawan.tasks.length" class="empty">
-          Tidak ada task
-        </div>
-
-        <div
-          class="task-card"
-          v-for="task in selectedKaryawan.tasks"
-          :key="task.id"
-        >
-          <div class="task-header">
-            <h4>{{ task.name }}</h4>
-            <span class="status" :class="task.status_type">
-              {{ task.status_name }}
-            </span>
-          </div>
-
-          <p class="project">{{ task.project_name }}</p>
-
-          <div class="meta">
-            <span>Est: {{ task.time_estimate_hours }}j</span>
-            <span>Spent: {{ task.time_spent_hours }}j</span>
-            <span>Selesai: {{ task.date_done }}</span>
-          </div>
-
-          <div class="tags">
-            <span v-for="tag in task.tags" :key="tag">
-              {{ tag }}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div class="section insight">
-        <h3>Insight</h3>
-        <ul>
-          <li v-if="selectedKaryawan.performance_bugs.workload_score > 100">
-            ⚠️ Beban kerja melebihi kapasitas
-          </li>
-          <li v-if="onTimeScore < 100">
-            ⚠️ Beberapa task melewati estimasi waktu
-          </li>
-          <li v-if="selectedKaryawan.total_tasks">
-            ✅ Task berhasil diselesaikan
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div> -->
 </template>
 
 <!-- Style Filter Sortir -->
@@ -1028,69 +911,19 @@
 <!-- Edit image -->
 <style scoped>
 .photo-wrapper {
-  position: relative;
   width: 40px;
   height: 40px;
   /* margin: 0 auto; */
 }
 
-.photo-wrapper img,
 .photo-option {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 4px solid rgb(193, 222, 232);
-  transition: 0.2s ease;
-}
-
-.photo-option {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: 600;
-  /* background: linear-gradient(135deg, #3b82f6, #6366f1); */
-  color: white;
-  border: none;
-}
-
-/* .photo-option {
-  background-color: red;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-} */
-
-/* Overlay */
-.camera-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
   font-size: 18px;
-  opacity: 0;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-
-  z-index: 10;
-}
-
-.photo-wrapper:hover .camera-overlay {
-  opacity: 1;
-}
-
-/* Hidden file input */
-.hidden-file {
-  display: none;
 }
 </style>
 
 <script>
+import { formatTanggal, setDefaultTanggal } from "@/utils/helpers";
+
 export default {
   data() {
     return {
@@ -1109,7 +942,11 @@ export default {
     };
   },
   mounted() {
-    this.setDefaultTanggal();
+    const result = setDefaultTanggal();
+
+    this.start = result.mulai;
+    this.end = result.akhir;
+
     // this.ambilTask();
     // this.hariLibur();
   },
@@ -1183,69 +1020,21 @@ export default {
       }
       const format = (date) => date.toISOString().split("T")[0];
 
-      // this.$router.replace({
-      //   query: {
-      //     startDate: format(startDate),
-      //     endDate: format(endDate),
-      //   },
-      // });
       this.$router.replace({
         path: "/admin/grouping",
         query: {
           ...this.$route.query, // 🔥 PENTING
-          start: this.formatTanggal(this.start),
-          end: this.formatTanggal(this.end),
+          start: formatTanggal(this.start),
+          end: formatTanggal(this.end),
         },
       });
 
       this.ambilTask();
     },
-
-    logout() {
-      const token = useCookie("token");
-      token.value = null;
-      this.$router.push("/login");
-    },
-    formatTanggal(tgl) {
-      const [year, month, day] = tgl.split("-");
-      return `${day}-${month}-${year}`;
-    },
-
-    setDefaultTanggal() {
-      if (this.start && this.end) return;
-      const today = new Date();
-      const firstDay = new Date();
-      // sevenDaysAgo.setDate(today.getDate() - 30);
-      firstDay.setDate(1);
-
-      // Format ke YYYY-MM-DD (format input type="date")
-      const format = (date) => date.toISOString().split("T")[0];
-      this.start = format(firstDay);
-      this.end = format(today);
-
-      // console.log("tes", this.$route.query);
-
-      // if (this.$route.query.startDate) {
-      //   this.start = this.$route.startDate;
-      // } else {
-      //   this.start = format(firstDay);
-      // }
-
-      // if (this.$route.query.endDate) {
-      //   this.end = this.$route.endDate;
-      // } else {
-      //   this.end = format(today);
-      // }
-
-      // this.$router.replace({
-      //   query: {
-      //     startDate: this.start,
-      //     endDate: this.end,
-      //   },
-      // });
-    },
-    closeSukses() {
-      this.sukses = false;
+    onStartDateSelected() {
+      this.$nextTick(() => {
+        this.$refs.endPicker.openMenu();
+      });
     },
 
     async ambilTask() {
@@ -1253,9 +1042,9 @@ export default {
       console.log("Ambil task dipanggil");
       try {
         const task = await this.$api.get(
-          `/api/v1/workload/tasks-by-range?start_date=${this.formatTanggal(
+          `/api/v1/workload/tasks-by-range?start_date=${formatTanggal(
             this.start,
-          )}&end_date=${this.formatTanggal(this.end)}`,
+          )}&end_date=${formatTanggal(this.end)}`,
         );
 
         this.daftarKaryawan = task.data.grouping || [];
