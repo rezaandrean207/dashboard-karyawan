@@ -237,7 +237,131 @@
 </template>
 
 <style scoped>
-.active {
+.konten .navbar {
+  display: none;
+}
+
+.navbar .menu {
+  background-color: rgb(16, 62, 170);
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+.navbar p {
+  font-size: 16px;
+}
+
+.konten .background {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.35);
+  z-index: 99999;
+}
+
+.konten .background .sidebar_responsive {
+  background-color: rgb(16, 50, 130);
+  text-align: center;
+  color: #fff;
+  position: fixed;
+  left: 0;
+  z-index: 999;
+  animation: slide-right 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  overflow: hidden;
+  height: 100vh; /* fallback */
+  height: 100dvh; /* utama */
+}
+
+.slideOut {
+  animation: slide-left 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@keyframes slide-left {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes slide-right {
+  from {
+    transform: translateX(-30%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+.sidebar .logo,
+.sidebar_responsive .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid rgb(85, 57, 223);
+  padding: 20px 25px;
+  /* flex: 1; */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);
+}
+
+.logo img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  background-color: white;
+  border-radius: 50%;
+}
+
+.logo .keterangan {
+  font-size: 13px;
+  text-wrap: nowrap;
+  text-align: justify;
+}
+
+.keterangan p {
+  color: rgb(98, 205, 238);
+}
+
+.sidebar .sidebar-text,
+.sidebar_responsive .sidebar-text {
+  display: flex;
+  flex-direction: column;
+  /* margin-top: 15px; */
+  text-align: justify;
+  padding: 15px;
+  width: 100%;
+  max-height: 60%;
+  height: auto;
+  gap: 12px;
+  flex: 1; /* INI KUNCINYA */
+  overflow-y: auto;
+
+  /* Smooth scroll */
+  scroll-behavior: smooth;
+
+  /* Firefox */
+  scrollbar-width: none;
+
+  /* Internet Explorer / Edge lama */
+  -ms-overflow-style: none;
+}
+
+/* Chrome, Edge, Safari */
+.sidebar-text::-webkit-scrollbar {
+  display: none;
+}
+
+.menu-item {
+  padding: 10px 10px 10px 15px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  opacity: 0.75;
+  text-wrap: nowrap;
+}
+
+.menu-item:hover {
   background-color: rgb(16, 67, 185);
   opacity: 1;
 }
@@ -245,10 +369,7 @@
 .setting {
   height: auto;
   cursor: pointer;
-  /* margin-top: 12px; */
-  /* padding: 10px 0;
-  border-radius: 10px; */
-  /* margin-bottom: 10px auto; */
+  font-size: 16px;
 }
 
 .submenu {
@@ -282,10 +403,130 @@
   transition: background-color 0.2s ease;
   display: flex;
   align-items: center;
+  opacity: 0.75;
 }
 
 .submenu-item:hover {
   background-color: rgba(255, 255, 255, 0.1);
+}
+
+@media (hover: none) {
+  /* .submenu-item:hover,
+  .submenu-item:active {
+    background-color: transparent;
+    opacity: 0.75;
+  } */
+
+  /* .setting:hover,
+  .setting:active {
+    background-color: transparent;
+    opacity: 0.75;
+  } */
+}
+
+.sidebar-text i {
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+.sidebar-text span.material-symbols-outlined {
+  /* font-size: 20px; */
+  margin-right: 10px;
+}
+
+.sidebar-text a{
+  color: #fff;
+  font-size: 15px;
+  /* height: 6vh; */
+  text-align: justify;
+}
+
+.sidebar .footer_sidebar {
+  /* border: 1px solid #010101; */
+  border-top: 1px solid rgb(85, 57, 223);
+  padding: 18px;
+  width: 100%;
+  margin-top: auto;
+  box-shadow: 0 -6px 12px rgba(0, 0, 0, 0.18);
+  background-color: rgb(16, 50, 130);
+  /* height: 25%; */
+}
+.sidebar_responsive .footer_sidebar {
+  position: absolute;
+  bottom: 0;
+  border-top: 1px solid rgb(85, 57, 223);
+  padding: 18px;
+  width: 100%;
+  /* margin-top: auto; */
+  box-shadow: 0 -6px 12px rgba(0, 0, 0, 0.18);
+  background-color: rgb(16, 50, 130);
+}
+
+.footer_sidebar .user {
+  background-color: rgb(16, 67, 185);
+  padding: 10px 14px;
+  /* margin: 0 15px; */
+  border-radius: 10px;
+  text-align: justify;
+}
+
+.footer_sidebar .sync .btn {
+  margin: 10px 0;
+  background-color: rgb(13, 85, 254);
+  font-size: 14px;
+  padding: 8px 0;
+  width: 100%;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+}
+
+.sync .btn:hover {
+  background-color: rgb(0, 69, 230);
+}
+
+.footer_sidebar .logout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid rgb(16, 72, 203);
+  font-size: 14px;
+  gap: 8px;
+  border-radius: 10px;
+  padding: 8px 0;
+  background-color: transparent;
+  color: #ffffff;
+  width: 100%;
+  font-size: 14px;
+}
+
+.logout:hover {
+  background-color: rgb(16, 67, 185);
+}
+
+.logout::before {
+  font-family: "Font Awesome 7 Free";
+  font-weight: 600; /* solid */
+  content: "\f2f5"; /* arrow-right-from-bracket */
+}
+
+.user p {
+  font-weight: 400;
+  color: rgb(98, 205, 238);
+  margin: 5px 0;
+  font-size: 12px;
+}
+
+.user h4 {
+  font-size: 15px;
+  font-weight: 400;
+}
+.active {
+  background-color: rgb(16, 67, 185);
+  opacity: 1;
 }
 
 .download {
@@ -321,10 +562,25 @@
   text-align: center;
   letter-spacing: 0.5px;
 }
+</style>
 
-/* .app-version {
-    color: #cfd8ff;
-  } */
+<!-- Resposive -->
+<style scoped>
+@media (max-width: 1024px) {
+  .konten .navbar {
+    display: flex;
+    background-color: rgb(16, 50, 130);
+    color: white;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    height: 10%;
+    align-items: center;
+    z-index: 99;
+    padding-left: 35px;
+    gap: 10px;
+  }
+}
 </style>
 
 <script>
@@ -372,7 +628,7 @@ const menuConfig = {
       type: "material",
       children: [
         { name: "Jadwal Libur", path: "/admin/jadwalLibur" },
-        { name: "Jadwal Cuti", path: "/admin/jadwalCuti" },
+        { name: "Cuti", path: "/admin/jadwalCuti" },
         { name: "Pengaturan Bug", path: "/admin/settingBug" },
         { name: "Performa", path: "/admin/performanceSetting" },
         { name: "Ubah Password", path: "/admin/changePassword" },

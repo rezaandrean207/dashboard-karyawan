@@ -344,12 +344,16 @@ export default {
         );
 
         // ambil message dari API
-        this.succesMessages = save.data.message;
+        // this.succesMessages = save.data.message;
+
+        this.succesMessages = "Perubahan berhasil disimpan";
 
         // trigger sukses
         this.isSukses = true;
 
         console.log("Settings saved:", payload, save);
+        console.log(this.succesMessages);
+
         await this.ambilData();
       } catch (err) {
         console.error("Gagal menyimpan settingan bug:", err);

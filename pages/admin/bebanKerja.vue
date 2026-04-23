@@ -141,6 +141,7 @@
       <div class="list_hari">
         <div
           class="hari_tanggal"
+          :class="{ flexGrow: daftarHari.length > 4 }"
           v-for="(h, index) in daftarHari"
           :key="index"
           v-if="daftarHari && daftarHari.length"
@@ -222,7 +223,7 @@
               </div>
 
               <div
-                class="dropdown_cuti"
+                class="dropdowncuti"
                 v-if="openCuti === k.clickup_id && k.cuti_summary"
               >
                 <!-- Summary -->
@@ -349,10 +350,10 @@
     </div>
   </div>
 
-  <!-- Details Task -->
+  <!-- Details Page -->
   <div class="isi" :class="{ hidden: detailBug }" v-else-if="detailKaryawan">
-    <div class="header_task">
-      <div class="back_button" @click="kembali()">
+    <div class="header-detail">
+      <div class="back-button" @click="kembali()">
         <i class="fa-solid fa-arrow-left"></i>
         <p>Kembali</p>
       </div>
@@ -530,203 +531,203 @@
       </div>
     </div>
 
-    <div class="task">
-      <div class="filter-detail">
-        <div class="filter-item">
-          <label for="">Progres</label>
-          <ClientOnly>
-            <n-select
-              v-model:value="progres"
-              :options="[
-                { label: 'Semua Progress', value: '' },
-                { label: 'Complete', value: 'completed' },
-                { label: 'Done Dev', value: 'done dev' },
-                { label: 'In Progress', value: 'in progress' },
-                { label: 'In Review', value: 'in review' },
-                { label: 'To Do', value: 'to do' },
-              ]"
-            ></n-select>
-          </ClientOnly>
-        </div>
-
-        <div class="filter-item">
-          <label for="">Ketepatan Tugas</label>
-          <ClientOnly>
-            <n-select
-              v-model:value="sortKetepatanDetail"
-              :options="[
-                { label: 'Semua Ketepatan', value: '' },
-                { label: 'Tertinggi', value: 'higest' },
-                { label: 'Terendah', value: 'lowest' },
-              ]"
-            ></n-select>
-          </ClientOnly>
-        </div>
-
-        <div class="filter-item">
-          <label for="">Tugas</label>
-          <ClientOnly>
-            <n-select
-              v-model:value="taskBug"
-              :options="[
-                { label: 'Semua', value: '' },
-                { label: 'Bug', value: 'bugs' },
-                { label: 'Task', value: 'task' },
-              ]"
-            ></n-select>
-          </ClientOnly>
-        </div>
+    <div class="filter-detail">
+      <div class="filter-item">
+        <label for="">Progres</label>
+        <ClientOnly>
+          <n-select
+            v-model:value="progres"
+            :options="[
+              { label: 'Semua Progress', value: '' },
+              { label: 'Complete', value: 'completed' },
+              { label: 'Done Dev', value: 'done dev' },
+              { label: 'In Progress', value: 'in progress' },
+              { label: 'In Review', value: 'in review' },
+              { label: 'To Do', value: 'to do' },
+            ]"
+          ></n-select>
+        </ClientOnly>
       </div>
 
-      <div
-        class="no_task"
-        v-if="!filteredKaryawanDetail || filteredKaryawanDetail.length === 0"
-      >
-        <i>Data tidak tersedia</i>
+      <div class="filter-item">
+        <label for="">Ketepatan Tugas</label>
+        <ClientOnly>
+          <n-select
+            v-model:value="sortKetepatanDetail"
+            :options="[
+              { label: 'Semua Ketepatan', value: '' },
+              { label: 'Tertinggi', value: 'higest' },
+              { label: 'Terendah', value: 'lowest' },
+            ]"
+          ></n-select>
+        </ClientOnly>
       </div>
 
-      <div
-        class="background_bug"
-        v-if="detailBug"
-        @click.self="closeDetailBug()"
-      >
-        <div class="container_bug">
-          <div class="header_containerBug">
-            <i class="fa-solid fa-xmark" @click="closeDetailBug"></i>
+      <div class="filter-item">
+        <label for="">Tugas</label>
+        <ClientOnly>
+          <n-select
+            v-model:value="taskBug"
+            :options="[
+              { label: 'Semua', value: '' },
+              { label: 'Bug', value: 'bugs' },
+              { label: 'Task', value: 'task' },
+            ]"
+          ></n-select>
+        </ClientOnly>
+      </div>
+    </div>
+
+    <div
+      class="no_task"
+      v-if="!filteredKaryawanDetail || filteredKaryawanDetail.length === 0"
+    >
+      <i>Data tidak tersedia</i>
+    </div>
+
+    <div class="bug-background" v-if="detailBug" @click.self="closeDetailBug()">
+      <div class="container">
+        <div class="container-header">
+          <i class="fa-solid fa-xmark" @click="closeDetailBug"></i>
+        </div>
+        <div class="card-detail">
+          <div class="card-header">
+            <div class="card-title">
+              <p>{{ detailBug.task_name }}</p>
+            </div>
+            <div class="card-meta">
+              <div class="card-label tags">Tags</div>
+              <div class="card-label tags">
+                <p>{{ detailBug.bug_label }}</p>
+              </div>
+            </div>
           </div>
-          <div class="bug_detail">
-            <div class="header_bug">
-              <div class="name_bug">
-                <p>{{ detailBug.task_name }}</p>
-              </div>
-              <div class="status_bug">
-                <div class="tags">Tags</div>
-                <div class="project_bug">
-                  <p>{{ detailBug.bug_label }}</p>
-                </div>
-              </div>
+          <div class="card-description">
+            <p>{{ detailBug.description }}</p>
+          </div>
+          <div class="card-info">
+            <div class="info-item start_date">
+              <i class="fa-regular fa-calendar"></i>
+              <p>Mulai: {{ detailBug.start_date_ui }}</p>
             </div>
-            <div class="description_bug">
-              <p>{{ detailBug.description }}</p>
+            <div class="info-item deadline">
+              <i class="fa-regular fa-calendar"></i>
+              <p>Target: {{ detailBug.due_date_ui }}</p>
             </div>
-            <div class="keterangan_waktu">
-              <div class="start_date">
-                <i class="fa-regular fa-calendar"></i>
-                <p>Mulai: {{ detailBug.start_date_ui }}</p>
-              </div>
-              <div class="deadline">
-                <i class="fa-regular fa-calendar"></i>
-                <p>Target: {{ detailBug.due_date_ui }}</p>
-              </div>
-              <div class="done_date">
-                <i class="fa-regular fa-calendar"></i>
-                <p>Selesai: {{ detailBug.date_done_ui }}</p>
-              </div>
-              <div class="created_by">
-                <i class="fa-regular fa-user"></i>
-                <p>Bug Terbuat oleh: {{ detailBug.assignee_name }}</p>
-              </div>
+            <div class="info-item done_date">
+              <i class="fa-regular fa-calendar"></i>
+              <p>Selesai: {{ detailBug.date_done_ui }}</p>
+            </div>
+            <div class="info-item created_by">
+              <i class="fa-regular fa-user"></i>
+              <p>Bug Terbuat oleh: {{ detailBug.assignee_name }}</p>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <div
-        class="container_task"
-        v-for="k in filteredKaryawanDetail"
-        @click.stop="handleCardClick(k)"
-      >
-        <div class="header_container">
-          <div class="name_task">
-            <p>{{ k.name }}</p>
-          </div>
-          <div class="status_task">
-            <div class="bug" v-if="k.bug_label">
-              <p>{{ k.bug_label }}</p>
-            </div>
-
-            <div class="progres_task" :class="statusTaskClass(k.status_name)">
-              <p>{{ statusLabel(k.status_name) }}</p>
-            </div>
-            <div
-              class="task_priority"
-              :class="priorityClass(k.priority_name)"
-              v-if="k.priority_name"
-            >
-              <p>{{ k.priority_name }}</p>
-            </div>
-
-            <!-- Dari Project mana task tersebut -->
-            <div class="task_project">
-              <p>{{ k.project_name }}</p>
-            </div>
-          </div>
+    <!-- Card -->
+    <div
+      class="container task"
+      v-for="k in filteredKaryawanDetail"
+      @click.stop="handleCardClick(k)"
+    >
+      <div class="card-header">
+        <div class="header-item card-title">
+          <p>{{ k.name }}</p>
         </div>
-        <div class="description">
-          <p>{{ k.description }}</p>
-        </div>
+        <div class="header-item card-meta">
+          <div class="card-label bug" v-if="k.bug_label">
+            <p>{{ k.bug_label }}</p>
+          </div>
 
-        <!-- Ketika start date tersedia -->
-        <div
-          class="achievement"
-          v-if="k.time_efficiency_percentage"
-          :class="achivClass(k.time_efficiency_percentage)"
-        >
-          <div class="penghargaan">
-            <p>Ketepatan Pengerjaan Tugas</p>
-            <h4>{{ k.time_efficiency_percentage }}%</h4>
-            <h4>{{ k.remaining_duration }}</h4>
-          </div>
-          <div class="ikon" v-if="k.bug_label === 'Bug Terbuat'">
-            <i class="fa-solid fa-bug"></i>
-          </div>
-        </div>
-
-        <!-- Ketika start date tidak tersedia-->
-        <div
-          class="achievement not_special"
-          v-if="
-            (k.status_name === 'done dev' || k.status_name === 'completed') &&
-            !k.start_date
-          "
-        >
-          <div class="penghargaan">
-            <p>Ketepatan Pengerjaan Tugas</p>
-            <h4>Tidak Tersedia</h4>
-          </div>
-        </div>
-        <div class="keterangan_waktu">
-          <div class="jam">
-            <i class="fa-regular fa-clock"></i>
-            <p>Waktu Pengerjaan: {{ k.time_estimate_hours }} Jam</p>
-          </div>
-          <div class="start_date">
-            <i class="fa-regular fa-calendar"></i>
-            <p v-if="k.start_date">Mulai: {{ k.start_date_ui }}</p>
-            <p v-if="!k.start_date">Mulai: <i>Tidak Valid</i></p>
-          </div>
-          <div class="deadline">
-            <i class="fa-regular fa-calendar"></i>
-            <p v-if="k.due_date">Target: {{ k.due_date_ui }}</p>
-            <p v-if="!k.due_date">Target: <i>Tidak Valid</i></p>
+          <div
+            class="card-label progres"
+            :class="statusTaskClass(k.status_name)"
+          >
+            <p>{{ statusLabel(k.status_name) }}</p>
           </div>
           <div
-            class="done_date"
-            v-if="k.status_name === 'done dev' || k.status_name === 'completed'"
+            class="card-label priority"
+            :class="priorityClass(k.priority_name)"
+            v-if="k.priority_name"
           >
-            <i class="fa-regular fa-calendar"></i>
-            <p>Selesai: {{ k.date_done_ui }}</p>
+            <p>{{ k.priority_name }}</p>
           </div>
-          <div class="created_by">
-            <i class="fa-regular fa-user"></i>
-            <p>Dibuat oleh: {{ k.creator_name }}</p>
+
+          <!-- Dari Project mana task tersebut -->
+          <div class="card-label project">
+            <p>{{ k.project_name }}</p>
           </div>
+        </div>
+      </div>
+      <div class="card-description">
+        <p>{{ k.description }}</p>
+      </div>
+
+      <!-- Ketika start date tersedia -->
+      <div
+        class="card-performance"
+        v-if="k.time_efficiency_percentage"
+        :class="achivClass(k.time_efficiency_percentage)"
+      >
+        <div class="performance-item">
+          <p>Ketepatan Pengerjaan Tugas</p>
+          <h4>{{ k.time_efficiency_percentage }}%</h4>
+          <h4>{{ k.remaining_duration }}</h4>
+        </div>
+        <div class="ikon" v-if="k.bug_label === 'Bug Terbuat'">
+          <i class="fa-solid fa-bug"></i>
+        </div>
+      </div>
+
+      <!-- Ketika start date tidak tersedia-->
+      <div
+        class="card-performance not_special"
+        v-if="
+          (k.status_name === 'done dev' || k.status_name === 'completed') &&
+          !k.start_date
+        "
+      >
+        <div class="performance-item">
+          <p>Ketepatan Pengerjaan Tugas</p>
+          <h4>Tidak Tersedia</h4>
+        </div>
+      </div>
+
+      <div class="card-info">
+        <div class="info-item jam">
+          <i class="fa-regular fa-clock"></i>
+          <p>Waktu Pengerjaan: {{ k.time_estimate_hours }} Jam</p>
+        </div>
+        <div class="info-item start_date">
+          <i class="fa-regular fa-calendar"></i>
+          <p v-if="k.start_date">Mulai: {{ k.start_date_ui }}</p>
+          <p v-if="!k.start_date">Mulai: <i>Tidak Valid</i></p>
+        </div>
+        <div class="info-item deadline">
+          <i class="fa-regular fa-calendar"></i>
+          <p v-if="k.due_date">Target: {{ k.due_date_ui }}</p>
+          <p v-if="!k.due_date">Target: <i>Tidak Valid</i></p>
+        </div>
+        <div
+          class="info-item done_date"
+          v-if="k.status_name === 'done dev' || k.status_name === 'completed'"
+        >
+          <i class="fa-regular fa-calendar"></i>
+          <p>Selesai: {{ k.date_done_ui }}</p>
+        </div>
+        <div class="info-item created_by">
+          <i class="fa-regular fa-user"></i>
+          <p>Dibuat oleh: {{ k.creator_name }}</p>
         </div>
       </div>
     </div>
   </div>
 </template>
 
+<!-- Main Page -->
 <style scoped>
 .holiday {
   background-color: #fff;
@@ -765,655 +766,12 @@
   color: var(--text-muted);
   margin-top: 2px;
 }
-</style>
 
-<!-- Style detail bug -->
-<style scoped>
-.hidden {
-  overflow: hidden;
+.flexGrow {
+  flex: 1 200px;
 }
 
-.container_bug {
-  padding: 10px 20px 15px 20px;
-  border-radius: 10px;
-  width: 80%;
-
-  background: #ffffff;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
-  animation: scaleIn 0.2s ease-out;
-}
-
-@keyframes scaleIn {
-  from {
-    transform: scale(0.96);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-.header_containerBug {
-  text-align: right;
-  font-size: 14px;
-}
-
-.bug_detail {
-  border: 1px solid var(--border_color);
-  padding: 15px;
-  border-radius: 10px;
-  margin: 15px 0;
-  background-color: #fff;
-}
-
-.background_bug {
-  position: fixed;
-  left: 0;
-  top: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* flex-direction: column; */
-  flex-wrap: wrap;
-  gap: 100px;
-  z-index: 1005;
-  pointer-events: all;
-  width: 100vw;
-  height: 101vh;
-  overflow-y: scroll;
-
-  backdrop-filter: blur(6px);
-  background: rgba(15, 23, 42, 0.4);
-  animation: fadeIn 0.2s ease-out;
-}
-
-.header_bug {
-  display: flex;
-  justify-content: space-between;
-  font-size: 16px;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.name_bug {
-  /* color: var(--font-color); */
-  color: rgb(16, 50, 130);
-  font-weight: 500;
-}
-
-.description_bug {
-  margin: 5px 0 10px 0;
-  font-weight: 300;
-}
-
-.status_bug {
-  display: flex;
-  gap: 10px;
-  font-size: 11px;
-  font-weight: 500;
-}
-
-.project_bug,
-.tags {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background-color: #fff;
-  border: 1px solid var(--border_color);
-  border-radius: 7px;
-  padding: 2px 5px;
-  padding-top: 4px;
-  color: var(--font-color);
-  font-size: 12px;
-  font-weight: 600;
-}
-</style>
-
-<!-- Style Container Progress -->
-<style scoped>
-.posisi select,
-.posisi select option {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.container-progres {
-  display: flex;
-  justify-content: space-between;
-  margin: 20px 0;
-  border-radius: 10px;
-  gap: 20px;
-  width: 100%;
-}
-
-.container-progres .progres-card {
-  flex: 1;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  flex-direction: column;
-  display: flex;
-  gap: 6px;
-}
-
-.progres-card p {
-  font-size: 15px;
-}
-
-.container-progres .complete {
-  background: linear-gradient(145deg, #f7faff, #eef4ff);
-  border: 1px solid rgba(136, 190, 255, 0.25);
-}
-.complete p {
-  color: #2f5bd3;
-}
-
-.container-progres .on-progres {
-  background: linear-gradient(145deg, #fff8f0, #fff1e6);
-  border: 1px solid rgba(255, 170, 100, 0.25);
-}
-.on-progres p {
-  color: #d96b1a;
-}
-
-.container-progres .to-do {
-  background: linear-gradient(145deg, #faf7ff, #f3edff);
-  border: 1px solid rgba(168, 85, 247, 0.25);
-}
-.to-do p {
-  color: #7a4bd1;
-}
-
-.container-progres .cancel {
-  background: linear-gradient(145deg, #fff5f5, #ffecec);
-  border: 1px solid rgba(255, 120, 120, 0.25);
-}
-.cancel p {
-  color: #d14343;
-}
-</style>
-
-<!-- Style Responsive -->
-<style scoped>
-@media (max-width: 1024px) {
-  .list_hari .hari_tanggal {
-    width: 32.3%;
-  }
-}
-
-@media (max-width: 768px) {
-  .list_hari .hari_tanggal {
-    width: 48.6%;
-  }
-}
-
-@media (max-width: 576px) {
-  .list_hari .hari_tanggal {
-    width: 48%;
-  }
-
-  .dates {
-    width: 100%;
-  }
-
-  .tanggal input {
-    position: relative;
-    width: 45%;
-  }
-
-  .card_karyawan {
-    font-size: 14px;
-    flex-wrap: wrap;
-  }
-
-  .card_karyawan .card_profile {
-    width: 75%;
-  }
-
-  .header_container {
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .keterangan_waktu {
-    /* display: flex;
-    flex-wrap: wrap; */
-    display: flex;
-    flex-direction: column; /* ⬅️ lebih tepat daripada wrap */
-    gap: 6px; /* ⬅️ jarak antar baris */
-    align-items: flex-start;
-  }
-
-  .keterangan_waktu .jam,
-  .keterangan_waktu .start_date,
-  .keterangan_waktu .deadline,
-  .keterangan_waktu .done_date,
-  .keterangan_waktu .created_by {
-    margin: 0;
-    width: 100%;
-    line-height: 0;
-  }
-}
-
-.late {
-  background-color: rgb(255, 200, 200);
-  border: 1px solid rgb(255, 100, 100);
-  border-radius: 7px;
-  padding: 5px;
-}
-
-.late .penghargaan p {
-  color: rgb(200, 0, 0);
-}
-
-.ontime {
-  background-color: rgb(200, 255, 200);
-  border: 1px solid rgb(100, 255, 100);
-  border-radius: 7px;
-  padding: 5px;
-}
-
-.ontime .penghargaan p {
-  color: rgb(0, 100, 0);
-}
-
-.early {
-  background-color: rgb(200, 255, 200);
-  border: 1px solid rgb(100, 255, 100);
-  border-radius: 7px;
-  padding: 5px;
-}
-
-.early .penghargaan p {
-  color: rgb(0, 100, 0);
-}
-</style>
-
-<style scoped>
-.isi .header_task {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-top: 20px;
-  width: 100%;
-}
-
-.header_task .back_button {
-  display: flex;
-  border: 1px solid rgb(165, 192, 255);
-  align-items: center;
-  gap: 15px;
-  font-size: 13px;
-  padding: 5px 10px;
-  border-radius: 8px;
-  background-color: #fff;
-  position: fixed;
-  box-shadow: 2px 2px 8px rgb(170, 170, 170);
-  z-index: 5;
-  /* margin: 10px 0; */
-  cursor: pointer;
-  /* background-color: rgb(16, 50, 130); */
-  background-color: #0041c2;
-  color: #fff;
-}
-
-.back_button:hover {
-  background-color: #0037a6;
-}
-
-.detailTask_karyawan .name_karyawan {
-  font-size: 23px;
-  font-weight: 500;
-  color: rgb(16, 50, 130);
-  margin: 10px 0;
-}
-
-.detailTask_karyawan .periode {
-  font-size: 16px;
-  font-weight: 300;
-}
-
-.card_karyawan {
-  margin: 20px 0;
-  background: var(--bg-card);
-  border-radius: 16px;
-  padding: 20px;
-  border: 1px solid var(--border-soft);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-  transition: all 0.25s ease;
-}
-
-.card_karyawan:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
-}
-
-.card_karyawan .card_profile {
-  flex-wrap: wrap;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-.card_profile .card_left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 70%;
-}
-
-.card_karyawan .card_profile .card_left img {
-  width: 88px;
-  height: 88px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #e0e7ff;
-}
-
-.card_name h3 {
-  font-size: 18px;
-  font-weight: 600;
-  color: #0f172a;
-}
-
-.card_name p {
-  font-size: 14px;
-  color: #64748b;
-  text-transform: capitalize;
-}
-
-.card_profile .performa_karyawan {
-  flex: 2;
-}
-
-.card_karyawan .card_task {
-  text-align: end;
-  font-weight: 400;
-}
-
-.isi .container {
-  /* position: relative;
-  top: 20px; */
-  border: 1px solid var(--border_color);
-  /* background-color: var(--border_color); */
-  padding: 20px;
-}
-
-.task h4 {
-  margin: 25px 0 0 0;
-  font-weight: 500;
-  color: green;
-}
-
-.task .container_task {
-  margin: 20px 0;
-
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 16px;
-  border: 1px solid #e5e7eb;
-  transition: all 0.2s ease;
-}
-
-.container_task:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
-}
-
-.header_container {
-  font-size: 16px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.header_container .name_task p {
-  color: var(--font-color);
-  font-weight: 500;
-}
-
-.status_task {
-  display: flex;
-  gap: 10px;
-  font-size: 11px;
-  font-weight: 500;
-}
-
-.status_task .bug {
-  cursor: pointer;
-}
-
-.status_task .task_project,
-.bug {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background-color: #fff;
-  border: 1px solid var(--border_color);
-  border-radius: 7px;
-  padding: 2px 5px;
-  padding-top: 4px;
-  color: var(--font-color);
-}
-
-.status_task .progres_task {
-  border-radius: 7px;
-  padding: 2px 5px;
-  display: flex;
-  align-items: center;
-  text-wrap: nowrap;
-}
-
-.task_priority {
-  padding: 2px 5px;
-  border-radius: 7px;
-  display: flex;
-  align-items: center;
-  text-wrap: nowrap;
-}
-
-.urgent {
-  background-color: rgb(255, 219, 219);
-  border: 1px solid rgb(255, 137, 137);
-  color: red;
-}
-
-.high {
-  background-color: rgb(255, 255, 219);
-  border: 1px solid rgb(255, 255, 95);
-  color: rgb(220, 114, 0);
-}
-
-.minimum {
-  background-color: rgb(221, 221, 255);
-  border: rgb(163, 163, 255);
-  color: blue;
-}
-
-.low {
-  background-color: #f5f5f5;
-  border: 1px solid #dbdbdb;
-}
-
-.description {
-  margin: 10px 0;
-  font-weight: 300;
-
-  white-space: pre-line;
-}
-
-.achievement {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  /* gap: 10px; */
-  border-radius: 10px;
-  padding: 12px;
-}
-
-.not_special {
-  background-color: #f5f5f5;
-}
-
-.achievement .achievement_logo i {
-  /* color: green; */
-  font-weight: 600;
-}
-
-.achievement .penghargaan p {
-  font-weight: 400;
-  /* color: green; */
-  font-size: 14px;
-}
-
-.achievement .penghargaan h4 {
-  font-size: 16px;
-  font-weight: 600;
-  color: #010101;
-  margin: 0;
-  padding: 0;
-}
-
-.penghargaan .label {
-  margin-top: 10px;
-}
-
-.keterangan_waktu {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  font-size: 14px;
-  font-weight: 400;
-  margin: 10px 0;
-  flex-wrap: wrap;
-
-  font-size: 13px;
-  color: #64748b;
-}
-
-.keterangan_waktu i {
-  font-size: 16px;
-  color: #94a3b8;
-}
-
-.keterangan_waktu .jam,
-.start_date,
-.deadline,
-.done_date,
-.created_by {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  text-wrap: nowrap;
-  font-size: 13.5px;
-  font-weight: 400;
-}
-
-.jenis_data {
-  display: flex;
-  gap: 15px;
-  font-size: 12px;
-}
-
-.jenis_data .form,
-.jenis {
-  padding: 2px 5px;
-  border: 1px solid var(--border_color);
-  border-radius: 7px;
-  color: var(--font-color);
-}
-
-.task_inProgres h4 {
-  color: var(--font-color);
-}
-
-.task_todo h4 {
-  color: orange;
-}
-
-.task_review .task h4 {
-  color: rgb(0, 255, 221);
-}
-
-.select_task,
-.sortir,
-.task_style {
-  border: 1px solid var(--border_color);
-  padding: 8px 8px 8px 30px;
-  font-size: 14px;
-  border-radius: 6px;
-  background-color: #fff;
-}
-
-.select_task {
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' stroke='%2364748b' stroke-width='32' viewBox='0 0 512 512'%3E%3Ccircle cx='256' cy='256' r='160'/%3E%3Cpath d='M256 96v160l96 64'/%3E%3Cpath d='M64 96h384M128 160h256'/%3E%3C/svg%3E")
-    no-repeat 10px center;
-  background-size: 14px;
-  background-color: #fff;
-}
-
-.task_style {
-  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path d='M32%2064C19.1%2064%207.4%2071.8%202.4%2083.8S.2%20109.5%209.4%20118.6L192%20301.3V416c0%208.5%203.4%2016.6%209.4%2022.6l64%2064c9.2%209.2%2022.9%2011.9%2034.9%206.9S320%20492.9%20320%20480V301.3L502.6%20118.6c9.2%209.2%2011.9%2022.9%206.9%2034.9S492.9%2064%20480%2064H32z'/></svg>")
-    no-repeat 12px center;
-  background-size: 14px;
-  background-color: #fff;
-}
-
-.achiv_overload {
-  background-color: red;
-  border: 1px solid rgb(253, 199, 199);
-}
-
-.achiv_normal {
-  background-color: green;
-  border: 1px solid rgb(124, 255, 124);
-}
-.achiv_underload {
-  background-color: orange;
-  border: 1px solid rgb(251, 251, 45);
-}
-
-.task_selesai {
-  background-color: rgb(216, 255, 216);
-  border: 1px solid rgb(115, 255, 115);
-  color: green;
-}
-
-.task_inProgress {
-  /* background-color: rgb(216, 216, 255);
-  border: 1px solid rgb(176, 176, 255); */
-  background-color: #fdff8b;
-  border: 1px solid #ffff47;
-}
-
-.task_todo {
-  background-color: #b3b7bd;
-  border: 1px solid rgb(176, 176, 255);
-}
-
-.task_inReview {
-  background-color: #14b8a6;
-  border: 1px solid rgb(176, 176, 255);
-}
-
-.task_cancelled {
-  background-color: #ffb3b3;
-  border: 1px solid #ff4d4d;
-  color: #800000;
-}
-</style>
-
-<style scoped>
 .not_found {
-  /* margin: 20px 0; */
   margin-top: 50px;
   width: 100%;
   font-weight: 500;
@@ -1432,85 +790,6 @@
   filter: drop-shadow(2px 2px 8px #d0d0d0);
   color: #6b788a;
   font-style: italic;
-}
-
-/* Laporan Pages */
-.isi .keterangan_kerja {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-  width: 100%;
-  gap: 15px;
-}
-
-.keterangan_kerja .total_karyawan,
-.overload,
-.normal,
-.underload,
-.average,
-.upcoming {
-  width: 17%;
-  padding: 25px 0;
-  text-align: center;
-  font-weight: 300;
-  font-size: 16px;
-  border-radius: 10px;
-}
-
-.total_karyawan {
-  border: var(--borderCard);
-}
-
-.total_karyawan .font_color {
-  margin-top: 2px;
-}
-
-.overload {
-  background-color: rgb(255, 241, 241);
-  border: 1px solid rgb(253, 199, 199);
-}
-
-.overload .font_color {
-  color: rgb(255, 11, 11);
-  margin-top: 2px;
-}
-
-.normal {
-  background-color: rgb(236, 255, 236);
-  border: 1px solid rgb(124, 255, 124);
-}
-
-.normal .font_color {
-  color: rgb(82, 178, 82);
-  margin-top: 2px;
-}
-
-.underload {
-  background-color: rgb(255, 255, 232);
-  border: 1px solid rgb(251, 251, 45);
-}
-
-.underload .font_color {
-  color: rgb(188, 188, 83);
-  margin-top: 2px;
-}
-
-.average {
-  border: var(--borderCard);
-}
-
-.average .font_color {
-  margin-top: 2px;
-}
-
-.upcoming {
-  border: 1px solid rgb(214, 173, 255);
-  background-color: rgb(243, 233, 253);
-}
-
-.upcoming .font_color {
-  color: purple;
-  margin-top: 2px;
 }
 
 .kinerja-karyawan {
@@ -1601,7 +880,7 @@
   transform: rotate(180deg);
 }
 
-.dropdown_cuti {
+.dropdown-cuti {
   font-size: 13px;
 
   position: absolute;
@@ -1621,7 +900,7 @@
   animation: fadeIn 0.2s ease;
 }
 
-.dropdown_cuti .title {
+.dropdown-cuti .title {
   font-weight: 600;
   margin-bottom: 6px;
 }
@@ -1683,32 +962,14 @@
   font-size: 30px;
 }
 
-.overload_task,
-.underload_task,
-.normal_task {
-  display: flex;
-  /* background-color: #f5f5f5; */
-  /* background-color: #010101; */
-  /* border: 1px solid #dbdbdb; */
-  /* color: #fff; */
-  font-weight: 600;
-  font-size: 12px;
-  padding: 2px 10px;
-  border-radius: 6px;
-  /* margin: 0 15 %; */
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-}
-.overload_task {
+.overloadTask {
   position: relative;
   background: #fff;
   z-index: 0;
   border: 5px solid #c0b838;
 }
 
-.overload_task::before {
+.overloadTask::before {
   content: "";
   position: absolute;
   inset: -2px; /* ketebalan border */
@@ -1726,57 +987,20 @@
   z-index: -1;
 }
 
-.underload_task {
+.underloadTask {
   background-color: rgb(255, 237, 237);
   border: 1px solid rgb(255, 204, 204);
   color: rgb(203, 0, 0);
 }
 
-.underload_task svg {
+.underloadTask svg {
   fill: rgb(203, 0, 0);
 }
 
-.normal_task {
-  /* background-color: #f5f5f5;
-  border: 1px solid #dbdbdb;
-  color: #010101; */
+.normalTask {
   background-color: rgb(212, 255, 212);
   border: 1px solid rgb(154, 255, 154);
   color: green;
-}
-
-.status_karyawan .keterangan_status {
-  /* color: rgb(255, 217, 4); */
-  font-weight: 500;
-  margin-top: 5px;
-  font-size: 15px;
-}
-
-.performa_karyawan {
-  border-radius: 6px;
-  padding: 10px 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: 2;
-  margin-left: auto;
-}
-
-.performa_karyawan i {
-  font-size: 25px;
-}
-
-.performa_karyawan .text {
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  gap: 5px;
-  font-size: 16px;
-}
-
-.text span {
-  font-weight: 500;
-  font-size: 18px;
 }
 
 .container-summary {
@@ -1811,114 +1035,7 @@
   color: #333333;
 }
 
-.detail_task,
-.detail_bug {
-  position: relative;
-  cursor: pointer;
-}
-
-.content {
-  /* border: var(--borderCard); */
-  /* border-radius: 10px; */
-  padding: 15px;
-  font-weight: 300;
-  font-size: 15px;
-}
-
-.content .ket {
-  margin: 10px 0;
-}
-
-.name_task {
-  display: flex;
-  justify-content: space-between;
-
-  font-size: 15px;
-  font-weight: 600;
-  color: #0f172a;
-}
-
-.name_task .progres-level {
-  display: flex;
-  /* border: 1px solid #010101; */
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-.content .time {
-  display: flex;
-  gap: 16px;
-}
-
-.time .project {
-  border: 1px solid rgb(163, 224, 255);
-  font-size: 12px;
-  padding: 3px 7px;
-  border-radius: 6px;
-  font-weight: 400;
-}
-
-:deep(details summary::marker),
-:deep(details summary::-webkit-details-marker) {
-  display: none;
-}
-
-details {
-  margin: 10px 0 20px 0;
-}
-
-summary {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  /* margin-top: 20px; */
-  border: 1px solid #ddd;
-  height: 36px;
-  width: 100%;
-  padding: 0 15px;
-  border-radius: 10px;
-  gap: 10px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.beban_karyawan::before {
-  content: "\f017";
-  font-family: "Font Awesome 7 Free";
-}
-
-.ringkasan::before {
-  content: "\f022";
-  font-family: "Font Awesome 7 Free";
-}
-
-summary::after {
-  content: ">";
-  margin-left: auto;
-  transition: transform 0.2s ease;
-  font-size: 25px;
-}
-
-summary:hover {
-  background-color: #f4f4f4;
-}
-
-:deep(details[open] > summary::after) {
-  transform: rotate(90deg);
-}
-
-.ringkasan_task .jud {
-  margin-top: 20px;
-}
-
-.task_detail {
-  margin-top: 10px;
-  border: 1px solid rgb(219, 214, 246);
-  border-radius: 10px;
-}
-
-.detail_task,
-.detail_bug {
+.detail_task {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1935,122 +1052,262 @@ summary:hover {
   color: #fff;
 }
 
-.detail_bug {
-  border: 1px solid #bdbdbd;
-}
-
-.detail_bug:hover {
-  background-color: #e6e6e6;
-}
-
 .detail_task:hover {
   background-color: rgb(7, 7, 183);
 }
+</style>
 
-/* ========================================================= */
-/*                       RESPONSIVE                          */
-/* ========================================================= */
+<!-- Detail Page -->
+<style scoped>
+.isi .header-detail {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+  width: 100%;
+}
 
-/* ----------- 1024px (Tablet Landscape) ----------- */
-@media (max-width: 1024px) {
-  .konten .sidebar .sidebar_text {
-    gap: 9px;
+.header-detail .back-button {
+  display: flex;
+  border: 1px solid rgb(165, 192, 255);
+  align-items: center;
+  gap: 15px;
+  font-size: 13px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background-color: #fff;
+  position: fixed;
+  box-shadow: 2px 2px 8px rgb(170, 170, 170);
+  z-index: 5;
+  cursor: pointer;
+  background-color: #0041c2;
+  color: #fff;
+}
+
+.back-button:hover {
+  background-color: #0037a6;
+}
+
+.container-progres {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+  border-radius: 10px;
+  gap: 20px;
+  width: 100%;
+}
+
+.container-progres .progres-card {
+  flex: 1;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  flex-direction: column;
+  display: flex;
+  gap: 6px;
+}
+
+.progres-card p {
+  font-size: 15px;
+}
+
+.container-progres .complete {
+  background: linear-gradient(145deg, #f7faff, #eef4ff);
+  border: 1px solid rgba(136, 190, 255, 0.25);
+}
+.complete p {
+  color: #2f5bd3;
+}
+
+.container-progres .on-progres {
+  background: linear-gradient(145deg, #fff8f0, #fff1e6);
+  border: 1px solid rgba(255, 170, 100, 0.25);
+}
+.on-progres p {
+  color: #d96b1a;
+}
+
+.container-progres .to-do {
+  background: linear-gradient(145deg, #faf7ff, #f3edff);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+}
+.to-do p {
+  color: #7a4bd1;
+}
+
+.container-progres .cancel {
+  background: linear-gradient(145deg, #fff5f5, #ffecec);
+  border: 1px solid rgba(255, 120, 120, 0.25);
+}
+.cancel p {
+  color: #d14343;
+}
+
+.bug-background {
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* flex-direction: column; */
+  flex-wrap: wrap;
+  gap: 100px;
+  z-index: 1005;
+  pointer-events: all;
+  width: 100vw;
+  height: 101vh;
+  overflow-y: scroll;
+
+  backdrop-filter: blur(6px);
+  background: rgba(15, 23, 42, 0.4);
+  animation: fadeIn 0.2s ease-out;
+}
+
+.container {
+  margin: 20px 0;
+
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+  animation: scaleIn 0.2s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.96);
+    opacity: 0;
   }
-
-  .konten .sidebar .sidebar_text a {
-    font-size: 200px;
-  }
-
-  .konten.sidebar .sidebar_text i {
-    font-size: 15px;
-  }
-
-  .isi .keterangan_kerja {
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .keterangan_kerja .total_karyawan,
-  .overload,
-  .normal,
-  .underload,
-  .average {
-    width: 32%;
-  }
-
-  .back_button {
-    margin-top: 30px;
-  }
-
-  .container-progres {
-    flex-wrap: wrap;
-  }
-
-  .tanggal input {
-    position: relative;
-    /* width:; */
+  to {
+    transform: scale(1);
+    opacity: 1;
   }
 }
 
-/* ----------- 768px (Tablet / Small Laptop) ----------- */
+.container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+  font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.card-header .card-title {
+  color: var(--font-color);
+  font-weight: 700;
+}
+
+.card-header .card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
 @media (max-width: 768px) {
-  .isi .keterangan_kerja {
-    flex-wrap: wrap;
-  }
-
-  .keterangan_kerja .total_karyawan,
-  .overload,
-  .normal,
-  .underload,
-  .average {
-    width: 48%;
-  }
-
-  .content {
-    font-size: 14px;
-  }
-
-  .style_sortir {
-    width: 100%;
+  .task-header {
+    flex-direction: column;
+    align-items: baseline;
+    gap: 8px;
   }
 }
 
-/* ----------- 576px (Mobile) ----------- */
+.card-meta .card-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 5px;
+  border-radius: 7px;
+  text-wrap: nowrap;
+}
+
+.card-meta .project,
+.card-meta .bug {
+  border: 1px solid var(--border_color);
+  color: var(--font-color);
+  cursor: default;
+}
+
+.card-description {
+  margin: 5px 0 10px 0;
+  font-weight: 400;
+  font-size: small;
+  color: var(--text-muted);
+
+  white-space: pre-line;
+}
+
+.card-performance {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.not_special {
+  background-color: #f5f5f5;
+}
+
+.card-performance .performance-item p {
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.card-performance .performance-item h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #010101;
+  margin: 0;
+  padding: 0;
+}
+
+.penghargaan .label {
+  margin-top: 10px;
+}
+
+.card-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 14px;
+  font-weight: 400;
+  margin: 10px 0;
+  flex-wrap: wrap;
+
+  font-size: 13px;
+  color: #64748b;
+}
+
+.card-info i {
+  font-size: 16px;
+  color: #94a3b8;
+}
+
+.card-info .info-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  text-wrap: nowrap;
+  font-size: 13.5px;
+  font-weight: 400;
+}
+
 @media (max-width: 576px) {
-  .konten .background .sidebar_responsive {
-    width: 59%;
-  }
-  .isi .keterangan_kerja {
-    /* flex-direction: column; */
-    flex-wrap: wrap;
-    width: 100%;
-  }
-
-  .keterangan_kerja .total_karyawan,
-  .overload,
-  .normal,
-  .underload,
-  .average,
-  .upcoming {
-    width: 48%;
-  }
-
-  .card_profile .card_left {
-    width: 100%;
-  }
-
-  .kinerja-karyawan {
-    width: 100%;
-  }
-}
-
-/* ----------- 430px (Small Mobile) ----------- */
-@media (max-width: 430px) {
-  /* .profil-karyawan img {
-    width: 50px;
-  } */
-  .konten .background .sidebar_responsive {
-    width: 60%;
+  .card-info {
+    flex-direction: column;
+    gap: 10px;
+    align-items: baseline;
   }
 }
 </style>
@@ -2064,6 +1321,115 @@ summary:hover {
 
 .photo-option {
   font-size: 25px;
+}
+</style>
+
+<!-- Conditioning Color -->
+<style scoped>
+.late {
+  background-color: rgb(255, 200, 200);
+  border: 1px solid rgb(255, 100, 100);
+  border-radius: 7px;
+}
+
+.late .penghargaan p {
+  color: rgb(200, 0, 0);
+}
+
+.ontime {
+  background-color: rgb(200, 255, 200);
+  border: 1px solid rgb(100, 255, 100);
+  border-radius: 7px;
+}
+
+.ontime .penghargaan p {
+  color: rgb(0, 100, 0);
+}
+
+.early {
+  background-color: rgb(200, 255, 200);
+  border: 1px solid rgb(100, 255, 100);
+  border-radius: 7px;
+}
+
+.early .penghargaan p {
+  color: rgb(0, 100, 0);
+}
+
+.task_inProgres h4 {
+  color: var(--font-color);
+}
+
+.taskTodo h4 {
+  color: orange;
+}
+
+.task_review .task h4 {
+  color: rgb(0, 255, 221);
+}
+
+.achiv_overload {
+  background-color: red;
+  border: 1px solid rgb(253, 199, 199);
+}
+
+.achiv_normal {
+  background-color: green;
+  border: 1px solid rgb(124, 255, 124);
+}
+.achiv_underload {
+  background-color: orange;
+  border: 1px solid rgb(251, 251, 45);
+}
+
+.taskCompleted {
+  background-color: rgb(216, 255, 216);
+  border: 1px solid rgb(115, 255, 115);
+  color: green;
+}
+
+.taskInprogres {
+  background-color: #fdff8b;
+  border: 1px solid #ffff47;
+}
+
+.taskTodo {
+  background-color: #b3b7bd;
+  border: 1px solid rgb(176, 176, 255);
+}
+
+.taskInReview {
+  background-color: #14b8a6;
+  border: 1px solid rgb(176, 176, 255);
+}
+
+.taskCancelled {
+  background-color: #ffb3b3;
+  border: 1px solid #ff4d4d;
+  color: #800000;
+}
+
+.urgent {
+  background-color: rgb(255, 219, 219);
+  border: 1px solid rgb(255, 137, 137);
+  color: red;
+}
+
+.high {
+  background-color: rgb(255, 255, 219);
+  border: 1px solid rgb(255, 255, 95);
+  color: rgb(220, 114, 0);
+}
+
+.minimum {
+  background-color: rgb(221, 221, 255);
+  border: 1px solid rgb(163, 163, 255);
+  color: blue;
+}
+
+.low {
+  background-color: #f5f5f5;
+  border: 1px solid #dbdbdb;
 }
 </style>
 
@@ -2119,7 +1485,7 @@ export default {
       this.openCuti = this.openCuti === id ? null : id;
 
       this.$nextTick(() => {
-        const dropdown = document.querySelector(".dropdown_cuti");
+        const dropdown = document.querySelector(".dropdown-cuti");
         if (!dropdown) return;
 
         const rect = dropdown.getBoundingClientRect();
@@ -2222,44 +1588,6 @@ export default {
       }
     },
 
-    async syncData() {
-      // Prevent Spam Klik
-      if (this.loading) return;
-
-      console.log("Sync data di proses");
-
-      this.loading = true;
-      this.sukses = false;
-
-      try {
-        const sync = await this.$api.post("/api/v1/sync/all");
-        // this.daftarKaryawan = sync.data;
-        console.log("Berhasil: ", sync);
-        // alert("Berhasil");
-        this.loading = false;
-
-        // Sukses
-        this.sukses = true;
-
-        // Hidden animasi
-        setTimeout(() => {
-          this.sukses = false;
-        }, 15000);
-      } catch (error) {
-        console.error("Sync tidak berfungsi:", error);
-        this.loading = false;
-        setTimeout(() => {
-          alert("Sync data gagal");
-        }, 500);
-
-        console.log("STATUS:", error.response?.status);
-        console.log("DATA:", error.response?.data);
-        console.log("MESSAGE:", error.message);
-      } finally {
-        this.sukses = true;
-        this.loading = false;
-      }
-    },
     menu() {
       this.sidebar = true;
     },
@@ -2391,18 +1719,18 @@ export default {
     },
     workloadClass(workload) {
       return {
-        overload_task: workload === "Overload",
-        underload_task: workload === "Underload",
-        normal_task: workload === "Normal",
+        overloadTask: workload === "Overload",
+        underloadTask: workload === "Underload",
+        normalTask: workload === "Normal",
       };
     },
     statusTaskClass(status) {
       return {
-        task_todo: status === "to do" || status === "backlog",
-        task_selesai: status === "done dev" || status === "completed",
-        task_inProgress: status === "in progress",
-        task_inReview: status === "in review",
-        task_cancelled: status === "cancelled",
+        taskTodo: status === "to do" || status === "backlog",
+        taskCompleted: status === "done dev" || status === "completed",
+        taskInprogres: status === "in progress",
+        taskInReview: status === "in review",
+        taskCancelled: status === "cancelled",
       };
     },
     handleCardClick(k) {

@@ -286,7 +286,9 @@ export default {
         const save = await this.$api.put("/api/v1/settings/bug", payload);
 
         // ambil message dari API
-        this.succesMessages = save.data.message;
+        this.succesMessages = save.data.api_message;
+
+        // this.succesMessages = "Perubahan berhasil disimpan";
 
         // trigger sukses
         this.isSukses = true;
