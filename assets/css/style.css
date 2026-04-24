@@ -43,6 +43,7 @@ body {
   gap: 10px;
   height: 100vh;
   background-color: #fff;
+  overflow: hidden;
 }
 
 .konten .sidebar {

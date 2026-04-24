@@ -190,6 +190,9 @@
               <h4>{{ k.username }}</h4>
               <p>{{ k.role }}</p>
             </div>
+          </div>
+
+          <div class="status-activity">
             <div class="cuti-wraper" v-if="k.total_cuti !== 0">
               <div class="total-cuti" @click="toggleCuti(k.clickup_id)">
                 <svg
@@ -223,7 +226,7 @@
               </div>
 
               <div
-                class="dropdowncuti"
+                class="dropdown_cuti"
                 v-if="openCuti === k.clickup_id && k.cuti_summary"
               >
                 <!-- Summary -->
@@ -244,34 +247,33 @@
                 </div>
               </div>
             </div>
-          </div>
-
-          <div class="status-karyawan">
-            <div class="box" :class="availableClass(k.availability_status)">
-              <i class="fa-solid fa-circle"></i>
-              <p>{{ k.availability_status }}</p>
-            </div>
-            <div class="box" :class="workloadClass(k.workload_status)">
-              <i
-                class="fa-solid fa-arrow-trend-up"
-                v-if="k.workload_status === 'Overload'"
-              ></i>
-              <i
-                class="fa-solid fa-minus"
-                v-if="k.workload_status === 'Normal'"
-              ></i>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="16px"
-                viewBox="0 -960 960 960"
-                width="16px"
-                v-if="k.workload_status === 'Underload'"
-              >
-                <path
-                  d="M640-240v-80h104L536-526 376-366 80-664l56-56 240 240 160-160 264 264v-104h80v240H640Z"
-                />
-              </svg>
-              <p>{{ k.workload_status }}</p>
+            <div class="status-karyawan">
+              <div class="box" :class="availableClass(k.availability_status)">
+                <i class="fa-solid fa-circle"></i>
+                <p>{{ k.availability_status }}</p>
+              </div>
+              <div class="box" :class="workloadClass(k.workload_status)">
+                <i
+                  class="fa-solid fa-arrow-trend-up"
+                  v-if="k.workload_status === 'Overload'"
+                ></i>
+                <i
+                  class="fa-solid fa-minus"
+                  v-if="k.workload_status === 'Normal'"
+                ></i>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="16px"
+                  viewBox="0 -960 960 960"
+                  width="16px"
+                  v-if="k.workload_status === 'Underload'"
+                >
+                  <path
+                    d="M640-240v-80h104L536-526 376-366 80-664l56-56 240 240 160-160 264 264v-104h80v240H640Z"
+                  />
+                </svg>
+                <p>{{ k.workload_status }}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -727,7 +729,6 @@
   </div>
 </template>
 
-<!-- Main Page -->
 <style scoped>
 .holiday {
   background-color: #fff;
@@ -770,7 +771,68 @@
 .flexGrow {
   flex: 1 200px;
 }
+</style>
 
+<!-- Style Container Progress -->
+<style scoped>
+.container-progres {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+  border-radius: 10px;
+  gap: 20px;
+  width: 100%;
+}
+
+.container-progres .progres-card {
+  flex: 1;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  flex-direction: column;
+  display: flex;
+  gap: 6px;
+}
+
+.progres-card p {
+  font-size: 15px;
+}
+
+.container-progres .complete {
+  background: linear-gradient(145deg, #f7faff, #eef4ff);
+  border: 1px solid rgba(136, 190, 255, 0.25);
+}
+.complete p {
+  color: #2f5bd3;
+}
+
+.container-progres .on-progres {
+  background: linear-gradient(145deg, #fff8f0, #fff1e6);
+  border: 1px solid rgba(255, 170, 100, 0.25);
+}
+.on-progres p {
+  color: #d96b1a;
+}
+
+.container-progres .to-do {
+  background: linear-gradient(145deg, #faf7ff, #f3edff);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+}
+.to-do p {
+  color: #7a4bd1;
+}
+
+.container-progres .cancel {
+  background: linear-gradient(145deg, #fff5f5, #ffecec);
+  border: 1px solid rgba(255, 120, 120, 0.25);
+}
+.cancel p {
+  color: #d14343;
+}
+</style>
+
+<style scoped>
 .not_found {
   margin-top: 50px;
   width: 100%;
@@ -827,10 +889,11 @@
 }
 
 .profil .user-summary {
-  flex: 4;
+  flex: 4 430px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
 
   gap: 9px;
 }
@@ -841,9 +904,17 @@
   gap: 8px;
 }
 
-.profil-karyawan .cuti-wraper {
+.user-summary .status-activity {
+  display: flex;
+  align-items: center;
+
+  flex: 1;
+}
+
+.status-activity .cuti-wraper {
   position: relative;
   /* border: 1px solid #dbdbdb; */
+  text-align: left;
 }
 
 .cuti-wraper .total-cuti {
@@ -852,7 +923,6 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  margin-left: 0px;
   position: relative;
   top: -11px;
 
@@ -880,7 +950,7 @@
   transform: rotate(180deg);
 }
 
-.dropdown-cuti {
+.dropdown_cuti {
   font-size: 13px;
 
   position: absolute;
@@ -900,7 +970,7 @@
   animation: fadeIn 0.2s ease;
 }
 
-.dropdown-cuti .title {
+.dropdown_cuti .title {
   font-weight: 600;
   margin-bottom: 6px;
 }
@@ -921,6 +991,10 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
+
+  /* flex: 1; */
+  width: 100px;
+  margin-left: auto;
 }
 
 .status-karyawan .box {
@@ -949,6 +1023,24 @@
   color: red;
 }
 
+@media (max-width: 576px) {
+  .user-summary .status-activity {
+    flex-direction: column;
+    align-items: end;
+  }
+
+  .user-summary .status-karyawan {
+    margin-left: 0;
+  }
+
+  .profil-karyawan .about h4 {
+    max-width: 125px; /* sesuaikan */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
 .profil .performance {
   flex: 1;
   display: flex;
@@ -962,14 +1054,32 @@
   font-size: 30px;
 }
 
-.overloadTask {
+.overload_task,
+.underload_task,
+.normal_task {
+  display: flex;
+  /* background-color: #f5f5f5; */
+  /* background-color: #010101; */
+  /* border: 1px solid #dbdbdb; */
+  /* color: #fff; */
+  font-weight: 600;
+  font-size: 12px;
+  padding: 2px 10px;
+  border-radius: 6px;
+  /* margin: 0 15 %; */
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.overload_task {
   position: relative;
   background: #fff;
   z-index: 0;
   border: 5px solid #c0b838;
 }
 
-.overloadTask::before {
+.overload_task::before {
   content: "";
   position: absolute;
   inset: -2px; /* ketebalan border */
@@ -987,20 +1097,57 @@
   z-index: -1;
 }
 
-.underloadTask {
+.underload_task {
   background-color: rgb(255, 237, 237);
   border: 1px solid rgb(255, 204, 204);
   color: rgb(203, 0, 0);
 }
 
-.underloadTask svg {
+.underload_task svg {
   fill: rgb(203, 0, 0);
 }
 
-.normalTask {
+.normal_task {
+  /* background-color: #f5f5f5;
+  border: 1px solid #dbdbdb;
+  color: #010101; */
   background-color: rgb(212, 255, 212);
   border: 1px solid rgb(154, 255, 154);
   color: green;
+}
+
+.status_karyawan .keterangan_status {
+  /* color: rgb(255, 217, 4); */
+  font-weight: 500;
+  margin-top: 5px;
+  font-size: 15px;
+}
+
+.performa_karyawan {
+  border-radius: 6px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 2;
+  margin-left: auto;
+}
+
+.performa_karyawan i {
+  font-size: 25px;
+}
+
+.performa_karyawan .text {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 5px;
+  font-size: 16px;
+}
+
+.text span {
+  font-weight: 500;
+  font-size: 18px;
 }
 
 .container-summary {
@@ -1035,7 +1182,114 @@
   color: #333333;
 }
 
-.detail_task {
+.detail_task,
+.detail_bug {
+  position: relative;
+  cursor: pointer;
+}
+
+.content {
+  /* border: var(--borderCard); */
+  /* border-radius: 10px; */
+  padding: 15px;
+  font-weight: 300;
+  font-size: 15px;
+}
+
+.content .ket {
+  margin: 10px 0;
+}
+
+.name_task {
+  display: flex;
+  justify-content: space-between;
+
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.name_task .progres-level {
+  display: flex;
+  /* border: 1px solid #010101; */
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.content .time {
+  display: flex;
+  gap: 16px;
+}
+
+.time .project {
+  border: 1px solid rgb(163, 224, 255);
+  font-size: 12px;
+  padding: 3px 7px;
+  border-radius: 6px;
+  font-weight: 400;
+}
+
+:deep(details summary::marker),
+:deep(details summary::-webkit-details-marker) {
+  display: none;
+}
+
+details {
+  margin: 10px 0 20px 0;
+}
+
+summary {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  /* margin-top: 20px; */
+  border: 1px solid #ddd;
+  height: 36px;
+  width: 100%;
+  padding: 0 15px;
+  border-radius: 10px;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.beban_karyawan::before {
+  content: "\f017";
+  font-family: "Font Awesome 7 Free";
+}
+
+.ringkasan::before {
+  content: "\f022";
+  font-family: "Font Awesome 7 Free";
+}
+
+summary::after {
+  content: ">";
+  margin-left: auto;
+  transition: transform 0.2s ease;
+  font-size: 25px;
+}
+
+summary:hover {
+  background-color: #f4f4f4;
+}
+
+:deep(details[open] > summary::after) {
+  transform: rotate(90deg);
+}
+
+.ringkasan_task .jud {
+  margin-top: 20px;
+}
+
+.task_detail {
+  margin-top: 10px;
+  border: 1px solid rgb(219, 214, 246);
+  border-radius: 10px;
+}
+
+.detail_task,
+.detail_bug {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1052,8 +1306,135 @@
   color: #fff;
 }
 
+.detail_bug {
+  border: 1px solid #bdbdbd;
+}
+
+.detail_bug:hover {
+  background-color: #e6e6e6;
+}
+
 .detail_task:hover {
   background-color: rgb(7, 7, 183);
+}
+
+/* ========================================================= */
+/*                       RESPONSIVE                          */
+/* ========================================================= */
+
+/* ----------- 1024px (Tablet Landscape) ----------- */
+@media (max-width: 1024px) {
+  .konten .sidebar .sidebar_text {
+    gap: 9px;
+  }
+
+  .konten .sidebar .sidebar_text a {
+    font-size: 200px;
+  }
+
+  .konten.sidebar .sidebar_text i {
+    font-size: 15px;
+  }
+
+  .isi .keterangan_kerja {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .keterangan_kerja .total_karyawan,
+  .overload,
+  .normal,
+  .underload,
+  .average {
+    width: 32%;
+  }
+
+  .back_button {
+    margin-top: 30px;
+  }
+
+  .container-progres {
+    flex-wrap: wrap;
+  }
+
+  .tanggal input {
+    position: relative;
+    /* width:; */
+  }
+}
+
+/* ----------- 768px (Tablet / Small Laptop) ----------- */
+@media (max-width: 768px) {
+  .isi .keterangan_kerja {
+    flex-wrap: wrap;
+  }
+
+  .keterangan_kerja .total_karyawan,
+  .overload,
+  .normal,
+  .underload,
+  .average {
+    width: 48%;
+  }
+
+  .content {
+    font-size: 14px;
+  }
+
+  .style_sortir {
+    width: 100%;
+  }
+}
+
+/* ----------- 576px (Mobile) ----------- */
+@media (max-width: 576px) {
+  .konten .background .sidebar_responsive {
+    width: 59%;
+  }
+  .isi .keterangan_kerja {
+    /* flex-direction: column; */
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .keterangan_kerja .total_karyawan,
+  .overload,
+  .normal,
+  .underload,
+  .average,
+  .upcoming {
+    width: 48%;
+  }
+
+  .card_profile .card_left {
+    width: 100%;
+  }
+
+  .kinerja-karyawan {
+    width: 100%;
+  }
+}
+
+/* ----------- 430px (Small Mobile) ----------- */
+@media (max-width: 430px) {
+  /* .profil-karyawan img {
+    width: 50px;
+  } */
+  .konten .background .sidebar_responsive {
+    width: 60%;
+  }
+}
+</style>
+
+<!-- Foto Profil -->
+<style scoped>
+.photo-wrapper {
+  width: 80px;
+  height: 80px;
+}
+
+.photo-option {
+  font-size: 25px;
 }
 </style>
 
@@ -1086,62 +1467,6 @@
 
 .back-button:hover {
   background-color: #0037a6;
-}
-
-.container-progres {
-  display: flex;
-  justify-content: space-between;
-  margin: 20px 0;
-  border-radius: 10px;
-  gap: 20px;
-  width: 100%;
-}
-
-.container-progres .progres-card {
-  flex: 1;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  flex-direction: column;
-  display: flex;
-  gap: 6px;
-}
-
-.progres-card p {
-  font-size: 15px;
-}
-
-.container-progres .complete {
-  background: linear-gradient(145deg, #f7faff, #eef4ff);
-  border: 1px solid rgba(136, 190, 255, 0.25);
-}
-.complete p {
-  color: #2f5bd3;
-}
-
-.container-progres .on-progres {
-  background: linear-gradient(145deg, #fff8f0, #fff1e6);
-  border: 1px solid rgba(255, 170, 100, 0.25);
-}
-.on-progres p {
-  color: #d96b1a;
-}
-
-.container-progres .to-do {
-  background: linear-gradient(145deg, #faf7ff, #f3edff);
-  border: 1px solid rgba(168, 85, 247, 0.25);
-}
-.to-do p {
-  color: #7a4bd1;
-}
-
-.container-progres .cancel {
-  background: linear-gradient(145deg, #fff5f5, #ffecec);
-  border: 1px solid rgba(255, 120, 120, 0.25);
-}
-.cancel p {
-  color: #d14343;
 }
 
 .bug-background {
@@ -1312,18 +1637,6 @@
 }
 </style>
 
-<!-- Foto Profil -->
-<style scoped>
-.photo-wrapper {
-  width: 80px;
-  height: 80px;
-}
-
-.photo-option {
-  font-size: 25px;
-}
-</style>
-
 <!-- Conditioning Color -->
 <style scoped>
 .late {
@@ -1360,7 +1673,7 @@
   color: var(--font-color);
 }
 
-.taskTodo h4 {
+.task_todo h4 {
   color: orange;
 }
 
@@ -1382,28 +1695,28 @@
   border: 1px solid rgb(251, 251, 45);
 }
 
-.taskCompleted {
+.task_selesai {
   background-color: rgb(216, 255, 216);
   border: 1px solid rgb(115, 255, 115);
   color: green;
 }
 
-.taskInprogres {
+.task_inProgress {
   background-color: #fdff8b;
   border: 1px solid #ffff47;
 }
 
-.taskTodo {
+.task_todo {
   background-color: #b3b7bd;
   border: 1px solid rgb(176, 176, 255);
 }
 
-.taskInReview {
+.task_inReview {
   background-color: #14b8a6;
   border: 1px solid rgb(176, 176, 255);
 }
 
-.taskCancelled {
+.task_cancelled {
   background-color: #ffb3b3;
   border: 1px solid #ff4d4d;
   color: #800000;
@@ -1485,7 +1798,7 @@ export default {
       this.openCuti = this.openCuti === id ? null : id;
 
       this.$nextTick(() => {
-        const dropdown = document.querySelector(".dropdown-cuti");
+        const dropdown = document.querySelector(".dropdown_cuti");
         if (!dropdown) return;
 
         const rect = dropdown.getBoundingClientRect();
@@ -1588,6 +1901,44 @@ export default {
       }
     },
 
+    async syncData() {
+      // Prevent Spam Klik
+      if (this.loading) return;
+
+      console.log("Sync data di proses");
+
+      this.loading = true;
+      this.sukses = false;
+
+      try {
+        const sync = await this.$api.post("/api/v1/sync/all");
+        // this.daftarKaryawan = sync.data;
+        console.log("Berhasil: ", sync);
+        // alert("Berhasil");
+        this.loading = false;
+
+        // Sukses
+        this.sukses = true;
+
+        // Hidden animasi
+        setTimeout(() => {
+          this.sukses = false;
+        }, 15000);
+      } catch (error) {
+        console.error("Sync tidak berfungsi:", error);
+        this.loading = false;
+        setTimeout(() => {
+          alert("Sync data gagal");
+        }, 500);
+
+        console.log("STATUS:", error.response?.status);
+        console.log("DATA:", error.response?.data);
+        console.log("MESSAGE:", error.message);
+      } finally {
+        this.sukses = true;
+        this.loading = false;
+      }
+    },
     menu() {
       this.sidebar = true;
     },
@@ -1719,18 +2070,18 @@ export default {
     },
     workloadClass(workload) {
       return {
-        overloadTask: workload === "Overload",
-        underloadTask: workload === "Underload",
-        normalTask: workload === "Normal",
+        overload_task: workload === "Overload",
+        underload_task: workload === "Underload",
+        normal_task: workload === "Normal",
       };
     },
     statusTaskClass(status) {
       return {
-        taskTodo: status === "to do" || status === "backlog",
-        taskCompleted: status === "done dev" || status === "completed",
-        taskInprogres: status === "in progress",
-        taskInReview: status === "in review",
-        taskCancelled: status === "cancelled",
+        task_todo: status === "to do" || status === "backlog",
+        task_selesai: status === "done dev" || status === "completed",
+        task_inProgress: status === "in progress",
+        task_inReview: status === "in review",
+        task_cancelled: status === "cancelled",
       };
     },
     handleCardClick(k) {

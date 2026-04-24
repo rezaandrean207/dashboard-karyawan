@@ -7,12 +7,9 @@
   </div>
 
   <!-- daftar karyawan -->
-  <div class="isi" :class="{ viewApp: isAppView }">
+  <div class="isi">
     <h2>Grouping</h2>
-    <!-- <p>
-      Karyawan dengan performa rendah (< {{ searchInput }}%) berdasarkan
-      kategori
-    </p> -->
+
     <p>Karyawan dengan performa rendah (< 85%) berdasarkan kategori</p>
     <div class="filter">
       <div class="title">
@@ -58,12 +55,6 @@
               ]"
             ></n-select>
           </ClientOnly>
-          <!-- <div class="kurang-lebih">
-            <select name="" id="" v-model="kurangLebih">
-              <option value="kurangDari">Kurang Dari</option>
-              <option value="lebihDari">Lebih Dari</option>
-            </select>
-          </div> -->
         </div>
         <div class="filter-item">
           <label for="">Set default</label>
@@ -74,35 +65,32 @@
               placeholder="Masukkan nilai default"
             ></n-input>
           </ClientOnly>
-          <!-- <div class="search">
-            <input type="number" v-model="searchInput" />
-          </div> -->
         </div>
       </div>
     </div>
 
-    <div class="container-kategory">
+    <div class="section-wraper">
       <div
-        class="kategory"
+        class="container-wraper"
         v-for="(kategori, index) in filteredKaryawan"
         :key="kategori.category"
       >
-        <div class="header-kategory">
+        <div class="header">
           <h4>{{ kategori.category }}</h4>
           <p>{{ kategori.data.length }} Karyawan</p>
         </div>
-        <div class="container-karyawan">
+        <div class="container">
           <div
-            class="group-karyawan"
+            class="container-card left"
             v-for="(k, index) in kategori.data"
             :key="k.clickup_id"
             @click="cekDetail(k.clickup_id)"
           >
-            <div class="left">
-              <div class="index">
+            <div class="card-summary">
+              <div class="card-item index">
                 <p>{{ index + 1 }}</p>
               </div>
-              <div class="profil-karyawan">
+              <div class="card-item profil-karyawan">
                 <div class="photo-wrapper" @click.stop>
                   <img
                     v-if="!k.imageError"
@@ -118,18 +106,6 @@
                   >
                     <p>{{ setInitial(k.name) }}</p>
                   </div>
-
-                  <!-- <div class="camera-overlay" @click.stop="triggerFileInput(k)">
-                    <i class="fa-solid fa-camera"></i>
-                  </div>
-
-                  <input
-                    type="file"
-                    accept="image/*"
-                    :ref="'fileInput-' + k.clickup_id"
-                    class="hidden-file"
-                    @change="handlePhotoChange($event, k)"
-                  /> -->
                 </div>
                 <div class="name-role">
                   <h4>{{ k.name }}</h4>
@@ -137,7 +113,7 @@
                 </div>
               </div>
             </div>
-            <div class="right">
+            <div class="card-summary right">
               <h4 :class="teksColorClass(k.value)" v-if="k.missing_hours">
                 {{ k.value }}% <span>({{ k.missing_hours }} Jam)</span>
               </h4>
@@ -151,50 +127,15 @@
   </div>
 </template>
 
-<!-- Style Filter Sortir -->
+<!-- Foto Profil -->
 <style scoped>
-.style_sortir label,
-.style_progres label,
-.sortir_style label,
-.filter_task label {
-  padding-left: 2px;
-  text-wrap: nowrap;
-  font-size: 14px;
-  font-weight: 500;
+.photo-wrapper {
+  width: 40px;
+  height: 40px;
 }
 
-.sortir_ketepatan {
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='currentColor' stroke-width='32' viewBox='0 0 512 512'%3E%3Ccircle cx='256' cy='256' r='200'/%3E%3Cpath d='M160 270l56 56 136-136'/%3E%3C/svg%3E")
-    no-repeat 10px center;
-  background-size: 14px;
-}
-
-.sortir_performa,
-.sortir_beban,
-.sortir_ketepatan,
-.select_task,
-.task_style {
-  border: var(--borderCard);
-  font-size: 14px;
-  padding: 8px 8px 8px 35px;
-  border-radius: 6px;
-  /* margin-top: 20px; */
-  display: block;
-  width: 100%;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.filter_task {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.sortir_style,
-.style_progres,
-.filter_bug {
-  width: 300px;
+.photo-option {
+  font-size: 18px;
 }
 </style>
 
@@ -203,7 +144,7 @@
   -webkit-font-smoothing: antialiased;
 }
 
-.container-kategory {
+.section-wraper {
   margin-top: 24px;
   width: 100%;
   display: flex;
@@ -211,7 +152,7 @@
   gap: 24px;
 }
 
-.kategory {
+.container-wraper {
   background: #ffffff;
   padding: 20px 24px;
   border-radius: 16px;
@@ -219,33 +160,34 @@
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
 }
 
-.header-kategory {
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.header-kategory h4 {
+.header h4 {
   font-size: 18px;
   font-weight: 600;
 }
 
-.header-kategory p {
+.header p {
   font-size: 14px;
   color: #6b7280;
 }
 
-.container-karyawan {
+.container {
   margin-top: 20px;
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.group-karyawan {
+.container-card {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   background: #f9fafb;
   padding: 16px 18px;
   border-radius: 14px;
@@ -253,58 +195,65 @@
   transition: all 0.2s ease;
 }
 
-.group-karyawan:hover {
+.container-card:hover {
   background: #ffffff;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   transform: translateY(-1px);
 }
 
-.group-karyawan .left {
+.container-card .card-summary {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
+
+  /* flex: 1; */
 }
 
-.left .index {
+.container-card .left {
+  flex: 1;
+  min-width: 0; /* WAJIB di mobile */
+}
+
+.card-summary .index {
   background: linear-gradient(135deg, #6366f1, #4338ca);
-  width: 36px;
-  height: 36px;
+  width: 25px;
+  height: 25px;
   color: #fff;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
 }
 
-.left .profil-karyawan {
+.card-summary .card-item {
   display: flex;
   align-items: center;
   gap: 12px;
   text-transform: capitalize;
 }
 
-.profil-karyawan img {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #e5e7eb;
-}
-
-.name-role h4 {
+.card-item .name-role h4 {
   font-size: 15px;
   font-weight: 600;
 }
 
-.name-role p {
-  font-size: 13px;
+.card-item .name-role p {
+  font-size: 12px;
   color: #6b7280;
+  /* text-wrap: nowrap; */
 }
 
-.group-karyawan .right {
+.container-card .right {
+  flex-direction: column;
+  /* border: 1px solid; */
+  align-items: end;
+  gap: 2px;
+
+  margin-left: auto;
   text-align: right;
+  flex-shrink: 0; /* biar ga gepeng */
 }
 
 .right h4 {
@@ -321,91 +270,24 @@
 .right p {
   font-size: 13px;
   color: #9ca3af;
+  text-wrap: wrap;
+  text-align: right;
 }
 
-.search-tanggal {
-  display: flex;
-  margin-top: 20px;
-  gap: 20px;
-  /* border: 1px solid #010101; */
-  flex-wrap: wrap;
-}
-
-.dates {
-  /* width: 35%; */
-  flex: 1;
-  min-width: 300px;
-}
-
-.kurang-lebih-dari,
-.search-input {
-  /* width: 25%; */
-  flex: 1;
-  min-width: 250px;
-}
-
-.search-input label,
-.kurang-lebih-dari label {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.search,
-.kurang-lebih {
-  /* background-color: #ddd; */
-  border: 1px solid #ddd;
-  /* padding: 10px; */
-  border-radius: 10px;
-  /* width: 30%; */
-}
-
-.search input,
-.kurang-lebih select {
-  border: 1px solid #ddd;
-  width: 100%;
-  height: 100%;
-  border-radius: 5px;
-  padding: 10px;
-}
-</style>
-
-<!-- Responsive -->
-<style scoped>
+/* Responsive tipis - tipis */
 @media (max-width: 576px) {
   .right h4 {
     display: flex;
     flex-direction: column;
   }
+}
 
-  .card_karyawan {
-    font-size: 14px;
-    flex-wrap: wrap;
-  }
-
-  .card_karyawan .card_profile {
-    width: 75%;
-  }
-
-  .header_container {
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .keterangan_waktu {
-    display: flex;
-    flex-direction: column; /* ⬅️ lebih tepat daripada wrap */
-    gap: 6px; /* ⬅️ jarak antar baris */
-    align-items: flex-start;
-  }
-
-  .keterangan_waktu .jam,
-  .keterangan_waktu .start_date,
-  .keterangan_waktu .deadline,
-  .keterangan_waktu .done_date,
-  .keterangan_waktu .created_by {
-    margin: 0;
-    width: 100%;
-    line-height: 0;
+@media (max-width: 480px) {
+  .name-role h4 {
+    max-width: 80px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 </style>
@@ -455,469 +337,6 @@
 
 .early .penghargaan p {
   color: rgb(0, 100, 0);
-}
-</style>
-
-<!-- Container Progress -->
-<style scoped>
-.posisi select,
-.posisi select option {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.container_progres {
-  display: flex;
-  justify-content: space-between;
-  /* margin: 20px; */
-  padding: 10px 0 20px 0;
-  /* background-color: #f5f5f5; */
-  border-radius: 10px;
-  gap: 20px;
-  width: 100%;
-}
-
-.container_selesai,
-.container_onProgres,
-.container_todo,
-.container_cancel {
-  flex: 1;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  flex-direction: column;
-  display: flex;
-  gap: 6px;
-}
-
-.container_selesai p,
-.container_onProgres p,
-.container_todo p,
-.container_cancel p {
-  font-size: 15px;
-}
-
-.container_selesai {
-  background-color: rgb(233, 243, 255);
-  border: 1px solid rgb(136, 190, 255);
-}
-.container_selesai p {
-  color: rgb(16, 50, 130);
-}
-
-.container_onProgres {
-  background-color: rgb(255, 244, 230);
-  border: 1px solid rgb(255, 200, 150);
-}
-.container_onProgres p {
-  color: rgb(218, 58, 0);
-}
-
-.container_todo {
-  background-color: #f3e8ff;
-  border: 1px solid #d8b4fe;
-}
-.container_todo p {
-  color: purple;
-}
-
-.container_cancel {
-  background-color: rgb(255, 224, 224);
-  border: 1px solid rgb(255, 130, 130);
-}
-
-.container_cancel p {
-  color: red;
-}
-</style>
-
-<style scoped>
-.isi .header_task {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-top: 20px;
-  width: 100%;
-}
-
-.header_task .back_button {
-  display: flex;
-  border: 1px solid rgb(165, 192, 255);
-  align-items: center;
-  gap: 15px;
-  font-size: 13px;
-  padding: 5px 10px;
-  border-radius: 8px;
-  background-color: #fff;
-  position: fixed;
-  box-shadow: 2px 2px 8px rgb(170, 170, 170);
-  z-index: 5;
-  /* margin: 10px 0; */
-  cursor: pointer;
-  /* background-color: rgb(16, 50, 130); */
-  background-color: #0041c2;
-  color: #fff;
-}
-
-.back_button:hover {
-  background-color: #0037a6;
-}
-
-.detailTask_karyawan .name_karyawan {
-  font-size: 23px;
-  font-weight: 500;
-  color: rgb(16, 50, 130);
-  margin: 10px 0;
-}
-
-.detailTask_karyawan .periode {
-  font-size: 16px;
-  font-weight: 300;
-}
-
-.card_karyawan {
-  margin: 20px 0;
-  background: var(--bg-card);
-  border-radius: 16px;
-  padding: 20px;
-  border: 1px solid var(--border-soft);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-  transition: all 0.25s ease;
-}
-
-.card_karyawan:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
-}
-
-.card_karyawan .card_profile {
-  flex-wrap: wrap;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-.card_profile .card_left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 70%;
-}
-
-.card_karyawan .card_profile .card_left img {
-  width: 88px;
-  height: 88px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #e0e7ff;
-}
-
-.card_name h3 {
-  font-size: 18px;
-  font-weight: 600;
-  color: #0f172a;
-}
-
-.card_name p {
-  font-size: 14px;
-  color: #64748b;
-}
-
-.card_profile .performa_karyawan {
-  flex: 2;
-}
-
-.card_karyawan .card_task {
-  text-align: end;
-  font-weight: 400;
-}
-
-.isi .container {
-  /* position: relative;
-  top: 20px; */
-  border: 1px solid var(--border_color);
-  /* background-color: var(--border_color); */
-  padding: 20px;
-}
-
-.task h4 {
-  margin: 25px 0 0 0;
-  font-weight: 500;
-  color: green;
-}
-
-.task .container_task {
-  margin: 20px 0;
-
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 16px;
-  border: 1px solid #e5e7eb;
-  transition: all 0.2s ease;
-}
-
-.container_task:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
-}
-
-.header_container {
-  font-size: 16px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.header_container .name_task p {
-  color: var(--font-color);
-  font-weight: 500;
-}
-
-.status_task {
-  display: flex;
-  gap: 10px;
-  font-size: 11px;
-  font-weight: 500;
-}
-
-.status_task .bug {
-  cursor: pointer;
-}
-
-.status_task .task_project,
-.bug {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background-color: #fff;
-  border: 1px solid var(--border_color);
-  border-radius: 7px;
-  padding: 2px 5px;
-  padding-top: 4px;
-  color: var(--font-color);
-}
-
-.status_task .progres_task {
-  border-radius: 7px;
-  padding: 2px 5px;
-  display: flex;
-  align-items: center;
-  text-wrap: nowrap;
-}
-
-.task_priority {
-  padding: 2px 5px;
-  border-radius: 7px;
-  display: flex;
-  align-items: center;
-  text-wrap: nowrap;
-}
-
-.urgent {
-  background-color: rgb(255, 219, 219);
-  border: 1px solid rgb(255, 137, 137);
-  color: red;
-}
-
-.high {
-  background-color: rgb(255, 255, 219);
-  border: 1px solid rgb(255, 255, 95);
-  color: rgb(220, 114, 0);
-}
-
-.minimum {
-  background-color: rgb(221, 221, 255);
-  border: rgb(163, 163, 255);
-  color: blue;
-}
-
-.low {
-  background-color: #f5f5f5;
-  border: 1px solid #dbdbdb;
-}
-
-.description {
-  margin: 10px 0;
-  font-weight: 300;
-}
-
-.achievement {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  /* gap: 10px; */
-  border-radius: 10px;
-  padding: 12px;
-}
-
-.not_special {
-  background-color: #f5f5f5;
-}
-
-.achievement .achievement_logo i {
-  /* color: green; */
-  font-weight: 600;
-}
-
-.achievement .penghargaan p {
-  font-weight: 400;
-  /* color: green; */
-  font-size: 14px;
-}
-
-.achievement .penghargaan h4 {
-  font-size: 16px;
-  font-weight: 600;
-  color: #010101;
-  margin: 0;
-  padding: 0;
-}
-
-.penghargaan .label {
-  margin-top: 10px;
-}
-
-.keterangan_waktu {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  font-size: 14px;
-  font-weight: 400;
-  margin: 10px 0;
-  flex-wrap: wrap;
-
-  font-size: 13px;
-  color: #64748b;
-}
-
-.keterangan_waktu i {
-  font-size: 16px;
-  color: #94a3b8;
-}
-
-.keterangan_waktu .jam,
-.start_date,
-.deadline,
-.done_date,
-.created_by {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  text-wrap: nowrap;
-  font-size: 13.5px;
-  font-weight: 400;
-}
-
-.jenis_data {
-  display: flex;
-  gap: 15px;
-  font-size: 12px;
-}
-
-.jenis_data .form,
-.jenis {
-  padding: 2px 5px;
-  border: 1px solid var(--border_color);
-  border-radius: 7px;
-  color: var(--font-color);
-}
-
-.task_inProgres h4 {
-  color: var(--font-color);
-}
-
-.task_todo h4 {
-  color: orange;
-}
-
-.task_review .task h4 {
-  color: rgb(0, 255, 221);
-}
-
-.select_task,
-.sortir,
-.task_style {
-  border: 1px solid var(--border_color);
-  padding: 8px 8px 8px 30px;
-  font-size: 14px;
-  border-radius: 6px;
-  background-color: #fff;
-}
-
-.select_task {
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' stroke='%2364748b' stroke-width='32' viewBox='0 0 512 512'%3E%3Ccircle cx='256' cy='256' r='160'/%3E%3Cpath d='M256 96v160l96 64'/%3E%3Cpath d='M64 96h384M128 160h256'/%3E%3C/svg%3E")
-    no-repeat 10px center;
-  background-size: 14px;
-  background-color: #fff;
-}
-
-.task_style {
-  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path d='M32%2064C19.1%2064%207.4%2071.8%202.4%2083.8S.2%20109.5%209.4%20118.6L192%20301.3V416c0%208.5%203.4%2016.6%209.4%2022.6l64%2064c9.2%209.2%2022.9%2011.9%2034.9%206.9S320%20492.9%20320%20480V301.3L502.6%20118.6c9.2%209.2%2011.9%2022.9%206.9%2034.9S492.9%2064%20480%2064H32z'/></svg>")
-    no-repeat 12px center;
-  background-size: 14px;
-  background-color: #fff;
-}
-
-.achiv_overload {
-  background-color: red;
-  border: 1px solid rgb(253, 199, 199);
-}
-
-.achiv_normal {
-  background-color: green;
-  border: 1px solid rgb(124, 255, 124);
-}
-.achiv_underload {
-  background-color: orange;
-  border: 1px solid rgb(251, 251, 45);
-}
-
-.task_selesai {
-  background-color: rgb(216, 255, 216);
-  border: 1px solid rgb(115, 255, 115);
-  color: green;
-}
-
-.task_inProgress {
-  /* background-color: rgb(216, 216, 255);
-  border: 1px solid rgb(176, 176, 255); */
-  background-color: #fdff8b;
-  border: 1px solid #ffff47;
-}
-
-.task_todo {
-  background-color: #b3b7bd;
-  border: 1px solid rgb(176, 176, 255);
-}
-
-.task_inReview {
-  background-color: #14b8a6;
-  border: 1px solid rgb(176, 176, 255);
-}
-
-.task_cancelled {
-  background-color: #ffb3b3;
-  border: 1px solid #ff4d4d;
-  color: #800000;
-}
-</style>
-
-<!-- Edit image -->
-<style scoped>
-.photo-wrapper {
-  width: 40px;
-  height: 40px;
-  /* margin: 0 auto; */
-}
-
-.photo-option {
-  font-size: 18px;
 }
 </style>
 
