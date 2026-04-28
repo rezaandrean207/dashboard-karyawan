@@ -58,8 +58,8 @@
               :options="[
                 { label: 'Semua Posisi', value: '' },
                 ...roleOptions.map((role) => ({
-                  label: role.label,
-                  value: role.value,
+                  label: role.charAt(0).toUpperCase() + role.slice(1).toLowerCase(),
+                  value: role,
                 })),
               ]"
             ></n-select>
@@ -1582,6 +1582,15 @@ export default {
     },
   },
   computed: {
+    roleOptions() {
+      return [
+        ...new Set(
+          this.daftarKaryawan
+            .filter((k) => k.role)
+            .map((k) => k.role),
+        ),
+      ];
+    },
     filteredKaryawan() {
       let hasil = this.daftarKaryawan;
 
@@ -1610,17 +1619,17 @@ export default {
     totalKaryawan() {
       return this.filteredKaryawan.length || 0;
     },
-    roleOptions() {
-      return [
-        { value: "pm", label: "Project Manager" },
-        { value: "admin", label: "Admin" },
-        { value: "analis", label: "Data Analys" },
-        { value: "backend", label: "Backend" },
-        { value: "web", label: "Web Developer" },
-        { value: "mobile apps", label: "Mobile Apps" },
-        { value: "UI-UX", label: "UI-UX" },
-      ];
-    },
+    // roleOptions() {
+    //   return [
+    //     { value: "pm", label: "Project Manager" },
+    //     { value: "admin", label: "Admin" },
+    //     { value: "analis", label: "Data Analys" },
+    //     { value: "backend", label: "Backend" },
+    //     { value: "web", label: "Web Developer" },
+    //     { value: "mobile apps", label: "Mobile Apps" },
+    //     { value: "UI-UX", label: "UI-UX" },
+    //   ];
+    // },
   },
   watch: {
     posisi() {
