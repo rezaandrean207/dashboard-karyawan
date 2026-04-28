@@ -1,7 +1,7 @@
 <template>
   <div class="isi">
     <h2>Jadwal Cuti</h2>
-    <p>Kelola jadwal cuti karyawan</p>
+    <p class="subtitle">Kelola jadwal cuti karyawan</p>
 
     <div v-if="isLoading" class="loading">
       <div class="loading_tanggal">

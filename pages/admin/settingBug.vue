@@ -9,7 +9,7 @@
   <div class="success-message" v-if="isSukses">
     <div class="message-content">
       <i class="fa-solid fa-check-circle"></i>
-      <p>{{ succesMessages }}</p>
+      <p>{{ succesMessage }}</p>
     </div>
   </div>
 
@@ -223,17 +223,12 @@ export default {
   data() {
     return {
       penaltyBug: null,
-      //   low: null,
-      //   normal: null,
-      //   high: null,
-      //   urgent: null,
-      //   noBugReward: null,
       angka: null,
       isLoading: false,
       isSukses: false,
       isError: false,
-      errorMessages: "",
-      succesMessages: "",
+      errorMessage: "",
+      succesMessage: "",
       // save: null,
     };
   },

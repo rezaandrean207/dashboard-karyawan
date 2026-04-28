@@ -236,6 +236,41 @@
       </div>
     </div>
 
+    <div class="container-progres" v-if="detailKaryawan">
+      <div class="progres-card complete">
+        <p>Selesai</p>
+        <p>
+          <strong
+            >{{ detailKaryawan?.task_status_summary.completed }} Task</strong
+          >
+        </p>
+      </div>
+      <div class="progres-card on-progres">
+        <p>Sedang Dikerjakan</p>
+        <p>
+          <strong
+            >{{ detailKaryawan?.task_status_summary.in_progress }} Task</strong
+          >
+        </p>
+      </div>
+      <div class="progres-card to-do">
+        <p>Akan Datang</p>
+        <p>
+          <strong
+            >{{ detailKaryawan?.task_status_summary.upcoming }} Task</strong
+          >
+        </p>
+      </div>
+      <div class="progres-card cancel">
+        <p>Dibatalkan</p>
+        <p>
+          <strong
+            >{{ detailKaryawan?.task_status_summary.cancelled }} Task</strong
+          >
+        </p>
+      </div>
+    </div>
+
     <div class="bug-background" v-if="detailBug" @click.self="closeDetailBug()">
       <div class="container">
         <div class="container-header">

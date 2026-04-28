@@ -170,18 +170,6 @@
 
 <!-- Header & table -->
 <style scoped>
-h2 {
-  font-size: 22px;
-  font-weight: 700;
-  color: #0f172a;
-  margin-bottom: 4px;
-}
-
-.subtitle {
-  font-size: 13px;
-  color: #64748b;
-  margin-bottom: 20px;
-}
 
 .card {
   background: #fff;

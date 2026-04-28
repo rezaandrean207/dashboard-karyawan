@@ -156,12 +156,6 @@
   /* max-width: 520px; */
   width: 100%;
 }
-
-.subtitle {
-  color: #64748b;
-  margin-bottom: 24px;
-}
-
 .card {
   background: white;
   padding: 28px;

@@ -15,7 +15,6 @@
 
   <div class="error-message" v-if="isError">
     <div class="message-content">
-     
       <i class="fa-solid fa-circle-xmark"></i>
       <p>{{ errorMessage }}</p>
     </div>
@@ -24,7 +23,9 @@
   <!-- Isi Konten -->
   <div class="isi">
     <h2>Performance Setting</h2>
-    <p>Atur batas performa untuk setiap kategori kinerja karyawan</p>
+    <p class="subtitle">
+      Atur batas performa untuk setiap kategori kinerja karyawan
+    </p>
 
     <form action="" class="submit-wrapper" @submit.prevent="saveSetting">
       <div class="container-wrapper">
@@ -71,18 +72,6 @@
 
 <!-- Konten utama -->
 <style scoped>
-/* .isi h2 {
-  font-size: 22px;
-  font-weight: 700;
-  color: #0f172a;
-}
-
-.isi p {
-  margin-top: 6px;
-  color: #64748b;
-  font-size: 14px;
-} */
-
 .container-wrapper {
   margin-top: 20px;
   width: 96%;
@@ -303,7 +292,7 @@ export default {
       isLoading: false,
       isSukses: false,
       isError: false,
-      errorMessages: "",
+      errorMessage: "",
       succesMessages: "",
     };
   },

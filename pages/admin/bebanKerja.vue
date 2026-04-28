@@ -30,7 +30,7 @@
 
   <div class="isi" v-if="detailKaryawan === null">
     <h2>Manajemen Beban Kerja</h2>
-    <p>
+    <p class="subtitle">
       Pantau dan kelola beban kerja karyawan berdasarkan total jam dan jumlah
       task
     </p>

@@ -102,7 +102,6 @@
               <th
                 style="
                   width: 700px;
-                  
                 "
               >
                 Nama Karyawan
@@ -141,7 +140,7 @@
                   class="badge main-badge"
                   :class="badgeClass(emp.category)"
                 >
-                  {{ Math.round(emp.score) }}%
+                  {{ emp.score }}%
                 </span>
               </td>
             </tr>

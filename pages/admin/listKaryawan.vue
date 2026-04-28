@@ -30,23 +30,8 @@
       </div>
     </div>
 
-    <!-- Animasi sukses -->
-    <div v-if="sukses" class="success-animation">
-      <div class="sukses">
-        <div class="berhasil">
-          <div class="ceklis">
-            <i class="fa-solid fa-check"></i>
-          </div>
-          <p>Sinkronisasi Berhasil!</p>
-        </div>
-        <div class="silang" @click="closeSukses">
-          <i class="fa-solid fa-xmark"></i>
-        </div>
-      </div>
-    </div>
-
     <h2>Daftar Karyawan</h2>
-    <p>Kelola dan pantau kinerja karyawan</p>
+    <p class="subtitle">Kelola dan pantau kinerja karyawan</p>
 
     <!-- Filter -->
     <div class="filter">
@@ -76,6 +61,18 @@
                   label: role.label,
                   value: role.value,
                 })),
+              ]"
+            ></n-select>
+          </ClientOnly>
+        </div>
+        <div class="filter-item">
+          <label for="">Status</label>
+          <ClientOnly>
+            <n-select
+              v-model:value="status"
+              :options="[
+                { label: 'Aktif', value: 'aktif' },
+                { label: 'Nonaktif', value: 'nonaktif' },
               ]"
             ></n-select>
           </ClientOnly>
@@ -452,7 +449,7 @@
   cursor: pointer;
 }
 
-.menu-dropdown.button-wraper  button:last-child {
+.menu-dropdown.button-wraper button:last-child {
   border-bottom: none;
 }
 
@@ -1080,7 +1077,7 @@ export default {
       sidebar: false,
       name: "",
       posisi: "",
-      kerja: "",
+      status: "aktif",
       selected: {},
       selectedUser: null,
       daftarKaryawan: [],
@@ -1599,6 +1596,12 @@ export default {
       if (this.posisi) {
         hasil = hasil.filter(
           (k) => k.role.toLowerCase() === this.posisi.toLowerCase(),
+        );
+      }
+
+      if (this.status) {
+        hasil = hasil.filter(
+          (k) => k.status.toLowerCase() === this.status.toLowerCase(),
         );
       }
 

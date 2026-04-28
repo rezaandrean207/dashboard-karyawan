@@ -82,6 +82,13 @@ body {
   color: rgb(16, 50, 130);
 }
 
+.isi .subtitle {
+  font-size: 13px;
+  font-weight: 500;
+  color: #64748b;
+  margin-bottom: 20px;
+}
+
 .filter {
   padding: 16px 18px;
   border-radius: 14px;
@@ -134,7 +141,7 @@ body {
 }
 
 .filter-item {
-  flex: 1 300px;
+  flex: 1 290px;
 
   /* padding: 6px; */
   border-radius: 5px;
@@ -493,7 +500,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  z-index: 999;
 }
 
 /* Popup Delete */

@@ -7,6 +7,20 @@
     </div>
   </div>
 
+  <div class="success-message" v-if="isSukses">
+    <div class="message-content">
+      <i class="fa-solid fa-check-circle"></i>
+      <p>{{ successMessage }}</p>
+    </div>
+  </div>
+
+  <div class="error-message" v-if="isError">
+    <div class="message-content">
+      <i class="fa-solid fa-circle-xmark"></i>
+      <p>{{ errorMessage }}</p>
+    </div>
+  </div>
+
   <!-- POPUP DETAIL TASK -->
   <div
     v-if="showDetail"
@@ -129,7 +143,7 @@
         </div>
 
         <!-- Assignee to -->
-        <div class="filter-item">
+        <!-- <div class="filter-item">
           <label for="">Assignee</label>
           <ClientOnly>
             <n-select
@@ -144,7 +158,7 @@
               placeholder="Pilih Assignee"
             ></n-select>
           </ClientOnly>
-        </div>
+        </div> -->
 
         <!-- Status Task -->
         <div class="filter-item">
@@ -1063,6 +1077,10 @@ export default {
       minZoom: 20,
       maxZoom: 200,
       zoomStep: 20,
+      isSukses: false,
+      isError: false,
+      successMessage: "",
+      errorMessage: "",
     };
   },
   mounted() {
@@ -1187,14 +1205,9 @@ export default {
         const task = await this.$api.get(
           `/api/v1/gantt/tasks?start_date=${formatTanggal(this.startDate)}&end_date=${formatTanggal(this.endDate)}&sort_by=${this.selectedSort}`,
         );
-        // this.daftarTask = task.data;
-        // this.daftarTask = task.data.map((k) => ({
-        //   ...k,
-        //   imageError: false,
-        // }));
         this.daftarTask = {
-          holidays: task.data.holidays || [],
-          tasks: (task.data.tasks || []).map((t) => ({
+          holidays: task.data.data.holidays || [],
+          tasks: (task.data.data.tasks || []).map((t) => ({
             ...t,
             imageError: false,
           })),
@@ -1225,10 +1238,24 @@ export default {
           }
         });
         console.log("daftar task", this.daftarTask);
-      } catch (err) {
-        console.log("Gagal mengambil task", err);
+        this.successMessage = task.data.api_message;
+        this.isSukses = true;
+      } catch (error) {
+        console.error("Gagal ambil task:", error);
+        this.errorMessage = task.data.api_message;
+        this.isError = true;
       } finally {
         this.isLoading = false;
+
+        setTimeout(() => {
+          this.isSukses = false;
+          this.successMessage = "";
+        }, 5000);
+
+        setTimeout(() => {
+          this.isError = false;
+          this.errorMessage = "";
+        }, 5000);
       }
     },
     formatRange(start, end) {

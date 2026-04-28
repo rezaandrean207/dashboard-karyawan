@@ -1,18 +1,18 @@
 <template>
-  <!-- Animasi sukses -->
-  <div v-if="sukses" class="success-animation">
-    <div class="sukses">
-      <div class="berhasil">
-        <div class="ceklis">
-          <i class="fa-solid fa-check"></i>
-        </div>
-        <p>Sinkronisasi Berhasil!</p>
-      </div>
-      <div class="silang" @click="closeSukses">
-        <i class="fa-solid fa-xmark"></i>
-      </div>
+  <div class="success-message" v-if="isSukses">
+    <div class="message-content">
+      <i class="fa-solid fa-check-circle"></i>
+      <p>{{ successMessage }}</p>
     </div>
   </div>
+
+  <div class="error-message" v-if="isError">
+    <div class="message-content">
+      <i class="fa-solid fa-circle-xmark"></i>
+      <p>{{ errorMessage }}</p>
+    </div>
+  </div>
+
   <div class="konten">
     <div class="download">
       <button @click="downloadAPK()" class="download-btn">
@@ -97,7 +97,7 @@
           </div>
         </div>
 
-        <div class="footer_sidebar">
+        <div class="sidebar-footer">
           <div class="user">
             <p>Masuk sebagai</p>
             <h4>{{ name }}</h4>
@@ -160,7 +160,7 @@
               height="20"
               viewBox="0 0 15 15"
               xmlns="http://www.w3.org/2000/svg"
-              style="margin: 0 12px 3px 1px; /* border: 1px solid #010101 */"
+              style="margin: 0 12px 3px 1px"
               v-else-if="item.type === 'svg'"
             >
               <path
@@ -196,17 +196,18 @@
         </div>
       </div>
 
-      <div class="footer_sidebar">
-        <div class="user">
+      <div class="sidebar-footer">
+        <div class="footer-item user">
           <p>Masuk sebagai</p>
           <h4>{{ name }}</h4>
           <p style="text-transform: capitalize">
             {{ roleLabel }}
           </p>
         </div>
-        <div class="sync">
+        <div class="footer-item sync-logout">
           <button
-            class="btn"
+            class="sync-button"
+            v-if="role === 'admin'"
             @click="syncData"
             :disabled="loading"
             :style="{
@@ -219,12 +220,12 @@
 
             {{ loading ? "Menyinkronkan..." : "Sinkronisasi" }}
           </button>
+
+          <button @click="logout" class="logout-button">Keluar</button>
         </div>
 
-        <button @click="logout" class="logout">Keluar</button>
-
         <!-- VERSION -->
-        <div class="app-version">Versi {{ appVersion }}</div>
+        <div class="footer-item app-version">Versi {{ appVersion }}</div>
       </div>
     </div>
     <NuxtPage />
@@ -420,16 +421,23 @@
   text-align: justify;
 }
 
-.sidebar .footer_sidebar {
+.sidebar .sidebar-footer {
   border-top: 1px solid rgb(85, 57, 223);
   padding: 18px;
   width: 100%;
   margin-top: auto;
   box-shadow: 0 -6px 12px rgba(0, 0, 0, 0.18);
   background-color: rgb(16, 50, 130);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.sidebar_responsive .footer_sidebar {
+.footer-item {
+  /* border: 1px solid; */
+}
+
+.sidebar_responsive .sidebar-footer {
   position: absolute;
   bottom: 0;
   border-top: 1px solid rgb(85, 57, 223);
@@ -439,7 +447,7 @@
   background-color: rgb(16, 50, 130);
 }
 
-.footer_sidebar .user {
+.sidebar-footer .user {
   background-color: rgb(16, 67, 185);
   background: linear-gradient(135deg, #1e40af, #2563eb);
   padding: 10px 14px;
@@ -447,8 +455,13 @@
   text-align: justify;
 }
 
-.footer_sidebar .sync .btn {
-  margin: 10px 0;
+.sidebar-footer .sync-logout {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar-footer .footer-item .sync-button {
   background: linear-gradient(135deg, #2563eb, #1e40af);
   font-size: 14px;
   padding: 8px 0;
@@ -461,7 +474,7 @@
   color: #fff;
 }
 
-.footer_sidebar .logout {
+.sidebar-footer .footer-item .logout-button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -533,7 +546,6 @@
 }
 
 .app-version {
-  margin-top: 10px;
   font-size: 12px;
   opacity: 0.6;
   text-align: center;
@@ -561,8 +573,6 @@
 </style>
 
 <script>
-// import { type } from "node:os";
-
 const menuConfig = {
   admin: [
     {
@@ -653,7 +663,10 @@ export default {
     return {
       sidebar: false,
       loading: false,
-      sukses: false,
+      isSukses: false,
+      isError: false,
+      successMessage: "",
+      errorMessage: "",
       openMenu: false,
       appVersion: "1.2",
       name: useCookie("name").value,

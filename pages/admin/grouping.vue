@@ -24,7 +24,7 @@
   <div class="isi">
     <h2>Grouping</h2>
 
-    <p>Karyawan dengan performa rendah (< 85%) berdasarkan kategori</p>
+    <p class="subtitle">Karyawan dengan performa rendah (< 85%) berdasarkan kategori</p>
     <div class="filter">
       <div class="title">
         <i class="fa-solid fa-filter"></i>
