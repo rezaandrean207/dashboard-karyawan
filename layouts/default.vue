@@ -28,7 +28,7 @@
     </div>
 
     <div class="background" v-if="sidebar" @click="close">
-      <div class="sidebar_responsive" @click.stop>
+      <div class="sidebar-mobile" @click.stop>
         <div class="logo">
           <img src="/img/logo-dna.png" alt="" />
           <div class="keterangan">
@@ -98,14 +98,17 @@
         </div>
 
         <div class="sidebar-footer">
-          <div class="user">
+          <div class="footer-item user">
             <p>Masuk sebagai</p>
             <h4>{{ name }}</h4>
-            <p>Admin</p>
+            <p style="text-transform: capitalize">
+              {{ roleLabel }}
+            </p>
           </div>
-          <div class="sync">
+          <div class="footer-item sync-logout">
             <button
-              class="btn"
+              class="sync-button"
+              v-if="role === 'admin'"
               @click="syncData"
               :disabled="loading"
               :style="{
@@ -115,13 +118,15 @@
             >
               <span v-if="loading" class="spinner"></span>
               <i v-else class="fa-solid fa-rotate-right"></i>
+
               {{ loading ? "Menyinkronkan..." : "Sinkronisasi" }}
             </button>
+
+            <button @click="logout" class="logout-button">Keluar</button>
           </div>
-          <button @click="logout" class="logout">Keluar</button>
 
           <!-- VERSION -->
-          <div class="app-version">Versi {{ appVersion }}</div>
+          <div class="footer-item app-version">Versi {{ appVersion }}</div>
         </div>
       </div>
     </div>
@@ -255,7 +260,7 @@
   z-index: 99999;
 }
 
-.konten .background .sidebar_responsive {
+.konten .background .sidebar-mobile {
   background-color: rgb(16, 50, 130);
   text-align: center;
   color: #fff;
@@ -291,7 +296,7 @@
 }
 
 .sidebar .logo,
-.sidebar_responsive .logo {
+.sidebar-mobile .logo {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -320,7 +325,7 @@
 }
 
 .sidebar .sidebar-text,
-.sidebar_responsive .sidebar-text {
+.sidebar-mobile .sidebar-text {
   display: flex;
   flex-direction: column;
   text-align: justify;
@@ -437,7 +442,7 @@
   /* border: 1px solid; */
 }
 
-.sidebar_responsive .sidebar-footer {
+.sidebar-mobile .sidebar-footer {
   position: absolute;
   bottom: 0;
   border-top: 1px solid rgb(85, 57, 223);

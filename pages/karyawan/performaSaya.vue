@@ -1481,11 +1481,6 @@ export default {
     },
     performaClass(performa) {
       return {
-        // special: performa > this.dataSetting.batas_atas,
-        // ontime:
-        //   performa >= this.dataSetting.batas_bawah &&
-        //   performa <= this.dataSetting.batas_atas,
-        // late: performa < this.dataSetting.batas_bawah,
         special: performa === "++",
         ontime: performa === "+",
         late: performa === "-" || !performa,
