@@ -57,7 +57,6 @@
               ]"
             ></n-select>
           </ClientOnly>
-        
         </div>
       </div>
     </div>
@@ -162,7 +161,6 @@
           </tbody>
         </table>
       </div>
-
     </div>
 
     <!-- Performa per tahun-->
@@ -535,61 +533,6 @@ h2 {
 }
 </style>
 
-<!-- Legend -->
-<style scoped>
-.legend {
-  display: flex;
-  gap: 16px;
-  margin-top: 20px;
-  flex-wrap: wrap;
-}
-
-/* Item */
-/* Legend modern */
-.legend.modern {
-  display: flex;
-  gap: 14px;
-  margin-top: 16px;
-  padding-top: 12px;
-  border-top: 1px dashed #e2e8f0;
-}
-
-.legend-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  background: #f8fafc;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #334155;
-}
-
-.legend-item small {
-  color: #64748b;
-  font-weight: 400;
-}
-
-.legend-item .dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-
-.legend-item.good .dot {
-  background: #22c55e;
-}
-
-.legend-item.medium .dot {
-  background: #facc15;
-}
-
-.legend-item.bad .dot {
-  background: #ef4444;
-}
-</style>
-
 <script>
 import { formatTanggal } from "@/utils/helpers";
 export default {
@@ -602,6 +545,7 @@ export default {
       displayPeriod: "",
       isLoading: false,
       dataType: "month",
+      
     };
   },
 
@@ -669,7 +613,7 @@ export default {
         // this.dateMonth = null;
 
         this.$router.replace({
-          path: "/admin/weekPerform",
+          path: "/karyawan/weekPerform",
           query: {
             ...this.$route.query,
             tahun: this.dateYear,
@@ -681,7 +625,7 @@ export default {
         this.displayPeriod = `${this.formatBulan(this.selectedMonth)} ${this.selectedYear}`;
 
         this.$router.replace({
-          path: "/admin/weekPerform",
+          path: "/karyawan/weekPerform",
           query: {
             ...this.$route.query,
             bulan: this.formatBulan(this.selectedMonth),
@@ -739,7 +683,7 @@ export default {
       console.log("Start:", formatTanggal(start_date));
       console.log("End:", formatTanggal(end_date));
       this.$router.push({
-        path: "/admin/bebanKerja",
+        path: "/karyawan/performaSaya",
         query: {
           id: emp.clickup_id,
           start: formatTanggal(start_date),

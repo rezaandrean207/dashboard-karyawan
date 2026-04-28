@@ -5,18 +5,14 @@
       <p>Tunggu Sebentar</p>
     </div>
   </div>
-  <div class="background_delete" v-if="hapus">
-    <div class="delete_tanggal">
-      <!-- <div class="header_delete">
-        <h3>Hapus Hari Libur</h3>
-        <i class="fa-solid fa-xmark" @click="closeSetTanggal"></i>
-      </div> -->
+  <div class="popup-overlay" v-if="hapus">
+    <div class="delete-modal">
       <p>Apakah anda yakin <br />ingin menghapus hari libur ini?</p>
-      <div class="submit_delete">
-        <div class="batal">
+      <div class="submit-delete">
+        <div class="submit-item cancel">
           <button @click="closeSetTanggal" type="button">Batal</button>
         </div>
-        <div class="simpan">
+        <div class="submit-item save">
           <button
             @click="deleteTanggal(selectedData?.tanggal)"
             :disabled="isLoading"
@@ -29,9 +25,9 @@
       </div>
     </div>
   </div>
-  <div class="background_tanggal" v-if="createTanggal">
-    <div class="create_tanggal">
-      <div class="header_tanggal">
+  <div class="popup-overlay" v-if="createTanggal">
+    <div class="holiday-modal">
+      <div class="holiday-header">
         <h3>Tambah Hari Libur</h3>
         <i class="fa-solid fa-xmark" @click="closeSetTanggal"></i>
       </div>
@@ -39,24 +35,35 @@
         Tambahkan hari libur untuk bulan {{ bulanDipilih }} {{ tahunAktif }}
       </p>
 
-      <form action="" class="form_tanggal" @submit.prevent="saveTanggal">
-        <div class="tanggal">
+      <form class="holiday-form" @submit.prevent="saveTanggal">
+        <div class="form-item tanggal">
           <label for="tanggal">Tanggal</label>
-          <input type="date" v-model="tanggal" />
+          <ClientOnly>
+              <VueDatePicker
+                format="dd-MM-yyyy"
+                model-type="yyyy-MM-dd"
+                type="date"
+                v-model="tanggal"
+                :min="year ? `${year}-01-01` : null"
+                :max="year ? `${year}-12-31` : null"
+                :time-config="{ enableTimePicker: false }"
+            /></ClientOnly>
         </div>
-        <div class="hari">
+        <div class="form-item hari">
           <label for="hari">Nama Hari Libur</label>
-          <input
-            type="text"
-            placeholder="Contoh: Hari Raya Idul Fitri"
-            v-model="hari"
-          />
+          <ClientOnly>
+              <n-input
+                v-model:value="hari"
+                placeholder="Contoh: Izin sakit flu"
+                type="text"
+              ></n-input>
+            </ClientOnly>
         </div>
-        <div class="submit_tanggal">
-          <div class="batal">
+        <div class="form-item submit-tanggal">
+          <div class="submit-item cancel">
             <button @click="closeSetTanggal" type="button">Batal</button>
           </div>
-          <div class="simpan">
+          <div class="submit-item save">
             <button
               @click="saveTanggal"
               :disabled="isDisabled"
@@ -102,23 +109,19 @@
                 <h4>{{ h.tanggal.split("-")[0] }} {{ h.nama_hari }}</h4>
                 <p>{{ h.keterangan }}</p>
               </div>
-              <!-- <i class="fa-solid fa-xmark" @click="deleteTanggal(h.tanggal)"></i> -->
+
               <i class="fa-solid fa-xmark" @click="openDelete(h)"></i>
             </div>
             <div class="belum_tersedia" v-else>
               <h4>Hari Libur belum tersedia</h4>
             </div>
           </div>
-          <div class="set_tanggal" @click="setTanggal(k)">
+          <div class="set-tanggal" @click="setTanggal(k)">
             <i class="fa-solid fa-plus"></i>
           </div>
         </div>
       </div>
     </Transition>
-
-    <!-- <div class="button_save">
-        <button type="submit">Simpan Semua Perubahan</button>
-      </div> -->
 
     <div class="kosong">
       <p>pp</p>
@@ -298,20 +301,17 @@
   box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12);
 }
 
-.month .set_tanggal {
-  background: var(--primary);
+.month .set-tanggal {
+  /* background: var(--primary); */
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
   color: #fff;
   border-radius: 999px;
   padding: 10px 16px;
   font-size: 18px;
-  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+
 
   transition: transform 0.2s ease;
-}
-
-.month .set_tanggal:hover {
-  background: var(--primary-hover);
-  transform: scale(1.05);
 }
 
 .month .month_name {

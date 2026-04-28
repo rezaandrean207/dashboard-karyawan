@@ -291,8 +291,6 @@
                     boxShadow: '0 3px 8px ' + task.color + '80',
                   }"
                 >
-                  <!-- <img :src="task.avatar" alt="avatar" /> -->
-                  <!-- <img src="/img/profil.png" alt="avatar" /> -->
                   <img
                     v-if="!task.imageError"
                     :src="getProfileImage(task.profile_picture_url)"

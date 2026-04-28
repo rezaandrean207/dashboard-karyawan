@@ -1,13 +1,26 @@
 <template>
+  <div v-if="isLoading" class="loading">
+    <div class="loading_tanggal">
+      <i class="fa-solid fa-spinner"></i>
+      <p>Tunggu Sebentar</p>
+    </div>
+  </div>
+
+  <div class="success-message" v-if="isSukses">
+    <div class="message-content">
+      <i class="fa-solid fa-check-circle"></i>
+      <p>{{ successMessage }}</p>
+    </div>
+  </div>
+
+  <div class="error-message" v-if="isError">
+    <div class="message-content">
+      <i class="fa-solid fa-circle-xmark"></i>
+      <p>{{ errorMessage }}</p>
+    </div>
+  </div>
   <!-- Details Task -->
   <div class="isi" :class="{ hidden: detailBug }">
-    <div v-if="isLoading" class="loading">
-      <div class="loading_tanggal">
-        <i class="fa-solid fa-spinner"></i>
-        <p>Tunggu Sebentar</p>
-      </div>
-    </div>
-
     <div class="filter">
       <div class="title">
         <i class="fa-solid fa-filter"></i>
@@ -48,13 +61,10 @@
       <div class="notifikasi" :class="{ gap: !hasNotifikasi }">
         <i class="fa-regular fa-bell"></i>
 
-        <!-- <span class="notif-dot" v-if="hasNotifikasi"></span> -->
         <span class="notif-dot"></span>
         <h4>{{ listNotifikasi.length }} Notifikasi</h4>
       </div>
-      <!-- <div class="header_notif">
-        <h4 class="judul-notif">Notifikasi Sistem</h4>
-      </div> -->
+
       <div class="container-notif">
         <div
           class="isi_notif"
@@ -85,7 +95,6 @@
           class="isi-not-found"
           v-if="!listNotifikasi || listNotifikasi.length === 0"
         >
-          <!-- <h4>Header Notifikasi</h4> -->
           <p>Belum ada notifikasi baru.</p>
         </div>
       </div>
@@ -111,7 +120,7 @@
               </div>
             </div>
             <div class="about">
-              <h3>{{ detailKaryawan.username }}</h3>
+              <h4>{{ detailKaryawan.username }}</h4>
               <p>{{ detailKaryawan.role }}</p>
               <div class="periode">
                 <p v-if="start === '' && end === ''">Seluruh Periode</p>
@@ -636,6 +645,23 @@ details[open] .sidebar-notif {
   gap: 8px;
 }
 
+.about p {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-muted);
+  text-transform: capitalize;
+}
+
+@media (max-width: 576px) {
+  .profil-karyawan .about h4 {
+    max-width: 170px;
+  }
+
+  .about .periode p {
+    max-width: 170px;
+  }
+}
+
 .profil-karyawan .cuti-wraper {
   position: relative;
   /* border: 1px solid #dbdbdb; */
@@ -855,7 +881,7 @@ details[open] .sidebar-notif {
 <!-- Detail Page -->
 <style scoped>
 .filter .dates-picker {
-  width: 600px;
+  width: 350px;
 }
 
 .isi .header-detail {
@@ -1258,13 +1284,24 @@ export default {
       daftarHari: [],
       notif: false,
       listNotifikasi: null,
+      isSukses: false,
+      isError: false,
+      successMessage: "",
+      errorMessage: "",
     };
   },
   mounted() {
-    const result = setDefaultTanggal();
+    const date = this.$route.query;
 
-    this.start = result.mulai;
-    this.end = result.akhir;
+    if (date.start && date.end) {
+      this.start = date.start;
+      this.end = date.end;
+    } else {
+      const result = setDefaultTanggal();
+
+      this.start = result.mulai;
+      this.end = result.akhir;
+    }
   },
   methods: {
     onStartDateSelected() {
@@ -1276,7 +1313,7 @@ export default {
       return new Date(tgl).toLocaleDateString("id-ID", {
         weekday: "long",
         day: "numeric",
-        month: "long",
+        month: "short",
         year: "numeric",
       });
     },
@@ -1336,19 +1373,32 @@ export default {
           )}&end_date=${formatTanggal(this.end)}`,
         );
         // this.daftarKaryawan = task.data.assignees || [];
-        console.log("TASK DATA:", task.data);
-        const assignee = task.data.assignees?.[0] || null;
+        console.log("TASK DATA:", task.data.data);
+        const assignee = task.data.data.assignees?.[0] || null;
 
         this.detailKaryawan = assignee
           ? { ...assignee, imageError: false }
           : null;
-        this.listNotifikasi = task.data.notifications || [];
+        this.listNotifikasi = task.data.data.notifications || [];
         console.log("Berhasil ambil task:", task);
+        this.successMessage = task.data.api_message;
+        this.isSukses = true;
       } catch (error) {
         console.error("Gagal ambil task:", error);
-        this.daftarKaryawan = [];
+        this.errorMessage = task.data.api_message;
+        this.isError = true;
       } finally {
         this.isLoading = false;
+
+        setTimeout(() => {
+          this.isSukses = false;
+          this.successMessage = "";
+        }, 5000);
+
+        setTimeout(() => {
+          this.isError = false;
+          this.errorMessage = "";
+        }, 5000);
       }
     },
     openTask() {

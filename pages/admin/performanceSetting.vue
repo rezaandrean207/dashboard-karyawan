@@ -15,7 +15,7 @@
 
   <div class="error-message" v-if="isError">
     <div class="message-content">
-      <!-- <i class="fa-solid fa-check-circle"></i> -->
+     
       <i class="fa-solid fa-circle-xmark"></i>
       <p>{{ errorMessage }}</p>
     </div>

@@ -2,7 +2,6 @@
   <div class="login">
     <div v-if="isLoading" class="loading">
       <div class="loading_tanggal">
-        <!-- <i class="fa-solid fa-circle-notch fa-spin"></i> -->
         <i class="fa-solid fa-spinner"></i>
         <p>Tunggu Sebentar</p>
       </div>
@@ -10,7 +9,6 @@
     <div class="wraper" id="app" :class="{ shake: isError }">
       <div class="hero">
         <div class="ikon_login">
-          <!-- <i class="fa-solid fa-users"></i> -->
           <img src="/img/logo-dna.png" alt="" />
         </div>
         <h2>DNA Monitoring</h2>
@@ -19,7 +17,6 @@
         <form action="#" method="POST" class="form" @submit.prevent="login">
           <div class="input">
             <div class="username">
-              <!-- <i class="fa-solid fa-user"></i> -->
               <input
                 type="text"
                 id="nama"
@@ -30,13 +27,6 @@
               <label for="username">Username</label>
             </div>
           </div>
-          <!-- <label for="username" class="error">Minimal 8 karakter</label> -->
-
-          <!-- <div class="input">
-        <i class="bx bx-envelope-open"></i>
-        <input type="email" id="email" name="email" placeholder="Email" />
-      </div> -->
-          <!-- <label for="email" class="error">Fromat email tidak valid</label> -->
 
           <div class="input">
             <div class="password">
@@ -63,28 +53,11 @@
               ></i>
             </div>
           </div>
-          <!-- <label for="password" class="error">Minimal 8 karakter</label> -->
-
-          <!-- <div class="input">
-        <i class="bx bx-lock"></i>
-        <input
-          type="password"
-          id="retypePassword"
-          name="retypePassword"
-          placeholder="Retype Password"
-        />
-      </div> -->
-          <!-- <label for="retypePassword" class="error">Password tidak valid</label> -->
 
           <div class="button">
             <button type="submit">Masuk</button>
           </div>
 
-          <!-- <div class="register">
-            <p>
-              Don't have an account?
-            </p>
-          </div> -->
         </form>
       </div>
     </div>

@@ -15,7 +15,6 @@
 
   <div class="error-message" v-if="isError">
     <div class="message-content">
-      <!-- <i class="fa-solid fa-check-circle"></i> -->
       <i class="fa-solid fa-circle-xmark"></i>
       <p>{{ errorMessage }}</p>
     </div>
@@ -23,10 +22,7 @@
 
   <!-- Isi Konten -->
   <div class="isi">
-    <!-- Animasi sukses -->
-    <!-- <div class="success-animation">
-      </div> -->
-
+    <!-- Loading -->
     <div v-if="isLoading" class="loading">
       <div class="loading_tanggal">
         <i class="fa-solid fa-spinner"></i>
@@ -34,6 +30,7 @@
       </div>
     </div>
 
+    <!-- Animasi sukses -->
     <div v-if="sukses" class="success-animation">
       <div class="sukses">
         <div class="berhasil">
@@ -82,16 +79,6 @@
               ]"
             ></n-select>
           </ClientOnly>
-          <!-- <select v-model="posisi">
-              <option value="">Semua Posisi</option>
-              <option
-                v-for="(role, index) in roleOptions"
-                :key="index"
-                :value="role.value"
-              >
-                {{ role.label }}
-              </option>
-            </select> -->
         </div>
         <div class="filter-item total-karyawan">
           <i class="fa-solid fa-users"></i>
@@ -150,18 +137,7 @@
                   </button>
                 </div>
 
-                <!-- <button @click.stop="toggleRoleMenu(k.id)">Atur Role ▶</button> -->
-
                 <div v-if="roleMenuOpen === k.clickup_id" class="role-submenu">
-                  <!-- <label v-for="role in daftarRole" :key="role.value">
-                    <input
-                      type="checkbox"
-                      :value="role.name"
-                      v-model="selectedRoles"
-                    />
-                    {{ role.name }}
-                  </label> -->
-
                   <label
                     v-for="role in daftarRole"
                     :key="role.id"
@@ -181,22 +157,23 @@
                     </button>
 
                     <div
-                      class="delete-overlay"
+                      class="popup-overlay"
                       v-if="deleteRoleId === role.id"
                       @click.stop="cancelDeleteRole"
                     >
-                      <div class="delete-wraper">
+                      <div class="delete-modal">
                         <p>Apakah Anda yakin ingin menghapus?</p>
-                        <div class="confirm-buttons">
-                          <button
-                            class="confirm"
-                            @click.stop="confirmDeleteRole(role)"
-                          >
-                            Ya
-                          </button>
-                          <button class="cancel" @click.stop="cancelDeleteRole">
-                            Tidak
-                          </button>
+                        <div class="submit-delete">
+                          <div class="submit-item cancel">
+                            <button @click.stop="cancelDeleteRole">
+                              Tidak
+                            </button>
+                          </div>
+                          <div class="submit-item save">
+                            <button @click.stop="confirmDeleteRole(role)">
+                              Ya
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -233,7 +210,6 @@
           </div>
         </div>
         <div class="card-section identitas">
-          <!-- <img :src="k.user.profilPicture" alt="" /> -->
           <div class="photo-wrapper" @click.stop>
             <img
               v-if="!k.imageError"
@@ -273,10 +249,6 @@
             <p>Status:</p>
             <p>{{ k.status }}</p>
           </div>
-          <!-- <div class="performa">
-              <p>Performa:</p>
-              <p>{{ k.performa }}</p>
-            </div> -->
         </div>
       </div>
     </div>
@@ -315,7 +287,7 @@
         <div class="wraper-beban">
           <div class="bebanKerja" :class="bebanClass(selected.workload_status)">
             <i class="fa-solid fa-clock"></i>
-            <!-- <p>Beban Kerja: {{ kategoriBeban(beban) }}</p> -->
+
             <p>Beban Kerja: {{ selected.workload_status }}</p>
           </div>
         </div>
@@ -343,14 +315,12 @@
               <h3>{{ selected.project_count }}</h3>
             </div>
             <div class="logo">
-              <!-- <i class="fa-solid fa-check"></i> -->
               <span class="material-symbols-outlined"> work_history </span>
             </div>
           </div>
 
           <div class="stat-card completed">
             <div class="judul">
-              <!-- <p>Completed</p> -->
               <p>Selesai</p>
               <h3>{{ selected.completed_tasks }}</h3>
             </div>
@@ -362,11 +332,10 @@
           <div class="stat-card on-progres">
             <div class="judul">
               <p>Sedang Dikerjakan</p>
-              <!-- <p>Dikerjakan</p> -->
+
               <h3>{{ selected.in_progress_tasks }}</h3>
             </div>
             <div class="logo">
-              <!-- <i class="fa-solid fa-chart-simple"></i> -->
               <span class="material-symbols-outlined"> pending_actions </span>
             </div>
           </div>
@@ -483,15 +452,15 @@
   cursor: pointer;
 }
 
-.menu-dropdown button:last-child {
+.menu-dropdown.button-wraper  button:last-child {
   border-bottom: none;
 }
 
-.menu-dropdown button:hover {
+.menu-dropdown .button-wraper button:hover {
   background: #f1f5f9;
 }
 
-.menu-dropdown .danger {
+.menu-dropdown .button-wraper .danger {
   color: #b91c1c;
 }
 
@@ -727,72 +696,8 @@
 }
 
 .photo-option {
-   font-size: 28px;
+  font-size: 28px;
   font-weight: 700;
-}
-</style>
-
-<!-- Delete overlay -->
-<style scoped>
-.delete-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  border-radius: 6px;
-}
-
-.delete-overlay .delete-wraper {
-  background: white;
-  padding: 20px 30px;
-  border-radius: 8px;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.delete-overlay p {
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.confirm-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.confirm {
-  padding: 6px 12px;
-  border: none;
-  border-radius: 6px;
-  background-color: #ef4444;
-  color: white;
-  cursor: pointer;
-}
-
-.confirm:hover {
-  background-color: #b91c1c;
-}
-
-.cancel {
-  padding: 6px 12px;
-  border: none;
-  border-radius: 6px;
-  background-color: #e5e7eb;
-  color: #374151;
-  cursor: pointer;
-}
-
-.cancel:hover {
-  background-color: #f1f5f9;
 }
 </style>
 
@@ -1138,7 +1043,7 @@
   gap: 10px;
   background-color: rgb(234, 241, 252);
   border: 1px solid rgb(202, 223, 255);
-   background: linear-gradient(135deg, #edf4ff, #dbeafe);
+  background: linear-gradient(135deg, #edf4ff, #dbeafe);
   box-shadow: 0 4px 12px rgba(118, 177, 254, 0.15);
   border-radius: 10px;
   padding: 10px 20px;

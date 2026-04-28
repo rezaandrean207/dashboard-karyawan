@@ -6,6 +6,20 @@
     </div>
   </div>
 
+  <div class="success-message" v-if="isSukses">
+    <div class="message-content">
+      <i class="fa-solid fa-check-circle"></i>
+      <p>{{ successMessage }}</p>
+    </div>
+  </div>
+
+  <div class="error-message" v-if="isError">
+    <div class="message-content">
+      <i class="fa-solid fa-circle-xmark"></i>
+      <p>{{ errorMessage }}</p>
+    </div>
+  </div>
+
   <!-- daftar karyawan -->
   <div class="isi">
     <h2>Grouping</h2>
@@ -358,6 +372,10 @@ export default {
       searchInput: 85,
       kurangLebih: "kurangDari",
       assigneeColors: {},
+      isSukses: false,
+      isError: false,
+      successMessage: "",
+      errorMessage: "",
     };
   },
   mounted() {
@@ -466,18 +484,31 @@ export default {
           )}&end_date=${formatTanggal(this.end)}`,
         );
 
-        this.daftarKaryawan = task.data.grouping || [];
-        this.daftarKaryawan = task.data.grouping.map((k) => ({
+        this.daftarKaryawan = task.data.data.grouping || [];
+        this.daftarKaryawan = task.data.data.grouping.map((k) => ({
           ...k,
           imageError: false,
         }));
 
         console.log("Berhasil ambil task:", task);
+        this.successMessage = task.data.api_message;
+        this.isSukses = true;
       } catch (error) {
         console.error("Gagal ambil task:", error);
-        this.daftarKaryawan = [];
+        this.errorMessage = task.data.api_message;
+        this.isError = true;
       } finally {
         this.isLoading = false;
+
+        setTimeout(() => {
+          this.isSukses = false;
+          this.successMessage = "";
+        }, 5000);
+
+        setTimeout(() => {
+          this.isError = false;
+          this.errorMessage = "";
+        }, 5000);
       }
     },
 

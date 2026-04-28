@@ -14,12 +14,27 @@
     </div>
   </div>
 
+  <div class="success-message" v-if="isSukses">
+    <div class="message-content">
+      <i class="fa-solid fa-check-circle"></i>
+      <p>{{ successMessage }}</p>
+    </div>
+  </div>
+
+  <div class="error-message" v-if="isError">
+    <div class="message-content">
+      <i class="fa-solid fa-circle-xmark"></i>
+      <p>{{ errorMessage }}</p>
+    </div>
+  </div>
+
   <div class="isi" v-if="detailKaryawan === null">
     <h2>Manajemen Beban Kerja</h2>
     <p>
       Pantau dan kelola beban kerja karyawan berdasarkan total jam dan jumlah
       task
     </p>
+
     <!-- Filter -->
     <div class="filter">
       <div class="title">
@@ -193,7 +208,7 @@
           </div>
 
           <div class="status-activity">
-            <div class="cuti-wraper" v-if="k.total_cuti !== 0">
+            <div class="cuti-wraper" v-if="k.cuti">
               <div class="total-cuti" @click="toggleCuti(k.clickup_id)">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -381,7 +396,7 @@
               </div>
             </div>
             <div class="about">
-              <h3>{{ detailKaryawan.username }}</h3>
+              <h4>{{ detailKaryawan.username }}</h4>
               <p>{{ detailKaryawan.role }}</p>
               <div class="periode">
                 <p v-if="start === '' && end === ''">Seluruh Periode</p>
@@ -747,7 +762,7 @@
 
 .list_hari .hari_tanggal {
   background-color: #efefef;
-  width: 24%;
+  width: 200px;
   border-radius: 10px;
   padding: 14px 16px;
 
@@ -1023,6 +1038,13 @@
   color: red;
 }
 
+.about p {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-muted);
+  text-transform: capitalize;
+}
+
 @media (max-width: 576px) {
   .user-summary .status-activity {
     flex-direction: column;
@@ -1034,10 +1056,11 @@
   }
 
   .profil-karyawan .about h4 {
-    max-width: 125px; /* sesuaikan */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    max-width: 110px;
+  }
+
+  .about .periode p {
+    max-width: 170px;
   }
 }
 
@@ -1058,10 +1081,6 @@
 .underload_task,
 .normal_task {
   display: flex;
-  /* background-color: #f5f5f5; */
-  /* background-color: #010101; */
-  /* border: 1px solid #dbdbdb; */
-  /* color: #fff; */
   font-weight: 600;
   font-size: 12px;
   padding: 2px 10px;
@@ -1182,114 +1201,7 @@
   color: #333333;
 }
 
-.detail_task,
-.detail_bug {
-  position: relative;
-  cursor: pointer;
-}
-
-.content {
-  /* border: var(--borderCard); */
-  /* border-radius: 10px; */
-  padding: 15px;
-  font-weight: 300;
-  font-size: 15px;
-}
-
-.content .ket {
-  margin: 10px 0;
-}
-
-.name_task {
-  display: flex;
-  justify-content: space-between;
-
-  font-size: 15px;
-  font-weight: 600;
-  color: #0f172a;
-}
-
-.name_task .progres-level {
-  display: flex;
-  /* border: 1px solid #010101; */
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-.content .time {
-  display: flex;
-  gap: 16px;
-}
-
-.time .project {
-  border: 1px solid rgb(163, 224, 255);
-  font-size: 12px;
-  padding: 3px 7px;
-  border-radius: 6px;
-  font-weight: 400;
-}
-
-:deep(details summary::marker),
-:deep(details summary::-webkit-details-marker) {
-  display: none;
-}
-
-details {
-  margin: 10px 0 20px 0;
-}
-
-summary {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  /* margin-top: 20px; */
-  border: 1px solid #ddd;
-  height: 36px;
-  width: 100%;
-  padding: 0 15px;
-  border-radius: 10px;
-  gap: 10px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.beban_karyawan::before {
-  content: "\f017";
-  font-family: "Font Awesome 7 Free";
-}
-
-.ringkasan::before {
-  content: "\f022";
-  font-family: "Font Awesome 7 Free";
-}
-
-summary::after {
-  content: ">";
-  margin-left: auto;
-  transition: transform 0.2s ease;
-  font-size: 25px;
-}
-
-summary:hover {
-  background-color: #f4f4f4;
-}
-
-:deep(details[open] > summary::after) {
-  transform: rotate(90deg);
-}
-
-.ringkasan_task .jud {
-  margin-top: 20px;
-}
-
-.task_detail {
-  margin-top: 10px;
-  border: 1px solid rgb(219, 214, 246);
-  border-radius: 10px;
-}
-
-.detail_task,
-.detail_bug {
+.detail_task {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1306,131 +1218,16 @@ summary:hover {
   color: #fff;
 }
 
-.detail_bug {
-  border: 1px solid #bdbdbd;
-}
-
-.detail_bug:hover {
-  background-color: #e6e6e6;
-}
-
 .detail_task:hover {
   background-color: rgb(7, 7, 183);
-}
-
-/* ========================================================= */
-/*                       RESPONSIVE                          */
-/* ========================================================= */
-
-/* ----------- 1024px (Tablet Landscape) ----------- */
-@media (max-width: 1024px) {
-  .konten .sidebar .sidebar_text {
-    gap: 9px;
-  }
-
-  .konten .sidebar .sidebar_text a {
-    font-size: 200px;
-  }
-
-  .konten.sidebar .sidebar_text i {
-    font-size: 15px;
-  }
-
-  .isi .keterangan_kerja {
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .keterangan_kerja .total_karyawan,
-  .overload,
-  .normal,
-  .underload,
-  .average {
-    width: 32%;
-  }
-
-  .back_button {
-    margin-top: 30px;
-  }
-
-  .container-progres {
-    flex-wrap: wrap;
-  }
-
-  .tanggal input {
-    position: relative;
-    /* width:; */
-  }
-}
-
-/* ----------- 768px (Tablet / Small Laptop) ----------- */
-@media (max-width: 768px) {
-  .isi .keterangan_kerja {
-    flex-wrap: wrap;
-  }
-
-  .keterangan_kerja .total_karyawan,
-  .overload,
-  .normal,
-  .underload,
-  .average {
-    width: 48%;
-  }
-
-  .content {
-    font-size: 14px;
-  }
-
-  .style_sortir {
-    width: 100%;
-  }
-}
-
-/* ----------- 576px (Mobile) ----------- */
-@media (max-width: 576px) {
-  .konten .background .sidebar_responsive {
-    width: 59%;
-  }
-  .isi .keterangan_kerja {
-    /* flex-direction: column; */
-    flex-wrap: wrap;
-    width: 100%;
-  }
-
-  .keterangan_kerja .total_karyawan,
-  .overload,
-  .normal,
-  .underload,
-  .average,
-  .upcoming {
-    width: 48%;
-  }
-
-  .card_profile .card_left {
-    width: 100%;
-  }
-
-  .kinerja-karyawan {
-    width: 100%;
-  }
-}
-
-/* ----------- 430px (Small Mobile) ----------- */
-@media (max-width: 430px) {
-  /* .profil-karyawan img {
-    width: 50px;
-  } */
-  .konten .background .sidebar_responsive {
-    width: 60%;
-  }
 }
 </style>
 
 <!-- Foto Profil -->
 <style scoped>
 .photo-wrapper {
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
 }
 
 .photo-option {
@@ -1754,18 +1551,14 @@ export default {
     return {
       posisi: "",
       daftarKaryawan: [],
-      sidebar: false,
       searchInput: "",
       notFound: false,
       loading: false,
       sukses: false,
       detailKaryawan: null,
-      // detailKaryawanBug: null,
       start: "",
       end: "",
       openTaskList: false,
-      karyawanLuar: [],
-      complete: [],
       progres: "",
       isLoading: false,
       isClose: false,
@@ -1778,6 +1571,10 @@ export default {
       detailBug: null,
       daftarHari: [],
       openCuti: null,
+      isSukses: false,
+      isError: false,
+      successMessage: "",
+      errorMessage: "",
     };
   },
   async mounted() {
@@ -1870,7 +1667,7 @@ export default {
       return new Date(tgl).toLocaleDateString("id-ID", {
         weekday: "long",
         day: "numeric",
-        month: "long",
+        month: "short",
         year: "numeric",
       });
     },
@@ -1887,17 +1684,30 @@ export default {
             this.start,
           )}&end_date=${formatTanggal(this.end)}`,
         );
-        this.daftarKaryawan = task.data.assignees || [];
-        this.daftarHari = task.data.jadwal_libur || [];
+        this.daftarKaryawan = task.data.data.assignees || [];
+        this.daftarHari = task.data.data.jadwal_libur || [];
 
         // 🔥 PENTING
         this.resolveDetailKaryawan();
         console.log("Berhasil ambil task:", task);
+        this.successMessage = task.data.api_message;
+        this.isSukses = true;
       } catch (error) {
         console.error("Gagal ambil task:", error);
-        this.daftarKaryawan = [];
+        this.errorMessage = task.data.api_message;
+        this.isError = true;
       } finally {
         this.isLoading = false;
+
+        setTimeout(() => {
+          this.isSukses = false;
+          this.successMessage = "";
+        }, 5000);
+
+        setTimeout(() => {
+          this.isError = false;
+          this.errorMessage = "";
+        }, 5000);
       }
     },
 

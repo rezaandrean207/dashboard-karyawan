@@ -101,8 +101,8 @@
       <!-- Filter Tanggal Gantt dan Assignee -->
       <div class="filter-detail">
         <div class="filter-item">
-          <!-- <label for="tanggal">Tanggal</label> -->
-          <div class="dates">
+          <label for="">Tanggal</label>
+          <div class="dates date-gantt">
             <ClientOnly>
               <VueDatePicker
                 ref="startPicker"
@@ -129,7 +129,8 @@
         </div>
 
         <!-- Assignee to -->
-        <!-- <div class="filter-item">
+        <div class="filter-item">
+          <label for="">Assignee</label>
           <ClientOnly>
             <n-select
               v-model:value="selected"
@@ -143,10 +144,11 @@
               placeholder="Pilih Assignee"
             ></n-select>
           </ClientOnly>
-        </div> -->
+        </div>
 
         <!-- Status Task -->
         <div class="filter-item">
+          <label for="">Status</label>
           <ClientOnly>
             <n-select
               v-model:value="selectedStatus"
@@ -164,6 +166,7 @@
 
         <!-- Project Task -->
         <div class="filter-item">
+          <label for="">Project</label>
           <ClientOnly>
             <n-select
               v-model:value="selectedProject"
@@ -181,6 +184,7 @@
 
         <!-- Project Task -->
         <div class="filter-item">
+          <label for="">Sortir data</label>
           <ClientOnly>
             <n-select
               v-model:value="selectedSort"
@@ -209,9 +213,6 @@
         </div>
 
         <div class="header-container" :style="{ minWidth: totalWidth + 'px' }">
-          <!-- <div class="header-name">
-            <p>Name</p>
-          </div> -->
           <div class="header-gant">
             <div class="dates-range" :style="{ minWidth: totalWidth + 'px' }">
               <div class="bulan-header" style="display: flex; width: 100%">
@@ -290,8 +291,6 @@
                     boxShadow: '0 3px 8px ' + task.color + '80',
                   }"
                 >
-                  <!-- <img :src="task.avatar" alt="avatar" /> -->
-                  <!-- <img src="/img/profil.png" alt="avatar" /> -->
                   <img
                     v-if="!task.imageError"
                     :src="getProfileImage(task.profile_picture_url)"
@@ -342,10 +341,6 @@
         <button class="zoom-btn" @click="zoomIn">+</button>
       </div>
     </div>
-
-    <!-- <div class="kosong">
-      <p>tes</p>
-    </div> -->
   </div>
 </template>
 

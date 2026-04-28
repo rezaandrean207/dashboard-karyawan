@@ -15,7 +15,7 @@
 
   <div class="error-message" v-if="isError">
     <div class="message-content">
-      <!-- <i class="fa-solid fa-check-circle"></i> -->
+     
       <i class="fa-solid fa-circle-xmark"></i>
       <p>{{ errorMessage }}</p>
     </div>
@@ -27,8 +27,6 @@
 
     <div class="wraper-pass">
       <div class="change-password">
-        <!-- <h1>Ubah Password</h1>
-      <p class="subtitle">Pastikan password baru Anda aman dan mudah diingat</p> -->
 
         <form class="card" @submit.prevent="changePassword">
           <div class="form-group">

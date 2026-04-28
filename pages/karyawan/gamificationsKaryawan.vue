@@ -8,7 +8,6 @@
 
   <div class="isi">
     <!-- Header -->
-    <!-- <h2>Performa Mingguan - {{ displayPeriod }}</h2> -->
     <h2>Gamifikasi Karyawan</h2>
     <p class="subtitle">{{ periode }}</p>
 
@@ -103,14 +102,12 @@
               <th
                 style="
                   width: 700px;
-                  /* border: 1px solid #010101; */
-                  /* border-width: 0 1px; */
+                  
                 "
               >
                 Nama Karyawan
               </th>
-              <!-- <th>Role</th> -->
-              <!-- <th>Task Selesai</th> -->
+            
               <th>Skor</th>
             </tr>
           </thead>
@@ -137,13 +134,7 @@
                 </span>
               </td>
 
-              <!-- <td>
-                <span class="role-badge">
-                  {{ emp.role }}
-                </span>
-              </td> -->
-
-              <!-- <td>{{ emp.tasks_completed }}</td> -->
+              
 
               <td>
                 <span

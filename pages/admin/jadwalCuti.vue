@@ -19,20 +19,19 @@
 
     <div class="error-message" v-if="isError">
       <div class="message-content">
-        <!-- <i class="fa-solid fa-check-circle"></i> -->
         <i class="fa-solid fa-circle-xmark"></i>
         <p>{{ errorMessage }}</p>
       </div>
     </div>
 
-    <div class="background_delete" v-if="hapus">
-      <div class="delete_tanggal">
+    <div class="popup-overlay delete-date" v-if="hapus">
+      <div class="delete-modal">
         <p>Apakah anda yakin <br />ingin menghapus hari libur ini?</p>
-        <div class="submit_delete">
-          <div class="batal">
+        <div class="submit-delete">
+          <div class="submit-item cancel">
             <button @click="closeSetTanggal" type="button">Batal</button>
           </div>
-          <div class="simpan">
+          <div class="submit-item save">
             <button
               @click="deleteTanggal(selectedData)"
               :disabled="isLoading"
@@ -46,47 +45,56 @@
       </div>
     </div>
 
-    <div class="background_tanggal" v-if="createTanggal">
-      <div class="create_tanggal">
-        <div class="header_tanggal">
+    <div class="popup-overlay set-date" v-if="createTanggal">
+      <div class="holiday-modal">
+        <div class="holiday-header">
           <h3>Tambah Hari Libur</h3>
           <i class="fa-solid fa-xmark" @click="closeSetTanggal"></i>
         </div>
         <p>Tambahkan hari libur untuk {{ selectedKaryawan?.name }}</p>
 
-        <form action="" class="form_tanggal" @submit.prevent="saveTanggal">
-          <div class="tanggal">
+        <form class="holiday-form" @submit.prevent="saveTanggal">
+          <div class="form-item tanggal">
             <label for="tanggal">Tanggal</label>
-            <input
-              type="date"
-              v-model="tanggal"
-              :min="year ? `${year}-01-01` : null"
-              :max="year ? `${year}-12-31` : null"
-            />
+            <ClientOnly>
+              <VueDatePicker
+                format="dd-MM-yyyy"
+                model-type="yyyy-MM-dd"
+                type="date"
+                v-model="tanggal"
+                :min="year ? `${year}-01-01` : null"
+                :max="year ? `${year}-12-31` : null"
+                :time-config="{ enableTimePicker: false }"
+            /></ClientOnly>
           </div>
-          <div class="kategori">
+          <div class="form-item kategori">
             <label for="hari">Kategori</label>
-            <select name="" id="" v-model="kategori" required>
-              <option value="">Pilih Kategori</option>
-              <option v-for="c in category" :key="c.id" :value="c">
-                {{ c }}
-              </option>
-            </select>
+            <ClientOnly>
+              <n-select
+                v-model:value="kategori"
+                :options="[
+                  { label: 'Pilih Kategori', value: '' },
+                  ...category.map((c) => ({ label: c, value: c })),
+                ]"
+              ></n-select>
+            </ClientOnly>
           </div>
-          <div class="hari">
+          <div class="form-item hari">
             <label for="hari">Keterangan</label>
-            <input
-              type="text"
-              placeholder="Contoh: Izin sakit flu"
-              v-model="keterangan"
-            />
+            <ClientOnly>
+              <n-input
+                v-model:value="keterangan"
+                placeholder="Contoh: Izin sakit flu"
+                type="text"
+              ></n-input>
+            </ClientOnly>
           </div>
 
-          <div class="submit_tanggal">
-            <div class="batal">
+          <div class="form-item submit-tanggal">
+            <div class="submit-item cancel">
               <button @click="closeSetTanggal" type="button">Batal</button>
             </div>
-            <div class="simpan">
+            <div class="submit-item save">
               <button
                 @click="saveTanggal"
                 :disabled="isDisabled"
@@ -138,15 +146,6 @@
             />
           </ClientOnly>
         </div>
-        <!-- <div class="total_karyawan">
-          <i class="fa-solid fa-users"></i>
-          <div class="jumlah_karyawan">
-            <p>Total Karyawan</p>
-            <p class="jumlah">
-              <strong>{{ daftarKaryawan.length }} Karyawan</strong>
-            </p>
-          </div>
-        </div> -->
       </div>
     </div>
 
@@ -160,7 +159,6 @@
       >
         <div class="identitas">
           <div class="photo-wrapper" @click.stop>
-            <!-- <img src="/img/profil.png" alt="" /> -->
             <img
               v-if="!k.imageError"
               :src="getProfileImage(k.profile_picture_url)"
@@ -175,34 +173,10 @@
             >
               <p>{{ setInitial(k.name) }}</p>
             </div>
-
-            <!-- <div class="camera-overlay" @click.stop="triggerFileInput(k)">
-              <i class="fa-solid fa-camera"></i>
-            </div>
-
-            <input
-              type="file"
-              accept="image/*"
-              :ref="'fileInput-' + k.clickup_id"
-              class="hidden-file"
-              @change="handlePhotoChange($event, k)"
-            /> -->
           </div>
-          <!-- <div class="edit-image">
-            <span class="material-symbols-outlined"> add_a_photo </span>
-          </div> -->
+
           <h4>{{ k.name }}</h4>
-          <!-- <div class="peran">
-            <i class="fa-solid fa-briefcase"></i>
-            <p>Web</p>
-          </div> -->
         </div>
-        <!-- <div class="kinerja">
-          <div class="status-member">
-            <p>Status:</p>
-            <p>{{ k.status }}</p>
-          </div>
-        </div> -->
 
         <div class="dropdown-cuti" v-if="k.total !== 0">
           <!-- Trigger -->
@@ -332,7 +306,10 @@
 }
 
 .create-cuti .set-tanggal {
-  background: var(--primary);
+  /* background: var(--primary); */
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  color: #fff;
   color: #fff;
   border-radius: 999px;
   padding: 10px 16px;
@@ -341,11 +318,6 @@
   box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
 
   transition: transform 0.2s ease;
-}
-
-.create-cuti .set-tanggal:hover {
-  background: var(--primary-hover);
-  transform: scale(1.05);
 }
 
 .dropdown-cuti {

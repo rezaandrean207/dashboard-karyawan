@@ -115,10 +115,10 @@
             >
               <span v-if="loading" class="spinner"></span>
               <i v-else class="fa-solid fa-rotate-right"></i>
-              {{ loading ? "Menyinkronkan..." : "Sync" }}
+              {{ loading ? "Menyinkronkan..." : "Sinkronisasi" }}
             </button>
           </div>
-          <button @click="logout" class="logout">Logout</button>
+          <button @click="logout" class="logout">Keluar</button>
 
           <!-- VERSION -->
           <div class="app-version">Versi {{ appVersion }}</div>
@@ -203,9 +203,6 @@
           <p style="text-transform: capitalize">
             {{ roleLabel }}
           </p>
-          <!-- <p style="text-transform: capitalize" v-if="role === 'member'">
-            Karyawan
-          </p> -->
         </div>
         <div class="sync">
           <button
@@ -218,11 +215,9 @@
             }"
           >
             <span v-if="loading" class="spinner"></span>
-            <!-- <i v-else class="fa-solid fa-rotate-right"></i> -->
             <i v-else class="fa-solid fa-rotate-right"></i>
 
             {{ loading ? "Menyinkronkan..." : "Sinkronisasi" }}
-            <!-- <i v-else class="fa-solid fa-circle-check"></i>     -->
           </button>
         </div>
 
@@ -327,7 +322,6 @@
 .sidebar_responsive .sidebar-text {
   display: flex;
   flex-direction: column;
-  /* margin-top: 15px; */
   text-align: justify;
   padding: 15px;
   width: 100%;
@@ -359,6 +353,7 @@
   align-items: center;
   opacity: 0.75;
   text-wrap: nowrap;
+  font-weight: 400;
 }
 
 .menu-item:hover {
@@ -410,69 +405,51 @@
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-@media (hover: none) {
-  /* .submenu-item:hover,
-  .submenu-item:active {
-    background-color: transparent;
-    opacity: 0.75;
-  } */
-
-  /* .setting:hover,
-  .setting:active {
-    background-color: transparent;
-    opacity: 0.75;
-  } */
-}
-
 .sidebar-text i {
   font-size: 16px;
   margin-right: 10px;
 }
 
 .sidebar-text span.material-symbols-outlined {
-  /* font-size: 20px; */
   margin-right: 10px;
 }
 
-.sidebar-text a{
+.sidebar-text a {
   color: #fff;
   font-size: 15px;
-  /* height: 6vh; */
   text-align: justify;
 }
 
 .sidebar .footer_sidebar {
-  /* border: 1px solid #010101; */
   border-top: 1px solid rgb(85, 57, 223);
   padding: 18px;
   width: 100%;
   margin-top: auto;
   box-shadow: 0 -6px 12px rgba(0, 0, 0, 0.18);
   background-color: rgb(16, 50, 130);
-  /* height: 25%; */
 }
+
 .sidebar_responsive .footer_sidebar {
   position: absolute;
   bottom: 0;
   border-top: 1px solid rgb(85, 57, 223);
   padding: 18px;
   width: 100%;
-  /* margin-top: auto; */
   box-shadow: 0 -6px 12px rgba(0, 0, 0, 0.18);
   background-color: rgb(16, 50, 130);
 }
 
 .footer_sidebar .user {
   background-color: rgb(16, 67, 185);
+  background: linear-gradient(135deg, #1e40af, #2563eb);
   padding: 10px 14px;
-  /* margin: 0 15px; */
   border-radius: 10px;
   text-align: justify;
 }
 
 .footer_sidebar .sync .btn {
   margin: 10px 0;
-  background-color: rgb(13, 85, 254);
+  background: linear-gradient(135deg, #2563eb, #1e40af);
   font-size: 14px;
   padding: 8px 0;
   width: 100%;
@@ -482,10 +459,6 @@
   align-items: center;
   gap: 10px;
   color: #fff;
-}
-
-.sync .btn:hover {
-  background-color: rgb(0, 69, 230);
 }
 
 .footer_sidebar .logout {
@@ -514,7 +487,7 @@
 }
 
 .user p {
-  font-weight: 400;
+  font-weight: 500;
   color: rgb(98, 205, 238);
   margin: 5px 0;
   font-size: 12px;
@@ -522,10 +495,12 @@
 
 .user h4 {
   font-size: 15px;
-  font-weight: 400;
+  font-weight: 600;
 }
+
 .active {
   background-color: rgb(16, 67, 185);
+  /* background: linear-gradient(135deg, #2563eb, #1e40af); */
   opacity: 1;
 }
 
@@ -537,16 +512,18 @@
 }
 
 .download-btn {
-  background-color: #2563eb;
-  color: white;
-  padding: 6px 16px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  font-size: 12px;
   display: flex;
   align-items: center;
   gap: 8px;
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: #ffffff;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: background-color 0.2s ease;
 }
@@ -618,7 +595,6 @@ const menuConfig = {
     },
     {
       name: "Gantt Chart",
-      //   icon: "fa-regular fa-clock",
       type: "svg",
       path: "/admin/ganttChart",
     },
@@ -644,6 +620,12 @@ const menuConfig = {
       path: "/karyawan/performaSaya",
     },
     {
+      name: "Performa",
+      icon: "show_chart",
+      type: "material",
+      path: "/karyawan/weekPerform",
+    },
+    {
       name: "Gamifikasi",
       icon: "trophy",
       type: "material",
@@ -651,7 +633,6 @@ const menuConfig = {
     },
     {
       name: "Gantt Chart",
-      //   icon: "timeline",
       type: "svg",
       path: "/karyawan/ganttChartKaryawan",
     },

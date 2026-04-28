@@ -486,12 +486,10 @@ body {
 }
 
 /* Popup Delete & Set tanggal */
-.background_delete,
-.background_tanggal {
+.popup-overlay {
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.35);
-  backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -499,178 +497,132 @@ body {
 }
 
 /* Popup Delete */
-.delete_tanggal p {
+.popup-overlay .delete-modal {
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 8px;
+  width: 300px;
+  animation: fadeIn 0.2s ease;
+}
+
+.delete-modal p {
   text-align: center;
+  font-weight: 500;
 }
 
-.delete_tanggal .header_delete {
-  text-align: right;
-}
-
-.delete_tanggal .submit_delete {
+.delete-modal .submit-delete {
   display: flex;
   justify-content: center;
   gap: 10px;
-  /* margin-top: 30px; */
 }
 
-.submit_delete .batal button {
-  padding: 8px 10px;
-  border-radius: 6px;
-  background-color: #fff;
-  border: 1px solid #dedede;
-}
-
-.submit_delete .batal button:hover {
-  background-color: #f7f7f7;
-}
-
-.submit_delete .simpan button {
-  background: var(--primary);
+.submit-delete .submit-item button {
+  width: 80px;
+  height: 35px;
   border-radius: var(--radius-sm);
-  padding: 10px 14px;
+  font-weight: 500;
+}
+
+.submit-delete .cancel button {
+  background: #f8fafc;
+  color: #475569;
+
+  border: 1px solid #e2e8f0;
+}
+
+.submit-delete .save button {
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
   color: #fff;
 }
 
-.submit_delete .simpan button:hover {
-  background-color: rgb(0, 0, 180);
-}
-
-.delete_tanggal {
+.delete-modal {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-.delete_tanggal,
-.create_tanggal {
-  background: var(--bg-card);
-  border-radius: 20px;
-  padding: 28px;
-  width: 420px;
-  box-shadow: 0 25px 60px rgba(15, 23, 42, 0.25);
-  animation: modalFade 0.25s ease;
-}
-
-@keyframes modalFade {
-  from {
-    opacity: 0;
-    transform: translateY(8px) scale(0.97);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
 /* Popup Set tanggal */
-.background_tanggal {
-  position: fixed;
-  z-index: 9999;
-  background-color: rgb(0, 0, 0, 0.2);
-  width: 100vw;
-  height: 101vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
-
-.background_tanggal .create_tanggal {
+.popup-overlay .holiday-modal {
   background-color: #fff;
   padding: 25px;
   border-radius: 8px;
   width: 500px;
+  animation: fadeIn 0.2s ease;
 }
 
-.create_tanggal .header_tanggal {
+.holiday-modal .holiday-header {
   display: flex;
   justify-content: space-between;
 }
 
-.header_tanggal h3 {
+.holiday-header h3 {
   font-weight: 600;
-  margin-bottom: 5px;
 }
 
-.create_tanggal p {
-  font-size: 13px;
-  font-weight: 300;
+.holiday-modal p {
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748b;
 }
 
-.create_tanggal .form_tanggal {
+.holiday-modal .holiday-form {
   margin-top: 20px;
-}
-
-.form_tanggal .tanggal,
-.form_tanggal .hari,
-.form_tanggal .kategori {
   display: flex;
   flex-direction: column;
-  margin: 15px 0;
+  gap: 12px;
 }
 
-.form_tanggal .tanggal label,
-.form_tanggal .hari label,
-.form_tanggal .kategori label {
-  font-size: 13px;
-  font-weight: 600;
+.holiday-form .form-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.holiday-form .form-item label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748b;
   padding: 0 0 3px 3px;
 }
 
-.form_tanggal .tanggal input,
-.form_tanggal .hari input,
-.form_tanggal .kategori select {
-  background-color: #f1f1f1;
-  padding: 10px;
-  border-radius: 8px;
-  width: 100%;
-  border: 4px solid #f1f1f1;
+.holiday-form .submit-tanggal {
+  flex-direction: row;
+  justify-content: right;
+  gap: 12px;
+  margin-top: 10px;
 }
 
-.form_tanggal .tanggal input:focus,
-.form_tanggal .hari input:focus,
-.form_tanggal .kategori select:focus {
-  border: 4px solid #cfcfcf;
-  animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0.2;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.submit_tanggal {
-  display: flex;
-  justify-content: end;
-  gap: 8px;
-  margin-top: 30px;
-}
-
-.submit_tanggal .batal button {
-  padding: 8px 10px;
-  border-radius: 6px;
-  background-color: #fff;
-  border: 1px solid #dedede;
-}
-
-.submit_tanggal .batal button:hover {
-  background-color: #f7f7f7;
-}
-
-.submit_tanggal .simpan button {
-  background: var(--primary);
+.submit-tanggal .submit-item button {
+  width: 70px;
+  height: 35px;
   border-radius: var(--radius-sm);
-  padding: 10px 14px;
+
+  font-weight: 500;
+}
+
+.submit-tanggal .cancel button {
+  background: #f8fafc;
+  color: #475569;
+
+  border: 1px solid #e2e8f0;
+}
+
+.submit-tanggal .save button {
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
   color: #fff;
 }
 
-.submit_tanggal .simpan button:hover {
-  background-color: rgb(0, 63, 210);
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .photo-wrapper {
@@ -686,8 +638,9 @@ body {
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
-  border: 3px solid #e6f2f7;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  /* border: 3px solid #e6f2f7; */
+  border: 2px solid #eef2f7;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
   transition: 0.2s ease;
 }
 
@@ -774,4 +727,3 @@ body {
     background-position: 300% 50%;
   }
 }
-

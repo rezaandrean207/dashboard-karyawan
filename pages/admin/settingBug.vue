@@ -15,7 +15,6 @@
 
   <div class="error-message" v-if="isError">
     <div class="message-content">
-      <!-- <i class="fa-solid fa-check-circle"></i> -->
       <i class="fa-solid fa-circle-xmark"></i>
       <p>{{ errorMessage }}</p>
     </div>
@@ -30,7 +29,6 @@
         <div class="header-setting">
           <div class="priority-penalty-labels">
             <h4>Prioritas</h4>
-            <!-- <h4>Penalti (%)</h4> -->
           </div>
         </div>
         <div class="bug-item" v-for="(b, index) in penaltyBug" :key="index">
@@ -54,22 +52,6 @@
         </div>
       </div>
     </div>
-    <!-- <div class="container_bug">
-      <div class="card-setting" v-for="(b, index) in penaltyBug" :key="index">
-        <h4>{{ b.name }}</h4>
-        <p v-if="b.name === 'No Bug Reward'">
-          Reward: <span>{{ b.value }}%</span>
-        </p>
-        <p v-else>
-          Penalti: <span>-{{ b.value }}%</span>
-        </p>
-        <div class="form-group">
-          <label for=""> Edit Penalty </label>
-          <input type="number" v-model.number="b.value" />
-        </div>
-      </div>
-    </div> -->
-
     <div class="submit-button">
       <div class="reset">
         <button type="button" @click="resetSetting()">Reset</button>

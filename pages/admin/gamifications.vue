@@ -98,17 +98,8 @@
           <thead>
             <tr>
               <th>Rank</th>
-              <th
-                style="
-                  width: 700px;
-                  /* border: 1px solid #010101; */
-                  /* border-width: 0 1px; */
-                "
-              >
-                Nama Karyawan
-              </th>
-              <!-- <th>Role</th> -->
-              <!-- <th>Task Selesai</th> -->
+              <th style="width: 700px">Nama Karyawan</th>
+
               <th>Skor</th>
             </tr>
           </thead>
