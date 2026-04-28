@@ -724,24 +724,25 @@ export default {
         this.loading = false;
 
         // Sukses
-        this.sukses = true;
+        this.successMessage = "Sinkronisasi Berhasil";
+        this.isSukses = true;
 
         // Hidden animasi
         setTimeout(() => {
-          this.sukses = false;
-        }, 15000);
+          this.isSukses = false;
+        }, 5000);
       } catch (error) {
         console.error("Sync tidak berfungsi:", error);
-        this.loading = false;
+        this.errorMessage = "Sinkronisasi Gagal";
+        this.isError = true;
         setTimeout(() => {
-          alert("Sync data gagal");
-        }, 500);
+          this.isError = false;
+        }, 5000);
 
         console.log("STATUS:", error.response?.status);
         console.log("DATA:", error.response?.data);
         console.log("MESSAGE:", error.message);
       } finally {
-        this.sukses = true;
         this.loading = false;
       }
     },
