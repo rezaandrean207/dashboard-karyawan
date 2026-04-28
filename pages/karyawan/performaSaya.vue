@@ -356,7 +356,7 @@
       <div
         class="card-performance"
         v-if="k.time_efficiency_percentage"
-        :class="achivClass(k.time_efficiency_percentage)"
+        :class="achivClass(k.category)"
       >
         <div class="performance-item">
           <p>Ketepatan Pengerjaan Tugas</p>
@@ -1460,9 +1460,9 @@ export default {
     },
     achivClass(achiv) {
       return {
-        special: achiv > 100,
-        ontime: achiv == 100,
-        late: achiv < 100,
+        special: achiv === '++',
+        ontime: achiv === '+',
+        late: achiv === '-',
       };
     },
     totalBebanClass(beban = 0) {
